@@ -1,0 +1,11 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Site statistics - {{ app_name }}</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+{% endblock %}
+{% block body %}
+    Sitewide hit count: {{ sitewide_hit_count }}
+{% endblock %}

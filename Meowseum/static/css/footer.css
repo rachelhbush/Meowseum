@@ -1,0 +1,52 @@
+/* File names: footer_v0_0_0_3.css, footer_night_v0_0_0_1.css, footer_v0_0_0_2.html    Version date: 2/2/2017 1:56 AM   Author: Rachel Bush
+   Description: 1. I modified footer {} because a glitch was occurring when the height was set to 36px. It needed a larger height or for the rule to be removed to keep the top border a straight line.
+   2. I removed the height: 100vh; rule from body {} because I moved it to the sitewide CSS.
+   3. I modified footer ul because I switched to using plain bullet point lists as the default for <ul>.
+   
+   footer_v0_0_0_2.html: I added the Feedback link. 2/23/2017 8:58 PM */
+
+body {
+    /* The absolute position of the footer will use coordinates relative to a corner of the body.
+       Without this rule, the footer appears in the middle of the viewport when the document is long enough to scroll. */
+    position: relative;
+    /* Allocate an amount of vertical space equal to the height of the footer, including its padding and border width.
+       Without this rule, the footer will overlap the end of the document if the document is long enough (when it exceeds the height of the viewport minus the height of the footer). */
+    padding-bottom: 36px;
+}
+footer {
+    font-size: 86%;
+    background-color: rgb(149,187,111);
+    /* Set the distance of the content below the top of the green background. If this isn't high enough, then a glitch occurs where the border becomes slightly stair-stepped instead of a straight line,
+       and I'm not sure why. */
+    padding-top: 8px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+}
+
+#pawprints {
+    height: 24px;
+}
+footer p, footer ul {
+    padding-top: 3px;
+}
+/* Styling the footer navigation bar */
+footer ul {
+    /* Remove the rules intended for lists that use bullet points. */
+    padding-left: 0px;
+    list-style: none;
+    margin-bottom: 0px;
+    margin-left: 24px;
+}
+footer li {
+    border-right: 1px solid black;
+    padding-left: 6px;
+    padding-right: 6px;
+    display: inline;
+}
+footer li:last-child {
+    border: none;
+}
+footer a, footer a:hover {
+    color:black;
+}

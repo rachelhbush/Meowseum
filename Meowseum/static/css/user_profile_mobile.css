@@ -1,0 +1,471 @@
+/* File names: user_profile_v0_1_0.js, user_profile_desktop_v0_1_0.html, user_profile_desktop_v0_1_0.css, user_profile_mobile_v0_1_0.html, user_profile_mobile_v0_1_0.css
+   Changes applicable to both desktop and modal are written over in the desktop CSS file.
+   Version date: 11/7/2016 8:26AM    Author: Rachel Bush
+   Version description: 
+*/
+
+/* TOC: 1. CSS applicable to the whole page.
+        2. Main CSS - everything above the "About me" section at 360px viewport width.
+        3. Main CSS - everything including and below the "About me" section at 360px viewport width.
+        3. Main CSS, responsiveness.
+        4. Styling the Interests section.
+        5. Style the When and Where section. */
+
+/* 1. CSS applicable to the whole page. */
+
+#user-profile-desktop, section:not(#about-me-and-cats) {
+    display: none;
+}
+
+/* The gutters are 10px wide, including between major parts of the layout like the banner image and About Me description. */
+#user-profile-mobile main, #user-profile-mobile section {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#user-profile-mobile section {
+    padding-top: 12px;
+}
+@media (min-width: 750px) {
+    /* Increase the pages's left and right margins for tablets. */
+    #user-profile-mobile section {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+#user-profile-mobile section {
+    /* Allow each edit button to be positioned relative to the top-right corner of each section of the page. */
+    position: relative;
+}
+/* If Django detects that the user viewing this page is the one who created it, then the server will add an edit button. */
+.edit-btn {
+    height: 24px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.edit-btn .glyphicon-pencil {
+    font-size: 13px;
+}
+#user-profile-mobile section .edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+}
+
+
+#user-profile-mobile h1 {
+    /* Shrink the top heading. */
+    font-size: 21.33px;
+    font-weight: bold;
+    text-align: left;
+}
+/* Remove the top margin from the heading at the top of the section, so that the section top padding will entirely control the amount of space. */
+#user-profile-mobile section h1:first-child {
+    margin-top: 0px;
+    margin-bottom: 4px;
+    /* Allow room for the Edit button. Unlike the desktop version, all mobile sections have a heading. */
+    padding-right: 67px;
+}
+
+/* 1. Main CSS, styled for 360px. Everything above the "About me" section.
+      At all viewport widths, the layout was tested using the usernames "raincloud" and "Nashville Humane Association" to be sure it would work for both. */
+
+#user-profile-mobile main {
+    border-bottom: 1px solid rgb(180,180,180);
+}
+/* Ideally, the banner image ratio should be 3:1 for phones and 4:1 at 600px-1200px.
+   The placeholder in the HTML is 3.5:1 for now until Django generates the differently cropped thumbnails. */
+#banner-image {
+    /* The banner image ignores the section padding and takes up the full viewport width. */
+    width: 100vw;
+    /* Subtract the left-padding so the left side of the image starts at the left viewport edge. */
+    margin-left: -10px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+#avatar {
+    width: 160px;
+}
+
+#avatar-plus-user-actions {
+    /* Center everything above "About me" -- the avatar and user information. */
+    text-align: center;
+}
+/* This block contains the username, location, profile menu, and follow button. Its contents are styled in the remainder of this section. */
+#user-actions {
+    /* Allow the block to be moved to the right of the avatar when the viewport becomes wide enough. */
+    display: inline-block;
+}
+
+/* Style the main area's headings. */
+#user-profile-mobile main h1 {
+    /* This rule sets the space between the heading, when it is underneath the avatar, and the avatar. */
+    margin-top: 8px;
+    /* Set the space between this heading and the location subheading. */
+    margin-bottom: 4px;
+}
+/* Center the display name above the location. At smartphone viewport widths, this is below a centered avatar. */
+#user-profile-mobile main h1 {
+    text-align: center;
+}
+/* Style the location subheading. This ruleset is specific to the Main section so that Bootstrap's default h3 for its thumbnails will not be affected in the Interests section. */
+#user-profile-mobile main h3 {
+    font-size: 15px;
+    margin-top: 0px;
+    /* Set the space between this element and the profile dropdown and follow button below. */
+    margin-bottom: 8px;
+}
+
+/* This element contains "Profile:", the profile section dropdown, and the Follow button. */
+#profile-box {
+    /* Without this rule, 15px of extra space hangs below all the buttons for unknown reasons. This rule keeps the box about the same height as the buttons. */
+    height: 26px;
+}
+#profile-box > span {
+    /* Adjust the "Profile:" label to be vertically centered within the height of the profile section dropdown. */
+    position: relative;
+    top: 1px;
+}
+/* Style the profile dropdown (Interests) and align it relative to the username heading and follow button. */
+#profile-btn button {
+    height: 25px;
+    /* Make the dropdown wide enough to contain the widest option, currently "About me and cats", plus about 30px extra space to separate the caret to the right. */
+    width: 155px;
+    /* Set where the dropdown button label begins. */
+    padding-left: 8px;
+    text-align: left;
+}
+/* Position the profile dropdown button's caret. */
+#profile-btn .caret {
+    float: right;
+    margin-top: 9px;
+    margin-right: -5px;
+}
+
+.follow-btn {
+    /* Set the horizontal separation between the profile section dropdown and the follow button. */
+    margin-left: 4px;
+}
+/* Move the dropdown menu left so that it does not go off the screen on the iPhone 5. Its right edge is intended to align with the button's left edge. */
+.follow-btn .dropdown-menu {
+    left: -140px;
+}
+
+/* 2. Main CSS. Everything including and below the "About me" section. */
+
+#about-me {
+    /* Create 10px of space above the About Me description. The 10px of space below is already provided by the last paragraph. */
+    margin-top: 10px;
+    /* Prevent the text from being spread over too wide an area, and center the block. */
+    max-width: 950px;
+    margin-left: auto;
+    margin-right: auto;
+    /* Leave some space between the profile buttons and the user toolbar at the bottom in case the user has not entered any description. */
+    min-height: 5px;
+}
+
+/* Style the user profile's navigational buttons: Gallery, Likes, Comments, and Direct Message. Only the Gallery, Direct Message, and website dropdown are seen by animal shelters/rescue groups. */
+#user-toolbar > li {
+    /* Switch from the default unordered list to letting the buttons wrap to the next line. */
+    display: inline-block;
+}
+#user-toolbar {
+    /* Center the buttons within the viewport. */
+    text-align: center;
+    margin-bottom: 0px;
+}
+#user-toolbar button, #website-btn button {
+    /* Provide 5px of vertical space between rows of buttons. */
+    margin-bottom: 5px;
+}
+
+/* Below 500px viewport width, the website dropdown is the fifth navigational button. Then it gets moved to the bottom-right corner of the banner image.
+   There are two copies of the website dropdown in the HTML, using the same ID so the common rulesets aren't repeated. They are differentiated in the CSS by using different parent elements in the selectors. */
+#website-btn .dropdown-menu > li > a {
+    /* Make the website dropdown options narrower. */
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+#website-btn .dropdown-menu img, #website-btn button img {
+    width: 16px;
+    /* Each dropdown option may have a favicon-sized image to its left -- referring to the image size used by browsers on laptops and desktops in tabs at 1dppx.
+       This rule sets the space between the favicon and the text. */
+    margin-right: 4px;
+}
+
+#website-btn .placeholder {
+    /* If the website has no favicon, <span class="placeholder"></span> will be used to the left of the dropdown text instead of an image. This keeps the dropdown options' left margins consistent. */
+    margin-right: 20px;
+}
+/* Move the dropdown menu left so that it does not go off the screen on the iPhone 5. Its right edge is intended to align with the button's left edge. */
+#website-btn .dropdown-menu {
+    left: -35px;
+}
+
+/* Style the contents of each button. This block of code is also present for the buttons on the photo page, so I may move it to the sitewide CSS later. */
+/* Vertically move the label for the Gallery button closer to the center of the button. */
+img[src*="Album"] {
+    vertical-align: -40%;
+}
+/* The following seven rules were copied from the laptop/desktop CSS, except for the ID at the beginning of the selector being changed.
+   The first four make changes to the sizes of the glyphicons and move the labels to compensate, and the last three internally style the website dropdown menu. */
+#user-toolbar .glyphicon-heart {
+    font-size: 18px;
+    top: 2px;
+}
+/* Move up the Likes label to keep it vertically centered. It became uncentered when the heart glyphicon was enlarged. */
+#likes {
+    position: relative;
+    top: -1px;
+}
+/* Enlarge and vertically recenter more glyphicons, which Bootstrap relatively positions by default */
+#user-toolbar .glyphicon-comment {
+    font-size: 16px;
+    top: 2px;
+}
+#user-toolbar .glyphicon-envelope {
+    font-size: 15px;
+    top: 2px;
+}
+
+/* Style the number of followers and following users above the main section's bottom border. */
+#count-label {
+    text-align: center;
+    /* Set the vertical space between "167 followers    3,029 following" and the main section's bottom border. */
+    margin-bottom: 3px;
+}
+.follow-label {
+    /* This <span> wraps the text, excluding the numbers, because the font makes "0" look like "o". */
+    font-family: Corbel, sans-serif;
+    font-size: 16px;
+}
+.followers {
+    /* Set the space between "167 followers" and "3,029 following". */
+    margin-right: 20px;
+}
+
+/* 3. Main CSS, responsiveness: Make adjustments and move around elements into areas where there is too much empty space,
+      or spread out the elements so that the empty space is not all concentrated in one huge blank area. */
+
+/* Devices between the width of the iPhone 5 and less than the width of the Samsung Galaxy S5. */
+@media (max-width: 359px) {
+    /* Halve the amount of left and right button padding in order to keep the Gallery, Likes, and Comments buttons on one line. */ 
+    #user-toolbar button {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    #user-profile-mobile h1 {
+        /* This ruleset causes the username to wrap less often, and also makes section headings look less crowded, especially when there is an Edit button to the right. */
+        font-size: 20px;
+    }
+}
+
+/* Above 471px viewport width, four user toolbar buttons appear on one line and the official website button appears by itself on one line.
+   Move the user toolbar button to appear over the bottom-right corner of the banner image so there will be less empty space.
+   
+   Coincidentally, around this breakpoint, if the username is "Nashville Humane Association", the <div id="user-actions">, containing the username, location,
+   section dropdown, and follow button, will move from under the avatar to the right of the avatar. This isn't because of any specific breakpoint, but because
+   that <div> is inline-block.  */
+@media (max-width: 471px) {
+    #banner-image-container #website-btn {
+        display: none;
+        }
+}
+@media (min-width: 472px) {
+    #user-toolbar #website-btn {
+        display: none;
+    }
+    #banner-image-container {
+        /* Allow a corner of the website dropdown to be positioned relative to a corner of the banner image's container. */
+        position: relative;
+    }
+    #banner-image-container #website-btn {
+        position: absolute;
+        /* Position the website dropdown in the bottom-right corner of the banner image. */
+        bottom: 13px;
+        right: -3px;
+    }
+    #banner-image-container #website-btn button {
+        /* The website dropdown button is slightly shorter when it is in the banner image than when it is in the user toolbar and has to be the same height as the other buttons. */
+        height: 25px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+/* This breakpoint should occur at the same viewport width where <div id="user-actions">, containing the username, location, section dropdown, and follow button,
+   moves from under the avatar to the right of the avatar. In practice, this viewport width will slightly vary with the length of the username, but the worst that happens
+   is that when #user-actions appears under the avatar, it's slightly off-center for a viewport width range of 10px.
+   The breakpoint was chosen for the display name "raincloud". The username "Nashville Humane Association"'s ideal breakpoint would be 512px. */
+@media (min-width: 477px) {
+    #user-actions {
+        /*  Provide a gutter between the avatar and #user-actions.
+            It will initially be smaller, in order to keep it symmetrical with the margin with the viewport's right edge. */
+        margin-left: 9px;
+        /* Align #user-actions with the avatar's vertical center. */
+        vertical-align: middle;
+    }
+}
+@media (min-width: 513px) {
+    #user-actions {
+        margin-left: 18px;
+    }
+}
+
+/* 4. Style the Interests section. */
+
+/* To keep the right padding of the Interests section the same as the Main section, the right margin of the button was subtracted from the usual amount of padding. */
+#interests {
+    padding-left: 10px;
+    padding-right: 8px;
+}
+@media (min-width: 750px) {
+    #interests {
+        padding-left: 12px;
+        padding-right: 10px;
+    }
+}
+
+#interests ul {
+    /* Allow displaying the header on the same row as the first row in the list of buttons. */
+    display: inline;
+}
+#interests ul > li {
+    display: inline;
+}
+#interests h2 {
+    display: inline;
+    /* The mobile version of the heading for each subsection is slightly larger than in the desktop version. */
+    font-size: 18.67px;
+    /* This is the separation between the subsection heading and the first item in the button list. */
+    margin-right: 6px;
+    /* The heading was too far below the horizontal center of the button labels. The top and bottom margin and padding properties had no effect, and vertical-align moved the heading too far up or down
+       on the top, middle, and bottom settings, so I resorted to relative positioning to get the heading and button labels vertically aligned. */
+    position: relative;
+    top: -2px;
+}
+/* Provide some separation between Interests subsections and force the next heading onto a new line. */
+.interest-container {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+/* The ruleset for the interest buttons is the same as the laptop/desktop version. */
+/* Each button has a fixed height, but they are free to expand on either side. They have 7px between rows. */
+#interests li .btn {
+    height: 25px;
+    padding-left: 9px;
+    padding-right: 9px;
+    margin-right: 2px;
+    margin-bottom: 7px;
+}
+.internet-media-container {
+    display: flex;
+    /* Center the items horizontally in the page. */
+    justify-content: center;
+    /* Without this setting, the bottom area of the thumbnail's frame is stretched to the bottom of the flexbox. */
+    align-items: flex-start;
+}
+
+/* This was copied from the laptop/desktop CSS, except for a property that was specific to it for alignment. */
+#recommended-webpage-mobile {
+    font-size: 16px;
+    height: 50px;
+    padding-left: 9px;
+    padding-right: 9px;
+    vertical-align: top;
+}
+/* The next three rulesets were also copied from the laptop/desktop CSS. */
+.thumbnail {
+    /* Allow thumbnails to be displayed on the same row. */
+    display: inline-block;
+    vertical-align: top;
+    /* Get rid of the padding on the bottom side of the thumbnail so that the padding around the caption will only be affected by the caption's own ruleset.
+       Default Bootstrap had a much larger caption font and much more vertical padding; the unevenness becomes much more noticable with small font. */
+    padding-bottom: 0px;
+}
+.thumbnail .caption {
+    padding: 3px;
+}
+/* The caption is only slightly bigger than the body text size. */
+.thumbnail h3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 14.67px;
+    text-align: center;
+}
+#thumbnail-gif-mobile {
+    /* The thumbnail GIF should use up all the available viewport width, aside from padding, that the fixed-width Recommended Webpage button isn't using. */ 
+    flex-grow: 1;
+    /* Without this property, the thumbnail will continue to grow even if the GIF has reached its maximum dimensions, causing only the frame to widen when I would prefer the frame stay
+       a consistent width. The property varies by image, so Django will have to take care of it. */
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+#thumbnail-gif-mobile img, #thumbnail-gif-mobile video {
+    width: 100%;
+}
+
+/* Display the video on its own line (outside the flexbox). */
+.internet-media-container > #thumbnail-video-mobile {
+    display: none;
+    }
+#interests > #thumbnail-video-mobile {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    /* Keep the video from getting too large in comparison to all the other features on the page. */
+    max-width: 500px;
+}
+
+@media (max-width: 449px) {
+    #recommended-gif-toggle {
+        display: none;
+    }
+}
+/* Prevent the GIF thumbnail from becoming too large in comparison to other features by replacing it with a button which launches a modal with the GIF instead. */
+@media (min-width: 450px) {
+    #thumbnail-gif-mobile {
+        display: none;
+    }
+    .internet-media-container {
+        /* Set the separation between the row with the "Recommended webpage" button and the GIF button and the row with the Internet video. */
+        padding-bottom: 8px;
+    }
+    [data-target="#recommended-gif-mobile"] {
+        /* Vertically center the "GIF" button within the height of the "Recommended webpage" button. */
+        margin-top: 10px;
+        /* Set the horizontal space btween the "Recommended webpage" button and this button. */
+        margin-left: 15px;
+    }
+}
+
+/* 5. Style the When and where section. */
+
+#hours-of-operation {
+    margin-bottom: 10px;
+}
+#hours-of-operation h2 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+table#contact-info th {
+    vertical-align: top;
+    position: relative;
+    top: 2px;
+}
+table#contact-info th label:not(.optional) {
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+    margin-right: 13px;
+}
+
+/* 6. Temporary rules */
+
+/* Hide the Direct Message button until this feature is implemented. */
+#direct-message {
+    display: none;
+}

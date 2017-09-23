@@ -1,0 +1,101 @@
+<div class="modal fade browse-menu has-footer" id="settings-menu">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>  
+                <h4 class="modal-title">Settings</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="list-menu">
+                    {% load staticfiles %}
+                    <li>Night mode<img src="{% static "images/Moon Icon - White.png" %}" data-night="{% static "images/Moon Icon - White.png" %}" data-day="{% static "images/Sun Icon.png" %}" alt="Moon icon" class="toggle-night-day"/></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url "user_contact_information" %}">Contact information</a></li>
+                        <li><a href="{% url "shelter_contact_information" %}">Shelters/rescue groups</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                {% if user.is_authenticated %}
+                    <a href="{% url "logout" %}"><button class="btn nav-btn-mobile" id="logout-btn">Log out</button></a>
+                {% else %}
+                    <a href="{% url "signup" %}"><button class="btn nav-btn-mobile">Sign up</button></a>
+                    <a href="{% url "login" %}"><button class="btn btn-primary">Log in</button></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade browse-menu" id="profile-menu">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>  
+                <h4 class="modal-title">Profile</h4>                                              
+            </div>
+            <div class="modal-body">
+                <ul class="list-menu">
+                    <li><a href="{% url "your_gallery" %}">Gallery</a></li>
+                    <li><a href="{% url "your_likes" %}">Likes</a></li>
+                    <li><a href="{% url "your_comments" %}">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade browse-menu dynamic-width" id="browsecats-menu">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>  
+                <h4 class="modal-title">Browse uploads</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="">
+                    <ul class="list-menu">
+                        {% include "en/public/browse_menu_subscribe_options.html" %}
+                        <li><a href="{% url "adoption_search" %}">Adoptable cats</a></li>
+                        <li><a href="{% url "lost_search" %}">Lost cats</a></li>
+                        <li><a href="{% url "found_search" %}">Found cats</a></li>
+                        <li><a href="{% url "shelter_search" %}">Shelters</a></li>
+                        <li>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    Browse pet uploads <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% if user.is_authenticated %}
+                                        <li><a href="{% url "subscribed_tags" %}">From subscribed tags</a></li>
+                                        <li><a href="{% url "followed_users" %}">From followed users</a></li>
+                                        <li><a href="{% url "most_popular" %}">Most popular</a></li>
+                                    {% else %}
+                                        {% comment %}
+                                        	This gives logged in users something to do and keeps the browse menu from being as empty.
+                                        {% endcomment %}
+                                        <li><a href="{% url "search" %}?filtering_by_photos=on">Photos only</a></li>
+                                        <li><a href="{% url "search" %}?filtering_by_gifs=on">GIFs only</a></li>
+                                        <li><a href="{% url "search" %}?filtering_by_looping_videos_with_audio=on">Looping videos with sound only</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url "new_submissions" %}">New submissions</a></li>
+                                    <li><a href="{% url "random_slide" %}">Random uploads</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="list-menu">
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url "subscribed_tags" %}">From subscribed tags</a></li>
+                            <li><a href="{% url "followed_users" %}">From followed users</a></li>
+                        {% endif %}
+                        <li><a href="{% url "new_submissions" %}">New submissions</a></li>
+                        <li><a href="{% url "random_slide" %}">Random uploads</a></li>
+                        <li><a href="{% url "search" %}?filtering_by_photos=on">Photos only</a></li>
+                        <li><a href="{% url "search" %}?filtering_by_gifs=on">GIFs only</a></li>
+                        <li><a href="{% url "search" %}?filtering_by_looping_videos_with_audio=on">Looping videos with sound only</a></li>
+                    </ul>
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

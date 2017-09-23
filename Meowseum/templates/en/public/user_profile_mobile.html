@@ -1,0 +1,437 @@
+<div id="user-profile-mobile">
+    <main>
+        <div id="banner-image-container">
+            {% load staticfiles %}
+            <img src="{% static "images/example_shelter_profile_banner.jpg" %}" alt="Banner image" id="banner-image"/>
+            <div class="btn-group bright" id="website-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Official website <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><img src="{% static "images/Cat Silhouette.png" %}" alt="Meowseum page"/>Official website</a></li>
+                    <li><a href="#"><img src="{% static "images/share/Facebook share button.png" %}" alt="Facebook page"/>Facebook</a></li>
+                    <li><a href="#"><img src="{% static "images/share/Twitter share button.png" %}" alt="Twitter page"/>Twitter</a></li>
+                    <li><a href="#"><span class="placeholder"></span>Another website</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="btn btn-default edit-btn"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+        </div>
+        <div id="user-information">
+            <div id="avatar-plus-user-actions">
+                <img src="{% static "images/Callie.jpg" %}" alt="Avatar" id="avatar"/>
+                <div id="user-actions">
+                    <hgroup>
+                        <h1>raincloud</h1>
+                        <h3>Somewhere</h3>
+                    </hgroup>
+                    <div id="profile-box">
+                        <span>Profile:</span>
+                        <div class="btn-group" id="profile-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle change-label" data-toggle="dropdown">
+                                About me and cats <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">About me and cats</a></li>
+                                <li><a href="#">Interests</a></li>
+                                <li><a href="#">When and where</a></li>
+                                <li><a href="#">Adoption process</a></li>
+                            </ul>
+                        </div>
+                        {% include "en/public/static_follow_button.html" %}
+                    </div>
+                </div>
+            </div>
+            <div id="about-me">
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
+                <p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.</p>
+            </div>
+            <ul id="user-toolbar">
+                <li><a href="#"><button type="button" class="btn btn-default"><img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery</button></a></li>
+                <li><a href="#"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-heart"></span><span id="likes"> Likes</span></button></a></li>
+                <li><a href="#"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Comments</button></a></li>
+                <li><a href="#"><button type="button" class="btn btn-default" id="direct-message"><span class="glyphicon glyphicon-envelope"></span> Direct message</button></a></li>
+                <li id="website-btn">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            Official website <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><img src="{% static "images/Cat Silhouette.png" %}" alt="Meowseum page"/>Official website</a></li>
+                            <li><a href="#"><img src="{% static "images/share/Facebook share button.png" %}" alt="Facebook page"/>Facebook</a></li>
+                            <li><a href="#"><img src="{% static "images/share/Twitter share button.png" %}" alt="Twitter page"/>Twitter</a></li>
+                            <li><a href="#"><span class="placeholder"></span>Another website</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="count-label">
+            <span class="followers">167 <span class="follow-label">followers</span></span>
+            <span class="following">3,029 <span class="follow-label">following</span></span>
+        </div>
+    </main>
+    <section id="main-edit">
+        <table class="form">
+            <tr>
+                <th><label>Display name:</label></th>
+                <td><input type="text" name="display-name"/></td>
+            </tr>
+            <tr>
+                <th><label>Display location:</label></th>
+                <td><input type="text" name="display-location"/></td>
+            </tr>
+            <tr>
+                <th><label>About me:</label></th>
+                <td><textarea name="about-me"></textarea></td>
+            </tr>
+            <tr>
+                <th><span class="add-field">+</span><label>Websites:</label></th>
+                <td><input type="text" name="website1"/></td>
+            </tr>
+            <tr>
+                <th><label>Avatar:</label></th>
+                <td><input type="file" accept='image/gif, image/jpeg, image/png' capture="camera" name="avatar"/></td>
+            </tr>
+            <tr>
+                <th><label>Banner image:</label></th>
+                <td><input type="file" accept='image/gif, image/jpeg, image/png' name="banner-image"/></td>
+            </tr>
+        </table>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-default">Cancel</button>
+            <input type="submit" class="btn btn-primary" value="Save changes"/>
+        </div>
+    </section>
+    <section id="interests">
+        <h1>Interests</h1>
+        <p>Q: What do you do for fun most of the time?<br/>A: I look at cat videos and read news articles.</p>
+        <div class="interest-container">
+            <h2>Music</h2>
+            <ul>
+                <li><button type="button" class="btn btn-default">Bon Jovi</button></li>
+                <li><button type="button" class="btn btn-default">Sheryl Crow</button></li>
+                <li><button type="button" class="btn btn-default">The Beatles</button></li>
+                <li><button type="button" class="btn btn-default">Daft Punk</button></li>
+                <li><button type="button" class="btn btn-default">Bob Dylan</button></li>
+                <li><button type="button" class="btn btn-default">Green Day</button></li>
+                <li><button type="button" class="btn btn-default">Enya</button></li>
+                <li><button type="button" class="btn btn-default">Tears for Fears</button></li>
+                <li><button type="button" class="btn btn-default">Aqua</button></li>
+                <li><button type="button" class="btn btn-default">Johnny Cash</button></li>
+                <li><button type="button" class="btn btn-default">Simon & Garfunkel</button></li>
+            </ul>
+         </div>
+         <div class="interest-container">
+            <h2>TV shows</h2>
+            <ul>
+                <li><button type="button" class="btn btn-default">The Walking Dead</button></li>
+                <li><button type="button" class="btn btn-default">Doctor Who</button></li>
+                <li><button type="button" class="btn btn-default">Better Call Saul</button></li>
+                <li><button type="button" class="btn btn-default">Breaking Bad</button></li>
+            </ul>
+        </div>
+        <div class="interest-container">
+            <h2>Movies</h2>
+            <ul>
+                <li><button type="button" class="btn btn-default">Shawshank Redemption</button></li>
+                <li><button type="button" class="btn btn-default">Deep Impact</button></li>
+            </ul>
+        </div>
+        <div class="interest-container">
+            <h2>Sports</h2>
+            <ul>
+                <li><button type="button" class="btn btn-default">Example team</button></li>
+            </ul>
+        </div>
+        <div class="interest-container">
+            <h2>Books</h2>
+            <ul>
+                <li><button type="button" class="btn btn-default">Count of Monte Cristo</button></li>
+                <li><button type="button" class="btn btn-default">Hitchhiker's Guide to the Galaxy</button></li>
+            </ul>
+        </div>
+        <div class="internet-media-container">
+            <button type="button" class="btn btn-default btn-lg" id="recommended-webpage-mobile">Recommended<br><a href="#">webpage</a></button>
+            <div class="thumbnail" id="thumbnail-gif-mobile">
+                <video loop autoplay>
+                    <source src="{% static "images/cat_videos/9nybhLg.webm" %}" type='video/webm; codecs="vp8, vorbis"'/>
+                    <source src="{% static "images/cat_videos/9nybhLg.mp4" %}" type="video/mp4"/>
+                    <img src="{% static "images/cat_videos/9nybhLg.gif" %}"/>
+                </video>
+                <div class="caption">
+                    <h3>GIF</h3>
+                </div>
+            </div>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#recommended-gif-mobile"><a href="#">Cat GIF</a></button>
+         </div>
+        <div class="thumbnail" id="thumbnail-video-mobile">
+            <div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tA9tqvfWQ7I" allowfullscreen=""></iframe></div>
+            <div class="caption">
+                <h3>Internet video</h3>
+            </div>
+        </div>
+        <button class="btn btn-default edit-btn"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    </section>
+    <!--Modal for the recommended GIF -->
+    <div class="modal fade dynamic-content" id="recommended-gif-mobile">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title text-center">Cat GIF</h4>
+                </div>
+                <div class="modal-body text-center">
+                <video loop autoplay>
+                    <source src="{% static "images/cat_videos/9nybhLg.webm" %}" type='video/webm; codecs="vp8, vorbis"'/>
+                    <source src="{% static "images/cat_videos/9nybhLg.mp4" %}" type="video/mp4"/>
+                    <img src="{% static "images/cat_videos/9nybhLg.gif" %}"/>
+                </video>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="interests-edit">
+        <h1>Interests</h1>
+        <div class="field">
+            <label>What do you do for fun most of the time?</label><br/>
+            <input type="text" name="fun-question"/>
+        </div>
+        <table class="form">
+            <tr>
+                <th><label>Music:</label></th>
+                <td><input type="text" name="music" placeholder="item 1, item 2, ..."/></td>
+            </tr>
+            <tr>
+                <th><label>TV shows:</label></th>
+                <td><input type="text" name="tv-shows"/></td>
+            </tr>
+            <tr>
+                <th><label>Movies:</label></th>
+                <td><input type="text" name="movies"/></td>
+            </tr>
+            <tr>
+                <th><label>Sports:</label></th>
+                <td><input type="text" name="sports"/></td>
+            </tr>
+            <tr>
+                <th><label>Books:</label></th>
+                <td><input type="text" name="books"/></td>
+            </tr>
+            <tr>
+                <th><label>Recommended<br/>webpage:</label></th>
+                <td><input type="text" name="recommended-webpage"/></td>
+            </tr>
+            <tr>
+                <th><label>Internet video URL:</label></th>
+                <td><input type="url" name="recommended-video"/></td>
+            </tr>
+            <tr>
+                <th><label>Cat GIF URL:</label></th>
+                <td><input type="url" name="recommended-gif"/></td>
+            </tr>
+        </table>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-default">Cancel</button>
+            <input type="submit" class="btn btn-primary" value="Save changes"/>
+        </div>
+    </section>
+    <section id="about-me-and-cats">
+        <h1>About me and cats</h1>
+        <div class="form-unit">
+            <label class="bold">What are your cats' names? What do your cats look like?</label><br/>
+            I had a cat named Callie. She was a tortoiseshell calico/Maine coon with a white spot on her nose.
+        </div>
+        <div class="form-unit">
+            <label class="bold">My cats' behavior</label><br/>
+            <p>My cat liked to play fetch whenever I threw a plastic Easter egg shell or milk bottlecap. She liked chasing after long pieces of string or cords if I dragged
+            them in front of her. She liked chasing after the spot from a laser pointer or flashlight for a while, but then she caught on and started looking at my hand.
+            Sometimes she rolled over on her back, and whenever my sister tried to rub her belly, she'd grab her hand and kick it really hard with her hind legs. She liked
+            sitting in my mom's lap during the day, and at night she'd sit on the armrest of the chair beside me while I was on a laptop.</p>
+        </div>
+        <div class="form-unit">
+            <label class="bold">When did you become interested in cats?</label><br/>
+            <p> When my parents brought my cat home.</p>
+        </div>
+        <div class="form-unit">
+            <label class="bold">Do you have any awesome stories about your cats?</label><br/>
+            <p>When I was older, my mom found a stray cat, also a tortoiseshell calico, who had two kittens. We would feed her bits of turkey whenever she came around.
+            Eventually the kittens got separated and my mom took her in, but not long after she ran away. A while later she came back with a broken leg, but my family
+            was already having problems affording her, so they didn't let her back in. I really hope that by starting this site, users who know cats in need will be able to
+            reach out to people that are able to provide them good homes.</p>
+        </div>
+        <div class="form-unit">
+            <label class="bold">Who is your favorite fictional or celebrity cat?</label><br/>
+            <p>Nyan Cat.</p>
+        </div>
+        <button class="btn btn-default edit-btn"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    </section>
+    <section id="about-me-and-cats-edit">
+        <div>
+            <h1>About me and cats</h1>
+            <table class="form">
+                <tr>
+                    <th><label class="debold">Have you ever owned a cat?</label></th>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" name="cat-ever" value="yes">
+                            Yes
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="cat-ever" value="no">
+                            No
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <div class="field">
+                <label>What are your cats' names? What do your cats look like?</label><br/>
+                <textarea name="my-cats-info"></textarea>
+            </div>
+            <div class="field">
+                <label>How do your cats react to bellyrubs? To catnip? During playtime? While sleeping? Describe your cats' behavior.</label><br/>
+                <textarea name="my-cats-behavior"></textarea>
+            </div>
+            <div class="field">
+                <label>When did you become interested in cats?</label><br/>
+                <textarea name="when-cat-interest"></textarea>
+            </div>
+            <div class="field">
+                <label>Do you have any awesome stories about your cats?</label><br/>
+                <textarea name="cat-story"></textarea>
+            </div>
+            <div class="field">
+                <label>Who is your favorite fictional or celebrity cat?</label><br/>
+                <input type="text" name="favorite-famous-cat"/>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="btn btn-default">Cancel</button>
+                <input type="submit" class="btn btn-primary" value="Save changes"/>
+            </div>
+        </div>
+    </section>
+    <section id="when-and-where">
+        <h1>When and where</h1>
+        <div>
+           <p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.</p>
+           <table id="contact-info">
+                <tr>
+                    <th><label>Contact:</label></th>
+                    <td>Firstname Lastname</td>
+                </tr>
+                <tr>
+                    <th><label>Address:</label></th>
+                    <td>P. O. Box 55555<br/>
+                    City, State 12345</td>
+                </tr>
+                <tr>
+                    <th><label>Phone number:</label></th>
+                    <td>(615) 555-5555</td>
+                </tr>
+                <tr>
+                    <th><label>Fax number:</label></th>
+                    <td>(615) 555-5555</td>
+                </tr>
+                <tr>
+                    <th><label>Email:</label></th>
+                    <td><a class="email-link" href="mailto:example@website.com" class="email">example@website.com</a></td>
+                </tr>
+                <tr>
+                    <th><label>More detail:</label></th>
+                    <td><a class="url" href="http://www.website.com/About_Us/Contact_Us/">http://www.website.com/About_Us/Contact_Us/</a></td>
+                </tr>
+            </table>
+            <div class="form-unit">
+                <label class="bold">We serve the following area:</label><br/>
+                Example County
+            </div>
+            <div id="hours-of-operation">
+                <h2>Hours of operation</h2>
+                Monday 10am-5pm<br/>
+                Tuesday 10am-5pm<br/>
+                Wednesday CLOSED<br/>
+                Thursday 10am-5pm<br/>
+                Friday 10am-5pm<br/>
+                Saturday 10am-5pm<br/>
+                Sunday 12pm-5pm
+            </div>
+        </div>
+        <button class="btn btn-default edit-btn"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    </section>
+    <section id="when-and-where-edit">
+        <h1>When and where</h1>
+        <div class="field">
+            <label class="bold">General information, adoption events:</label><br/>
+            <textarea name="when-and-where-general"></textarea>
+        </div>
+        <div class="field">
+            <label class="bold">We serve the following area:</label><br/>
+            <input type="text" name="area-served"></input>
+        </div>
+        <div class="field">
+            <label class="bold">Hours of operation:</label><br/>
+            <textarea name="hours-of-operation"></textarea>
+        </div>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-default">Cancel</button>
+            <input type="submit" class="btn btn-primary" value="Save changes"/>
+        </div>
+    </section>
+    <section id="adoption-process">
+        <h1>Adoption process</h1>
+        <p>The adoption process at NHA is friendly, educational and rewarding!  Animals come to us looking for a forever home, and we make certain to give them their best shot. 
+        All animals in our Adoption Program, while at NHA, receive spay/neuter surgery, vaccinations, and veterinary treatment.  And of course, lots of love!</p>
+        <p>Now, it’s your turn to love them forever.  Noticing that we use the word “forever” a lot?  Well, it is really important to us that our pets find a permanent home! 
+        Therefore, adoption applicants are carefully screened and must meet adoption requirements prior to taking your new furry friend home.</p>
+        <h2>Adoption requirements</h2>
+        <p>Be 21 years or older and have a picture ID showing your current address. Those who have been NHA Pet Food Bank clients within the past 6 months are not eligible.
+        You must have the ability to spend time/money necessary to provide training, medical treatment, and proper care for a pet. You must have the knowledge and consent of
+        your landlord (if applicable).</p>
+        <p>Now here comes the hard part – visit with our wonderful cats and dogs and try to pick just one!  NHA Pet Service Representatives are available to provide advice on selecting
+        the best match for you and will schedule a Meet & Greet between family members (including those with four-legs) and your prospective pet to help you determine which animal
+        will best accept your lifestyle.</p>
+        <h2>Adoption fees</h2>
+        <p>Regular Fees for adoption will range from $45 to $160. Fees are based on breed, size, age, etc. and include:<br/>
+        spay/neuter (all animals are spayed or neutered before leaving NHA!)<br/>
+        vaccinations and veterinary treatment while at the shelter.</p>
+        <p>Some breeds have additional fees above standard adoption fee due to breed specifications. People aged 60 or older may adopt a cat or dog (1 year or older) for
+        free thanks to a grant from Pets for the Elderly Foundation.  Some restrictions may apply.</p>
+        <p>
+            <span class="bold">Online application:</span> 
+            <a class="url" href="http://nashvillehumane.org/custpage.cfm/frm/89833/sec_id/89833/f_76090/KITTENS">http://nashvillehumane.org/custpage.cfm/frm/89833/sec_id/89833/f_76090/KITTENS</a>
+        </p>
+        <p>Adult cats have a separate application included at the bottom of each listing.</p>
+        <button class="btn btn-default edit-btn"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    </section>
+    <section id="adoption-process-edit">
+        <h1>Adoption process</h1>
+        <div class="field">
+            <label class="bold">General information:</label><br/>
+            <textarea name="adoption-general"></textarea>
+        </div>
+        <div class="field">
+            <label class="bold">Adoption requirements:</label><br/>
+            <textarea name="adoption-requirements"></textarea>
+        </div>
+        <div class="field">
+            <label class="bold">Adoption fees:</label><br/>
+            <textarea name="adoption-fees"></textarea>
+        </div>
+        <div class="field">
+            <label class="bold">Online application(s):</label><br/>
+            <input type="url" name="online-application1"/>
+        </div>
+        <div class="field">
+            <label class="bold">Any information about applying:</label><br/>
+            <input type="text" name="application-information"/>
+        </div>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-default">Cancel</button>
+            <input type="submit" class="btn btn-primary" value="Save changes"/>
+        </div>
+    </section>
+</div>

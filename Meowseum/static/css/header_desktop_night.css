@@ -1,0 +1,41 @@
+/* File names: header_desktop_v0_1_3.html, header_desktop_v0_1_4.js, header_desktop_v0_1_3.css, header_desktop_night_v0_1_2.css
+   Version date: 11/1/2016 7:27PM    Author: Rachel Bush
+   Version description:  */
+
+#header-desktop {
+    border: none;
+}
+#header-desktop .glyphicon-search, #header-desktop a {
+    color: rgb(211,211,211);
+}
+#header-desktop a:hover, #header-desktop a:active {
+    color: rgb(190,190,190);
+}
+
+/* Navigation buttons are a very dark green, which I associate with a night-time frog pond. The text color was changed from white so that there's less contrast, but still enough it resembles a glow. */
+.nav-btn {
+    background-color: rgb(0,108,0);
+    color: rgb(240,240,240);
+    }
+.nav-btn:hover, .nav-btn:focus {
+    background-color: rgb(0,98,0);
+    color: rgb(240,240,240);
+}
+
+/* This is the only dropdown on the page, but the specificity provided by the ID at the beginning of the selector is needed to ensure the rulesets override the header day CSS. */
+#header-desktop .dropdown-menu {
+    background-color: rgb(25,25,25);
+}
+#header-desktop .dropdown-menu li {
+    /* Recolor the dividers between dropdown list items. */
+    border-bottom-color: rgb(80,80,80);
+}
+#header-desktop .dropdown-menu > li > a {
+    color: rgb(211,211,211);
+}
+/* Without this ruleset, the browser will sometimes undesirably make the black dropdown items turn white.
+   The second selector is for when the user has mousedowned on an item, but didn't mouseup, so the link hasn't been followed yet. */
+#header-desktop .dropdown-menu > li > a:hover, #header-desktop .dropdown-menu > li > a:focus, #header-desktop .dropdown-menu > li > a:active {
+    color: rgb(180,180,180);
+    background-color: rgb(25,25,25);
+}

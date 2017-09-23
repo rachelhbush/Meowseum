@@ -1,0 +1,55 @@
+{% comment %}
+File name: follow_button_v0_0_1_11.html
+Author: Rachel Bush
+Last modified: 
+Version description: 
+{% endcomment %}
+<div class="btn-group follow-btn">
+    <button type="submit" name="submission_type" value="follow" class="btn follow_button ajax-btn" data-ajax-url="{% url "follow" upload.uploader.username %}?next={{ request.path | urlencode }}">
+        {% if viewer in uploader.followers.all %}
+            <span class="default-content">Following</span><span class="rollover-content">Unfollow</span>
+        {% else %}
+            Follow
+        {% endif %}
+    </button>
+    <div class="btn-group">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            {% csrf_token %}
+            <li>
+                <a href="#" class="dropdown_follow_option ajax-btn" data-ajax-url="{% url "follow" upload.uploader.username %}?next={{ request.path | urlencode }}">
+                    {% if viewer in uploader.followers.all %}
+                        Unfollow
+                    {% else %}
+                        Follow
+                    {% endif %}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li class="mutable">
+                <a href="#" class="dropdown_mute_option ajax-btn" data-ajax-url="{% url "mute" upload.uploader.username %}?next={{ request.path | urlencode }}">
+                    {% if viewer in uploader.muters.all %}
+                        <span class="glyphicon glyphicon-ban-circle"></span>Unmute all activity
+                    {% else %}
+                        <span class="glyphicon glyphicon-ban-circle"></span>Mute all activity
+                    {% endif %}
+                </a>
+             </li>
+            <li><a href={{ report_abuse_url }}><span class="glyphicon glyphicon-flag"></span>Report user</a></li>
+            {% if can_delete_upload %}
+                <li class="mutable"><a href="#" class="dropdown_delete_option ajax-btn" data-ajax-url="{% url "delete_upload" upload.relative_url %}"><span class="glyphicon glyphicon-remove-circle"></span>Delete upload</a></li>
+            {% endif %}
+            {% if can_ban_users %}
+                <li class="mutable">
+                    <a href="#" class="dropdown_ban_option ajax-btn" data-ajax-url="{% url "ban" upload.uploader.username %}?next={{ request.path | urlencode }}">
+                    {% if upload.uploader.is_active %}
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>Ban from {{ app_name }}
+                    {% else %}
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>Unban from {{ app_name }}
+                    {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>

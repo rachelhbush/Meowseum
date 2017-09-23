@@ -1,0 +1,110 @@
+<header id="header-desktop">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 col-xl-offset-1" id="logo-container">
+        {% load staticfiles %}
+                <a href="{% url "index" %}"><img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" alt="Logo" id="logo"/></a>
+            </div>
+            <div class="col-lg-5 col-xl-3 no-left-gutter">
+                <ul class="nav-btn-list">
+                    <li>
+                      <div class="btn-group">
+                        <button type="button" class="nav-btn btn dropdown-toggle" data-toggle="dropdown">
+                            Settings <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a href="#" data-toggle="modal" data-target="#layout-menu">Layout</a></li>
+                          {% if user.is_authenticated %}
+                              <li><a href="{% url "user_contact_information" %}">Contact information</a></li>
+                              <li><a href="{% url "shelter_contact_information" %}">Shelters/rescue groups</a></li>
+                              <li><a href="{% url "logout" %}">Log out</a></li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                          <div class="btn-group">
+                            <button type="button" class="nav-btn btn dropdown-toggle" data-toggle="dropdown">
+                                Profile <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url "your_gallery" %}">Gallery</a></li>
+                                <li><a href="{% url "your_likes" %}">Likes</a></li>
+                                <li><a href="{% url "your_comments" %}">Comments</a></li>
+                            </ul>
+                          </div>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="btn-group">
+                                <button type="button" class="nav-btn btn dropdown-toggle" data-toggle="dropdown">
+                                    Browse <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% if user.is_authenticated %}
+                                        <li>
+                                            <a href="{% url "subscribed_tags" %}">From subscribed tags</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url "followed_users" %}">From followed users</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url "most_popular" %}">Most popular</a>
+                                        </li>
+                                    {% endif %}
+                                    <li>
+                                        <a href="{% url "new_submissions" %}">New submissions</a>
+                                    </li>
+                                    {% if not user.is_authenticated %}
+                                        {% comment %}
+                                            This gives logged in users something to do and keeps the browse menu from being as empty.
+                                        {% endcomment %}
+                                        <li><a href="{% url "search" %}?filtering_by_photos=on">Photos only</a></li>
+                                        <li><a href="{% url "search" %}?filtering_by_gifs=on">GIFs only</a></li>
+                                        <li><a href="{% url "search" %}?filtering_by_looping_videos_with_audio=on">Looping videos with sound only</a></li>
+                                    {% endif %}
+                                    {% include "en/public/browse_menu_subscribe_options.html" %}
+                                </ul>
+                            </div>
+                        </form>
+                    </li>
+                    {% if not user.is_authenticated %}
+                    <li><a href="{% url "random_slide" %}"><button type="button" class="btn nav-btn">Random<br/>cat</button></a></li>
+                    {% endif %}
+                    <li>
+                      <div class="btn-group">
+                        <button type="button" class="btn nav-btn dropdown-toggle" data-toggle="dropdown">
+                            Local <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url "adoption_search" %}">Up for adoption</a></li>
+                            <li><a href="{% url "lost_search" %}">Lost cats</a></li>
+                            <li><a href="{% url "found_search" %}">Found cats</a></li>
+                            <li><a href="{% url "shelter_search" %}">Shelters and rescue groups</a></li>
+                        </ul>
+                      </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-3" id="search-elements">
+                <form method="get" action="{% url "header_search" %}">
+                    <input type="search" name="header_search" maxlength="255" placeholder="Search" id="searchbar"/>
+                    <a href="{% url "advanced_search" %}" id="filter">Filter</a>
+                    <span class="glyphicon glyphicon-search"></span>
+                </form>
+           </div>
+           <div class="col-lg-1 no-left-gutter">
+               {% if user.is_authenticated %}
+               <button class="btn btn-primary" id="upload-btn" data-toggle="modal" data-target="#upload-menu">Upload <img src="{% static "images/Up Icon - White.png" %}" /></button>
+               {% else %}
+               <a href="{% url "login" %}"><button class="btn btn-primary" id="sign-in-button">Sign in</button></a>
+               <p id="signin-question"><a href="{% url "signup" %}">New user?</a></p>
+               {% endif %}
+           </div>
+        </div>
+    </div>
+</header>
+{% include "en/public/modals_desktop.html" %}

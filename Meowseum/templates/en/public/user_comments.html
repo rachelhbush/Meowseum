@@ -1,0 +1,98 @@
+{% extends "en/public/base.html" %}
+{% load my_filters %}
+{% block head %}
+        {{ block.super }}
+        <title>{{ app_name }} - {{ profile_username }}'s comments</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/user_comments.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/user_comments_night.css" %}"/>
+        <script src="{% static "javascript/user_comments.js" %}"></script>
+        <script>settings.prepareDayModeBackground();</script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    <section id="user-comments">
+        <div id="navigation-and-comment-controls">
+            <nav class="inline-block">
+                @{{ profile_username }}'s
+                <ul class="pipe-separated inline-block">
+                    {% if gallery_type == 'uploads' %}
+                        <li class="active">Gallery</li>
+                    {% else %}
+                        <li><a href="{% url "gallery" profile_username %}" class="emphasized">Gallery</a></li>
+                    {% endif %}
+                    {% if gallery_type == 'likes' %}
+                        <li class="active">Likes</li>
+                    {% else %}
+                        <li><a href="{% url "likes" profile_username %}" class="emphasized">Likes</a></li>
+                    {% endif %}
+                    <li class="active">Comments</li>
+                </ul>
+            </nav>
+            {% if comments|length > 0 %}
+            <label class="checkbox-inline">
+                <input type="checkbox" name="enlarged-images" value="true">
+                Enlarge
+            </label>
+            {% endif %}
+        </div>
+        {% for comment in comments %}
+            <div class="user-comment">
+                <a href="{% url "slide_page" comment.upload.relative_url %}">
+                    {% if 'image' in comment.upload.metadata.mime_type %}
+                        <img src="{{ MEDIA_URL }}{{ comment.upload.file|urlencode }}" title="{{ comment.upload.title }}" />
+                    {% else %}
+                        <div class="gif-container" title="{{ comment.upload.title }}">
+                            <video playsinline poster="{{ MEDIA_URL }}{{ upload_directory }}/{{ poster_directory }}/{{ comment.upload.metadata.file_name|urlencode }}.jpg" muted loop>
+                                <source src="{{ MEDIA_URL }}{{ comment.upload.file.name|urlencode }}" type="{{ comment.upload.metadata.mime_type }}"/>
+                            </video>
+                            <span class="glyphicon glyphicon-play"></span>
+                        </div>
+                    {% endif %}
+                </a>
+                <div class="comment-time">{{ comment.last_edited | naturaltime_with_dates:"{'date_args':'n/j/y'}" | largest_time_unit }}</div>
+                <div class="comment-text">{{ comment.text | linebreaks:50 }}</div>
+            </div>
+        {% endfor %}
+        {% if comments.paginator.num_pages > 1 %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if comments.has_previous %}
+                        <a href="?page={{ comments.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ comments.number }} of {{ comments.paginator.num_pages }}.
+                    </span>
+            
+                    {% if comments.has_next %}
+                        <a href="?page={{ comments.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            {% if comments|length == 0 %}
+                <div class="pagination">{{ no_results_message }}</div>
+            {% endif %}
+        {% endif %}
+    </section>
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+{% endblock %}

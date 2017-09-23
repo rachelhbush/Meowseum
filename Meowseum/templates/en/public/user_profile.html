@@ -1,0 +1,35 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>raincloud - Photos and GIFs on Meowseum</title>
+        <meta name="description" content="I'm the owner of the Meowseum website. I started this site because I used to copy and paste links to cat images on the Internet all the time, and I really wanted to make a better image site. If you have any suggestions for the site, drop me a note on the Feedback page. The site is new and I'm the only employee right now, so I'll definitely be listening."/>
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/user_profile_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/user_profile_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/user_profile_night.css" %}" media="(min-width: 1200px)"/>
+        <script>settings.prepareDayModeBackground();</script>
+        <script src="{% static "javascript/user_profile.js" %}"></script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    {% include "en/public/user_profile_mobile.html" %}
+    {% include "en/public/user_profile_desktop.html" %}
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+{% endblock %}

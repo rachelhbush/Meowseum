@@ -1,0 +1,124 @@
+/* File names: slide_page_v0_4_14.html, slide_page_author_box_v0_4_6.html, slide_page_v0_4_9.js, slide_page_v0_4_10.css, slide_page_night_v0_4_2.css 
+   Version description: See slide_page_v0_4_10.css. Author: Rachel Bush
+*/
+
+/* 1. Style the page as a whole. */
+body, #information, #information > :not(#comments) {
+    background-color: rgb(15,15,15);
+}
+
+/* The #close selector is used for an X button outside a modal, used as a link inside <a id="close">.
+   On mobile devices, the close button is centered within the first line of the heading, so it looks best if it possesses the same level of brightness as the heading.
+   On desktops, the close button is separate from the heading, up and to the right of it. It looks best keeping the sitewide CSS: the close button is darker than the heading and brightens when mousing over it. */
+@media (max-width: 1199px) {
+    #landscape-order-switcher a.close {
+        opacity: 1;
+        color: rgb(240,240,240);
+        text-shadow: initial;
+    }
+    #landscape-order-switcher a.close:hover, #landscape-order-switcher a.close:hover, #landscape-order-switcher a.close:active {
+        opacity: 1;
+        color: rgb(240,240,240);
+    }
+}
+
+/* 2. Style #slide-mobile and mobile-only elements. Style the slide, swiping areas, background, heading, and slide. */
+
+#slide-mobile h1 {
+    /* The heading is brighter for emphasis. */
+    color: rgb(240,240,240);
+}
+@media (orientation: landscape) and (max-width: 1199px) {
+    /* On mobile devices in landscape mode, reset the close icon its original state: black and semitransparent. */
+    #landscape-order-switcher a.close {
+        opacity: 0.2;
+        color: black;
+    }
+    #landscape-order-switcher a.close:hover, #landscape-order-switcher a.close:hover, #landscape-order-switcher a.close:active {
+        opacity; 0.5;
+        color: black;
+    }
+    #landscape-order-switcher {
+        /* Set the night mode color for the bottom border under the title, which is moved under the image rescaled to 100% viewport height in landscape mode. */
+        border-bottom-color: rgb(70,70,70);
+    }
+}
+
+#datetime-abbreviated {
+    /* Keep the writing faded by about the same amount, but for the darker background. */
+    color: rgb(150,150,150);
+}
+
+/* 3. Style #slide-desktop and the other elements visible only above 1200px viewport width. */
+
+@media (min-width: 1200px) {
+    /* Against the black background, items that have a larger area, like bold font and navigational arrows, stand out more. The night mode CSS reduces the amount of attention they draw,
+   so the user can focus on the slide and the comments. The night mode CSS does this by reducing the font-size, using a similar, thinner glyphicon, or dimming the font color. */
+    #information {
+        /* This rule is for consistency with the bottom of the header having no border. */
+        border-left: none;
+    }
+    #slide-desktop .glyphicon-chevron-left, #slide-desktop .glyphicon-chevron-right {
+        /* Hide the chevrons used with day mode. */
+        display: none;
+    }
+    #slide-desktop .glyphicon-menu-left, #slide-desktop .glyphicon-menu-right {
+        /* Replace them with glyphicons for thinner navigational arrows. */
+        display: inline;
+        font-size: 30px;
+    }
+    #information > h1 {
+        color: rgb(240,240,240);
+    }
+}
+
+/* 4. Style the comments section. */
+
+#comments {
+    /* The background color has to be set here, rather than on the #posted-comments sections, or else the blacker background of the page as a whole will show up if
+       there is any remaining vertical viewport space. */
+    background-color: rgb(15,15,15);
+    border-top-color: rgb(70,70,70);
+}
+#comments textarea {
+    background-color: rgb(25,25,25);
+}
+/* This container is for the comment area's Submit button. It has the same background as the textarea and no top border, to make it look like the Submit button is positioned over it.
+   In the future, the buttons for Italics, Reaction GIF, and/or Emojis may be added back. If that happens, it would look better if #reply-footer were as black as the body, had a top border,
+   and #posted-comments were as grey as the textarea, so that #reply-footer forms a dividing space between them. */
+#reply-footer {
+    background-color: rgb(25,25,25);
+    /* Increase the space between the bottom of the Submit button and the bottom border of the writing area by 1px. */
+    padding-bottom: 7px;
+}
+#posted-comments {
+    background-color: rgb(15,15,15) /* same as the body background color */;
+    border-top: 1px solid rgb(70,70,70);
+}
+@media (min-width: 1200px) {
+    /* In the desktop version, night mode only, the part of the page where the user will enter a comment will be bordered on all four sides, with 10px of padding on the right edge but not the left.
+       This will be the only bordered area of the page, placing emphasis on it.  */
+    #comments {
+        padding-right: 10px;
+        border-top: none;
+    }
+    #posted-comments {
+        padding-right: 0px;
+    }
+    #comments textarea, #reply-footer, #posted-comments {
+        border: none;
+    }
+}
+
+/* 5. Style the share section. */
+
+#share {
+    border-top-color: rgb(70,70,70);
+}
+/* This ruleset returns the Share section's <input> fields back to night mode defaults.
+   Day mode had to override the sitewide CSS to keep the field different from its grey background color. */
+.copy-and-paste-set input {
+    background-color: rgb(25,25,25);
+    border-color: rgb(80,80,80);
+    color: white;
+}

@@ -1,0 +1,214 @@
+{% extends "en/public/base.html" %}
+{% load my_filters %}
+{% block head %}
+        {{ block.super }}
+        <title>{{ upload.title }} - Scrapbin</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/slide_page.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/slide_page_night.css" %}"/>
+        <script src="{% static "javascript/lib/modernizr-detect-flexbox-support-only.min.js" %}"></script>
+        <script src="{% static "javascript/slide_page.js" %}"></script>
+{% endblock %}
+{% block body %}
+    <div class="page">
+        <section id="slide-mobile">
+            <div id="swipe-back"></div>
+            <div id="swipe-forward"></div>
+            <div id="landscape-order-switcher">
+                <h1>{{ upload.title }}</h1>
+                <a href="{% url "index" %}" class="close"><span>&times;</span></a>
+                <div id="slide-overflow-mobile">
+                    {% include "en/public/elements/file_element.html" %}
+                </div>
+            </div>
+        </section>
+        <section id="slide-desktop">
+            <div id="slide-navigation">
+                <div id="slide-container">
+                    {% include "en/public/elements/file_element.html" %}
+                </div>
+            </div>
+            {% if previous_slide == '?previous_slide=random' %}
+                    <a class="glyphicon glyphicon-menu-left" href="javascript:history.back()"></a>
+                    <a class="glyphicon glyphicon-chevron-left" href="javascript:history.back()"></a>
+            {% else %}
+                {% if previous_slide != '' %}
+                    <a class="glyphicon glyphicon-menu-left" href="{% url "slide_page" previous_slide %}"></a>
+                    <a class="glyphicon glyphicon-chevron-left" href="{% url "slide_page" previous_slide %}"></a>
+                {% endif %}
+            {% endif %}
+            {% if next_slide == '?next_slide=random' %}
+                <a class="glyphicon glyphicon-chevron-right" href="{% url "random_slide" %}"></a>
+                <a class="glyphicon glyphicon-menu-right" href="{% url "random_slide" %}"></a>
+            {% else %}
+                {% if next_slide != '' %}
+                    <a class="glyphicon glyphicon-chevron-right" href="{% url "slide_page" next_slide %}"></a>
+                    <a class="glyphicon glyphicon-menu-right" href="{% url "slide_page" next_slide %}"></a>
+                {% endif %}
+            {% endif %}
+            
+            <div id="fullscreen-version">
+                {% include "en/public/elements/file_element.html" %}
+            </div>
+        </section>
+        <section id="information">
+            <h1>{{ upload.title }}</h1>
+            <a href="{% url "index" %}" class="close"><span>&times;</span></a>
+            <main>
+                {% comment %}
+                    Above 1200px, display in the top-right "46 minutes ago" or "1/20/2017".
+                    Below 1200px, display in the top-right "46m" or "1/20/17". For lost and found posts, write "Lost " or "Found " before the datetime variable.
+                {% endcomment %}
+                {% if upload.adoption %}
+                    <span id="datetime-full" class="visible-lg-inline visible-xl-inline listing">{{ upload.metadata.datetime_uploaded|naturaltime_with_dates:"{'date_args':'n/j/Y'}"|largest_time_unit }}</span>
+                {% elif upload.lost %}
+                    <span id="datetime-full" class="visible-lg-inline visible-xl-inline listing">Lost {{ upload.lost.date|naturalday:'n/j/Y' }}</span>
+                {% elif upload.found %}
+                    <span id="datetime-full" class="visible-lg-inline visible-xl-inline listing">Found {{ upload.found.date|naturalday:'n/j/Y' }}</span>
+                {% else %}
+                    <span id="datetime-full" class="visible-lg-inline visible-xl-inline">{{ upload.metadata.datetime_uploaded|naturaltime_with_dates:"{'date_args':'n/j/Y'}"|largest_time_unit }}</span>
+                {% endif %}
+                {% if upload.adoption %}
+                    <span id="datetime-abbreviated" class="hidden-lg hidden-xl listing">{{ upload.metadata.datetime_uploaded|naturaltime_with_dates:"{'date_args':'n/j/y'}"|one_letter_time_unit }}</span>
+                {% elif upload.lost %}
+                    <span id="datetime-abbreviated" class="hidden-lg hidden-xl listing">Lost {{ upload.lost.date|naturalday:'n/j/y' }}</span>
+                {% elif upload.found %}
+                    <span id="datetime-abbreviated" class="hidden-lg hidden-xl listing">Found {{ upload.found.date|naturalday:'n/j/y' }}</span>
+                {% else %}
+                    <span id="datetime-abbreviated" class="hidden-lg hidden-xl">{{ upload.metadata.datetime_uploaded|naturaltime_with_dates:"{'date_args':'n/j/y'}"|one_letter_time_unit }}</span>
+                {% endif %}
+                
+                {% include "en/public/slide_page_author_box.html" %}
+                {% if upload.adoption or upload.lost or upload.found %}
+                    <div id="pet-profile">
+                        {% for i in merged_field_values|length|times %}
+                            {% if merged_field_values|index:i != '' %}
+                                <div class="profile-unit">
+                                    <label>{{ merged_field_labels|index:i }}:</label>
+                                    <div>{{ merged_field_values|index:i }}</div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if boolean_answers != None %}
+                            <ul id="boolean-answers">
+                                {% for entry in boolean_answers %}
+                                    <li><img src="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-night="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-day="{% static "images/Cat Pawprint Icon.png" %}" %}"/>{{ entry }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if upload.description != "" %}
+                    <div id="description">
+                        <p>{{ upload.description }} </p>
+                    </div>
+                {% endif %}
+                <div id="slide-buttons">
+                    <div class="btn-group" id="slide-toolbar">
+                        <button type="button" class="btn btn-default fixed-btn" >{{ views|format:",d" }} view{{ views|pluralize }}</button>
+                        <button type="button" class="btn btn-default fixed-btn tag-btn"><span class="glyphicon glyphicon-tag"></span> {{ upload.tags.count }}</button>
+                        <button type="button" class="btn btn-default fixed-btn share-btn"><span class="glyphicon glyphicon-share"></span> Share</button>
+                        <button type="button" class="btn btn-default fixed-btn comment-btn"><span class="glyphicon glyphicon-comment"></span> Comment</button>
+                    </div>
+                </div>
+            </main>
+            <section id="tags">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ tag_form.non_field_errors }}
+                    {{ tag_form.name.errors }}
+                    {% if upload.tags.count > 0 %}
+                        <ul id="tag-list">
+                            {% for tag in upload.tags.all %}
+                                <li><a class="emphasized" href="{% url "tag_gallery" tag %}">#{{ tag }}</a></li>
+                            {% endfor %}
+                            <div class="inline-block">
+                                {{ tag_form.name }}
+                                <button type="submit" name="submission_type" value="tag" class="btn btn-primary">Add tag</button>
+                            </div>
+                        </ul>
+                    {% else %}
+                        <div class="text-center">
+                            {{ tag_form.name }}
+                            <button type="submit" name="submission_type" value="tag" class="btn btn-primary">Add tag</button>
+                        </div>
+                    {% endif %}
+                </form>
+            </section>
+            {% if not upload.uploader_has_disabled_comments %}
+            <section id="comments">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ comment_form.non_field_errors }}
+                    {{ comment_form.text.errors }}
+                    {{ comment_form.text }}
+                    <div id="reply-footer">
+                        <button type="submit" name="submission_type" value="comment" class="btn btn-primary"><div class="reply-btn-label">Submit</div></button>
+                    </div>
+                </form>
+                {% if comments_from_unmuted_users.count > 0 %}
+                    {% if can_delete_comments %}
+                        <form id="posted-comments" class="deletable" method="post" action="">
+                            {% for comment in comments_from_unmuted_users %}
+                                <div class="comment">
+                                    {% csrf_token %}
+                                    <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
+                                    <span class="glyphicon glyphicon-trash" data-name="submission_type" data-value="delete_comment_{{ comment.id }}"></span>
+                                </div>
+                            {% endfor %}
+                        </form>
+                    {% else %}
+                        <div id="posted-comments">
+                            {% for comment in comments_from_unmuted_users %}
+                                <div class="comment">
+                                    {% comment %}
+                                        The filter's setting will merge a paragraph with the following paragraph if it isn't at least one line long.
+                                    {% endcomment %}
+                                    <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </section>
+            {% endif %}
+            <section id="share">
+                <p class="text-center">Tap a link to copy it.</p>
+                <div class="copy-and-paste-set">
+                    <label>Link to this page</label>
+                    <div class="link-field">
+                        <span class="glyphicon glyphicon-link"></span>
+                        <input type="text" value="http://www.{{ app_name|lower }}.tk/slide/{{ upload.relative_url }}/" spellcheck="false"/>
+                    </div>
+                </div>
+                <div class="copy-and-paste-set">
+                    <label>Direct link to file</label>
+                    <div class="link-field">
+                        <span class="glyphicon glyphicon-link"></span>
+                        <input type="text" value="http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }}" spellcheck="false"/>
+                    </div>
+                </div>
+                {% if 'image' in upload.metadata.mime_type %}
+                    <div class="copy-and-paste-set">
+                        <label>BB code forums</label>
+                        <input type="text" value="[timg]http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }}[/timg]" spellcheck="false"/>
+                    </div>
+                {% else %}
+                    <div class="copy-and-paste-set">
+                        <label>BB code forums</label>
+                        <input type="text" value="[url]http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }}[/url]" spellcheck="false"/>
+                        {% comment %}
+                            On the SomethingAwful forums, one of the most popular BB code forums, this looks like a regular link in the preview, but it still renders correctly after submitting the post.
+                        {% endcomment %}
+                    </div>
+                {% endif %}
+                <div class="copy-and-paste-set">
+                    <label>Reddit markdown</label>
+                    <input type="text" value="[{{ upload.title }}](http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }})" spellcheck="false"/>
+                </div>
+            </section>
+        </section>
+    </div>
+{% endblock %}

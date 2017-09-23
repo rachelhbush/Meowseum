@@ -1,0 +1,358 @@
+/* File names: bootstrap_extension_v0_0_0_52.css, bootstrap_extension_night_v0_0_0_22.css, bootstrap_extension_noscript_v0_0_0_3.css  Version date:   Author: Rachel Bush
+   Description: This file extends Bootstrap with extra classes and widgets. It also sets up any CSS styling that I use consistently across all of my projects.
+   Version description:  */
+   
+/* This document overrides the sitewide CSS to change the background and font colors. Until I institute a way to turn night mode on, this mode is enabled for mobile by applying a
+   media query in the HTML. */
+
+/* 1. Background color, font styling
+   For mobile, it looks better when long snippets of text that are obviously links don't stand out from normal text, which is common, so white is also the default link color.
+   White links become light grey without any underlining on hover.
+   The .emphasized class is used when the link needs to stand out, like "Privacy Policy" under a typical sign-up form.
+   The .email-link class will be used for the link in the TOU, and any email addresses users choose to put on their profile pages.
+   
+   On my front page, the laptop header uses light grey text and the laptop footer uses dark grey text. Dimmer shades of grey are needed to have the same contrast when there is more surrounding black space.
+   Keeping white text in modals and text fields serves to focus the user's attention.
+*/
+
+body {
+    background-color: rgb(15,15,15);
+    color: rgb(240,240,240);
+}
+
+/* Most links on the night mode site will be off-white with no underline and darken when clicked. */
+a {
+    color: rgb(240,240,240);
+}
+a:hover, a:active {
+    color: rgb(211,211,211);
+}
+a:hover, a:active {
+    text-decoration: none;
+}
+
+a.emphasized,  a.email, a[data-toggle], a.url {
+    color: rgb(42,132,185);
+}
+/* Certain classes use the same color as day mode for emphasis. I noticed that most links on the site use the .emphasized class, except for the ones in the header and footer, so
+   someday I am going to go back and make the day mode version into the default and change to using a .subtle class.
+   Override Bootstrap's link darkening because, against a night mode background, it makes the link look less distinguishable. */
+a.emphasized:hover, a[data-toggle*="collapse"]:hover, a.email:hover, a.url:hover
+a.emphasized:active, a[data-toggle*="collapse"]:active, a.email:active, a.url:hover
+a.emphasized:focus, a[data-toggle*="collapse"]:focus, a.email:focus, a.url:hover {
+    color: rgb(42,132,185) !important;
+}
+a.emphasized:hover, a.emphasized:active {
+    text-decoration: underline;
+}
+
+.glyphicon-info-sign {
+    /* Make the info i appear white. */
+    background-color: white;
+    /* This rule prevents the element from having a square white background. It has the side effect of giving the glpyhicon a thin white border, which appears a little glitchy,
+       but I find this acceptable because it also makes the glyphicon appear more three-dimensional. */
+    border-radius: 50%;
+}
+
+/* 2. Night mode modals */
+.modal-content {
+    background-color: rgb(15,15,15);
+    color: white;
+    /* The modal has a slightly lighter border. */
+    border: 1px solid rgb(30,30,30);
+}
+.modal-body a:not(.emphasized, [data-toggle], .email, .url) {
+    color: white;
+}
+/* Style the X button. */
+.close {
+    opacity: 0.9;
+    color: white;
+    text-shadow: initial;
+}
+.close:hover, .close:focus, .close:active {
+    opacity: 1;
+    color: white;
+}
+
+/* Night mode modals have less padding than day mode modals, and they are borderless. */
+.modal-header {
+    border:none;
+    padding-bottom: 0px;
+}
+.modal-body {
+    padding-top: 5px;
+}
+/* The .has-footer class, used with .modal, will reduce the padding on the body of night mode modals and .browse-menu day mode modals.
+   The class exists because there is no CSS selector involving whether a parent contains a child with a certain tag, only the other way around. */
+.has-footer .modal-body {
+    padding-bottom: 5px;
+}
+.modal-footer {
+    border: none;
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+
+/* 3. Follow button, the site's dropdown menus, the default buttons, and Bootstrap thumbnails. */
+
+.follow-btn .btn, .follow-btn .btn:hover, .follow-btn .btn:focus {
+    /* Dim the follow button by 3% luminosity. */
+    background-color: rgb(0,128,64);
+}
+.follow-btn .btn:hover, .follow-btn .btn:focus {
+    /* Dim the follow button by 6% luminosity from the unpressed state in day mode. */
+    background-color: rgb(0,112,56);
+}
+
+/* Style the dropdown. The .bright class styles a button, a button group, or a dropdown button and its dropdown with Bootstrap defaults, even when night mode is turned on.
+   This is used to increase the element's visbility and place emphasis on it. */
+.btn-group:not(.bright) > .dropdown-menu {
+    background-color: rgb(45,45,50);
+}
+.btn-group:not(.bright) > .dropdown-menu > li > a {
+    color: rgb(240,240,240);
+}
+/* Like how day mode dropdown list items turn grey when you hover over them, night mode list items will darken. */
+.btn-group:not(.bright) > .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > li > a:active {
+    background-color: rgb(35,35,37);
+    color: rgb(240,240,240);
+}
+.btn-group:not(.bright) > .dropdown-menu .divider {
+    border-bottom: 1px solid rgb(80,80,80);
+}
+
+/* Style the default night mode buttons.
+   Without the !important part, the buttons with JavaScript go back to Bootstrap defaults when they are clicked, even though there isn't a rule
+   that would cause that in any of the style sheets for individual pages. */
+.btn-default:not(.bright) {
+    background-color: rgb(45,45,50) !important;
+    color: rgb(240,240,240) !important;
+    border: none;
+}
+.btn-default:not(.bright):hover, .btn-default:not(.bright):active, .btn-default:not(.bright):focus, .btn-default:not(.bright):hover:active, .btn-default.active:not(.bright)
+    /* The last selector is used when a button in a settings menu has been pressed, and the setting has been remembered from last time. */ {
+    background-color: rgb(35,35,37) !important;
+    color: rgb(240,240,240) !important;
+}
+
+/* Default night mode buttons in a button group have only left and right borders between buttons, but the button group as a whole has no border.
+   Each button has a border which would disappear in a pressed state, if not for each of the neighboring buttons still having a rule which provides a border.
+   So, the rulesets are not repeated for :hover, :active states.
+   
+    The selector after the comma applies the ruleset to a dropdown button within a button group.  */
+
+/* This ruleset caused only the second button from the left to have borders. */
+.btn-group > .btn-default:not(:first-child):not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn-group:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+    border-left: 1px solid rgb(80,80,80);
+    border-right: 1px solid rgb(80,80,80);
+}
+/* The first button from the left has a right-border. */
+.btn-group > .btn-default:first-child:not(.dropdown-toggle),
+.btn-group > .btn-group:first-child:not(.dropdown-toggle) {
+    border-right: 1px solid rgb(80,80,80);
+}
+/* The first button from the right has a left-border.
+   This isn't applied to a dropdown button in a button group because it led to the following glitches:
+   1. When a regular button is next to a dropdown caret button, it doubles the border thickness.
+   2. If the button is of fixed height, but the dropdown caret button does not have a height specified, the border hangs down below the button.
+      This happened to the Follow button. */
+.btn-group > .btn-default:last-child:not(.dropdown-toggle) {
+    border-left: 1px solid rgb(80,80,80);
+}
+
+/* Implement the bright class for button groups and dropdown buttons. */
+.btn-group.bright .btn-default {
+    background-color: white !important;
+    color: black !important;
+}
+.btn-group.bright .btn-default:hover, .btn-group.bright .btn-default:focus, .btn-group.bright .btn-default:active {
+    background-color: #e6e6e6 !important;
+    color: black !important;
+}
+
+/* Thumbnails (Polaroid-like frames for images) should use the same background color as the default button background color. */
+.thumbnail {
+    background-color: rgb(45,45,50);
+    border: none;
+}
+.thumbnail .caption {
+    color: rgb(240,240,240);
+}
+
+/* 4. Form elements */
+
+table.form th label {
+    /* For night mode, bolded text has less contrast with the body text, so override the day mode CSS's shrinking of the font size.
+       The cost of this rule is that some labels will have to have more space allocated in the night mode style sheet for the individual page,
+       as in #energy-level-field th {  width: 100px; } */
+    font-size: 14px;
+    /* Increase the minimum space between the right edge of the label and the left edge of the field. */
+    margin-right: 15px;
+}
+table.form th .add-field+label {
+    /* If a plus sign for adding another field exists in the label's cell, add more room for it. */
+    margin-right: 20px;
+}
+
+input[type="text"], input[type="password"], input[type="search"], input[type="url"], input[type="email"], input[type="tel"],
+input[type="number"], input[type="time"], input[type="date"], input[type="datetime-local"], input[type="week"], input[type="month"], textarea {
+    /* This rule makes text fields pop out from the background by being slightly lighter than the page background color. */ 
+    background-color: rgb(25,25,25);
+    border-color: rgb(80,80,80);
+    color: white;
+}
+/* Sometimes in night mode I prefer the form fields to still be white in order to stand out, like on the signup and login pages.
+   Applied to <form>, the .bright class makes an exception and styles the night mode text field the same as in day mode, except for the border. */
+form.bright input[type="text"], form.bright input[type="password"], form.bright input[type="search"],
+form.bright input[type="url"], form.bright input[type="email"], form.bright input[type="tel"],
+form.bright input[type="number"], form.bright input[type="time"], form.bright input[type="date"], form.bright input[type="datetime-local"],
+form.bright input[type="week"], form.bright input[type="month"], form.bright textarea {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 0px;
+}
+form.bright .glyphicon-search {
+    color: rgb(51,51,51);
+}
+
+select:not([multiple]), select[multiple] /* The selectors need to reference dropdowns and multiselects individually in order to have enough specificity to override anything. */ {
+    background-color: rgb(25,25,25);
+    border-color: rgb(80,80,80);
+}
+select:not([multiple]) {
+    color: rgb(240,240,240);
+}
+select[multiple] {
+    /* Make the color of all the options slightly darker, because a lot of text is clustered together for an overall brighter area.
+       Darkening the text helps the user concentrate more on the surrounding form labels. */
+    color: rgb(225,225,225);
+}
+select:not([multiple]):focus, select[multiple]:focus {
+    /* The day mode rule has to be marked as !important in order to override the Bootstrap rule, so the night mode rule must use !important to override the day mode rule. */
+    border-color: rgb(80,80,80) !important;
+    /* Get rid of Bootstrap's blue glow on focus. */
+    box-shadow: none;
+}
+.checkbox-dropdown, .scrollable-checkboxes {
+    background-color: rgb(25,25,25);
+    border-color: rgb(80,80,80);
+}
+.checkbox-dropdown.open > div:last-child {
+    background-color: rgb(25,25,25);
+    /* This color, for the box of the dropdown's options, is 5% more luminous than the color used to highlight each option. */
+    border-color: rgb(41,103,127);
+}
+.checkbox-dropdown.open > div:last-child > .selected, .scrollable-checkboxes > .selected {
+    /* Highlight an option while its checkmark is checked. */
+   background-color: rgb(35,87,107);
+}
+@media (min-width: 1200px) {
+    .checkbox-dropdown.open > div:last-child > div:hover {
+        /* Highlight an unchecked option while the user is hovering over it. There is a "sticky hover" problem where, on touchscreen devices, the last option to be clicked
+           will stay highlighted until another one is clicked. So, this ruleset only applies over 1200px viewport width, at which point most devices will be using a mouse instead. */
+        background-color: rgb(35,87,107);
+    }
+}
+
+.custom-checkbox {
+    background-color: rgb(100,100,100);
+    border-color: rgb(60,60,60);
+    color: black;
+}
+
+/* In Internet Explorer only, setting the color for a text field will override its placeholder ruleset, so the ruleset also used for day mode is written here again. */
+:-ms-input-placeholder {
+    color: rgb(169,169,169);
+}
+/* For forms only, brighten the placeholder text, because the default dark grey would have too much contrast  with the white text for labels, dropdowns, and time controls.
+   In other places where the placeholder text has dark surroundings, dark grey still looks fine. */
+.field ::-webkit-input-placeholder, table.form ::-webkit-input-placeholder {
+    color: rgb(210,210,210);
+}
+.field :-moz-placeholder, table.form :-moz-placeholder {
+    color: rgb(210,210,210);
+}
+.field ::-moz-placeholder, table.form ::-moz-placeholder {
+    color: rgb(210,210,210);
+}
+.field :-ms-input-placeholder, table.form :-ms-input-placeholder {
+    color: rgb(210,210,210);
+}
+
+.required-asterisk {
+    /* This is my preferred shade of red or pink for coloring the asterisk of a required field. */
+   color: rgb(255,100,100);
+}
+.errorlist > li {
+     /* pink */
+    color: rgb(220,150,150);
+}
+.errorlist > li:not(:only-child)::before {
+    /* Night mode will use the same color for the list item's marker as it uses for its text. */
+    color: rgb(220,150,150);
+}
+
+.nested-form {
+    /* These are subsets of the form which appear only when certain form controls are checked. This ruleset makes the bordered area use the same background as the page and same border color as the fields. */ 
+    background-color: rgb(15,15,15);
+    border-color: rgb(80,80,80);
+}
+@media (min-width: 769px) {
+    /* Night mode full-page forms do not have a border under the header, so these rulesets reduce the space between where the border would be and the top of the form. */
+    main.form {
+        padding-top: 8px;
+    }
+    .all-fields-are-optional input[type="submit"] {
+        top: 8px;
+    }
+}
+
+/* 5. Style the site's Bootstrap buttons, other than the default one. Then style the basic structure (header, body, footer) of the site's forms for smartphones.
+   There are also rules to let them be re-used on tablets and larger devices as modals. */
+
+/* Darken the primary buttons in order to decrease the contrast. */
+.btn-primary {
+    background-color: rgb(0,101,171);
+    border-color: rgb(0,101,171);
+    }
+.btn-primary:hover {
+    background-color: rgb(0,86,148);
+    border-color: rgb(0,86,148);
+}
+.btn-primary:active, .btn-primary:focus, .btn-primary.active, .btn-primary.active:focus {
+    background-color: rgb(32,77,116);
+    /* If the border is not kept the same color as the button in night mode, and the border is darker, the button appears to shrink when it changes states.
+       The effect is more noticable the smaller the button. */
+    border-color: rgb(32,77,116) !important;
+}
+
+.page.form, .page.form form.inner-layout, .form .modal-content {
+    background-color: rgb(15,15,15);
+}
+header.form {
+    background-color: rgb(15,15,15);
+    border-bottom-color: rgb(80,80,80);
+}
+@media (min-width: 769px) {
+    header.form {
+        /* Past this breakpoint, the form stops taking up the full viewport width of the page. It looks weird when a border that doesn't extend all the way, so this rule removes it.  */
+        border-bottom: none;
+    }
+}
+.form .modal-header {
+    /* Most night modals are short and have no border, with reduced padding. Form modals are long and need clearer separation of the title from the body, so override and return to using a header bottom border
+    with the same header and body padding as day mode. */
+    background-color: rgb(15,15,15);
+    border-bottom-color: rgb(80,80,80);
+    padding-top: 14px;
+    padding-bottom: 11px;
+}
+.form .modal-body {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+}

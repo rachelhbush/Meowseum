@@ -1,0 +1,90 @@
+{% comment %}
+File name: advanced_search_main_v0_0_2_5.html
+Author: Rachel Bush
+Last modified: 
+Version description: 
+{% endcomment %}
+{{ form.include_photos.errors }}
+{{ form.include_gifs.errors }}
+{{ form.filter_by_looping_videos_with_sound.errors }}
+<table class="form">
+    <tr>
+        <th><label>File type:</label></th>
+        <td>
+            <label class="checkbox-inline has-custom-checkbox">
+                <div class="custom-checkbox">
+                    {{ form.filtering_by_photos }}
+                    {% include "en/public/elements/custom_checkmark.html" %}
+                </div>
+                Photos
+            </label>
+            <label class="checkbox-inline has-custom-checkbox">
+                <div class="custom-checkbox">
+                    {{ form.filtering_by_gifs }}
+                    {% include "en/public/elements/custom_checkmark.html" %}
+                </div>
+                GIFs
+            </label>
+            <label class="checkbox-inline has-custom-checkbox">
+                <div class="custom-checkbox">
+                    {{ form.filtering_by_looping_videos_with_audio }}
+                    {% include "en/public/elements/custom_checkmark.html" %}
+                </div>
+                Looping videos with audio
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <th><label>Duration:</label></th>
+        <td>
+            {{ form.min_duration.errors }}
+            {{ form.max_duration.errors }}
+            {{ form.min_duration }} to {{ form.max_duration }} seconds
+        </td>
+    </tr>
+    <tr>
+        <th><label>Minimum<br>frame rate:</label></th>
+        <td>
+            {{ form.max_fps.errors }}
+            {{ form.min_fps }} (up to 60)
+        </td>
+    </tr>
+</table>
+{{ form.all_words.errors }}
+<div class="field">
+    <label>Search for all of these words or hashtags:</label><br/>
+    {{ form.all_words }}
+</div>
+{{ form.exact_phrase.errors }}
+<div class="field">
+    <label>Search for this exact phrase:</label><br/>
+    {{ form.exact_phrase }}
+</div>
+{{ form.any_words.errors }}
+<div class="field">
+    <label>Search for any of these words or hashtags:</label><br/>
+    {{ form.any_words }}
+</div>
+{{ form.exclude_words.errors }}
+<div class="field">
+    <label>Exclude these words or hashtags:</label><br/>
+    {{ form.exclude_words }}
+</div>
+<table class="form">
+    <tr>
+        <th><label>From</label></th>
+        <td>
+            {{ form.from_user.errors }}
+            {{ form.from_user }}
+        </td>
+    </tr>
+</table>
+<div class="checkbox has-custom-checkbox text-center">
+    <label>
+        <div class="custom-checkbox">
+            {{ form.save_search_to_front_page }}
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Save this search to the front page
+    </label>
+</div>

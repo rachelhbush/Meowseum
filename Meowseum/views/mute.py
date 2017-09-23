@@ -1,0 +1,51 @@
+# mute_v0_0_0_6.py by Rachel Bush. Last modified: 
+# PROGRAM ID: mute.py (_v0_0_0_6) / Mute or unmute action
+# REMARKS: This is the page for processing a request from a slide page's Follow button's Mute option, using the URL "user/username/mute".
+# Currently, this is only for AJAX requests, but it is designed to handle requests when JavaScript is disabled.
+# VERSION REMARKS: 
+
+from django.contrib.auth.models import User
+from Meowseum.common_view_functions import ajaxWholePageRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
+from django.template.defaultfilters import urlencode
+import json
+
+def page(request, username):
+    # The user can navigate to this page from the slide page, the user page (in the future), or the URL bar. The first two pages redirect to this page with a querystring.
+    # when JavaScript is disabled, then this page redirects back. When redirecting occurs, redirect to the user page when the previous URL is unknown.
+    previous_URL = urlencode(request.GET.get('next', reverse('gallery', args=[username])))
+    if request.user.is_authenticated():
+        try:
+            uploader_user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse('index'))
+        uploader = uploader_user.user_profile
+        viewer = request.user.user_profile
+        response_data = {}
+
+        if viewer in uploader.muters.all():
+            uploader.muters.remove(viewer)
+            response_data['.dropdown_mute_option'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Mute all activity')
+        else:
+            uploader.muters.add(viewer)
+            # In Meowseum's current system, muting silences all activity. A user cannot be muted and followed at the same time. When either status is added, the other needs to be removed.
+            uploader.followers.remove(viewer)
+            response_data['.dropdown_mute_option'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Unmute all activity')
+            response_data['.follow_button'] = 'Follow'
+            response_data['.dropdown_follow_option'] = 'Follow'
+        uploader.save()
+
+        if request.is_ajax():
+            # If the request is AJAX, then respond with a JSON object containing the new Follow button label, the new label for the Follow option in its dropdown, and the new label for the
+            # Mute option in its dropdown.
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            # If the request isn't AJAX (JavaScript is disabled), redirect back to the previous page.
+            return HttpResponseRedirect(previous_URL)
+    else:
+        # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
+        # Redirect the user back to the previous page after the user logs in.
+        return ajaxWholePageRedirect(request, reverse('login') + "?next=" + previous_URL)

@@ -1,0 +1,7 @@
+/* File names: user_profile_v0_1_0.js, user_profile_desktop_v0_1_0.html, user_profile_desktop_v0_1_0.css, user_profile_mobile_v0_1_0.html, user_profile_mobile_v0_1_0.css, user_profile_night_v0_1_0.css
+   Version date: 11/12/2016 2:16AM    Author: Rachel Bush
+ */
+
+#user-profile-desktop main, #user-profile-mobile main {
+    border-bottom-color: rgb(80,80,80);
+}

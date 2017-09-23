@@ -1,0 +1,326 @@
+<table class="form">
+    <tr>
+        <th><label>Location:</label></th>
+        <td><input type="text" name="location" placeholder="ZIP code / City, State"/></td>
+    </tr>
+    <tr>
+        <th><label>Distance:</label></th>
+        <td>
+            <select name="distance">
+                <option value="anywhere">Anywhere</option>
+                <option value="10-miles">Less than 10 miles</option>
+                <option value="25-miles">Less than 25 miles</option>
+                <option value="50-miles">Less than 50 miles</option>
+                <option value="100-miles">Less than 100 miles</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th><label>Breed:</label></td>
+        <td>
+            <fieldset class="checkbox-dropdown">
+                <label><span class="caret"></span></label>
+                <div>
+                    <button type="button" class="btn btn-primary">Clear</button>
+                    <div><input type="checkbox" name="breed" value="any"/>Any</div>
+                    <div><input type="checkbox" name="breed" value="absynnian"/>Absynnian</div>
+                    <div><input type="checkbox" name="breed" value="americanbobtail"/>American Bobtail</div>
+                    <div><input type="checkbox" name="breed" value="americancurl"/>American Curl</div>
+                    <div><input type="checkbox" name="breed" value="americanshorthair"/>American Shorthair</div>
+                    <div><input type="checkbox" name="breed" value="americanwirehair"/>American Wirehair</div>
+                    <div><input type="checkbox" name="breed" value="balinese-javanese"/>Balinese-Javanese</div>
+                    <div><input type="checkbox" name="breed" value="bengal"/>Bengal</div>
+                    <div><input type="checkbox" name="breed" value="birman"/>Birman</div>
+                    <div><input type="checkbox" name="breed" value="bombay"/>Bombay</div>
+                    <div><input type="checkbox" name="breed" value="britishshorthair"/>British Shorthair</div>
+                    <div><input type="checkbox" name="breed" value="burmese"/>Burmese</div>
+                    <div><input type="checkbox" name="breed" value="burmilla"/>Burmilla</div>
+                    <div><input type="checkbox" name="breed" value="chartreux"/>Chartreux</div>
+                    <div><input type="checkbox" name="breed" value="colorpointshorthair"/>Colorpoint Shorthair</div>
+                    <div><input type="checkbox" name="breed" value="cornishrex"/>Cornish Rex</div>
+                    <div><input type="checkbox" name="breed" value="cymric"/>Cymric</div>
+                    <div><input type="checkbox" name="breed" value="devonrex"/>Devon Rex</div>
+                    <div><input type="checkbox" name="breed" value="europeanburmese"/>European Burmese</div>
+                    <div><input type="checkbox" name="breed" value="exoticshorthair"/>Exotic Shorthair</div>
+                    <div><input type="checkbox" name="breed" value="havanabrown"/>Havana Brown</div>
+                    <div><input type="checkbox" name="breed" value="himalayan"/>Himalayan</div>
+                    <div><input type="checkbox" name="breed" value="japanesebobtail"/>Japanese Bobtail</div>
+                    <div><input type="checkbox" name="breed" value="korat"/>Korat</div>
+                    <div><input type="checkbox" name="breed" value="mainecoon"/>Maine Coon</div>
+                    <div><input type="checkbox" name="breed" value="laperm"/>LaPerm</div>
+                    <div><input type="checkbox" name="breed" value="manx"/>Manx</div>
+                    <div><input type="checkbox" name="breed" value="munchkin"/>Munchkin</div>
+                    <div><input type="checkbox" name="breed" value="nebelung"/>Nebelung</div>
+                    <div><input type="checkbox" name="breed" value="norwegianforestcat"/>Norwegian Forest Cat</div>
+                    <div><input type="checkbox" name="breed" value="ocicat"/>Ocicat</div>
+                    <div><input type="checkbox" name="breed" value="oriental"/>Oriental</div>
+                    <div><input type="checkbox" name="breed" value="persian"/>Persian</div>
+                    <div><input type="checkbox" name="breed" value="ragamuffin"/>Ragamuffin</div>
+                    <div><input type="checkbox" name="breed" value="ragdoll"/>Ragdoll</div>
+                    <div><input type="checkbox" name="breed" value="russianblue"/>Russian Blue</div>
+                    <div><input type="checkbox" name="breed" value="savannah"/>Savannah</div>
+                    <div><input type="checkbox" name="breed" value="scottishfold"/>Scottish Fold</div>
+                    <div><input type="checkbox" name="breed" value="selkirkrex"/>Selkirk Rex</div>
+                    <div><input type="checkbox" name="breed" value="siamese"/>Siamese</div>
+                    <div><input type="checkbox" name="breed" value="siberian"/>Siberian</div>
+                    <div><input type="checkbox" name="breed" value="singapura"/>Singapura</div>
+                    <div><input type="checkbox" name="breed" value="snowshoe"/>Snowshoe</div>
+                    <div><input type="checkbox" name="breed" value="somali"/>Somali</div>
+                    <div><input type="checkbox" name="breed" value="sphynx"/>Sphynx</div>
+                    <div><input type="checkbox" name="breed" value="tonkinese"/>Tonkinese</div>
+                    <div><input type="checkbox" name="breed" value="toyger"/>Toyger</div>
+                    <div><input type="checkbox" name="breed" value="turkishangora"/>Turkish Angora</div>
+                    <div><input type="checkbox" name="breed" value="turkishvan"/>Turkish Van</div>
+                </div>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <th><label>Pattern:</label></th>
+        <td>
+            <fieldset class="checkbox-dropdown">
+                <label><span class="caret"></span></label>
+                <div>
+                    <div><input type="checkbox" name="pattern" value="solid"/>Solid color fur</div>
+                    <div><input type="checkbox" name="pattern" value="tuxedo"/>Tuxedo</div>
+                    <div><input type="checkbox" name="pattern" value="bicolor"/>Other bicolor fur</div>
+                    <div><input type="checkbox" name="pattern" value="tortoiseshell"/>Multicolor fur</div>
+                    <div><input type="checkbox" name="pattern" value="tabby"/>Tabby stripes</div>
+                    <div><input type="checkbox" name="pattern" value="spotted"/>Spotted</div>
+                </div>
+            </fieldset>
+        </td>
+    </tr>
+    <tr class="calico-field">
+        <th><label for="tricolor">Calico?</label></th>
+        <td>
+            <select name="tricolor" id="tricolor">
+                <option value=""></option>
+                <option value="True">Calico (has white in its coat)</option>
+                <option value="False">Non-calico</option>
+            </select>
+        </td>
+    </tr>
+    <tr class="tortie-tabby-field">
+        <th><label>Tabby?</label></th>
+        <td>
+            <select name="tricolor-tabby" id="tricolor-tabby">
+                <option value=""></option>
+                <option value="Yes">Yes (also has tabby stripes)</option>
+                <option value="No">No</option>
+            </select>
+        </td>
+    </tr>
+    <tr class="dilute-field">
+        <th><label>Dilute?</label></th>
+        <td class="inline-radio-buttons">
+            <label class="radio-inline">
+                <input type="radio" name="dilute" value="Yes"/> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="dilute" value="No"/> No
+            </label>
+        </td>
+    </tr>
+    <tr class="color-field">
+        <th><label>Colors:</label></th>
+        <td>
+            <fieldset class="checkbox-dropdown">
+                <label><span class="caret"></span></label>
+                <div>
+                    <div><input type="checkbox" name="color" value="black"/>Black</div>
+                    <div><input type="checkbox" name="color" value="chocolate"/>Chocolate or brown</div>
+                    <div><input type="checkbox" name="color" value="gray"/>Gray</div>
+                    <div><input type="checkbox" name="color" value="orange"/>Orange or red</div>
+                    <div><input type="checkbox" name="color" value="tan"/>Tan or buff</div>
+                    <div><input type="checkbox" name="color" value="white"/>White</div>
+                </div>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <th><label>Hair length:</label></td>
+        <td>
+            <fieldset class="checkbox-dropdown">
+                <label><span class="caret"></span></label>
+                <div>
+                    <div><input type="checkbox" name="hair" value="short"/>Short</div>
+                    <div><input type="checkbox" name="hair" value="medium"/>Medium</div>
+                    <div><input type="checkbox" name="hair" value="long"/>Long</div>
+                </div>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="sex">Sex:</label></th>
+        <td>
+            <select name="sex" id="sex">
+                <option value=""></option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </td>
+    </tr>
+</table>
+<div class="field">
+    <label class="bold">Other physical characteristics:</label><br/>
+    <fieldset class="checkbox-dropdown">
+        <label><span class="caret"></span></label>
+        <div>
+            <div><input type="checkbox" name="other-characteristics-adopt" value="socks"/>Has 'socks'</div>
+            <div><input type="checkbox" name="other-characteristics-adopt" value="polydactyl"/>Polydactyl</div>
+            <div><input type="checkbox" name="other-characteristics-adopt" value="heterochromia"/>Heterochromia</div>
+        </div>
+    </fieldset>
+</div>
+<div class="form-unit text-center" id="age-rating-field">
+    <label class="bold">Age range:</label><br/>
+    <div class="check-btn newborn">
+        {% load staticfiles %}
+        <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+        data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}" alt="Newborn"/><br/>
+        Newborn
+    </div>
+    <div class="check-btn young">
+        <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+        data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}" alt="Young"/><br/>
+        Young
+    </div>
+    <div class="check-btn adult">
+        <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+        data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}" alt="Adult"/><br/>
+        Adult
+    </div>
+    <div class="check-btn senior">
+        <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+        data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}" alt="Senior"/><br/>
+        Senior
+    </div>
+    <input type="checkbox" name="age-rating" value="newborn"/>
+    <input type="checkbox" name="age-rating" value="young"/>
+    <input type="checkbox" name="age-rating" value="adult"/>
+    <input type="checkbox" name="age-rating" value="senior"/>
+</div>
+<div class="inline-checkboxes">
+    <label>Find a cat that has been (or will be)</label><br/>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="spayedorneutered" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Spayed or neutered
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="housetrained" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        House trained
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="declawed" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Declawed
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="vaccinated" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Vaccinated (up to date)
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="microchipped" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Microchipped
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="freefromparasites" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span>
+        <div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>
+    </label>
+</div>
+<div class="inline-checkboxes">
+    <label>My household has</label><br/>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="likescats" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Cats
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="likesdogs" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Dogs
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            <input type="checkbox" name="likeschildren" value="true">
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Children, down to age <input type="number" placeholder="0" name="likeschildren-age"/>
+    </label>
+    
+</div>
+<div class="form-unit">
+    <label class="bold">Disabilities and special needs:</label><br/>
+    <fieldset class="scrollable-checkboxes" data-size="3">
+        <button type="button" class="btn btn-primary">Clear</button>
+        <div><input type="checkbox" name="disabilities-adopt" value="any"/>Any</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="visuallyimpaired"/>Visually impaired</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="blind"/>Blind</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="hearingimpaired"/>Hearing impaired</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="deaf"/>Deaf</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="limbproblems"/>Missing or nonworking limbs</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="cerebellarhypoplasia"/>Cerebellar hypoplasia</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="cerebralpalsy"/>Cerebral palsy</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="mobilityissues"/>Mobility issues</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="mentallydisabled"/>Mentally disabled</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="heartproblems"/>Heart problems</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="kidneyproblems"/>Kidney problems</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="incontinent"/>Incontinent</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="fiv"/>FIV+</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="leukemia"/>Leukemia</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="diabetic"/>Diabetic</div>
+        <div><input type="checkbox" name="disabilities-adopt" value="obese"/>Obese</div>
+    </fieldset>
+</div>
+<table class="form" id="energy-level-field">
+    <tr>
+        <th><label>Energy level: </label></th>
+        <td>
+        <fieldset class="checkbox-dropdown">
+            <label><span class="caret"></span></label>
+            <div>
+                <div><input type="checkbox" name="energy-level" value="lowenergy"/>Low</div>
+                <div><input type="checkbox" name="energy-level" value="averageenergy"/>Average</div>
+                <div><input type="checkbox" name="energy-level" value="active"/>Active</div>
+                <div><input type="checkbox" name="energy-level" value="veryactive"/>Very Active</div>
+            </div>
+        </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="name">Pet name:</label></td>
+        <td><input type="text" name="name" id="name"/></td>
+    </tr>
+</table>
+<div class="checkbox has-custom-checkbox">
+    <label>
+    <div class="custom-checkbox">
+        <input type="checkbox" name="make-search-front-page" value="true"/>
+        {% include "en/public/elements/custom_checkmark.html" %}
+    </div>
+    Make this search my front page for Meowseum.
+    </label>
+</div>

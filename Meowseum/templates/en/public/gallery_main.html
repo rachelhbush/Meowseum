@@ -1,0 +1,86 @@
+<section id="gallery">
+    {% if gallery_type != None %}
+        {% if gallery_type == 'uploads' or gallery_type == 'likes' %}
+            <nav>
+                @{{ profile_username }}'s 
+                <ul class="pipe-separated inline-block">
+                    {% if gallery_type == 'uploads' %}
+                        <li class="active">Gallery</li>
+                    {% else %}
+                        <li><a href="{% url "gallery" profile_username %}" class="emphasized">Gallery</a></li>
+                    {% endif %}
+                    {% if gallery_type == 'likes' %}
+                        <li class="active">Likes</li>
+                    {% else %}
+                        <li><a href="{% url "likes" profile_username %}" class="emphasized">Likes</a></li>
+                    {% endif %}
+                    <li><a href="{% url "user_comments" profile_username %}" class="emphasized">Comments</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+    {% endif %}
+    <div class="container-fluid">
+        <div class="row">
+            {% load my_filters %}
+            {% for i in 3|times %}
+                <div class="col-xs-4">
+                    <ul class="list-unstyled">
+                        {% for j in uploads|length|times %}
+                            {% if j|mod:3 == i %}
+                                {% if 'image' in uploads|index:j|attribute:'metadata'|attribute:'mime_type' %}
+                                    <li>
+                                        <a href="{% url "slide_page" uploads|index:j|attribute:'relative_url' %}">
+                                            {% if uploads|index:j|attribute:'metadata'|attribute:'width' <= 600 %}
+                                                <img src="{{ MEDIA_URL }}{{ uploads|index:j|attribute:'file'|urlencode }}" title="{{ uploads|index:j|attribute:'title' }}"/>
+                                            {% else %}
+                                                <img src="{{ MEDIA_URL }}{{ upload_directory }}/{{ thumbnail_directory }}/{{ uploads|index:j|attribute:'metadata'|attribute:'file_name'|urlencode }}{{ uploads|index:j|attribute:'metadata'|attribute:'extension' }}" title="{{ uploads|index:j|attribute:'title' }}"/>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="{% url "slide_page" uploads|index:j|attribute:'relative_url' %}">
+                                            <div class="gif-container">
+                                                {% if uploads|index:j|attribute:'metadata'|attribute:'width' <= 600 %}
+                                                    <video playsinline poster="{{ MEDIA_URL }}{{ upload_directory }}/{{ poster_directory }}/{{ uploads|index:j|attribute:'metadata'|attribute:'file_name'|urlencode }}.jpg" muted loop title="{{ uploads|index:j|attribute:'title' }}">
+                                                        <source src="{{ MEDIA_URL }}{{ uploads|index:j|attribute:'file'|urlencode }}" type="{{ uploads|index:j|attribute:'metadata'|attribute:'mime_type' }}"/>
+                                                    </video>
+                                                {% else %}
+                                                    <video playsinline poster="{{ MEDIA_URL }}{{ upload_directory }}/{{ poster_directory }}/{{ thumbnail_directory }}/{{ uploads|index:j|attribute:'metadata'|attribute:'file_name'|urlencode }}.jpg" muted loop title="{{ uploads|index:j|attribute:'title' }}">
+                                                        <source src="{{ MEDIA_URL }}{{ upload_directory }}/{{ thumbnail_directory }}/{{ uploads|index:j|attribute:'metadata'|attribute:'file_name'|urlencode }}{{ uploads|index:j|attribute:'metadata'|attribute:'extension' }}" type="{{ uploads|index:j|attribute:'metadata'|attribute:'mime_type' }}"/>
+                                                    </video>
+                                                {% endif %}
+                                                <span class="glyphicon glyphicon-play"></span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% if uploads.paginator.num_pages > 1 %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if uploads.has_previous %}
+                <a href="?page={{ uploads.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ uploads.number }} of {{ uploads.paginator.num_pages }}.
+            </span>
+    
+            {% if uploads.has_next %}
+                <a href="?page={{ uploads.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+{% else %}
+    {% if uploads|length == 0 %}
+        <div class="pagination">{{ no_results_message }}</div>
+    {% endif %}
+{% endif %}

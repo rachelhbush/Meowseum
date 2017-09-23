@@ -1,0 +1,14 @@
+<div class="page form">
+    {% if consistent_columns %}
+    <form class="inner-layout consistent-columns" method="post" enctype="multipart/form-data" action="{% url action %}">
+    {% else %}
+    <form class="inner-layout" method="post" enctype="multipart/form-data" action="{% url action %}">
+    {% endif %}
+        {% csrf_token %}
+        {% include "en/public/elements/full_page_form_header.html" with heading=heading %}
+        <main class="form">
+            {% include main_template %}
+        </main>
+        {% include "en/public/elements/full_page_form_footer.html" with footer_button_label=footer_button_label %}
+    </form>
+</div>

@@ -1,0 +1,23 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Lost pet search - Meowseum</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search_night.css" %}"/>
+        <script src="{% static "javascript/pet_upload_and_search.js" %}"></script>
+{% endblock %}
+{% block body %}
+    <header class="form">
+        <h1 id="search-heading">Lost cat search</h1>
+        <a href="{% url "index" %}" id="close"><button type="button" class="close"><span>&times;</span></button></a>
+    </header>
+    <main class="form">
+        {% include "en/public/lost_search_main.html" %}
+    </main>
+    <footer class="form">
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+    </footer>
+{% endblock %}

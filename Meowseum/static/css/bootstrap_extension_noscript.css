@@ -1,0 +1,50 @@
+/* File names: bootstrap_extension_v0_0_0_51.css, bootstrap_extension_night_v0_0_0_21.css, bootstrap_extension_noscript_v0_0_0_3.css   Version date: 6/11/2017 10:46 AM  Author: Rachel Bush
+   File description: This style sheet contains sitewide rulesets for when JavaScript is disabled that were simplest to implement within <noscript>.
+                     I avoid this practice when possible, because it can lead to individual pages' JavaScript-compatible style sheets overriding the <noscript> style sheet,
+                     leading to individual pages needing their own <noscript>s just to keep these rules.
+                     Sometimes I start out assuming JavaScript is disabled and have the JavaScript implement any CSS changes dependent on JavaScript being enabled.
+                     Most of the time, this isn't practical because the script takes long enough to complete that the user may see elements jumping around while it is running.
+   Version description:  */
+
+/* 1. General classes: When developing widgets, use these until <noscript> rulesets are added for the widget specifically. This will avoid cluttering up the HTML. */
+.hidden-noscript {
+    /* Hide the element when JavaScript is disabled. */
+    display: none !important;
+}
+/* Show the element when JavaScript is disabled. These rulesets override the rulesets in bootstrap_customized.css which hide the element.
+   There are two reasons to use these classes instead of <noscript>. First, sometimes the hidden element still needs to be present in the HTML (e.g. hidden radio buttons that are being checked by a JavaScript widget).
+   Second, sometimes it is simpler than rewriting a CSS selector ending with "direct child" which would no longer apply to the element if it were wrapped in <noscript>. */
+.visible-noscript-inline {
+    display: inline !important;
+}
+.visible-noscript-block {
+    display: block !important;
+}
+.visible-noscript-inline-block {
+    display: inline-block !important;
+}
+
+.collapse {
+    /* Show collapsed elements when the page loads. This rule is especially useful for form elements that were hidden until something was checked indicating the field is necessary.
+       In some cases, it may lead to too much information being displayed at once. */
+    display: block;
+}
+
+/* 2. Rulesets for widgets. */
+
+.custom-checkbox {
+    /* Fall back to the default checkboxes. */
+    background-color: transparent;
+    border: none;
+}
+.custom-checkbox img, .custom-checkbox .glyphicon-ok {
+    display: none;
+}
+.custom-checkbox input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    position: absolute;
+    left: 28px;
+    top: 1px;
+    display: inline;
+}

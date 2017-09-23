@@ -1,0 +1,23 @@
+{% comment %}
+    File name: file_element_v0_0_4.html
+    Author: Rachel Bush
+    Last modified: 
+    Remarks: This template is for an element that represents the file that is the focus of the page. It can be an image, GIF, video, or possibly some other element in the future depending on the file type.
+    Version description: 
+{% endcomment %}
+{% if 'image' in upload.metadata.mime_type %}
+    <img src="{{ MEDIA_URL }}{{ upload.file|urlencode }}" title="{{ upload.title }}"/></li>
+{% else %}
+    {% if upload.metadata.has_audio %}
+        <video playsinline poster="{{ MEDIA_URL }}{{ upload_directory }}/{{ poster_directory }}/{{ upload.metadata.file_name|urlencode }}.jpg" loop data-autoplay class="hidden-noscript">
+            <source src="{{ MEDIA_URL }}{{ upload.file.name|urlencode }}" type="{{ upload.metadata.mime_type }}"/>
+        </video>
+        <video playsinline poster="{{ MEDIA_URL }}{{ upload_directory }}/{{ poster_directory }}/{{ upload.metadata.file_name|urlencode }}.jpg" loop controls class="visible-noscript-inline-block">
+            <source src="{{ MEDIA_URL }}{{ upload.file.name|urlencode }}" type="{{ upload.metadata.mime_type }}"/>
+        </video>
+    {% else %}
+        <video playsinline poster="{{ MEDIA_URL }}{{ upload_directory }}/{{ poster_directory }}/{{ upload.metadata.file_name|urlencode }}.jpg" muted loop autoplay>
+            <source src="{{ MEDIA_URL }}{{ upload.file.name|urlencode }}" type="{{ upload.metadata.mime_type }}"/>
+        </video>
+    {% endif %}
+{% endif %}

@@ -1,0 +1,19 @@
+footer {
+    background-color: rgb(15,15,15);
+    color: grey;
+}
+#pawprints {
+    display: none;
+}
+footer li {
+    border-right: grey;
+}
+footer li:last-child {
+    border: none;
+}
+footer a {
+    color:grey !important;
+}
+footer a:hover, footer a:active {
+    color: rgb(110,110,110) !important;
+    }

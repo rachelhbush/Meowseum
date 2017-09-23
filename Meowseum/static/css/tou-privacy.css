@@ -1,0 +1,71 @@
+/* File names: tou_v0_0_0_1.html/v2, privacy_v0_0_0_2.html/v0_0_0_3/v0_0_0_4, tou-privacy_v0_0_0_2.css    Version date: 11/4/2016 10:16PM    Author: Rachel Bush
+   Description: 1. 6/28/2016 5:14PM Removed the warrant canary HTML and CSS before publication. The government didn't send me an NSL.
+                   I just decided it'd be wiser not to risk legal fees over it.
+                2. Added data-day and data-night attributes to the cat photo at the end of the TOU. 8/14/2016 9:08PM
+                3. I decided the TOU is the only place I'd like the email to be underlined, so I moved a rule from the sitewide CSS to here.
+                   In the HTML, I also change .email-link to .email. I didn't make a new version for this, because the old version is
+                   in the backup of the whole site. 9/23/2016 11:56PM
+                4. tou_v0_0_0_2.html, privacy_v0_0_0_4.html: I changed the desktop header and mobile header file names. 11/4/2016 10:16PM
+                5. tou_v0_0_0_3.html: I temporarily removed the sentences from section 6 specifying that any legal disagreements must use a court that is convenient for me to appear at,
+                   in order to hide where I live until these sentences feel necessary. 4/21/2017 1:43 AM
+*/
+
+/* Despite the id #tou, some of the rulesets are used by both the Terms of Use and the Privacy Policy. */
+#tou {
+    margin-left: 5%;
+    margin-right: 5%;
+    }
+#tou ol {
+    list-style-type: lower-roman;
+}
+#tou ol, #tou ul {
+   /* This affects the copyright contact list and the privacy policy data type list. Both should be made to stand out by giving them smaller margins than the surrounding text.
+      These margins take into account the Roman letters or bullets appearing outside the block of text. */
+    margin-left: 5%;
+    margin-right: 5%;
+}
+#tou table {
+   border: none;
+}
+/* These rules make the label align with the top of the contact information. The margins between lines and between the table and the next <p> are the same as
+   the default margins between paragraphs, 10px. The cells in the second column are moved rightward with padding-left to give them separation from the label. */
+#tou th {
+    font-weight: normal;
+    vertical-align: top;
+}
+#tou td {
+    padding-left: 15px;
+}
+#tou td, th {
+    padding-bottom: 10px;
+}
+a.email {
+    /* Underline the mailto link for the DMCA email. */
+    text-decoration: underline;
+}
+
+/* Mobile only rules, except for -md- */
+@media (max-width: 991px) {
+    #tou-kitten {
+        display: none;
+        }
+}
+/* Desktop, laptop, and -md- rules */
+@media (min-width: 992px) {
+    #tou {
+        max-width: 980px;
+        margin-left: auto;
+        margin-right: auto;
+        /* Provide some separation from the footer. */
+        margin-bottom: 20px; 
+    }
+    #tou img {
+        display: inline;
+        margin-bottom: 20px;
+        margin-left: 20px;
+        float: right;
+    }
+    #tou-kitten {
+        width: 300px;
+    }
+}

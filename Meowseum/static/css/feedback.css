@@ -1,0 +1,95 @@
+/* File names: feedback_v0_0_0_7.css, feedback_v0_0_0_4.html   Version date: Author: Rachel Bush
+   Version description: 
+*/
+
+/* 1. These rulesets convert the units of all the elements in the form, as set in the sitewide CSS, to ems. This way, changing the font-size in the upcoming media queries will change their dimensions.
+   Each width or height in px is divided by 14px, the height of the Bootstrap body font. This section also contains rules which increase the size of the font and textarea as the viewport increases in area. */
+#feedback h1 {
+    font-size: 2em;
+}
+#feedback table.form th label, #feedback .bold {
+    font-size: 0.9286em;
+}
+#feedback input[type="text"], #feedback input[type="email"] {
+    height: 1.856em;
+}
+#feedback .form-buttons .btn-primary {
+    /* This rule increases the size of the Submit button from its normal size by 5.4% with the font-size: 115% rule and by 10% with the font-size: 120% rule. */
+    font-size: 91.67%;
+    height: 1.856em;
+    padding-left: 0.714em;
+    padding-right: 0.714em;
+}
+
+@media (min-width: 400px) and (min-height: 600px) {
+    #feedback {
+        font-size: 105%;
+    }
+}
+@media (min-width: 400px) and (min-height: 675px), (min-width: 750px) and (min-height: 650px) /* This range affects laptops. */ {
+    #feedback {
+        font-size: 115%;
+    }
+    #feedback textarea {
+        /* As the viewport increases in height, fill the space by increasing the number of rows on the Comments textarea. */
+        height: 100px;
+    }
+}
+@media (min-width: 400px) and (min-height: 750px) {
+    #feedback {
+        font-size: 120%;
+    }
+    #feedback textarea {
+        height: 120px;
+    }
+}
+@media (min-width: 400px) and (min-height: 850px) {
+    #feedback textarea {
+        height: 150px;
+    }
+}
+
+/* 2. Responsively set the padding or maximum width of the area. */
+
+@media (max-width: 700px) /* short portrait-mode smartphones, or smartphones in landscape mode */  {
+    #feedback {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+#feedback {
+    /* Constrain the form to a readable width and horizontally center it in the viewport.
+       The <div id="feedback"> is nested inside <main> because the leftover space on a laptop or desktop may be filled in the future with background images for theming,
+       such as splashed paint or a collage of cat photos. */
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 3. Responsively set the top margin. */
+
+@media (max-height: 400px) /* smartphones in landscape mode */ {
+    #feedback h1 {
+        /* Reduce the separation between the heading and header. */
+        margin-top: 10px;
+    }
+}
+
+@media (min-height: 500px) and (max-width: 1199px) {
+    #feedback h1 {
+        margin-top: 30px;
+    }
+}
+
+@media (min-height: 600px) and (min-width: 1200px) {
+    /* Once the viewport is tall enough to have space for the whole form, vertically center it in the viewport. */
+    #feedback {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%,-50%);
+        -webkit-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+    }
+}

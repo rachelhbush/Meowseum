@@ -1,0 +1,29 @@
+/* File names: upload_page1_main_v0_0_2_9.html, upload_page1_v0_0_0_3.css  Author: Rachel Bush
+   Version description: 
+*/
+
+/* Style the "Up for adoption", "Lost", "Found", "Shelters", "Pets" buttons for the type of upload. */
+#upload-type-field > .btn, #search-type-field > .btn {
+    height: 24px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 2px;
+}
+
+#upload-type-field + #contact-record-warning {
+    /* Hide the warning until the user presses a button other than the button for the Pets category. */
+    display: none;
+}
+
+#tag-list-label {
+    font-weight: normal;
+    font-size: 14px;
+    margin-right: 7px;
+}
+
+#more-detail-btn {
+    /* The "More detail" button, which takes the user to a second page, is not displayed until the user has pressed one of the Adopt, Lost, or Found buttons. */
+    display: none;    
+}

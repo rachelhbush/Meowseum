@@ -1,0 +1,33 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Meowseum - The place for cat lovers to share photos and cat GIFs</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/gallery.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/gallery_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <script>settings.prepareDayModeBackground();</script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    {% include "en/public/gallery_main.html" %}
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+    <script src="{% static "javascript/gallery.js" %}"></script>
+{% endblock %}

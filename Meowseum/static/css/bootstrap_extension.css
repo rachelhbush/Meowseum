@@ -1,0 +1,1499 @@
+/* File names: bootstrap_extension_v0_0_0_52.css, bootstrap_extension_night_v0_0_0_22.css, bootstrap_extension_noscript_v0_0_0_3.css  Version date:  Author: Rachel Bush
+   Description: This file extends Bootstrap with extra classes and widgets. It also sets up any CSS styling that I use consistently across all of my projects. 
+   Version description: 
+*/
+
+/* 1. Common sitewide defaults */
+
+html, body, .page, .inner-layout {
+    /* If the content is less than the height of the viewport, then this ruleset is needed to make the body take up the whole viewport.
+       <div class="page"> allows styling the body without styling <body>. The way a Django site is set up, <body> can only be edited from the sitewide base template. A class can't be added to <body> 
+       in the HTML source code without making the changes sitewide. Wrapping the content of <body> in <div class="page"> will allow these changes. */
+    min-height: 100vh;
+}
+.inner-layout {
+    /* Optional and usually omitted.
+       Wrap the content of <div class="page"> with .inner-layout if you want to use a layout with a fixed or maximum width. This class allows setting a different background for the space between the edge of the
+       layout and the edge of the viewport. Use .inner-background for the layout's background and .page for the background of the side space. For this site's form pages, I put this class on <form>.
+       This ruleset centers the inner layout, so all that the CSS for some class or style sheet will only need to add "max-width: __ px".
+       
+       If you want to put a frame around the entire layout, as on senate.gov (viewed January 2016), then this style sheet is compatible with putting <div class="frame"> between <div class="page"> and
+       this element in the hierarchy. */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Gutters serve to separate content in one column from another, but the space is wasted if there is only white space in the neighboring area of the adjacent column.
+   This class gets rid of gutters inside a Bootstrap column's box model when I need slightly more space.
+   There isn't a corresponding .no-right-gutter because Bootstrap's columns use float: left, so setting padding-right: 0 has no effect.  */
+.no-left-gutter {
+    padding-left: 0;
+}
+
+[class*="visible-noscript-"] {
+    /* Hide elements that should be visible only when JavaScript is disabled and which use a class with this prefix to implement it.
+       The rules related to displaying based on whether JavaScript is enabled need !important in order to override rules with high specificity that display the element for unrelated reasons. */
+    display: none !important;
+}
+
+p > a {
+    /* By default, the cursor will continue being I shaped when mousing over a link within a paragraph. Override it to make the cursor a pointer, as it would be in other circumstances. */
+    cursor: pointer;
+}
+
+/* This ruleset is required for the iphone-inline-video library to be able to hide the iPhone's native play buttons, on iOS 8 and iOS 9, which will play the video fullscreen. */
+.IIV::-webkit-media-controls-play-button,
+.IIV::-webkit-media-controls-start-playback-button {
+    opacity: 0;
+    pointer-events: none;
+    width: 5px;
+}
+
+/* 2. Custom utility classes */
+
+.inline-block {
+    /* This class indicates that the elements inside the block will always wrap as a unit. */
+    display: inline-block;
+}
+
+/* Lists */
+
+.table-center {
+    /* Display the markers directly left of the list item, instead of near the container border. */
+    display: table;
+    /* Horizontally center the list. */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0px;
+}
+.table-right {
+    display: table;
+    /* Right-align the list. */
+    margin-left: auto;
+    padding-left: 0px;
+}
+.unstyled {
+    /* Use this class with the previous two classes to remove list markers. */
+    list-style: none;
+}
+
+.list-unstyled {
+    /* Most times I have used Bootstrap's .list-unstyled, it didn't need the bottom margin that <ul>s for text have, so this ruleset removes it. */
+   margin-bottom: 0px;
+}
+.list-inline.list-unstyled {
+    /* Normally, .list-inline is used for text like a plain <ul>. It styles a list with items on one line as inline-block and adds padding between them.
+       These two rulesets remove this styling so the class will only make all items appear on one line and without any bottom margin.
+       I'm not using the class "inline" because the list itself will still use display: block, and I want to reserve the "inline" class for making the element itself inline. */
+    margin-left: 0px;
+    padding-left: 0px;
+}
+.list-inline.list-unstyled > li {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.pipe-separated {
+    /* Use this class when you want the list items to appear separated by pipes, |. This is common for links in navigation bars, especially those in website footers. */
+   list-style: none;
+   padding-left: 0px;
+   margin-bottom: 0px;
+}
+.pipe-separated > li {
+    display: inline;
+    border-right: 1px solid black;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.pipe-separated > li:last-child {
+    border-right: none;
+}
+.pipe-separated > li.active {
+    font-weight: bold;
+}
+
+/* 3. Background color, font styling, links */
+
+a {
+   /* Like Wikipedia, day mode uses blue links which become underlined when you hover, but with a different shade of blue. Links won't change CSS after visiting them. */
+    color: rgb(42,132,185);
+    text-decoration: none;
+}
+a:hover:, a:active {
+    text-decoration: underline;
+}
+a.url, td a.email {
+    /* Links that use a URL for the text should be able to wrap if the text ends up being longer than the width of the viewport.
+       Without this rule, smartphone users may have to sidescroll to see the entire link. I use word-break, and not word-wrap, so the rule will also apply in a table cell.
+       
+       Most emails are short enough that the author intends them to be used like a word. At a viewport width of 320px, this doesn't cause any problems in a paragraph.
+       If the email is in a table of contact information, allow the email to be broken across lines. */
+    word-break: break-all;
+}
+
+a.close {
+    /* This ruleset positions a close button in the top-right corner of a container. It takes the user back to somewhere like the front page or the previous page.
+       Bootstrap's documentation only mentions button.close, but I found that wrapping it in <a> made Internet Explorer unable to follow the link most of the time. */
+    position: absolute;
+    top: 8px;
+    right: 10px;
+}
+
+/* Style <a>s that are being used to toggle hidden content when clicked.
+   HTML: <a data-toggle="instant-collapse" data-target="#id">Label<span class="minus">-</span></a>.
+   Use data-toggle="collapse" instead to use a transition animation that ends with slightly snapping back.
+   On the target element, use .collapse or .collapse .in to indicate whether it is shown or hidden when the page loads. */
+a[data-toggle*="collapse"]:hover, a[data-toggle*="collapse"]:active {
+    text-decoration: none;
+}
+/* When the link is clicked and the hidden content is shown, display a - sign on the far right of the viewport.
+   I don't include a + because I think the link color suffices to show interactivity, and the + can be distracting. */ 
+a[data-toggle*="collapse"] > span.minus {
+    float: right;
+}
+/* This ruleset is for a blue info glyphicon that can be clicked to expose extra information. (I use a link with a one word label like "Purpose" instead when I draw more attention to the hidden content.)
+   HTML:  <div class="pull-right">
+   <span class="glyphicon glyphicon-info-sign" data-toggle="collapse" data-target="#id"></span>
+   </div> */
+.glyphicon-info-sign {
+    color: rgb(0,101,171);
+    /* The glyphicon cannot be floated right and vertically aligned within the parent element, so I use a <div> floated right in order to be able to do both. */
+    vertical-align: middle;
+}
+
+/* 4. Modals. I only put custom classes on .modal for several reasons. First, it makes all the custom classes affecting the modal size and positioning easier to locate at a glance.
+     Second, CSS can only be applied downward from the highest element in the DOM as the ancestor. Even if the ruleset only affects a certain element (.modal-dialog, .modal-content, .modal-body),
+     once I discovered an IE bug that was only resolved by adding a rule to .modal. */
+
+/* 4a. These rulesets create some defaults for modals to better fit them on phones and tablets. */
+.modal-dialog {
+    /* In Bootstrap's default CSS, the modal takes up the full width below -sm- and 600px above -sm-.
+       These rules makes it easier to specify a width past which the modal doesn't need to expand, or else it will have too much space for its amount of content.
+       Individual modals will only need to override max-width. */
+    width: 100%;
+    /* The new default setting makes the modal no more than the full width of a narrow phone held vertically. */
+    max-width: 350px;
+    /* There is a bug with % fixed positioning of the modal on phones:
+       margin-top and margin-bottom, for some reason, use % relative to the width instead of the height. This bug isn't present in the top: property,
+       so the margins are being set to 0 not to interfere. This may just be a bug in Google Developer Tools */
+    /* In Bootstrap's default CSS, the modal has margin-top and margin-bottom properties of 10px on -xs- and 30px on -sm-. */
+    margin-top: 0px;
+    margin-bottom: 0px;
+    /* In Bootstrap's default CSS, the modal is centered above the -sm- breakpoint, but it has fixed-width 10px margins on all sides for -xs-, which makes it appear on the left side of the viewport.
+       These rules make the modal centered on all devices.  */
+    margin-left: auto;
+    margin-right: auto;
+}
+.modal-header {
+    padding-top: 13px;
+    padding-bottom: 8px;
+}
+/* This ruleset moves the X button from the top-right corner downward to be on the same line as the modal heading. */
+.modal-header .close {
+    margin-top: 1px;
+}
+/* The rules for rounding the corners of .modal-content were having no effect on rounding the bottom of .modal-footer. They should have worked, because they had an effect on the
+   top of .modal-header and the bottom of modals without .modal-footer. So, I added a ruleset that explicitly rounds .modal-footer's bottom corners.
+   Then the .modal-header corners became sharp, so I had to round them, too. The reason is unknown, and this occurred in multiple browsers. */ 
+.modal-header {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.modal-footer {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+
+/* 4b. These classes, which go on .modal, allow the width of the modal to vary based on the width of its content.
+   1. Use .dynamic-width when the modal has static content. This class is free from upper limits on dimensions. I've used this specifically to support modals with multiple columns of menu items.
+   2. Use .dynamic-content when the modal contains an image or video uploaded by a user, because it will constrains the maximum dimensions of its content so that the modal can fit in the viewport.
+      .dynamic-height modifies this class by turning off the height constraints; the user scrolls to view all the image instead. It also makes the modal grow downward from the top of the viewport instead of
+      being centered, like Bootstrap's defaults. */
+.dynamic-width .modal-dialog, .dynamic-content .modal-dialog {
+    display: table; /* This is important */
+   /* Override Bootstrap's fixed-width rules. */
+    width: auto;
+    /* This rule prevents the modal from being very small before the image loads, then suddenly jumping in size.
+       I chose 200px because it is the width of the modals I use for menus. */
+    min-width: 200px;
+}
+.dynamic-width .modal-dialog, .dynamic-content .modal-dialog {
+    /* Remove the fixed-width setting that was in place to keep the modal from expanding to near 100% viewport width.
+       This has to be removed for .dynamic-content, too, because the width restriction will be done by another modal element. */
+    max-width: none;
+}
+.dynamic-content:not(.dynamic-height) {
+    /* This rule resolves a bug in Internet Explorer/MS Edge, where empty space appears beneath the modal with a scrollbar to the right.
+       It is the reason the classes go on .modal. */
+    overflow-y: hidden;
+}
+.dynamic-content .modal-body > :only-child {
+    /* Prevent the modal from horizontally overflowing the viewport of a smartphone.
+       The .modal-body still has the default 15px on each side, so this rule leaves 10px between the edge of the modal and the edge of the viewport. */
+    max-width: calc(100vw - 50px);
+}
+/* If the modal only contains a photo, GIF or video, then limit its height in order to fit the modal in the viewport.
+   If .dynamic-height is also being used, then the content and its modal will overflow the viewport and the user can scroll through it. */
+.dynamic-content:not(.dynamic-height) .modal-body > :only-child {
+    max-height: calc(100vh - 160px);
+}
+
+/* 4c. Vertically positioning a modal */
+
+/* 1) If the modal height is less than 100% of the height of the viewport, the modal's center should be at the center of the viewport.
+      The sitewide CSS treats this situation as the default. */
+.modal-dialog {
+    top: 50vh;
+}
+/* Before the modal is vertically centered, it appears with a slide-down animation by a distance of 25% of the height of the modal.
+   This effect is already in Bootstrap's default, but it needed to be written again while overriding the final modal position in order to keep it. */
+.modal.fade .modal-dialog {
+    -ms-transform: translate(0, -75%) !important
+    -webkit-transform: translate(0, -75%) !important
+    -moz-transform: translate(0, -75%) !important
+    transform: translate(0, -75%) !important /* !important was necessary to override Bootstrap's translate property. */;
+}
+.modal.in .modal-dialog {
+    -ms-transform: translate(0, -50%) !important;
+    -webkit-transform: translate(0, -50%) !important;
+    -moz-transform: translate(0, -50%) !important;
+    transform: translate(0, -50%) !important;
+}
+
+/* 2) .scrollable: This class is automatically added by the sitewide JavaScript when the modal is within 20px from overflowing the viewport. It repositions the modal the top of the modal near the top
+                   of the viewport. You should add it in the HTML source code when a JavaScript interaction could cause the modal to overflow the viewport, which will make the modal exempt from vertical centering. */
+.modal.scrollable .modal-dialog {
+    top: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.modal.scrollable.fade .modal-dialog {
+    -ms-transform: translate(0, -25%) !important;
+    -webkit-transform: translate(0, -25%) !important;
+    -moz-transform: translate(0, -25%) !important;
+    transform: translate(0, -25%) !important;
+}
+.modal.scrollable.in .modal-dialog {
+    -ms-transform: translate(0, 0) !important;
+    -webkit-transform: translate(0, 0) !important;
+    -moz-transform: translate(0, 0) !important;
+    transform: translate(0, 0) !important;
+}
+
+/* 3) .short: When the modal takes up less than a third of the height of the viewport, it looks better further above the center at greater viewport heights.
+When the modal takes up most of the viewport height, the unevenness above and below the modal is undesirably noticable.
+.modal-short addresses this just for modals under 300px. It's a very minor change compared to coding all the other scenarios, and in most other situations improving
+the positioning would be a waste of time. */
+@media (min-height: 600px) {
+    .short .modal-dialog {
+        top: 49vh;
+    }
+}
+@media (min-height: 800px) {
+    .short .modal-dialog {
+        top: 46vh;
+    }
+}
+@media (min-height: 1200px) {
+    .short .modal-dialog {
+        top: 44vh;
+    }
+}
+
+/* 4. Styling forms. */
+
+/* 4a. How I prefer to organize my forms:
+
+   Only some parts of the form use a table, with "Label:" on the left and a field on the right.  Django automatically styles forms entirely nested in one table, but the
+   price of greater customization is having to also include rulesets for styling form tables manually. The beginning of this section does the same thing as Django. Customization
+   allows sections with inline checkboxes and fields with placeholder text instead of labels. I also use fields with widgets that check hidden radio buttons. This includes rating
+   widgets (e.g. 5 stars) and sets of Bootstrap buttons where only one can be pressed at a time.
+   
+   I use a total of 10px of vertical spacing between form fields and sections by having 5px of padding on the top and bottom.
+   By keeping this consistent, forms look better and allow reordering sections in the HTML without altering the CSS.
+   
+   HTML syntax:
+   1. Use <table class="form"> to organize fields in tables like Django.
+      The label is bolded by default. Use class="optional" when it is debolded because bold signifies a required field, and use class="debold" otherwise.
+   2. Use <div class="field"> to enclose text fields, textareas, and yes/no questions with inline radio buttons that wrap.
+      These fields either have the label on a separate line due to the label length, or they have no label because they use a placeholder value instead.
+      -Wrap a form control following <label> in a <div> to have it wrap as an inline-block unit.
+      For example, "Yes/No" radio buttons would appear under the label on a smartphone in portrait mode and to the right of the label in landscape mode.
+      -Wrap part of the <label> in a <div> to have it wrap as a unit. This is useful if part of it is non-bolded or in parentheses. Using <br class="visible-lsph"> is also useful for
+       only allowing the label to wrap as a unit when it would reduce the amount of conspicuously empty space.
+       "What services are included with the base
+       adoption fee?
+       This section allows you to skip part of the adoption form."
+       On a smartphone, it would provide a line-break between sentences only when the first sentence is all on one line.
+   3. Bolding: Table labels are bolded by default. Use class="optional" when it is debolded because bold signifies a required field, and use class="debold" otherwise.
+      Use class="bold" with .field labels. The bold-related classes can also be used with a <span> to bold part of the label.
+   3. Use <div class="inline-checkboxes"> to enclose a series of inline checkboxes. No wrapper element is necessary for checkboxes on a single line.
+   4. Use .inline-radio-buttons on a <div> or <td> with inline radio buttons involving multiple rows.
+   5. Use .radio-btn on each Bootstrap button in a set that will behave the same way as radio buttons; only one has the "active" class when pressed.
+      Any input[type="radio"] controls listed afterward in the same parent <div> will be hidden, and when a Bootstrap button is pressed, the corresponding one will become checked. 
+      The Bootstrap buttons and radio button form controls must be listed in the same order.
+   6. Use <div class="form-buttons"> to enclose form buttons in the middle of a field, like a "Save changes" button, and it will style it similarly to the footer.
+      When all fields are optional, put at the top
+        <div class="all-fields-are-optional">
+            All fields are optional.
+            <input type="submit" class="btn btn-primary" value="Submit"/>
+        </div>
+   7. Use <div class="form-unit"> to enclose anything else that receives the usual 5px of top and bottom padding.
+      This includes multiselects and sections with a few paragraphs of information in the middle of the form.
+   8. When I need to address something specifically in the form's stylesheet, for consistency I use id="fieldname-field".
+      
+  Common improvements in style sheets for individual pages:
+  Forms with many consecutive text fields in tables should have a breakpoint, above which all the columns for all the labels will be the same width.
+  This makes all the text fields the same width so that their edges align. Below the breakpoint, it looks better when text fields are allowed to expand as much as possible.
+  Inspect all the tables' <th> columns in Developer Tools and make them all use the width of the widest one. */
+
+table.form {
+    width: 100%;
+}
+table.form td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+table.form th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* If the label and form control both take up one line, these rules vertically align its center with the center of the form control.
+       Occasionally the alignment a little off for reasons that can't be helped, like some browsers nesting radio buttons being nested within a block that provides extra padding.
+       If the form control is taller than one line of text (e.g. a textarea), this aligns the label's top with the form control's top, a standard layout presented in textbooks
+       and used by Django. When the default of vertical-align: middle was used, most labels appeared too far down, not vertically centered, even though the inspector showed
+       equal padding above and below. */
+    vertical-align: top;
+    /* In order to be able to customizize the right margin on the longest label, the header cell has to have a fixed width, or else the browser will make the content area
+       of <th> include a right margin of about 30px. Setting the fixed width to 1px has the same effect as setting it to auto does in other circumstances. */
+    width: 1px;
+}
+table.form th label {
+    /* These next three rules work together to make the whole column for field labels 13px wider than the width of the longest label, with the label only on one line. */
+    /* Prevent the label from wrapping unless it contains <br>. All the header cells take on the same width as the longest header cell.
+       To have an independent header cell length or start a set of rows with a different header cell length, begin a different table.form.  */
+    white-space: nowrap;
+    /* Set the space between the right edge of the longest label and the left edge of the field. */
+    margin-right: 13px;
+    /* Remove the default 5px bottom margin that assumes the label is above the field instead of left of the field. */
+    margin-bottom: 0px;
+    /* These two rules make labels appear more vertically aligned with the vertical center of the form control. */
+    position: relative;
+    top: 2px;
+}
+table.form input[type="text"]:not(.currency), table.form input[type="password"],
+table.form input[type="url"], table.form input[type="email"], table.form input[type="tel"], /* text fields */
+table.form select /* dropdowns */ {
+    width: 100%;
+}
+table.form textarea {
+    width: 100%;
+    height: 60px;
+}
+/* Prevent "Browse for file" buttons from overflowing. They were causing narrow smartphone viewports to sidescroll. The rule causes "No file chosen" to take on an ellipsis.
+   The actual "Browse for file" rectangle isn't involved, and won't be affected no matter how much the browser is narrowed.
+   Max-width didn't work to prevent the overflow like I'd have expected. If I customize the file buttons in the future, this selector will exempt any that are wrapped in a <div>. */
+table.form td > input[type="file"] {
+    width: 100%;
+}
+
+/* The following four rulesets involve a scenario where additional text fields can be added using a plus sign button beside the label. */
+table.form th {
+    /* Position the plus sign relative to a corner of the cell for the label. */
+    position: relative;
+}
+table.form th > span.add-field {
+    /* Set the initial position of the plus sign to be vertically centered relative to the first text field and 6px from its left edge.
+       The plus sign will be moved down by an increment with each new field. */
+    position: absolute;
+    top: 8px;
+    right: 6px;
+    cursor: pointer;
+}
+table.form th .add-field+label {
+    /* Add 5px more space between the right edge of the label and the left edge of the field, in order to be able to make room for the plus sign. */
+    margin-right: 18px;
+}
+table.form input[type="text"]+br+input[type="text"], table.form input[type="search"]+br+input[type="search"], table.form input[type="url"]+br+input[type="url"], 
+table.form input[type="email"]+br+input[type="email"], table.form input[type="tel"]+br+input[type="tel"], table.form input[type="number"]+br+input[type="number"], 
+table.form input[type="time"]+br+input[type="time"], table.form input[type="date"]+br+input[type="date"], table.form input[type="datetime-local"]+br+input[type="datetime-local"], 
+table.form input[type="week"]+br+input[type="week"], table.form input[type="month"]+br+input[type="month"] {
+    /* This ruleset is for a field with a plus sign nearby that the user can click to add another value using an HTML5 form control. Each value is in a <td> and separated by <br>s.
+       This rule sets the size of the vertical gap between successive HTML5 form controls, half as much as for those with separate labels. This ruleset relates to a function in forms.js.
+       The selector was written so that this rule won't affect other situations with two fields in the same cell, like date and time or specifying a range using two number fields. */
+    margin-top: 5px;
+}
+
+.field, .form-unit {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.form-unit  > p:last-child {
+    /* If the section contains paragraphs, this rule preserves spacing between sections by removing the last one's bottom margin. */
+    margin-bottom: 0px;
+}
+
+/* In this scenario, there is a text field, textarea, or dropdown with a label on a separate line above it, because the label is too long for a 320px viewport.
+   This usually occurs at 14 characters or more. The "label+br+" part of the selector exempts fields using a placeholder value instead of a label. */
+.field label+br+input[type="text"], .field label+br+input[type="password"], .field label+br+input[type="url"],
+.field label+br+input[type="email"], .field label+br+input[type="tel"],
+.field label+br+textarea, .field label+br+select {
+    width: 100%;
+}
+.field label+br+textarea {
+    height: 60px;
+}
+/* In this situation, a text field has placeholder text instead of a label and the text field is on its own line.
+   This also includes textareas with placeholder text, assuming they are styled to look like they are input[type="text"] and expand vertically when clicked. */
+.field input[type="text"][placeholder]:only-child,
+.field input[type="password"][placeholder]:only-child,
+.field input[type="url"][placeholder]:only-child,
+.field input[type="email"][placeholder]:only-child,
+.field input[type="tel"][placeholder]:only-child {
+        width: 100%;
+        height: 28px;
+}
+.field textarea[placeholder]:only-child {
+    width: 100%;
+    height: 60px;
+    /* This rule is needed to vertically align the placeholder text of a textarea. */
+    padding-top: 3px;
+    /* Remove the diagonal striping in the bottom-right corner of textareas in Chrome. */
+    resize: none;
+}
+.field label > div {
+    /* You can wrap part of the <label> in a <div> to have it wrap as a unit. This is useful for a bolded label with a non-bolded part in parentheses. */
+    display: inline-block;
+}
+.field label ~ div {
+    /* A <div> following a <label> can wrap a form control to make it inline-block. */
+   display: inline-block;
+}
+.field > label:first-child, .inline-checkboxes > label:first-child {
+    /* Add a right-margin to the label in case the label has an inline-block element after it. */
+    margin-right: 7px;
+}
+
+.form h2 {
+    /* Allow headings of sections within forms to have some element, such as a checkbox, to the right.
+       If the elements above and below the h2 were inline, this rule might cause the h2 to wrap to the next line, but in a form the elements above and below it will always
+       be block elements, so this won't happen. */
+    display: inline-block;
+}
+.form-buttons+h2 {
+    /* The space between the bottom of a "Save changes" button and an <h2> is much taller than the bottom of a field and an <h2> without this rule. */
+    margin-top: 6px;
+}
+/* Allow an inline checkbox to be placed to the right of the heading, vertically centered within the heading height. This was intended for a "same as previous section" checkbox. */
+.form h2+.checkbox-inline {
+    margin-left: 20px;
+    top: -2px;
+}
+/* Allow a link to be placed to the right of the heading, which a user can click to show more detailed form instructions below the subheading. */
+.form h2+a[data-toggle] {
+    margin-left: 20px;
+    position: relative;
+    top: -1px;
+}
+.form h2+a[data-toggle] span.minus {
+    /* Vertically center the - sign of the link within the height of the heading. */
+    margin-top: 12px;
+}
+
+.form-unit > a[data-toggle]+p:first-of-type {
+    /* This ruleset is for a unit of the form with a link at the top that you can expand to show or hide form instructions. Preserve the usual amount of spacing between elements. */
+    margin-top: 5px;
+}
+
+input[type="date"]+a[data-toggle] {
+    /* This ruleset is for HTML5 form controls with a link for showing help text next to them. */ 
+    margin-left: 5px;
+}
+
+.nested-form {
+    /* <div class="nested-form collapse"> is for a container of form fields that are hidden until certain options are selected in other form controls above it.
+       When any field inside the .nested-form is shown, then .nested-form is shown, and when the last visible field is hidden, then .nested-form is hidden.
+       Inside the .nested-form, use <fieldset> to wrap multiple fields that will be toggled together. For now, .collapse is being used to hide the structure when JavaScript is turned off. HTML: 
+       <div class="nested-form">
+           <fieldset class="collapse">
+               fields
+           </fieldset>
+           <div class="collapse">
+               a field
+           </div>
+       </div>
+    */ 
+    /* Present the nested form in a panel with a darker background color and round borders. */
+    background-color: rgb(220,220,220);
+    border-radius: 5px;
+    border: 1px solid rgb(190,190,190);
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    /* To use a horizontal rule for visual separation instead, just replace these rules with padding-bottom: 5px and margin-bottom: 5px. */
+}
+
+/* 4b. Error list, placeholders and labels, text fields, HTML5 controls, dropdowns, textareas, custom file browse, "same-as-previous-section" fields */
+
+.required-asterisk {
+    /* This is my preferred shade of red for coloring the asterisk of a required field. */
+   color: rgb(230,0,0);
+}
+.errorlist {
+    /* The error list should have 5px of space between it and the field. In many situations, this will be provided by the form unit instead, because they use 5px on each end to create 10px gaps. */
+    margin-bottom: 0px;
+    padding-left: 0px;
+}
+table.form td .errorlist {
+    /* For the parts of the form organized using a table, right-align the error list over the field in the same cell.
+       This works well for 100% width fields, usually text fields and dropdowns. For narrow form controls, it needs adjusting; see the comments at the top of the next media query. */
+    display: table;
+    margin-left: auto;
+    margin-bottom: 5px;
+}
+@media (min-width: 544px) {
+    /* At wide viewport widths, it looks better when the error is left-aligned over narrow form controls like Yes/No radio buttons.
+       The reader's eyes are looking at both the left side for the label and the right side for the error message.
+       At narrow viewport widths, though, it looks better for all the error messages to be on the same side of the viewport. */
+    table.form td.inline-radio-buttons .errorlist {
+        margin-left: 0px;
+    }
+}
+.errorlist > li {
+    /* dark red */
+    color: rgb(200,0,0);
+    list-style: none;
+}
+.errorlist > li:not(:only-child) {
+    /* When the list item is an only child, the list marker is hidden and there is no indentation. When there are multiple list items, they have list markers and the items are indented enough
+       that the markers align just inside the left edges of the text fields. */
+    padding-left: 20px;
+}
+.errorlist > li:not(:only-child)::before {
+    /* Use bullet points only when there are multiple errors, either for the same field or for the form as a whole. This ruleset will allow the bullet points to be black while the list text is dark red. */
+   content: '\2022';
+   display: block;
+   position: relative;
+   max-width: 0px;
+   max-height: 0px;
+   left: -12px;
+   top: -3px;
+   color: black;
+   font-size: 20px;
+}
+
+/* Style the site's placeholder text. These rulesets make Chrome's dark grey color uniform across browsers. */
+::-webkit-input-placeholder /* Chrome/Opera/Safari */ {
+    color: rgb(169,169,169);
+}
+:-moz-placeholder /* Firefox 19+ */ {
+    color: rgb(169,169,169);
+}
+::-moz-placeholder /* Firefox 18- */ {
+    color: rgb(169,169,169);
+    opacity: 1;
+}
+:-ms-input-placeholder /* IE 10+ */ {
+    color: rgb(169,169,169);
+} 
+
+/* Required/optional system for form labels:
+   1. When most of the fields are optional, the required fields have an asterisk.
+   2. When most of the fields are required, the label has "(optional)" in italics at the end.
+      Err toward this system, because research shows people are more likely to fill out optional fields in a form using it.
+   3. When most of the fields are text fields short enough to be organized in a table, like "Name", and most of the fields are required, I still use "Required fields are indicated in [bold]."
+      This avoids having to put the label with "(optional)" on a separate line, increasing the form length considerably.
+   4. When all of the fields are optional (e.g. search pages), there is a short message at the top with a second Submit button.
+   5. When all of the fields are required, and it should be apparent from context, there is no symbol or message until the user leaves a field blank.
+   
+   Bolding/italics system:
+   Most of the time, bolding has no relation to whether a field is required. On my site, longer and more conversational labels like "Have you ever owned a cat?" will lack bold, and short labels
+   like "Name:" will have bold. Sometimes I bold only the first part of a label using a <span>, like only the first sentence of "What services are included with the base adoption fee? This section
+   allows you to skip part of the adoption form." So, I added classes for bold and italics in order to make label styling more flexible.
+   
+   By default, labels are not bolded unless they are in a form table.
+   The class .bold exists to add bold to a label not in a form table.
+   The class .debold exists to remove bold from a label in a form table.
+   The class .italics is used mainly for <span class="italics">(optional)</span>.
+*/
+
+label {
+    font-weight: normal;
+}
+
+table.form th label /* Bold the labels of fields organized into tables. */, .bold {
+    font-weight: bold;
+    /* Reduce the font size by 8% to reduce the contrast with the body text. */
+    font-size: 13px;
+}
+.debold {
+    font-weight: normal !important;
+    font-size: 14px  !important;
+}
+.italic, .italics {
+    /* Style "(optional)" within labels. */
+    font-style: italic;
+}
+
+/* Most text fields use this ruleset to ensure uniformity across browsers. I took three screenshots showing the fields before, with the Chrome defaults,
+   the IE defaults, and after this ruleset was applied. */
+input[type="text"], input[type="password"], input[type="search"], input[type="url"], input[type="email"], input[type="tel"],
+input[type="number"], input[type="time"], input[type="date"], input[type="datetime-local"], input[type="week"], input[type="month"], textarea {
+    /* Round the tips of the corners. */
+    border-radius: 2px;
+    /* The Chrome default is 2px inset rgb(238,238,238), but it just looks like a thicker, darker solid border unless border-radius is applied, which forces it into looking like
+       the traditional inset border. Compared to Chrome's defaults, the net effect is to lighten and thin the border, a very minor change.
+       Compared to IE's defaults, this gets rid of the inset border. */
+    border: 1px solid rgb(180,180,180);
+    /* Move the text to the right, so it won't be up against the left edge of the container.
+       This is the same amount of space that <select> dropdowns have on the left, even though it doesn't show up in their box models. */
+    padding-left: 4px;
+    /* Chrome: No change, except to add back to the total height the 2px lost by narrowing the border. IE: This rule is needed for text to appear vertically centered.
+       Without it, the text appears nearly at the bottom of the field. */
+    height: 26px;
+}
+
+input[type="number"] {
+    /* Shorten the width of the number field down to enough room for three characters, because two or three characters will be the most common case. */
+    width: 40px;
+}
+input.currency {
+    /* Shorten the width of a field intended for an amount of money down to enough space for "000.00". */
+    width: 65px;
+}
+@media (min-width: 1200px) {
+    input[type="date"] {
+        /* Shorten the width of the date field from Chrome's default down to the minimum width possible. Under this width, "yyyy" will begin to be erased from right to left
+           on the version for devices supporting mouseover. */
+        width: 135px;
+    }
+    input[type="time"] {
+        /* Browsers not supporting the time control will render the text field at the same width as Chrome, shorter than a text field's usual length. */
+        width: 102px;
+    }
+}
+@media (max-width: 1199px) {
+    /* The mobile date and time fields can be less wide than the desktop date and time fields because they don't need space for clickable up and down arrows on hover.
+       Also, at a viewport width of 320px, the date field needed to be less wide in order to support having a time field to the right of a date field. */
+    input[type="date"] {
+        width: 125px;
+    }
+    input[type="time"] {
+        width: 85px;
+    }
+}
+input[type="date"]+button, input[type="time"]+button {
+    /* This ruleset styles a "Today" or "Now" button placed to the right of a date or time field. */
+    height: 24px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 12px;
+    margin-left: 5px;
+    /* Move the button, and everything in the document, up one pixel, centering the button within the height of the date or time field. */
+    vertical-align: 10%;
+}
+
+form .glyphicon-search, form .search-icon {
+    /* Corresponding JavaScript in forms.js makes the search icon within a search bar submit the form when clicked, so make the cursor a pointer when hovering over it. */
+    cursor: pointer;
+}
+
+
+select:not([multiple]) {
+    border-radius: 2px;
+    /* IE's defaults use a 2px solid dark grey border.  Chrome's defaults use 1px solid rgb(169,169,169). This ruleset brings it into uniformity with the text fields. */
+    border: 1px solid rgb(180,180,180);
+    /* This ruleset is needed by both Chrome and IE to make <select>s the same height as text fields. */
+    height: 26px;
+}
+/* Remove Bootstrap's cyan highlight from <select>s receiving focus, while leaving the cyan shadow. */
+select:focus {
+    border-color: rgb(180,180,180) !important /* Without marking this rule as important, Bootstrap overrides it due to higher specificity. */;
+}
+
+textarea {
+    /* This rule erases cross-browser differences in the bottom margin of textareas. Without this rule, Chrome and Opera (Webkit browsers) add 5px of space. This doesn't show up in the box model in Developer Tools,
+    but it shows up in the parent element's content area. IE doesn't add extra space. In Firefox, the extra space is 2px.  */
+    vertical-align: top;
+    /* Remove the diagonal stripes in the lower-right corner in some browsers, at the cost of not allowing the user to resize the textarea. */
+    resize: none;
+}
+
+.custom-file-browse {
+    /* This widget replaces the default "Browse for file" widget. It does not include a field for showing the path to the file on the user's computer. Paste the following HTML:
+       <label for="ID_HERE" class="custom-file-browse">
+           <a type="button" class="btn your-class">Button label</a>
+           <input type="file" id="ID_HERE">
+       </label>
+       
+       This time the id and for attributes are not optional. Other tags can be used in place of <a>, but <button> won't work. Out of all browsers, only IE11 (not IE9 and IE10) needs forms.js for this to work.
+       This CSS rule removes the space usually intended to be between a form label and its field. */
+    margin-bottom: 0px;
+}
+.custom-file-browse input[type="file"] {
+    display: none;
+}
+
+/* These rulesets, for the disabled and readonly attributes, are copies of Bootstrap's. The only difference is that the readonly attribute also has the not-allowed sign.
+   Also, they don't require an extra Bootstrap class, which I don't use, in order to be applied. It requires .form-control, which I don't use because it overrides a lot of unrelated properites like
+   font size, padding, and corner rounding that I've set individually. */
+[disabled], [readonly] {
+    background-color: #eee !important;
+    opacity: 1;
+}
+[disabled], [readonly], .disabled {
+    cursor: not-allowed !important /* I used !important on these rulesets in order to override the specificity of Bootstrap's selectors. */;
+}
+.disabled input, .disabled select {
+    /* Apply the CSS for [disabled], [readonly] to all form elements inside. This is somewhat redundant, because the JavaScript function will need to add the relevant attributes to all the elements.
+       I wanted .disabled to make the not-allowed cursor to apply to the whole area, not just the elements, but if the class doesn't also grey out the fields, it won't make sense. */
+    background-color: #eee !important;
+    opacity: 1;
+}
+
+/* 4c. This section is for alternatives to <select> listboxes (multiselects), which have been added in order to avoid requring users without a mobile OS (Android or iOS) to hold down Ctrl or Shift. */ 
+
+/*  .checkbox-dropdown renders like a <select> dropdown, but with checkboxes. I also refer to these as "checkbox dropdowns". The clear button is optional.
+    Example HTML:
+    <fieldset class="checkbox-dropdown">
+        <label>Everyone<span class="caret"></span></label>
+        <div>
+            <button type="button" class="btn btn-primary">Clear</button>
+            <div><input type="checkbox" name="followed_user_lists" value="any"/>Any</div>
+            <div><input type="checkbox" name="followed_user_lists" value="Followed users"/>Followed users</div>
+            <div><input type="checkbox" name="followed_user_lists" value="Friends"/>Users in my Friends list</div>
+            <div><input type="checkbox" name="followed_user_lists" value="Family"/>Users in my Family list</div>
+            <div><input type="checkbox" name="followed_user_lists" value="Work"/>Users in my Work list</div>
+        </div>
+    </fieldset> */
+.checkbox-dropdown {
+    /* This ruleset styles the dropdown when it is closed. */
+    overflow-y: hidden;
+    background-color: white;
+    /* See the previous section for comments on these three rules. */
+    border-radius: 2px;
+    border: 1px solid rgb(180,180,180);
+    height: 26px;
+    /* Position the box for the dropdown options relative to a corner of this element, its parent. Without this rule, its width also keeps going past this element's right border. */
+    position: relative;
+    /* Prevent the cursor from becoming an I when it goes over text. */
+    cursor: default;
+    /* Prevent highlighting text, in order to make the control more like a <select>. This feature is not supported by IE9 and Android 4.1.  */
+    -webkit-user-select: none;  /* Chrome all / Safari all / Opera */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    -webkit-touch-callout: none; /* Disable Android and iOS callouts, such as "Copy/Define". */  
+}
+/* Align content within <label>, the container for the dropdown label text. */
+.checkbox-dropdown > label {
+    display: block;
+    margin-bottom: 0px;
+    /* Without this rule, if the label text is omitted from the dropdown, because there's already a label above or to the left, then there's a glitch where the first option appears as the label instead.
+       The value should be the same as the height of .checkbox-dropdown, minus the total border width. */
+    height: 24px;
+    /* Vertically center the dropdown label. */
+    padding-top: 2px;
+    padding-bottom: 2px;
+    /* Move the text to the right, so it won't be up against the left edge of the container. */
+    padding-left: 4px;
+    /* Place the caret (dropdown symbol) the same distance left of the right border as in a <select> dropdown. */
+    padding-right: 7px;
+}
+.checkbox-dropdown > label > .caret {
+    float: right;
+    /* Vertically center the caret. */
+    margin-top: 8px;
+}
+.checkbox-dropdown.open {
+    /* Remove height limitations when the user opens the dropdown. */
+    height: auto;
+    overflow-y: initial;
+}
+/* Style the container for the dropdown options. */
+.checkbox-dropdown.open > div:last-child {
+    /* When the dropdown overflows, this amount of top padding vertically centers the visible area, if the height is set to include empty space at the top of the option below the visible ones. */
+    padding-top: 4px;
+    padding-bottom: 5px;
+    /* When the dropdown is open, like the <select> dropdown, the maximum height of the visible area should be the combined height of 20 options, except this element adds 8px for top and bottom padding.
+       (20 * 22 + 8)px. During development, use a value of 52px to more easily see how the dropdown will look when the options overflow the available area.
+       The JavaScript restricts the maximum height so that the dropdown will never be cut off by the boundaries of the viewport, so it can still turn into an overflow when there are less than 20 options. */
+    max-height: 448px;
+    overflow-y: auto;
+    /* Make this part of the dropdown float above the rest of the page. The rest of these rules are needed as a consequence of this rule. */
+   position: absolute;
+   /* The element loses the background-color of the parent element when it is taken out of the flow, so this rule needed to be restated. */
+   background-color: white;
+   /* Use the same border color as the <select> dropdown. */
+   border: 1px solid rgb(122,156,211);
+   width: 100%; /* This is a fallback rule in case the browser doesn't support calc(). */
+   /* Ignore the borders of the parent element, which are invisible because the element is absolutely positioned, when calculating this element's width. */
+   width: calc(100% + 2px);
+   margin-left: calc(-1px);
+   /* Without this rule, elements that aren't even absolutely positioned try to appear over the dropdown. */
+   z-index: 1;
+}
+.checkbox-dropdown.open.above > div:last-child {
+    /* If the "above" class is added, the options appear above the dropdown label instead of below it.
+       The class will be added if the dropdown is far enough down in the viewport that opening upward allows more room. */
+    top: 0px;
+    -ms-transform: translateY(-100%);
+    -webkit-transform: translateY(-100%);
+    -moz-transform: translateY(-100%);
+    transform: translateY(-100%);
+}
+/* Style the container for each option. */
+.checkbox-dropdown.open > div > div {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    /* Move the text to the right, so it won't be up against the left edge of the container.
+       This is slightly more than for text fields and <select> dropdowns, in order to give the checkboxes more room. */
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.checkbox-dropdown.open > div:last-child > .selected {
+    /* Highlight an option while its checkmark is checked. */
+    background-color: rgb(30,144,255);
+    color: white;
+}
+@media (min-width: 1200px) {
+    .checkbox-dropdown.open > div:last-child > div:hover {
+        /* Highlight an unchecked option while the user is hovering over it. There is a "sticky hover" problem where, on touchscreen devices, the last option to be clicked
+           will stay highlighted until another one is clicked. So, this ruleset only applies over 1200px viewport width, at which point most devices will be using a mouse instead. */
+        background-color: rgb(30,144,255);
+        color: white;
+    }
+}
+.checkbox-dropdown.open input[type="checkbox"] {
+    /* Bring each checkbox and its label into closer alignment. */
+    vertical-align: top;
+    /* This excludes the 3px of space from the spaces that Django includes at the front of the label. */
+    margin-right: 2px;
+}
+
+/* When the .checkbox-dropdown or .scrollable-checkboxes has a lot of options, it has a Clear button in the top-right corner. Clicking the Clear button will unselect all the options.
+   If included, this button should be the first element within the container for the options. Depending on the context, there may also be an Any checkbox.
+   The Any checkbox isn't itself an option; clicking the Any checkbox will select all the options.  */
+.checkbox-dropdown .btn-primary, .scrollable-checkboxes .btn-primary {
+    height: 20px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 2px;
+    font-size: 13px;
+    /* Vertically center the button label. */
+    padding-top: 1px;
+    /* Position the button within the dropdown. */
+    float: right;
+}
+.checkbox-dropdown .btn-primary {
+    margin-right: 10px;
+}
+.scrollable-checkboxes .btn-primary {
+    /* The difference in positioning between the two types of multiselects is caused by the difference in padding for the container of all the options. */
+    margin-right: 5px;
+}
+
+/* .scrollable-checkboxes renders like a Bootstrap multiselect, but with checkboxes. I also refer to these as "scrollable checkbox areas".
+   Like multiselects, the data-size attribute sets the height using a multiple of its value. This value must be more than 1, because the HTML structure can't support dropdowns.
+   The clear button is optional. Example HTML:
+    <fieldset class="scrollable-checkboxes" data-size="3">
+        <button type="button" class="btn btn-primary">Clear</button>
+        <div><input type="checkbox" name="followed_user_lists" value="any"/>Any</div>
+        <div><input type="checkbox" name="followed_user_lists" value="Followed users"/>Followed users</div>
+        <div><input type="checkbox" name="followed_user_lists" value="Friends"/>Users in my Friends list</div>
+        <div><input type="checkbox" name="followed_user_lists" value="Family"/>Users in my Family list</div>
+        <div><input type="checkbox" name="followed_user_lists" value="Work"/>Users in my Work list</div>
+    </fieldset>
+*/
+.scrollable-checkboxes {
+    overflow-y: auto;
+    /* These four rules are the same as Bootstrap's multiselect. */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    /* The bottom padding is 1px less than the Bootstrap multiselect so that the padding on the visible area will be symmetrical. */
+    padding-top: 6px;
+    padding-bottom: 5px;
+    /* Half of the total padding will go on this outermost <div>, and the other half of the padding will go on the <div> for each option, so that when an option has a blue highlight,
+       it will extend left of the left edge of the checkbox. */
+    padding-left: 6px;
+    padding-right: 6px;
+    /* If JavaScript is enabled, the height will be the value of data-size multiplied by the height of each option, 22px, plus 5px for top padding and 5px for bottom padding of the visible area.
+       The empty space at the top of each option is sufficient that the text will be hidden, making it act like bottom padding.
+       If JavaScript is disabled, the height of the element is 77px, as if data-size="3" were set. */
+    height: 77px;
+    /* Prevent the cursor from becoming an I when it goes over text. */
+    cursor: default;
+    /* Prevent highlighting text, in order to make the control more like a <select>. This feature is not supported by IE9 and Android 4.1.  */
+    -webkit-user-select: none;  /* Chrome all / Safari all / Opera */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    -webkit-touch-callout: none; /* Disable Android and iOS callouts, such as "Copy/Define". */
+}
+.scrollable-checkboxes > div {
+    /* Set the padding on each option, between the end of the text and the end of the rectangle that will be visible when the option is highlighted. */
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+.scrollable-checkboxes > .selected {
+    /* Highlight an option while its checkmark is checked. */
+    background-color: rgb(30,144,255);
+    color: white;
+}
+.scrollable-checkboxes > div > input[type="checkbox"] {
+    /* Bring each checkbox and its label into closer alignment. */
+    vertical-align: top;
+    /* This excludes the 3px of space from the spaces that Django includes at the front of the label. */
+    margin-right: 2px;
+}
+
+/* 4d. Checkboxes */
+
+/* These three rulesets work just as well whether the checkboxes are default or the site's custom ones. */
+.checkbox {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.checkbox-inline {
+    /* Increase the vertical spacing between inline default checkboxes. */
+    padding-top: 4px;
+    padding-bottom: 4px;
+   /* Bootstrap sets the margins between inline checkboxes on the left side, which makes the inline checkboxes appear unaligned by having a gap on the left when they wrap to the
+      next line. Moving the gap to the right keeps everything left-justified. */
+    padding-right: 10px;
+}
+.checkbox-inline+.checkbox-inline {
+    margin-left: 0px;
+}
+
+.checkbox-inline input[type="number"] {
+    /* In this situation, the inline checkbox is being elaborated on with a number, like "Appropriate for children ages _ and up."
+       There should be a space before and after the field, as if it were a word. This ruleset increases the space before and after it. */
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+/* Style a unit of the form with a <label> for instructions followed by inline checkboxes. Adjust for the checkboxes' padding to maintain the 10px gaps between sections.
+   Only the bottom side of the checkbox is adjacent with a neighboring section, so have 5px of padding on top and 0px on the bottom. */
+.inline-checkboxes {
+    padding-top: 5px;
+    padding-bottom: 0px;
+}
+.inline-checkboxes > label:first-child {
+    /* Reduce the bottom margin of the label in order to compensate for the gap being increased by the top padding of the top row of inline checkboxes. */
+    margin-bottom: 2px;
+}
+
+/* These three rulesets style the site's customized checkbox and the elements in its interior.
+   Each .custom-checkbox is a <div> containing a hidden default checkbox, preceded by a checkmark glyphicon when it is checked.
+   This system was used because the default checkbox does not allow changing its background color.
+   This widget is also ideal for theming. This site could use a pawprint instead of the checkmark. CNN might use a red checkmark, Disney might use the Mickey Mouse symbol, etc.  */ 
+.custom-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 1px solid black;
+    background-color: white;
+    display: inline-block;
+    /* To be compatible with Bootstrap's checkbox classes, the custom checkbox has to be absolutely positioned. */
+    position: absolute;
+    /* The absolute positioning will not take effect unless the element's position is altered by a very minor amount. */
+    left: 1px;
+}
+.custom-checkbox .glyphicon-ok {
+    font-size: 17px;
+    /* Align the checkmark within the checkbox. To me, the checkmark appears centered in Chrome and Opera, but it appears 1px too far down in IE and Firefox. When I showed it to other people, they said it looked
+       fine in all four browsers, but if it didn't, it could be due to rounding issues or variance in how the different browsers interpret fonts. I tried several different methods for vertical centering, and all of
+       them led to the same problem. I spent more than an hour on this before moving on to other tasks. */
+    margin-left: 1px;
+    margin-top: 1px;
+}
+.custom-checkbox img {
+    /* Align an image, used in place of a checkmark for theming purposes, within the checkbox. For this site, it uses an cat pawprint. */ 
+    margin-left: -1px;
+    margin-top: -2px;
+}
+/* Make the default checkbox completely overlap the custom checkbox and then hide it. */
+.custom-checkbox input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 19px;
+    top: -5px;
+    display: none;
+}
+/* These three rulesets control the site's customized checkbox's alignment. */
+.checkbox.has-custom-checkbox label {
+    /* To support a bigger checkbox, increase the amount of blank space to the left of the text where the checkbox will be absolutely positioned. */
+    padding-left: 35px;
+}
+.checkbox-inline.has-custom-checkbox {
+    padding-left: 30px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+.checkbox .custom-checkbox, .checkbox-inline .custom-checkbox {
+    /* Vertically center the checkbox within its section. If the accompanying text takes up more than one line, this makes the custom checkbox appear left of the center of
+       the text instead of the top. The default checkbox is still aligned left of the center of the first row of text, which is fine. I tried this ruleset on it, and for
+       some reason it moved the checkbox too far down. */
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.checkbox.has-custom-checkbox.text-center {
+    /* Absolute positioning will prevent horizontal centering of a custom checkbox and its label within the viewport using the text-align property.
+       The label would be centered, but the custom checkbox would hang in the same position. These rules allow centering the custom checkbox and label using the .text-center class already used by Bootstrap. */
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+/* Vertically align a text field to the right of an inline custom checkbox. Make their vertical centers within the same horizontal line. */
+.checkbox-inline.has-custom-checkbox+input[type="text"], .checkbox-inline.has-custom-checkbox+input[type="number"] {
+    position: relative;
+    top: 1px;
+}
+
+/* 4e. Radio buttons */
+
+/* These three rulesets are for when the radio buttons take up the full width of the form, because the labels are very verbose. */
+.radio, .radio+.radio {
+    /* Switch from a system with 10px above and below the first and last radio button, with 5px between, to just having 5px above and below each radio button. */
+    margin-top: 5px;
+}    
+.radio {
+    margin-bottom: 5px;
+}
+label+br+.radio {
+    /* If there is a label above the radio buttons that will take up the full width of the form, reduce the top margin of the .radio to 0px so only the <label>'s margin is providing the space. */
+    margin-top: 0px;
+}
+
+/* These two rulesets affect vertically stacked radio buttons in a form table.
+   Remove Bootstrap's 10px margin above the first radio button and below the last radio button, so that only the table padding is involved. */
+table.form .radio:first-child {
+    margin-top: 0px;
+}
+table.form .radio:last-child {
+    margin-bottom: 0px;
+}
+
+/* Bootstrap sets the margins between inline radio buttons on the left side, which makes the inline radio buttons appear unaligned by having a gap on the left when they wrap to the
+  next line. These two rulesets move the gap to the right to keep everything left-justified. */
+.radio-inline {
+    padding-right: 10px;
+}
+.radio-inline+.radio-inline {
+    margin-left: 0px;
+}
+
+/* Increase the padding between rows of radio buttons. Applying this only to elements with the .inline-radio-buttons class means that the class doesn't have to be used
+   unless it is certain that the radio buttons could wrap to create multiple rows on some device.
+   It also helps with special cases; a cell containing a block of text above a single row of radio buttons wouldn't use it. */
+.inline-radio-buttons .radio-inline {
+    padding-bottom: 5px;
+}
+/* Style a unit of the form with inline radio buttons. Adjust for the radio buttons' bottom padding to maintain the 10px gaps between sections. */
+.inline-radio-buttons {
+    padding-top: 5px;
+    padding-bottom: 0px;
+}
+/* This ruleset alters the padding on a cell containing inline radio buttons, because space is already being created by the last row of radio buttons. */
+table.form td.inline-radio-buttons {
+    /* For unknown reasons, the content area shrank by 1px, so padding-top is increased from 5px to 6px. */
+    padding-top: 6px;
+    padding-bottom: 0px;
+}
+
+/* Style a text field with the placeholder text "other" listed after inline radio buttons. */
+table.form td.inline-radio-buttons input[type="text"] {
+    width: 120px;
+    /* The height of the text field extends beyond the box containing the radio button padding. This rule keeps the space with the next section consistent. */
+    margin-bottom: 5px;
+}
+
+/* 4f. This section is for when Bootstrap buttons or image buttons being used to check hidden radio buttons or checkboxes.
+       See the JavaScript file for an explanation of each class. */
+
+.radio-btn ~ input[type="radio"], .radio-btn ~ .radio, .radio-btn ~ .radio-inline {
+    display: none;
+}
+.check-btn ~ input[type="checkbox"], .check-btn ~ .checkbox, .radio-btn ~ .radio-inline {
+    display: none;
+}
+.rating-widget-btn ~ input[type="radio"], .rating-widget-btn ~ .radio, .rating-widget-btn ~ .radio-inline {
+    display: none;
+}
+div.radio-btn, div.check-btn, .rating-widget-btn {
+    display: inline-block;
+    cursor: pointer;
+    /* Combined with the next ruleset, this rule removes the space between inline-block box models. If the buttons have a hover effect, this will make mousing over them from left to right appear smoother,
+       when the button is irregularly shaped with a transparent area, so there aren't any margins between buttons. With this rule, from left to right, empty .check-btn #1 has a hover effect, then empty
+       .check-btn #2 has a hover effect instead. Without this rule, #1 has a hover effect, then neither #1 nor #2 has a hover effect for an instant, then #2 has a hover effect, and the momentary blinking
+       is a little distracting. Also, the rating widget would appear empty for an instant, like the mouse had left the area entirely. */
+    margin-right: -5px;
+}
+div.radio-btn:last-of-type, div.check-btn:last-of-type, .rating-widget-btn:last-of-type {
+    margin-right: 0px;
+}
+
+/* 5. Style the site's Bootstrap buttons. Then style the basic structure (header, body, footer, buttons) of the site's mobile forms.
+   A second set of rules lets them be re-used on tablets and larger devices as modals. */
+
+/* Make Bootstrap buttons flatter. Several months into making the site, most Bootstrap buttons across this site had this height, and the ones that didn't set another height explicitly.
+   As individual pages are updated, their copy of this rule will be removed. */
+.btn {
+    height: 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.btn:focus, .close {
+    /* Get rid of Chrome's rectangular outline when you left- or right-click a Bootstrap button. */
+    outline:none !important; 
+}
+/* Darken the primary buttons compared to the Bootstrap default. */
+.btn-primary {
+  background-color: rgb(0,116,197);
+}
+.btn-primary:hover {
+  background-color: rgb(0,101,171);
+}
+.btn-primary:focus {
+    /* Make the border closer to the color of the button, instead of a black outline. This color is already used by this button for the .active border. */
+    border-color: rgb(32,77,116);
+}
+/* Keep Bootstrap primary buttons that are pressed from having an even darker color when you initially press them, and from appearing almost black when you hover over them.
+   They will stay the same color as when they aren't being interacted with. */
+.btn-primary.active:focus, .btn-primary.active:hover {
+    background-color: rgb(40,96,144);
+}
+
+
+.form .modal-dialog {
+    /* Most forms will be visited directly from the site's navigation system. If the viewport is wider than 768px, a modal with the following width will pop up. */
+    max-width: 400px;
+}
+/* Sometimes the form may be visited from an internal link which opens a new window, or typing its URL into the browser's URL bar.
+   These rules set a maximum width for the form so that it will still be readable on a laptop or desktop. */
+.page.form form.inner-layout {
+    /* Set the maximum width of the area of the form that will have a lighter background color above 768px. This also sets the maximum width of the form header. */
+    max-width: 850px;
+}
+main.form {
+    /* Set the maximum width of the main content area of the form. */
+    max-width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+}
+footer.form {
+    max-width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page.form form.inner-layout, .form .modal-content {
+    /* Pages for forms use a grey background so that the white text fields stand out more. The .form-padding class was created to style <div class="page">, the element wrapping the content of <body>, 
+       because when the form reaches its maximum width (see the >768px media query), the space to its left and right will have a different background color. */
+    background-color: rgb(240,240,240);
+}
+
+.form .modal-header {
+    background-color: white;
+    border-bottom: 1px solid rgb(180,180,180);
+    padding-top: 14px;
+    padding-bottom: 11px;
+}
+header.form {
+    /* For forms on smartphones, the header is optional. */
+    background-color: white;
+    border-bottom: 1px solid rgb(180,180,180);
+    /* Leave room for the close button on the right, and keep the heading horizontally centered by leaving an equal amount of space on the left.
+       The space on the left could be used by a logo or company seal. */
+    padding-left: 10%;
+    padding-right: 10%;
+    /* These rules for padding are used when the heading is long enough for two rows of text, forcing the header to expand past the minimum height. */ 
+    padding-top: 8px;
+    padding-bottom: 6px;
+    /* Allow vertically centering the heading within the header's minimum height area. */
+    display: table;
+    /* Define the minimum height for the header. In W3 standards, min-height is not defined for tables, so Firefox doesn't support it (although Chrome does). Using the height property will have the same effect. */
+    height: 37px;
+    /* Above a breakpoint, the header will stop expanding outward, but stay centered above the form. The close button will be moved from the form's top-right to the header's top-right. */
+    width: 100%;
+    position: relative;
+}
+header.form h1 {
+    font-size: 14px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.form .modal-title {
+    margin-left: 5%;
+    /* Leave room between the right edge of the title and the close button. */
+    margin-right: 20px;
+}
+/* Position the close button on the right edge of the screen, vertically centered relative to the heading if the heading is one line long.
+   The downside is that if the heading is two lines long, the close button won't be vertically centered within the first line.
+   It won't be vertically centered within the heading, either, though that wouldn't look good if the heading were more than two lines long anyway.
+   I tried positioning it relative to the heading, but that didn't work, so this ruleset is the best that the close button can be positioned without JavaScript. */
+header.form a.close {
+    position: absolute;
+    top: 8px;
+    right: 9px;
+}
+
+main.form {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 12px;
+    padding-bottom: 0px;
+    /* Allow a submit button to be positioned in the top-right corner of the main area. */
+    position: relative;
+}
+.form .modal-body {
+    /* Leave the top, left, and right .modal-body padding at the default 15px. */
+    padding-bottom: 0px;
+}
+
+/* The space between the header and the top of the first visible element in the form needs to be consistent, regardless of the top padding and top margin of the first visible element.
+   Set the top-padding of the first visible element to 0 so that the form's body can entirely control the space. 
+   I use !important on the rule so when I define padding on elements in the form, later in the style sheet, the rule won't be overriden.
+   The 0px vertical margin rules were written with .radio in mind. */
+main.form > :first-child:not(.checkbox, .all-fields-are-optional), .form .modal-body > :first-child:not(.checkbox, .all-fields-are-optional), .errorlist:first-child > li:first-child > * {
+    padding-top: 0px !important;
+    margin-top: 0px;
+}
+/* Likewise, the top padding on the footer needs to be consistent, regardless of the top padding and top margin of the last element in the form. */
+main.form > :last-child:not(.checkbox, .all-fields-are-optional), .form .modal-body > :last-child:not(.checkbox, .all-fields-are-optional), .errorlist:last-child > li:last-child > * {
+    padding-bottom: 0px !important;
+    margin-bottom: 0px;
+}
+/* Elements requiring vertical centering and symmetry, like .checkbox, are exempted from the previous rulesets. Instead, the space is kept consistent
+   using negative margins. Negative margins are also used for form tables, rather than try to set the padding to 0 on one side for the <th> and <td>. */
+main.form > .checkbox:first-child, .form .modal-body > .checkbox:first-child,
+main.form > table.form:first-child, .form .modal-body > table.form:first-child{
+    margin-top: -5px;
+}
+main.form > .checkbox:last-child, .form .modal-body > .checkbox:last-child,
+main.form > table.form:last-child, .form .modal-body > table.form:last-child {
+    margin-bottom: -5px;
+}
+
+/* Style the footer for the smartphone version of the form. */
+footer.form {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: right;
+}
+/* Style the footer for the modal version of the form. */
+.form .modal-footer {
+    border: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 12px;
+    text-align: right;
+}
+/* When all fields are optional, as on the search pages, I write "All fields are optional." at the top of the form. Across from it, I put a Submit button in the top-right corner of the main area. */
+.all-fields-are-optional {
+    /* Leave empty space over which the button can be absolutely positioned. I use absolute positioning instead of floating in order to keep the text centered. */
+    height: 30px;
+    text-align: center;
+    /* Keep the "All fields are optional." text vertically centered relative to the Submit button. I can't do this by moving the Submit button upward without it going into the padding area on smartphones. */
+    padding-top: 2px;
+}
+.all-fields-are-optional input[type="submit"] {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+/* If the form is long enough to be divided into sections beginning with an <h2>, then some of these sections will have a "Save changes" button at the bottom. This keeps the form
+   on one page, so it doesn't seem as long, while still breaking it into smaller chunks. (It looks repetitive with a button at the bottom of every section with a heading.)
+   Each "Save changes" button should be enclosed in <div class="form-buttons">, except for the last, which will still use the footer element. */
+.form-buttons {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: right;
+}
+
+/* Style the "Next" or "Previous" button. The form footer buttons are larger on larger devices to make them easier to find. */
+footer.form .btn-default, .form-buttons .btn-default, .form .modal-footer .btn-default {
+    height: 28px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+/* At the same height as the "Next" or "Previous" button, the submit button looks bigger next to it, so I reduced the height by 2px in both versions. */
+footer.form .btn-primary, .form-buttons .btn-primary, .form  .modal-footer .btn-primary, .form input[type="submit"].btn-primary {
+    height: 26px;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* Add top and bottom margins to the button. This prevents the modal from shifting and trying to recenter itself in the viewport because its total dimensions changed. */
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 2px;
+}
+
+.form .modal-body > img, .form .modal-body > form > img, .form .modal-body > video, .form .modal-body > form > video {
+    display: block;
+    /* For the modal version of the form, let the slide have 10px padding on each side, like the rest of the modal body, to separate it from the gallery. */
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+main.form > img, main.form > form > img, main.form > video, main.form > form > video {
+    display: block;
+    /* For the phone version of the form, the slide should take up 100% of the viewport width using vw.
+    Doing it this way, instead of using <div>s with different amounts of padding, is simpler and allows using the same HTML for both the phone and modal versions. */
+    width: 100vw;
+    /* Set the left margin equal to a negative amount which offsets <main>'s left-padding. */
+    margin-left: -10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Style the non-modal version of the form as viewed on a tablet or desktop. This ruleset is used when the site doesn't have AJAX on it and when the user has JavaScript disabled.  */
+@media (min-width: 769px) {
+    .page.form {
+        /* Use a darker background for the space left and right of the fixed-width area, allowing the user to better concentrate on the form. */ 
+        background-color: rgb(225,225,225);
+    }
+    main.form {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 20px;
+    }
+    .all-fields-are-optional input[type="submit"] {
+        top: 20px;
+        right: 50px;
+    }
+    footer.form {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    main.form > img, main.form > form > img, main.form > video, main.form > form > video {
+        width: 100%;
+        margin-left: 0px;
+    }
+    header.form a.close {
+        right: 11px;
+    }
+}
+
+/* 6. Styling JavaScript widgets, the follow button, the site's dropdown menus, and pagination. */
+
+.rollover-content {
+    /* This class is for rollover content that works by showing a separate element in the HTML while hiding the .default-content class. */
+    display: none;
+}
+
+/* The follow button uses the same color as the login and signup button. */
+.follow-btn .btn, .follow-btn .btn:hover, .follow-btn .btn:focus {
+    background-color: rgb(0,144,73);
+    color: white;
+    border: 1px solid rgb(60,60,60);
+}
+.follow-btn .btn:hover, .follow-btn .btn:focus {
+    background-color: rgb(0,125,64);
+}
+.follow-btn .btn {
+    height: 25px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 3px;
+}
+.follow-btn > .btn {
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+/* When the label of a dropdown has a glyphicon to the left and takes up multiple lines, I wrap the label in a <div class="inline-block"> to keep its left margin consistent. */
+.dropdown-menu .divider {
+    /* Reduce the vertical space surrounding the divider between groups of list items in a dropdown from the default of 9px on the top and bottom sides. */
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.dropdown-menu .glyphicon {
+    /* To make list items with a glyphicon more visually distinguishable, dropdown list items with a glyphicon begin further to the left.
+     This keeps the column of glyphicons to the left of the left margin of list items without a glyphicon. */
+    margin-left: -10px;
+    /* This amount assumes that there is no whitespace between the glyphicon and the label text. The width of the whitespace is about 4px. */
+    margin-right: 6px;
+    /* These two rules position the glyphicon within the center of the first line of the first line of the label text to the right. */
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+.pagination {
+    /* Horizontally center the Django pagination message. */
+    width: 100%;
+    text-align: center;
+}
+
+/* 7. Style the site's GIFs. The .gif-container class is for a <video> with an icon in its lower-right corner to indicate that it is playable when it is paused.
+      A <video> wrapped in the .gif-container class will be affected by sitewide GIF settings (settings.js) that allow specifying GIF behavior: autoplay, play on mouseover and pause on mouseout, etc.
+      A <video> not wrapped in .gif-container will not be subject to sitewide settings, meaning it is free to separately always autoplay. I use .gif-container on gallery pages and on the user comments page currently. */
+
+.gif-container {
+    /* The container has to shrink down to the GIF's dimensions, and only this display mode accomplishes that. */
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    /* The play button will be absolutely positioned relative to a corner of the GIF. */
+    position: relative;
+}
+.gif-container > video {
+    width: 100%;
+}
+.gif-container span {
+    /* Style the play button. */
+    color: white;
+    position: absolute;
+    right: 5px;
+    /* The top-right corner is being used instead of the bottom-right because, for some reason, the browser was ignoring the bottom property. */
+    top: calc(100% - 20px);
+}
+@media (max-width: 1199px) {
+    .gif-container span {
+        /* Hide the play button on mobile devices. */
+        display: none;
+    }
+}
+
+/* 8. Styling other elements with rulesets that could be used across sites */
+
+/* The site uses five different shades of green for navigation buttons: day mode laptop/desktop header, the mobile filter button, the mobile modal footer buttons, and night
+   mode laptop/desktop header, and the login/signup button. I tried interchanging them and styling them here, but it didn't work because each shade serves a purpose.
+   Login buttons need to grab attention, so they can be a more vibrant shade. The header needs to be a more desaturated color; it would be an eyesore if users saw too
+   much contrast at the top of every page. */
+
+/* Header sizes, used on pages like Terms of Use and Privacy Policy, are defined here to be consistent. */
+h1 {
+   font-size: 28px;
+   text-align: center;
+}
+h2 {
+   font-size: 18px;
+   /* By default, Bootstrap headers have a top margin twice the size of the lower one. The default top gap was too wide and made the header look uneven,
+      but at 10px the header was too narrow. */
+   margin-top: 15px;
+}
+/* h4 was skipped so it would not override the Bootstrap default for the modal header. */
+h5 {
+   font-size: 14px;
+   text-align: center;
+}

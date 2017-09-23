@@ -1,0 +1,30 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Advanced search - {{ app_name }}</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <style>
+            h1#search-heading {
+                font-size: 18px;
+            }
+        </style>
+        <script src="{% static "javascript/advanced_search.js" %}"></script>
+{% endblock %}
+{% block body %}
+    <div class="page form">
+        <form class="inner-layout" method="get" action="{% url "advanced_search" %}">
+            <header class="form">
+                <h1 id="search-heading">Advanced search</h1>
+                <a href="{% url "index" %}" class="close"><span>&times;</span></a>
+            </header>
+            <main class="form">
+                {% include "en/public/advanced_search_main.html" %}
+            </main>
+            <footer class="form">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </footer>
+        </form>
+    </div>
+{% endblock %}

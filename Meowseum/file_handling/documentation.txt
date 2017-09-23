@@ -1,0 +1,115 @@
+"""This field is the same as FileField, but with three additional keyword arguments that allow summarizing your file handling policy for the field in one
+place. These are validation_specifications (dict), hosting_limits (dict), and keep_metadata (Boolean). For syntax reasons, you must define the dictionaries above the model
+definition. Preferably, use names like 'validation_specifications_for_ModelName' and 'hosting_limits_for_ModelName' to make it easy to prevent a conflict. This field will also
+generate the value for the HTML accept attribute based on your input. This field should be paired with a OneToOneField for a Metadata object if you plan on keeping the metadata.
+Some image/video modules require complicated procedures for collecting metadata, and a metadata field prevents having to do it twice.
+
+Uncomment this file to more easily see the documentation with example code.
+# First, read and copy over code for settings.py. In models.py, use the syntax
+file = MetadataRestrictedFileField(upload_to="uploads", validation_specifications = validation_specifications_for_ModelName, keep_metadata = True, storage = StorageWithLooseNameValidation(), max_length = 250, verbose_name="file", blank=True, null=True, default="uploads/placeholder.png")
+# In the ModelForm or Form class, define
+file = MetadataRestrictedFileField()
+# You cannot set up the field using keyword arguments, so you have to use __init__(). With a ModelForm, you can still use class Meta for the usual arguments.
+def __init__(self, *args, **kwargs):
+    super(FormName,self).__init__(*args, **kwargs)
+    self.fields['file'].required = True
+# In the view, at the top, write
+from App_directory.models import ModelName, validation_specifications_for_ModelName, hosting_limits_for_ModelName, Metadata
+from App_directory.MetadataRestrictedFileField import get_validated_metadata, process_to_meet_hosting_limits
+# Above the "form.is_valid()" line, supposing that 'file' is the name of the MetadataRestrictedFileField, write
+metadata = get_validated_metadata('file', form, request.FILES, validation_specifications_for_ModelName)
+# Below the "form.is_valid()" line, write
+new_record = form.save(commit=False)
+new_upload.save() # Removing this line will cause an exception. Saving the file causes it to use a different class, which the next function is written to expect.
+if new_upload.file != None: # This condition accounts for the file not being included when the field is optional.
+    new_upload.file, metadata = process_to_meet_hosting_limits(new_upload.file, metadata, hosting_limits_for_Upload)
+    new_upload.save()
+Last, if you want to keep the metadata, save it to a Metadata record.
+
+# Upload limits are specifications for content allowed to be processed by the server. Arguments with a _ are on the to-do list to implement in the validation function.
+validation_specifications_for_ModelName = {
+    # file_type uses a tuple of strings that can be either a MIME type or one of four coded values. Without this key, all files will be accepted!
+    # Use 'image' or 'video' to refer to file types in settings.py. For .GIFs, you can specify whether or not they have a single frame using 'gif-still'
+    # and 'gif-animated'. Animated GIFs are grouped under 'video' by default.
+    'file_type': ('image', 'video/mp4', 'video/webm', 'video/ogg'),
+    # Maximum uploading size in bytes. This can be an integer or a dictionary containing a maximum size for each file type.
+    # When there is a different limit for a general type and a more specific type, the stricter limit will be used.
+    'max_size': {'image': 10485760, 'video': 524288000, 'gif-animated': 2097152} # 10MB, 500MB, 2MB
+    # For .GIFs and videos, the maximum amount of frames per second. Type: int or float
+    'max_fps': 60,
+    # For .GIFs and videos, the maximum duration in seconds.
+    'max_duration': 360000, # 10 hours
+    'min_duration': 3,
+    # The remaining arguments are for prevention of garbage data, like a file containing only one line of pixels.
+    # Type: (width, height) tuple or a dictionary with optional keys 'image' and 'video'.
+    'min_dimensions': {'video': (32,32)},
+    # Only allow through specific dimensions, like 150x150. Type: int only, because I expect this to only be used for avatars and web ad standard sizes.
+    'exact_width': 150
+    'exact_height': 150
+    # The next two keys allow specifying an inclusive range for the aspect ratio. To allow for rounding error on the part of the source, the width can be within 4px
+    # of the limit for the video's height. 1:1 disallows rounding error, and 16:9 has extra leeway because there are laptop resolutions from 1360x768 to 1368x768.
+    # Type: A 'width:height' string. A float with the width/height part of the (width/height):1 ratio. If the ratio is a standard one like 4:3,
+    # then using a string is preferable for use in in error messages. For all the aspect ratio arguments, you can pass a dictionary with file_types for keys. If
+    # the dictionary has multiple contradicting keys, like 'image' and 'image/jpeg', the program uses the most specific one that is applicable to the file.
+    'widest_aspect_ratio': {'video': '2.39:1'},
+    'narrowest_aspect_ratio': {'video': '1:2.39'},
+    # A specific aspect ratio.
+    'aspect_ratio': '1:1'
+    }
+# Hosting limits are specifications for what uploaded content should be compressed toward, in terms of dimensions, file size, etc.
+hosting_limits_for_ModelName = {
+    # Specify a directory path relative to your media directory for saving .jpg posters using the first frame of the video. Based on the
+    # 'thumbnail' setting, the program will save posters for any thumbnail videos to a subdirectory with the same name as the directory for
+    # thumbnails of the main file. Creating a poster is optional, but without it, most mobile browsers will show a black rectangle or nothing
+    # before the user plays the video.
+    'poster_directory': 'posters',        
+    # Set a file conversion policy. Use a tuple of tuples with the form (from type, to type entries, size threshhold in bytes). The size
+    # threshhold entry is optional. The "from" entry can use a string for a general type like 'image', a MIME type, or specifically
+    # 'gif-still'/'gif-animated'. 'Video' as a general type will include animated .gif files. The "to" entry can only use a MIME type, except when
+    # 'gif-still'/'gif-animated' are both the "from" and "to" entries. A tuple with a more specific "from" type will override a tuple with a more
+    # general one. You can exempt a type from a general rule, a ('image', ...) or ('video', ...) tuple, by including another tuple with the same
+    # "from" and "to" types or a tuple with no "to" type. Unless the file's type is also a "to type" entry in the applicable tuple, the original
+    # file will be deleted.
+    #
+    # Multiple "to" types are for cross-browser video compatibility. If the original file is deleted, the first "to" type will be treated as the
+    # primary file in the database. Read the example value as "Convert images to JPEG, except for PNGs.
+    # Convert those to JPEG only if they are over 5MB. Convert all videos including animated .gifs to MP4, except for WebM.
+    'conversion': (('image', 'image/jpeg'), ('image/png', 'image/jpeg', 5242880), ('video', 'video/mp4'), ('video/webm',))
+    # Equivalent syntax:
+    'conversion': (('image', 'image/jpeg'), ('image/png', 'image/png', 5242880), ('video', 'video/mp4'), ('video/webm', 'video/webm'))
+    # Specify an integer on a scale of 0-100. This setting will be used when saving jpegs after processing. Defaults to 75, like the Pillow module.
+    'jpeg_quality': 90,
+    # Specify a 2-tuple. The 2-tuple can be (width, height) or ((width, height), (width, height)). In the latter case, one entry should provide limits
+    # for landscape uploads, and the other entry should provide limits for portrait uploads: an L-shaped boundary. You can specify individual constraints
+    # for each possible media or MIME type, with more specific constraints overriding more general ones.
+    #
+    # Restrictions on dimensions are applied BEFORE conversion to other file types; the "to" type is expected to have the same restriction.
+    # The only exception is conversion to an animated .gif, for which this setting will be checked, because a short 1080p .gif tends to be >500MB large.
+    # I only use this for hosting_limits and not validation_specifications because the server power used for downscaling isn't very expensive.
+    'max_dimensions': {'image': ((1920,1200),(1080,1920)), 'video': ((1920,1200),(1080,1920)), 'gif-animated': ((1067,600),(600,1067))},
+    # Specify a tuple in which the first entry is the width or height, the second is a number of pixels, and the third is a directory path relative to your media directory.
+    # The program will produce a shrunk version of the image or video with a dimension equal to or greater than the threshhold while maintaining the same aspect ratio.
+    # If you have converted to multiple formats, you should know the thumbnail will only be created for one file type.
+    'thumbnail': ('height', 600, 'thumbnails'),
+    
+    # For video, specify a maximum bitrate in bits/second. Type: int, float
+    'max_bitrate': 4000000, # 4 Mbps at 1920x1080
+    # Use the Power of 0.75 formula to make the maximum bitrate vary with the dimensions of the video. Videos with a very small amount of area
+    # need a larger file size than if it were linear. So, pass (bitrate, height), where the height is for a 16:9 video you would have in mind with
+    # that bitrate. The formula is r2=(A2/A1)^0.75*r1, where r1 is your supplied bitrate. Type: tuple
+    'power_formula_coordinate': (4000000, 1080),
+    # Allow videos with high fps (>=48) to have a higher bitrate. 48fps doesn't need twice as much data as 24fps because of data interpolation between frames.
+    # Type: int, float
+    'high_fps_multiplier': 1.5,
+    # This offsets the computational expense of re-encoding a file to prevent it from being barely over the maximum bitrate.
+    # When re-encoding, use a fraction (0.0 to 1.0) of its prior bitrate to ensure some storage space is being gained. Type: int, float
+    'reencode_multiplier': 0.75,
+    # Set the amount of time that ffmpeg will spend on compression when re-encoding an MP4 file. This allows a tradeoff between more processing
+    # time in exchange for smaller files. Choices are: 'ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow', 'slower',
+    # and 'veryslow'. If the key isn't included, the default is 'medium'.
+    'preset': 'veryslow'
+}
+# The following keys are available to the metadata dictionary: original_name, name, extension, mime_type, motion_type, size, width, height, duration (seconds),
+# fps, has_audio. I left out keys with values that can be calculated using other keys, like bitrate from size and duration.
+# The motion_type key returns 'image', 'video', or 'file' based on whether it contains animation instead of how it will be used in an HTML file.
+"""

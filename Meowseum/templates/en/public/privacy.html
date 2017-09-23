@@ -1,0 +1,48 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Privacy Policy - {{ app_name }}</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/tou-privacy.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <script>settings.prepareDayModeBackground();</script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    <main id="tou">
+        <h1>Privacy Policy</h1>
+        <h5>Last updated 4/20/2017</h5>
+        <h2>Data we collect</h2>
+        <p>Like most websites, our servers automatically collect information your browser or mobile device sends when you visit a page. This constitutes</p>
+        <ul>
+            <li>log data: your IP address, the date and time when you sign in, and statistics on viewing pages.</li>
+            <li>statistics on which links were clicked.</li>
+            <li>the metadata from uploaded files and the information you choose to submit regarding the content of those files.</li>
+            <li>device information: the browser type, the operating system, and settings like screen resolution.</li>
+        </ul>
+        <p>Third party advertisers may place cookies on your computer in order to customize their content to be more of interest to you. These advertisers may use information about your visits on this web site and other web sites for the same purpose. We also use cookies in order to improve your experience on this site.</p>
+        <p>If you choose to let us use cookies, the technical information previously described will be logged as coming from you. Otherwise, the data would be anonymous. If your server log data were subpoenaed or we were otherwise forced to disclose it through legal means, a third party such as your ISP could also reveal the anonymous log data as coming from you.</p>
+        <p>When we ask for a username and email, you may choose one which reveals no information pertaining to your identity. Although you may modify or delete personal information which you have already given us, the personal information prior to any modifications may still be retained in backup or archival copies.</p>
+        <h2>How we use the information we collect</h2>
+        <p>We do not disclose to third parties information we have about you without a subpoena or some other legal process. We may use site statistics to show users different versions of the same page on our site and then determine the better version from which one most users preferred. We use cookies for authentication of your user profile and to store data about your customization of our site.</p>
+        <p>You may have choices available to you, including disabling cookies and local data storage through your browser or device settings. Our privacy policy is subject to change. You agree to the revised policy by continuing to use the site after the changes are in effect.</p>
+    </main>
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+{% endblock %}

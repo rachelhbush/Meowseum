@@ -1,0 +1,856 @@
+/* File names: slide_page_v0_0_0_4_21.html, slide_page_author_box_v0_0_0_4_10.html, slide_page_v0_0_0_4_14.js, slide_page_v0_0_0_4_14.css, slide_page_night_v0_0_0_4_2.css
+   Author: Rachel Bush
+   Version description:
+   
+   No changes: slide_page_v0_0_0_4_14.css, slide_page_v0_0_0_4_21.html, slide_page_v0_0_0_4_14.js, slide_page_author_box_v0_0_0_4_10.html, slide_page_night_v0_0_0_4_2.css
+*/
+
+/* 1. Style the page as a whole. */
+ 
+body {
+    /* White layout elements will be used against a grey background, all with a border color of rgb(120,120,120). */
+    background-color: rgb(240,240,240);
+}
+#information {
+    /* This is the section with everything other than the slide. Allow the comment section taking up the remainder of the page can appear white. All the other child elements must have
+       the background color specified to be the same as the body. It has to be done this way because IE11 doesn't support flex columns where the flex container has the min-height property. */
+    background-color: white;
+}
+#information > :not(#comments) {
+    background-color: rgb(240,240,240);
+}
+
+@media (max-width: 1199px) {
+    #slide-desktop, #information > h1,  #information > a.close {
+        display: none;
+    }
+}
+@media (min-width: 1200px) {
+    #slide-mobile {
+        display: none;
+    }
+}
+#information main, #tags, #share, #comments textarea, #reply-footer, #posted-comments {
+    /* Set the padding within the parts of the #information section that use padding. */
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#information main {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#landscape-order-switcher a.close {
+    /* This button takes users back to the gallery they were previously viewing. If the JavaScript gives the slide a click event and moves the slide underneath the button, this rule is needed so
+       the slide's click event won't be triggered and the close icon as a link will still work. */
+    z-index: 1;
+}
+
+/* 2. Style #slide-mobile. Style the slide, swiping areas, background, heading, and slide. */
+
+/* When the image is a panorama, or the user is zoomed-in in portait mode, there will be transparent overlays for the areas within which the user can swipe to go back and swipe to go
+   forward to the next image. This allows the user to use the center of the viewport to horizontally scroll through the image if it is a panorama or zoomed-in from portrait mode. */
+#swipe-back {
+    /* Touches ignore the transparent overlays while the default swiping anywhere interface is being used instead. */
+    display: none;
+    position: fixed;
+    /* The swiping areas need to be at least 30px wide for jQuery Mobile to register the swipe with default settings. This rule achieves that on
+       the currently narrowest phone viewport, iPhone 5 (320px). */
+    width: 6vh;
+    height: 100vh;
+}
+#swipe-forward {
+    display: none;
+    position: fixed;
+    right: 0px;
+    min-width: 32px;
+    width: 6vh;
+    height: 100vh;
+}
+#slide-mobile h1 {
+    font-size: 18px;
+    text-align: left;
+    line-height: 1.4;
+    /* The top margin of the heading has to be 0px, or else there is white space below the header, so the heading should use padding instead. */
+    margin: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    /* This rule includes 20px extra padding in order to leave room for a close icon. */
+    padding-right: 30px;
+    /* This rule is used when the user hasn't given the upload a title. It makes sure that the <h1> uses the same amount of space as when the upload has a title that takes up one line. */
+    min-height: 35px;
+}
+
+#slide-overflow-mobile > img {
+    display: block;
+    /* width is being used instead of max-width, because mobile devices are frequently high dpi. Without it, there could potentially be far too much empty space to the left and right of the image.
+       This would require reconfiguring the layout to keep from leaving it blank. Reconfiguring the layout would be a lot more work, which can be put off until after the website is launched. */
+    width: 100vw;
+}
+/* These two rulesets do the same thing as the img ruleset, but they are considered separately because I was having difficulty overriding them in the landscape section. */
+@media (orientation: portrait) {
+    #slide-overflow-mobile > video {
+        width: 100vw;
+        }
+}
+#slide-overflow-mobile > video {
+    display: block;
+    /* Center the video if it is smaller than the viewport width. This isn't needed for portrait mode, but it will be needed for landscape and after changes by JavaScript. */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 3. Style #slide-desktop and the other elements visible only above 1200px viewport width. */
+
+@media (min-width: 1200px) {
+    #slide-desktop {
+        /* Allocate the space in the layout for the fixed-position content. */
+        width: calc(76% - 118px);
+        float: left;
+        /* Because the slide will be in a fixed-position container, a height rule is needed to keep the section from having a height of 1px. */
+        min-height: 100vh;
+    }
+    #slide-navigation {
+        /* These rules make scrolling only affect the right half of the screen with the information. The slide and arrows stay in place.
+           These rules also vertically center the slide within the viewport. */
+        position: fixed;
+        top: 50%;
+        left: calc(38% - 59px);
+        /* Center the center of the slide, not its top-left corner. */
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+        /* Because the content is fixed-position, the width rule has to be restated, or else the width will be the same as the viewport. */
+        width: calc(76% - 118px);
+    }
+    #slide-container {
+        /* This element keeps the arrows that the user clicks in the same position across slides, so that the user can keep clicking to browse instead of moving the cursor.
+           It stations the arrows at the place where they would be if the slide's aspect ratio were wide enough to take up the full available space. */
+        text-align: center;
+    }
+    #slide-container > img, #slide-container > video {
+        /* A slide that is wider and/or taller than the available space will shrink to fit it, while maintaining the slide's aspect ratio.
+           If JavaScript is disabled, a slide that is narrower and shorter than the allocated space will retain its natural dimensions in CSS pixels.
+           If JavaScript is enabled, such a slide will be stretched as much as possible while maintaining the aspect ratio.
+           These rules had to be applied directly to the slide in order for them to apply while keeping the slide vertically centered. */
+        max-width: calc(100% - 100px);
+        max-height: 100vh;
+    }
+    
+    #slide-desktop .glyphicon-chevron-left, #slide-desktop .glyphicon-chevron-right {
+        font-size: 35px;
+    }
+    #slide-desktop .glyphicon-chevron-left, #slide-desktop .glyphicon-chevron-right, #slide-desktop .glyphicon-menu-left, #slide-desktop .glyphicon-menu-right {
+        /* Turn off the link styling. */
+        color: inherit;
+        text-decoration: none;
+    }
+    /* Fixed-position each of the arrows at a point that is 10px inward from the boundaries of the slide section, and vertically center them. */
+    #slide-desktop .glyphicon-chevron-left, #slide-desktop .glyphicon-menu-left {
+        position: fixed;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        transform: translateY(-50%);
+        left: 10px;
+
+    }
+    #slide-desktop .glyphicon-chevron-right, #slide-desktop .glyphicon-menu-right {
+        position: fixed;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        transform: translateY(-50%);
+        /* Position the right slide arrow a distance leftward from the edge of the viewport.
+           Use the width of the #information section plus 10px, so that it is 10px inward from the right border of the slide section. */
+        right: calc(24% + 128px);
+    }
+    /* Hide the thinner navigational arrows that are used with night mode. */
+    #slide-desktop .glyphicon-menu-left, #slide-desktop .glyphicon-menu-right {
+        display: none;
+    }
+    
+    #information {
+        /* This was the line of best fit through 400px at 1200px viewport width, 450px at 1368px viewport width, and 575px at 1920px viewport width. */
+        width: calc(24% + 118px);
+        float: left;
+        border-left: 1px solid rgb(180,180,180);
+        /* Make the border between sections extend down to the bottom of the page, even if the content of the section is less than the height of the viewport. */
+        min-height: 100vh;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        -moz-flex-direction: column;
+        flex-direction: column;
+    }
+    #information h1 {
+        font-size: 21px;
+        padding-top: 10px;
+        /* The heading has 5px less padding than it would by itself. #author-box below it was originally designed to be under a block image with no margins. */
+        padding-bottom: 5px;
+        padding-left: 15px;
+        /* This rule includes 20px extra padding in order to leave room for a close icon. */
+        padding-right: 35px;
+        margin: 0px;
+        /* This rule is used when the user hasn't given the upload a title. It makes sure that the <h1> uses the same amount of space as when the upload has a title that takes up one line. */
+       min-height: 38px;
+    }
+}
+
+/* 4. Style the fullscreen features of the layout. */
+.zoomable {
+    /* If the image has a fullscreen version, and the browser supports fullscreen elements, the cursor should be a magnifying glass when hovering over it. */
+    cursor: url("../images/zoom-in.gif"), url("/static/images/zoom-in.cur"), pointer;
+    /* Google Chrome's built-in zoom-in cursor is better than the image I provided. If the browser already supports zoom-in, keep using its default. */
+    cursor: zoom-in;
+}
+/* Hide the fullscreen image until the image is clicked. This image will be shown by the script for the HTML5 fullscreen API.
+   The fullscreen version of the image needs to be inside a styled <div> because different browsers style the fullscreen element differently. If that element were an image, by default,
+   1. Chrome, Opera 15+, and Safari center the image on a black background while confining its dimensions to those of the viewport.
+   2. IE, Firefox, and Opera 12-14 will stretch the element to the dimensions of the viewport, messing up the aspect ratio.
+      IE and Firefox use a black background, but Opera 12-14 uses a transparent background.
+   My implementation's HTML and CSS will make all browsers supporting the fullscreen API style it the first way.
+   If the user's browser doesn't support fullscreen or the user has it disabled, the fullscreen HTML and CSS will still be used with a "full viewport" mode.
+   Fullscreen/"full viewport" is only accessible when it enlarges the image. */
+#fullscreen-version {
+    display: none;
+}
+/* When the image is clicked, the fullscreen version is shown by toggling this class for its container. */
+#fullscreen-version.fullscreen {
+    display: block;
+    /* The container's dimensions are the same as the viewport. */
+    width: 100vw;
+    height: 100vh;
+    /* Even in day mode, whenever a device is in fullscreen the extra space is universally black (dimming the lights). */
+    background-color: black;
+}
+#fullscreen-version > img, #fullscreen-version > video {
+    /* Let the image take up as much space as possible while staying within the dimensions of the viewport. */
+    max-width: 100%;
+    max-height: 100%;
+    /* Vertically center the image by centering the top-left corner with absolute positioning, then subtracting half the width or height of the
+       image with the transform property. */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    /* Let the user know that clicking again will exit fullscreen mode and go back to the photo page. */
+    cursor: url("../images/zoom-out.gif"), url("/static/images/zoom-out.cur"), pointer;
+    cursor: zoom-out;
+}
+
+/* 5. Style #author-box and its contents. This is the box with the avatar, author username, how long it has been since the slide was submitted, and the Like button. */
+#author-box {
+    height: 63px;
+    width: 100%;
+    /* This rule is only present because Chrome has a layout error without it: inability to move down #author-label by some margin-top without moving down the avatar. */
+    padding-top: 1px;
+    padding-bottom: 5px;
+}
+#author-label {
+    padding-bottom: 2px;
+}
+
+#information main {
+    position: relative;
+}
+#datetime-abbreviated, #datetime-full {
+    /* Place the upload time in the top-right corner of #information section's main subsection. For a lost/found upload, this area will instead contain the date the pet was lost or found.
+       On a mobile device, the box containing the author's avatar, the username, and the Follow/Like buttons will be rendered below all the Adoption/Lost/Found information, but the relevant time stays in the same place. */
+    float: right;
+    /* Float with a left margin (instead of absolute positioning) so that there can be a field to the left which wraps before it runs into this element. */
+    margin-left: 15px;
+}
+#datetime-abbreviated {
+    /* For mobile devices. */
+    color: rgb(100,100,100); /* dark grey */
+}
+#datetime-abbreviated.listing, #datetime-full.listing {
+    /* If the time is for an Adoption, Lost, or Found upload, then enlarge the font to be the same size as the other parts of the record. */
+   font-size: 15px;
+}
+
+#avatar {
+    max-width: 55px;
+    margin-right: 10px;
+    float: left;
+}
+.follow-btn .btn {
+    /* Set the gap between the top edge of the button and "submitted by". */
+    margin-top: 6px;
+}
+#delete-btn {
+    /* Set the gap between the top edge of the button and "submitted by". */
+    margin-top: 3px;
+}
+#delete-btn .glyphicon-trash {
+    top: 2px;
+}
+
+/* This ruleset is used for all buttons of fixed height in the main area, except for the follow button and Likes button. */
+.fixed-btn, .fixed-btn:hover, .fixed-btn:active {
+    border-color: rgb(120,120,120);
+    height: 28px;
+    padding-left: 9px;
+    padding-right: 9px;
+}
+.glyphicon-heart-empty, .glyphicon-heart {
+    font-size: 19px;
+    position: relative;
+    top: 2px;
+}
+.glyphicon-heart {
+    color: rgb(210,0,0);
+}
+.likes-label {
+    position: relative;
+    top: -2px;
+}
+/* Position the Like button 22px from the right edge of the viewport, 12px from the right edge of the parent container. */
+.like-btn, .like-btn:hover, .like-btn:active {
+    border-color: rgb(120,120,120);
+    height: 28px;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-right: 7px;
+    margin-top: 4px;
+}
+/* Don't leave the Like button in a pressed state after the user "likes" or "unlikes" the page. */
+.like-btn:focus {
+    background-color: white;
+    border-color: rgb(120,120,120);
+}
+/* If the user has Liked the page, replacing the empty heart icon with a full, red icon, the icon darkens like the button's background color does. */
+.like-btn:hover .glyphicon-heart, .like-btn:focus .glyphicon-heart, .like-btn:active .glyphicon-heart {
+    color: rgb(200,0,0);
+}
+
+/* 6. Style the Adoption, Lost, or Found profile. Style the slide's description field. */
+
+#pet-profile {
+    font-size: 15px;
+    padding-bottom: 5px;
+}
+
+.profile-unit {
+    /* This is for a <div> containing a label and text that wraps under it, possibly with a line-break between.
+       These rules give it the same padding as the table cells have. */
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+.profile-unit > label {
+    /* Increase the space between the label and the text. */
+    margin-right: 2px;
+    margin-bottom: 0px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.profile-unit > label + div {
+    /* If the text is long enough for it to wrap to the next line, then move all the text underneath the label. */
+    display: inline-block;
+}
+
+#boolean-answers {
+    /* Override the default left margin for lists. */
+    padding-left: 0px;
+    /* This rule cancels out the bottom margin from the last row of list items, making the space only apply between rows.
+       Without this effect, it would still need to be 0px to override the default 10px bottom margin for lists. */
+    margin-bottom: -2px;
+}
+#boolean-answers > li {
+    /* Using inline-block list items will ensure that the text within each list item does not wrap. */
+    display: inline-block;
+    margin-right: 5px;
+    /* Set the space between rows of inline-block list items. */
+    margin-bottom: 2px;
+}
+#boolean-answers > li > img {
+    /* Set the size of the pawprint icon for the list marker. */
+    width: 18px;
+    /* Set the space between the list marker and the text to be equal to the width of a space. */
+    margin-right: 4px;
+}
+
+/* 7. Style the section for the number of views and slide navigational buttons. */
+
+/* Hide the "Back to search results" button until the 768px breakpoint. */
+#back-btn {
+    display: none;
+}
+#slide-buttons {
+    text-align: center;
+    /* This is most important for the separation between the slide's toolbar, when it is directly above the comment section, and the closed pet profile toggler. */
+    padding-top: 2px;
+}
+@media (max-width: 543px) {
+    #slide-buttons {
+        /* On portrait smartphones where space is very limited, exempt the slide buttons from the page's left and right padding.
+           I can't move this element outside of <main>, because the bottom padding has to be consistent. At a wider viewport width, the slide buttons will be moved away from the bottom to somewhere else. */
+        width: 100vw;
+        margin-left: -10px;
+    }
+}
+.glyphicon-tag {
+    font-size: 16px;
+    position: relative;
+    top: 3px;
+}
+/* This ruleset makes it so that the pressed state will not linger after switching between sections. */
+.share-btn:focus, .comment-btn:focus {
+    background-color: white;
+}
+
+/* 8. Style the tags section. */
+
+#tags {
+    display: none;
+    padding-bottom: 10px;
+}
+
+#tag-list {
+    /* This element is for rendering data that is stored server-side as a list or array and delivered using <ul>. It will render the data as a comma-separated list.
+       The margins and selectors are set up to allow an inline-block <div> containing a field for adding another item at the end, such as for adding a tag.
+       In the future, I could rename this as a .comma-separated class. I could have made this tag list another way, by constructing the list of comma-separated links in the Django view.  */
+    padding-left: 0px;
+    list-style: none;
+    margin-bottom: 0px;
+    display: inline;
+}
+#tag-list > li {
+    display: inline-block;
+    /* Set the space between items. */
+    margin-bottom: 5px;
+}
+#tag-list > li:not(:last-child) {
+    /* If the last item is a field <div>, then keep the last between-space. Otherwise, remove it so that the list can be used naturally in a sentence. */
+    margin-right: 3px;
+}
+#tag-list > li:not(:last-of-type)::after {
+    content: ","
+}
+
+#tags input {
+    /* Set the dimensions for the box for adding a new tag.  */
+    width: 110px;
+    height: 24px;
+}
+#tags .btn-primary {
+    height: 24px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 13px;
+    margin-left: 5px;
+    position: relative;
+    top: -1px;
+}
+#tags .errorlist {
+    margin-bottom: 5px;
+}
+
+/* 9. Style the comments section. */
+
+#comments {
+    border-top: 1px solid rgb(180,180,180);
+    background-color: white;
+}
+#comments, #comments > form:first-child {
+    /* Allow extending the textarea to take up the remaining difference between the height of the page content and the height of the viewport. */
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;
+    -ms-flex: auto;
+    -webkit-flex: auto;
+    -moz-flex: auto;
+    flex: auto;
+}
+#comments > form:first-child {
+    /* This rule is required to keep the layout from breaking in IE11, which doesn't support flex columns well. */
+    min-height: 87px;
+}
+/* The user types in this area to submit a comment on the slide. */
+#comments textarea {
+    width: 100%;
+    min-height: 68px;
+    -ms-flex: auto;
+    -webkit-flex: auto;
+    -moz-flex: auto;
+    flex: auto;
+    padding-top: 10px;
+    /* The reply field has no top or bottom border because the borders are provided by the main section above and the reply field's footer below. */
+    border: none;
+    /* Override some sitewide CSS that assumed the width wasn't 100% of the viewport. */    
+    border-radius: 0px;
+    /* Get rid of Chrome's blue outline when you click the textarea, because it doesn't look right with width: 100%. */
+    outline:none !important;
+    resize: none;
+    /* Without these rules, the transparent left and right swiping area would overlay the textarea, making the user unable to touch part of it. */
+    position: relative;
+    z-index: 100;
+    
+}
+/* This container is for the comment area's Submit button. It has the same background as the textarea and no top border, to make it look like the Submit button is positioned over it.
+   In the future, the buttons for Italics, Reaction GIF, and/or Emojis may be added back, in which case it will look better if this area has a top border. */
+#reply-footer {
+    width: 100%;
+    /* Set the vertical space between the bottom of the user's writing and the Submit button. */
+    padding-top: 3px;
+    /* Position the submit button's bottom border 5px from the bottom of the border of the writing area. */
+    padding-bottom: 6px;
+    background-color: white;
+    /* In browsers that do not support flexboxes, because the submit button is floating, the intended height of #reply-footer needs to be stated or else the browser will think the box is empty.
+       In browsers supporting flexboxes, the browser would be able to detect this height regardless, by adding up the padding and submit button height. */
+    height: 30px;
+}
+
+#comments button {
+    height: 20px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 2px;
+}
+/* After specifying a specific button height, the label is off-center. Padding and margins had no effect on the label, so the only option was to adjust it with relative positioning. */
+.reply-btn-label {
+    position: relative;
+    top: -1px;
+}
+#reply-footer > .btn-primary {
+    float: right;
+}
+
+#comments .errorlist {
+    /* Style the error messages that appear above the comment form. */
+   text-align: center;
+   /* Set the space between the error message and the border with everything above the comment section. */
+   padding-top: 10px;
+}
+
+#posted-comments {
+    border-top: 1px solid rgb(180,180,180);
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 12.83px;
+}
+.comment {
+    /* Prevent the viewport from sidescrolling when a word near the right edge of the viewport would be long enough to otherwise overflow the container.
+       As a sidenote, the layout also breaks without this rule. Part of the slide moves under #information and part of it moves over it. */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin-bottom: 7px;
+}
+.comment > p:first-of-type {
+    display: inline;
+}
+.comment > p:nth-of-type(2) {
+    margin-top: 7px;
+}
+.comment > p {
+    margin-bottom: 7px;
+}
+.comment:last-child, .comment > p:last-child {
+    margin-bottom: 0px;
+}
+#posted-comments.deletable > .comment {
+    padding-right: 20px;
+    position: relative;
+}
+#posted-comments.deletable > .comment .glyphicon-trash {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.username {
+    font-weight: bold;
+    /* This rule allows the username to link to the user's profile while still using the same color as the body text. */
+    color: inherit;
+    font-size: 12.5px;
+    /* Set the space between the username and the user's comment. */
+    margin-right: 7px;
+}
+
+/* 10. Style the share section. */
+
+/* Hide the share section until the user clicks the button to open it. */
+#share {
+    display: none;
+}
+#share {
+    padding-top: 10px;
+    /* Set the width of the gutters between the content and the edge of the viewport. */
+    border-top: 1px solid rgb(180,180,180);
+}
+/* Center the buttons for embedding the page on social media sites, with 5px separation between 35x35 buttons, above the next section. */
+#share-btn-list {
+    /* Remove two of the rules intended for lists that use bullet points. */
+    list-style: none;
+    padding-left: 0px;
+    text-align: center;
+    margin-top: -5px;
+}
+#share-btn-list li {
+    display: inline-block;
+}
+#share-btn-list li img {
+    width: 38px;
+    height: 38px;
+    /* Set the space between rows of images. The parent <ul> has a rule that cancels this out for the top row. */
+    margin-top: 5px;
+}
+
+@media (min-width: 420px) and (max-width: 1200px) {
+    #share-btn-list > br {
+        /* When the social media buttons have a wide enough area not to have to wrap to the next line, hide the line break, spreading out the elements. */
+        display: none;
+    }
+    #share-btn-list {
+        /* Increase the separation with the next section below, to keep the elements spread out. */
+        padding-bottom: 2px;
+    }
+}
+
+/* Each container with this class contains a container with text for copying and pasting, styled like an input text field that has already been filled out, with a label to the left. */
+.copy-and-paste-set {
+    /* Set the vertical separation between pairs of labels and fields. This rule has to use padding, because using a margin would leave 10px of white space below the grey background. */
+    padding-bottom: 10px;
+    /* A label and its field should appear on the same line. */
+    white-space: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    /* Keep the label centered relative to the field. */
+    align-items: center;
+}
+.copy-and-paste-set label {
+    /* Set the separation between the label and its field. */
+    margin-right: 10px;
+    margin-bottom: 0px;
+}
+/* Style the text field with the sharing information for the user to copy and paste. I would have put HTML5 attributes like readonly on these fields, but I read that they can interfere with functionality of
+   the JavaScript copy command on some devices. */
+.copy-and-paste-set input {
+    background-color: white;
+    border: 1px solid rgb(120,120,120);
+    /* The fields are taller on mobile so the user's fingers have more area for touching and long holding to copy. */
+    height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    /* These two rules vertically center the text in the middle of the container. */
+    padding-bottom: 1px;
+    vertical-align: middle;
+}
+.copy-and-paste-set > input, .link-field {
+    /* The field will take up all the space on the same line that isn't taken up by the label. */
+    -ms-flex: auto;
+    -webkit-flex: auto;
+    -moz-flex: auto;
+    flex: auto;
+}
+
+/* This class allows a link glyphicon to be placed in the empty space on the left side of the nested text field. */
+.link-field {
+    position: relative;
+}
+.link-field > input {
+    width: 100%;
+    padding-left: 20px;
+}
+.link-field > .glyphicon-link {
+    position: absolute;
+    top: 8px;
+    left: 5px;
+}
+
+/* 11. Responsiveness: Sections 4 to 7 were designed for 320-360px viewport width (iPhone5, Samsung Galaxy S5 in portrait mode). The following rulesets make the page responsive over the 360px to 1200px range. */
+
+@media (max-width: 1199px) {
+    /* If the content of the page is less than the height of the viewport, have the comment textarea take up all remaining space. This is already the case in the desktop layout,
+       but the mobile layout needs extra rules because #information is stacked below another element instead of being in its own column. */
+    .page {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        -moz-flex-direction: column;
+        flex-direction: column;
+    }
+    #information {
+        -ms-flex: auto;
+        -webkit-flex: auto;
+        -moz-flex: auto;
+        flex: auto;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        -moz-flex-direction: column;
+        flex-direction: column;
+    }
+}
+
+@media (orientation: landscape) and (max-width: 1199px) {
+   /* Images switch from 100% viewport width to 100% viewport height. If the image is wider than the viewport, the user can view the rest by swiping in an overflow.
+   It allows a more zoomed-in view of horizontal panoramas, and it allows viewing vertical panoramas or long photos of things like skyscrapers all at once.
+   GIFs and videos instead go fullscreen with black bars when you switch to a landscape orientation. */
+    #slide-overflow-mobile > img {
+        width: auto;
+        height: 100vh;
+        /* This rule centers the image if it is less wide than it is tall. */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    /* If a 4:3 video is playing on a 16:9 device, the user sees black bars.
+       If a 16:9 video is playing on a 4:3 device, the user can see the rest of the page.
+       If a video that is slightly wider than 4:3 is playing on a 4:3 device, it annoyingly shows only just a sliver of the page.
+       The same problem may be happening for 1.85:1 video on 16:9 devices. Showing more of the page isn't useful unless the user can see the whole heading.
+       I address the problem using JavaScript, but it isn't that bad if the user has JavaScript disabled. */
+    #landscape-order-switcher video {
+        width: 100vw;
+        max-height: 100vh;
+        background-color: black;
+    }
+    #slide-overflow-mobile {
+        /* If the image is less wide than it is tall, this rule ensures that the image stays on its own line and that its container can center it.
+           Without this rule, due to the use of a flexbox for ordering, the heading appears to the right of the image.  */
+        width: 100%;
+        overflow-x: auto;
+    }
+    /* I am assuming the user will usually be browsing in portrait mode and is switching into landscape mode after seeing that the slide is wide.
+       If this is true, the user would have already seen the heading, so the heading is moved below the image, below the fold, so the image can be larger. */
+    #landscape-order-switcher {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -moz-flex-wrap: wrap;
+        flex-wrap: wrap;
+        /* This is the border between the caption and the author information. */
+        border-bottom: 1px solid rgb(180,180,180);
+    }
+    #landscape-order-switcher > img, #landscape-order-switcher > video {
+        -webkit-order: 1;
+        -moz-order: 1;
+        order: 1;
+    }
+    #landscape-order-switcher > h1 {
+        -webkit-order: 2;
+        -moz-order: 2;
+        order: 2;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 359px) {
+    /* Shrink the font so that a caption length of about 100 characters, which I see most often, can fit on two lines. */
+    #photo-page-mobile h1 {
+        font-size: 16px;
+    }
+    /* Move the close button to keep it centered in the middle of the first line of the heading. */
+    a.close {
+        top: 6px;
+    }
+    /* Keep the button group beneath the slide from wrapping to the next line. */
+    .fixed-btn, .fixed-btn:hover, .fixed-btn:active {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+@media (min-width: 400px) {
+    /* Slightly enlarge the font size. Below 768px, the font is smaller than usual so that text will wrap less often. */
+    #posted-comments {
+        font-size: 14px;
+    }
+    .username {
+        font-size: 13px;
+    }
+}
+
+#slide-toolbar-phablet {
+    /* The DOM has a second copy of the slide toolbar in order to move it between the avatar and follow button on the left and the Like button on the right, once the viewport has enough room.  */
+    display: none;
+}
+/* There are several changes happening at the following breakpoints. First, if there is an avatar, it is being enlarged to an extent that room has to be made for it.
+   Second, the slide toolbar, the group of buttons beneath the slide, are being moved between the block with the "submitted by" label and Follow/Delete button on the left and the block with the Like button
+   on the right, as soon as the viewport reaches the point where there is room for it. This point differs depending on whether the user has an avatar.
+   The .uploader-has-avatar class, used specifically for implementing these changes, has to be on "#information <main>" as the closest ancestor which contains both slide toolbars.
+   At some point, I may decide it is better for there to always be a placeholder avatar for visual consistency, in which case I'd remove the first media query and the .uploader-has-avatar class. */
+@media (min-width: 630px) and (max-width: 1199px) {
+    main:not(.uploader-has-avatar) #author-box > .like-btn {
+        display: inline-block;
+        /* Change the vertical alignment to keep the Like button aligned with the slide toolbar instead of the Follow button. */
+        margin-top: 6px;
+        /* At the breakpoint, the right margin with the viewport (including parent container padding) is 25px, and it slightly grows as the viewport expands to 768px. */
+        margin-right: 4%;
+    }
+    main:not(.uploader-has-avatar) #slide-buttons {
+        display: none;
+    }
+    main:not(.uploader-has-avatar) #slide-toolbar-phablet {
+        /* Hide the portrait-smartphone range copy of the slide toolbar and show the one for landscape phones and wider devices. */
+        display: inline-block;
+        /* Keep the toolbar at the same level as the Follow button with the same spacing from the author label. */
+        margin-top: 6px;
+        margin-left: calc(47% - 243px);
+    }
+}
+@media (min-width: 730px) and (max-width: 1199px) {
+    /* Enlarge the avatar and increase the right margin, so that it doesn't look as narrow by comparison. */
+    .uploader-has-avatar #author-box #avatar {
+        max-width: 100px;
+        margin-right: 15px;
+    }
+    .uploader-has-avatar #author-box {
+        padding-left: 10px;
+        /* This rule is needed to provide room for enlarging the avatar without it overlapping the content below, because the avatar uses the float property. */
+        margin-bottom: 45px;
+    }
+    .uploader-has-avatar #author-box #author-label {
+        /* Vertically center everything to the right of the avatar. */
+        margin-top: 20px;
+    }
+    
+    .uploader-has-avatar #author-box {
+        padding-left: 20px;
+    }
+    .uploader-has-avatar #author-box > .like-btn {
+        display: inline-block;
+        /* Change the vertical alignment to keep the Like button aligned with the slide toolbar instead of the Follow button. */
+        margin-top: 6px;
+        /* At the breakpoint, the right margin with the viewport (including parent container padding) is 25px, and it slightly grows as the viewport expands to 768px. */
+        margin-right: 4%;
+    }
+    .uploader-has-avatar #slide-buttons {
+        display: none;
+    }
+    .uploader-has-avatar #slide-toolbar-phablet {
+        /* Hide the portrait-smartphone range copy of the slide toolbar and show the one for landscape phones and wider devices. */
+        display: inline-block;
+        /* Keep the toolbar at the same level as the Follow button with the same spacing from the author label. */
+        margin-top: 6px;
+        margin-left: calc(39% - 243px);
+    }
+}
+
+#author-box {
+    /* Beyond 768px viewport width, there's nothing left to fill the horizontal space and keep the elements from drifting too far apart.
+       Center the block containing the avatar, follow button, button toolbar, etc. */
+    max-width: 748px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+    /* Draw more attention to the heading, because at this point it is taking up a very small proportion of the viewport. */
+    #photo-page-mobile h1 {
+        text-align: center;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+}

@@ -1,0 +1,11 @@
+/* File names: pet_upload_and_search_night_v0_0_3_1.css  Version date: Author: Rachel Bush
+   File description: This file contains all the CSS for searching and uploading to the Adoption, Lost, and Found categories.
+   Version description: 
+*/
+
+#search-pages li {
+    border-right-color: white;
+}
+#search-pages li.active {
+    color: white;
+}

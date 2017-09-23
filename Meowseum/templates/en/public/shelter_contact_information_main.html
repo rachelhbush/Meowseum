@@ -1,0 +1,367 @@
+{% comment %}
+File name: shelter_contact_information_main_v0_0_2_6.html
+Author: Rachel Bush
+Version date: 
+Version description: 
+{% endcomment %}
+<div class="form-unit">
+    Required fields are shown in <span class="bold">bold</span>.
+</div>
+{{ form.non_field_errors }}
+<table class="form">
+    <tr>
+        <th><label>Organization name:</label></th>
+        <td>
+            {{ form.organization_name.errors }}
+            {{ form.organization_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Contact first name:</label></th>
+        <td>
+            {{ form.contact_first_name.errors }}
+            {{ form.contact_first_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Contact last name:</label></th>
+        <td>
+             {{ form.contact_last_name.errors }}
+             {{ form.contact_last_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label class="debold">Contact title:</label></th>
+        <td>
+            {{ form.contact_title.errors }}
+            {{ form.contact_title }}
+        </td>
+    </tr>
+</table>
+{{ form.include_contact_in_profile.errors }}
+<div class="checkbox text-center">
+    <label>
+        {{ form.include_contact_in_profile }}
+        Include contact name in profile
+    </label>
+</div>
+<h2>Profile and search engine address</h2>
+<table class="form">
+    <tr>
+        <th><label class="debold">Address line 1:</label></th>
+        <td>
+            {{ form.profile_address_line_1.errors }}
+            {{ form.profile_address_line_1 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label class="debold">Address line 2:</label></th>
+        <td>
+            {{ form.profile_address_line_2.errors }}
+            {{ form.profile_address_line_2 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>City:</label></th>
+        <td>
+            {{ form.profile_city.errors }}
+            {{ form.profile_city }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>State/Province:</label></th>
+        <td>
+            {{ form.profile_state_or_province.errors }}
+            {{ form.profile_state_or_province }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Country:</label></th>
+        <td>
+            {{ form.profile_country.errors }}
+            {{ form.profile_country }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>ZIP/Postal Code:</label></th>
+        <td>
+            {{ form.profile_zip_code.errors }}
+            {{ form.profile_zip_code }}
+        </td>
+    </tr>
+    <tr>
+        <th><label class="debold">Phone number:</label></th>
+        <td>
+            {{ form.profile_phone_number.errors }}
+            {{ form.profile_phone_number }}
+        </td>
+    </tr>
+    <tr>
+        <th><label class="debold">Fax number:</label></th>
+        <td>
+            {{ form.profile_fax_number.errors }}
+            {{ form.profile_fax_number }}
+        </td>
+    </tr>
+    <tr>
+        <th><label class="debold">Email:</label></th>
+        <td>
+            {{ form.profile_email.errors }}
+            {{ form.profile_email }}
+        </td>
+    </tr>
+    <tr>
+        <th><label class="debold">Website:</label></th>
+        <td>
+            {{ form.website.errors }}
+            {{ form.website }}
+        </td>
+    </tr>
+</table>
+<table class="form">
+    <tr>
+        <th><label>Status:</label></th>
+        <td>
+            Is your organization governmentally / municipally owned, a 501(c)(3) non-profit, a non-profit exempt from state taxes, or a nonprofit with charitable status 
+            granted by the Canada Customs and Revenue Agency?<br/>
+            <div class="text-center">
+                {% for radio in form.is_nonprofit %}
+                    <label for="{{ radio.id_for_label }}" class="radio-inline">
+                        {{ radio.tag }}
+                        {{ radio.choice_label }}
+                    </label>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
+</table>
+<table class="form">
+    <tr>
+        <th><label class="debold">"Contact Us" page:</label></th>
+        <td>
+            {{ form.contact_us_page.errors }}
+            {{ form.contact_us_page }}
+        </td>
+    </tr>
+</table>
+{{ form.donation_page.errors }}
+<div class="field">
+    <label>Donation webpage or PayPal link:</label><br/>
+    {{ form.donation_page }}
+</div>
+{% if user_has_shelter_record_on_file %}
+    <div class="form-buttons">
+        <input type="submit" class="btn btn-primary" value="Save changes"/>
+    </div>
+{% endif %}
+<h2>Mailing address</h2>
+<label class="checkbox-inline">
+    <input type="checkbox" data-source-fields="profile_address_line_1, profile_address_line_2, profile_city, profile_state_or_province, profile_country, profile_zip_code" data-target-fields="mailing_address_line_1, mailing_address_line_2, mailing_city, mailing_state_or_province, mailing_country, mailing_zip_code">
+    Same as above
+</label>
+<table class="form">
+    <tr>
+        <th><label>Address line 1:</label></th>
+        <td>
+            {{ form.mailing_address_line_1.errors }}
+            {{ form.mailing_address_line_1 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Address line 2:</label></th>
+        <td>
+            {{ form.mailing_address_line_2.errors }}
+            {{ form.mailing_address_line_2 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>City:</label></th>
+        <td>
+            {{ form.mailing_city.errors }}
+            {{ form.mailing_city }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>State/Province:</label></th>
+        <td>
+            {{ form.mailing_state_or_province.errors }}
+            {{ form.mailing_state_or_province }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Country:</label></th>
+        <td>
+            {{ form.mailing_country.errors }}
+            {{ form.mailing_country }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>ZIP/Postal Code:</label></th>
+        <td>
+            {{ form.mailing_zip_code.errors }}
+            {{ form.mailing_zip_code }}
+        </td>
+    </tr>
+</table>
+<h2>Veterinarian information</h2>
+<a data-toggle="instant-collapse" data-target="#veterinary-info-request-explanation">Purpose<span class="minus">-</span></a>
+<div class="form-unit collapse" id="veterinary-info-request-explanation">
+    Before entering beta testing, we may contact the primary veterinarian of the organization and request a signed letter of reference which states that he or she
+    provides medical care for the sheltered animals.
+</div>
+<table class="form">
+    <tr>
+        <th><label>Name:</label></th>
+        <td>
+            {{ form.veterinarian_name.errors }}
+            {{ form.veterinarian_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Phone number:</label></th>
+        <td>
+            {{ form.veterinarian_phone_number.errors }}
+            {{ form.veterinarian_phone_number }}
+        </td>
+    </tr>
+</table>
+<h2>Contact information for Meowseum</h2>
+<div class="form-unit">
+    This section is for the information of someone we can contact regarding Meowseum,
+    such as the person responsible for posting pets on adoption websites.
+</div>
+<div class="checkbox">
+    <label>
+        <input type="checkbox" data-source-fields="contact_first_name, contact_last_name" data-target-fields="site_contact_first_name, site_contact_last_name">
+        Same as the main contact at the shelter/rescue group
+    </label>
+</div>
+<table class="form">
+    <tr>
+        <th><label>First name:</label></th>
+        <td>
+            {{ form.site_contact_first_name.errors }}
+            {{ form.site_contact_first_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Last name:</label></th>
+        <td>
+            {{ form.site_contact_last_name.errors }}
+            {{ form.site_contact_last_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Phone number:</label></th>
+        <td>
+            {{ form.site_contact_phone_number.errors }}
+            {{ form.site_contact_phone_number }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Email:</label></th>
+        <td>
+            {{ form.site_contact_email.errors }}
+            {{ form.site_contact_email }}
+        </td>
+    </tr>
+</table>
+{% if user_has_shelter_record_on_file %}
+    <div class="form-buttons">
+        <input type="submit" class="btn btn-primary" value="Save changes"/>
+    </div>
+{% endif %}
+<h2>Settings</h2>
+<div class="form-unit">
+    This optional section will be used when users are searching for shelters. It will also allow you to skip parts of the adoption form that will always be the same for your organization.
+</div>
+{{ form.distance_prohibition.errors }}
+<div class="field">
+    <label class="bold">Do you prohibit adoption for people living over a certain distance away?</label>
+    <div>
+        <label class="radio-inline hidden-noscript">
+            <input type="radio" name="adoption-distance-restriction" value="yes">
+            Yes
+        </label>
+        <label class="radio-inline hidden-noscript">
+            <input type="radio" name="adoption-distance-restriction" value="no" checked>
+            No
+        </label>
+        <span class="follow-up"><label class="bold">Distance:</label> {{ form.distance_prohibition }} miles</span>
+    </div>
+</div>
+{{ form.age_prohibition.errors }}
+<div class="field">
+    <label class="bold">Do you prohibit adoption until a certain age over 18?</label>
+    <div>
+        <label class="radio-inline hidden-noscript">
+            <input type="radio" name="adoption-age-restriction" value="yes">
+            Yes
+        </label>
+        <label class="radio-inline hidden-noscript">
+            <input type="radio" name="adoption-age-restriction" value="no" checked>
+            No
+        </label>
+        <span class="follow-up"><label class="bold">Age</label> {{ form.age_prohibition }}</span>
+    </div>
+</div>
+<div class="form-unit">
+    <label>Would you like your location to be used as a meeting place when someone has lost a pet and another person has potentially found it?</label><br/>
+    <div class="text-center">
+        {% for radio in form.is_lost_found_meeting_place %}
+            <label for="{{ radio.id_for_label }}" class="radio-inline">
+                {{ radio.tag }}
+                {{ radio.choice_label }}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+{{ form.base_adoption_fee_cat.errors }}
+<div class="field">
+    <label class="bold">What is your base adoption fee for a cat, age one year or older?</label>
+    <div>
+        $ {{ form.base_adoption_fee_cat }} USD
+    </div>
+</div>
+{{ form.base_adoption_fee_kitten.errors }}
+<div class="field">
+    <label class="bold">What is your base adoption fee for a kitten?</label>
+    <div>
+        $ {{ form.base_adoption_fee_kitten }} USD
+    </div>
+</div>
+{{ form.spaying_or_neutering_included.errors }}
+{{ form.vaccination_included.errors }}
+{{ form.microchipping_included.errors }}
+{{ form.parasite_treatment_included.errors }}
+<div class="inline-checkboxes">
+    <label><span class="bold">What services are included with the base adoption fee?</span><br/>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            {{ form.spaying_or_neutering_included }}
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Spaying/neutering
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            {{ form.vaccination_included }}
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Vaccinations (up to date)
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            {{ form.microchipping_included }}
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Microchipping
+    </label>
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            {{ form.parasite_treatment_included }}
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        Testing and treatment for worms, ticks, and fleas (<a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited)
+    </label>
+</div>

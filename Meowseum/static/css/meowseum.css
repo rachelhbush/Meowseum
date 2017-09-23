@@ -1,0 +1,96 @@
+/* File names: scrapbin_v0_0_0_2.css, scrapbin_night_v0_0_0_2.css. Version date:   Author: Rachel Bush
+   Description: This file is for sitewide CSS that is specific to Meowseum.
+   Version description: 
+*/
+
+/* 1. Styling the Meowseum upload modal. */
+
+/* 1a. Style the upload modal itself. */
+#upload-menu .modal-dialog {
+    width: 276px;
+}
+#upload-menu .modal-header {
+   text-align: center;
+   padding-top: 10px;
+   padding-bottom: 0px;
+   border-bottom: none;
+}
+/* This ruleset makes sure the gaps between the buttons and the borders of the modal are of equal width. It wasn't centered without it. */
+#upload-menu .modal-body {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#upload-menu .close {
+    font-size: 24px;
+}
+
+/* 1b. Style the contents of the upload modal body. */
+
+/* This class is used for buttons for uploading a file from the device in different ways. */
+.upload-btn, .upload-btn:hover, .upload-btn:focus, .upload-btn:active {
+    font-size: 18.67px;
+    background-color: #eeeeee;
+    color: black; /* This rule overrides the link coloring. */
+    height: 62px;
+    width: 254px;
+    margin-bottom: 6px;
+}
+.upload-btn .glyphicon {
+    font-size: 40px;
+    /* Align the label, relative to the glyphicon, such that the label is right of the glyphicon's center. */
+    vertical-align: -27%;
+    margin-top: 10px;
+}
+/* The text needs to be horizontally and vertically positioned separately from the glyphicon, or else it will be at the bottom of the row and too close to the glyphicon. */
+.upload-button-label {
+    width: 190px;
+    margin-left: 10px;
+    text-align: left;
+    /* Allow the label to be vertically aligned. */
+    display: inline-block;
+}
+
+#upload-menu .modal-body > form:first-child > div {
+    /* Position the invisible file form control over the button by applying this property to the container wrapping it. */
+    position: relative;
+}
+#upload-menu .modal-body > form:first-child > .errorlist {
+    /* Display the error message centered and without a bullet point above the file button. */
+    list-style: none;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+/* This element provides a background for the text field for pasting a URL. */
+#web-btn {
+    /* The background should have the same color and width as the upload button. */
+    background-color: #eeeeee;
+    width: 254px;
+    padding: 7px;
+    margin-bottom: 5px;
+    /* The link icon will be absolutely positioned relative to the top-left corner of this element. */
+    position: relative;
+}
+#web-btn input {
+    width: 100%;
+    /* Make this text field taller than most others on the site. */
+    height: 30px;
+    padding-left: 24px;
+}
+#web-btn .errorlist {
+    /* Display the error message centered and without a bullet point above the URL field. */
+    list-style: none;
+    text-align: center;
+    margin-bottom: 6px;
+}
+#web-btn > form > div {
+    /* Position the link icon relative to a corner of (a container with only) the text field. */
+    position: relative;
+}
+#web-btn .glyphicon-link {
+    position: absolute;
+    font-size: 16px;
+    top: 8px;
+    left: 6px;
+}

@@ -1,0 +1,90 @@
+/* File names: gallery_main_v0_0_1_10.html, gallery_v0_0_1_5.js, gallery_v0_0_1_6.css, gallery_night_v0_0_1_0.css  Version date:  Author: Rachel Bush
+   Version description: 
+   
+   gallery_main_v0_0_1_10.html: Minor changes. I changed "username" to "profile_username". I corrected a syntax error with an extra quotation mark on line 114 that was already being ignored by browsers. 3/20/2017 2:23 PM
+   gallery_main_v0_0_1_11.html: I removed the 'thumbnail_directory' metadata key and replaced it with a template variable. 3/25/2017 1:52 AM
+   gallery_main_v0_0_1_12.html: I added a poster attribute, because without it videos weren't being shown until they started playing. I added the playsinline attribute, in order to support iPhones. 3/25/2017 6:11 PM
+   gallery_main_v0_0_1_13.html: 1. I changed "<" to "<=" because at the critical point, thumbnails were being created with the same dimensions as the original.
+   2. I moved the thumbnail directory and poster directory into the directory for uploads, because this structure makes it easier to manage directories where uploads
+   will be temporarily stored while they are being processed so that files that can be deleted are kept separate. 4/8/2017 9:35 PM */
+   
+/* 0. Style the gallery section as a whole. */
+
+#gallery {
+    /* On smartphones in portrait or landscape mode, this setting will keep the widths of the side-gutters about the same as the widths of gutters between images. */
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#gallery .container-fluid {
+    width: 100%;
+}
+/* Style the gutter between the gallery and the header. */
+#gallery {
+    margin-top: 5px;
+}
+@media (min-width: 1200px) {
+    #gallery {
+        margin-top: 10px;
+    }
+}
+
+/* 1. Style the navigation bar present on user's Gallery page for uploads and the user's Likes page. */
+
+#gallery nav {
+   margin-bottom: 5px;
+}
+@media (min-width: 544px) {
+    #gallery nav {
+        margin-bottom: 8px;
+    }
+}
+@media (min-width: 1200px) {
+    #gallery nav {
+        margin-bottom: 10px;
+    }
+}
+#gallery nav > ul > li {
+    border-right: none;
+}
+#gallery nav {
+    text-align: center;
+}
+
+/* 2. Style the gallery grid. */
+
+#gallery .container-fluid ul {
+    list-style: none;
+}
+#gallery .container-fluid li {
+    text-align: center;
+}
+#gallery .container-fluid img, #gallery .container-fluid .gif-container {
+    /* Image and videos will fit the width of the columns instead of overflowing them. Using width instead of max-width will prevent distracting variations in the gutter width, especially when the images
+       are smaller than 350x350 and the screen is 1080p, 23". */
+    width: 100%;
+    height: auto;
+}
+
+/* Style the gutters between slides.  I want horizontal and vertical gutters to be the same length, so the bottom padding has to be equal to the total of left and right padding.
+   In order to avoid affecting the gutter between the gallery and the header, bottom paddng isn't used. With Bootstrap's default of 15px on all devices, the smaller the device,
+   the larger the gutters look relative to content. I used media queries to make gutter length proportional to device width. */
+  
+@media (max-width: 999px) {
+    #gallery [class*="col"] {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    #gallery [class*="col"] li {
+        padding-bottom: 4px;
+    }
+}
+@media (min-width: 1000px) {
+    #gallery [class*="col"] {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+    #gallery [class*="col"] li {
+        padding-bottom: 6px;
+    }
+}

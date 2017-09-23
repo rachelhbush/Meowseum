@@ -1,0 +1,36 @@
+{% comment %}
+File name: modals_desktop_v0_0_0_11.html
+Author: Rachel Bush
+Last modified: 
+Version description: 
+{% endcomment %}
+<div class="modal fade has-footer" id="layout-menu">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>  
+                <h4 class="modal-title">Layout</h4>                                              
+            </div>
+            <div class="modal-body">
+                <ul class="list-menu">
+                    {% load staticfiles %}
+                    <li>Night mode<img src="{% static "images/Moon Icon - White.png" %}" data-night="{% static "images/Moon Icon - White.png" %}" data-day="{% static "images/Sun Icon.png" %}" alt="Moon icon" class="toggle-night-day"/></li>
+                    <li>Play all GIFs<span class="glyphicon glyphicon-play" id="toggle-autoplay"></span></li>
+                </ul>
+                <div id="gif-mouseout-behavior">
+                    When you stop mousing over a GIF,<br/>
+                    <div id="gif-mouseout-buttons">
+                        <button type="button" class="btn btn-default" id="finish-option">Finish the loop.</button>
+                        <button type="button" class="btn btn-default" id="pause-option"><span class="glyphicon glyphicon-pause"></span> Pause the GIF.</button><br/>
+                        <button type="button" class="btn btn-default" id="stop-option"><span class="glyphicon glyphicon-stop"></span> Stop and restart from the beginning next time.</button><br/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal short ajax-modal fade in" data-ajax-url="{% url "from_device" %}" id="upload-menu">
+</div>

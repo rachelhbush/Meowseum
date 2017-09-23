@@ -1,0 +1,3 @@
+The Moderators group can change abuse reports in order to confirm they have
+been dealt with without deleting them. They can also delete comments, delete
+uploads, and change Users in order to inactivate their accounts.

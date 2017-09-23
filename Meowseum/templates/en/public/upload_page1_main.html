@@ -1,0 +1,72 @@
+{{ form.non_field_errors }}
+{% if not has_contact_information %}
+    {{ form.upload_type.errors }}
+{% endif %}
+{{ form.title.errors }}
+<div class="field">
+    {{ form.title }}
+</div>
+{{ form.description.errors }}
+<div class="field">
+    {{ form.description }}
+</div>
+{% include "en/public/elements/file_element.html" %}
+<div class="form-unit text-center" id="upload-type-field">
+    <button type="button" class="btn btn-primary radio-btn hidden-noscript">Up for adoption</button>
+    <button type="button" class="btn btn-primary radio-btn hidden-noscript">Lost</button>
+    <button type="button" class="btn btn-primary radio-btn hidden-noscript">Found</button>
+    <button type="button" class="btn btn-primary radio-btn active hidden-noscript">Pets</button>
+    {% for radio in form.upload_type %}
+        <label for="{{ radio.id_for_label }}" class="radio-inline visible-noscript-inline">
+            {{ radio.tag }}
+            {{ radio.choice_label }}
+        </label>
+    {% endfor %}
+</div>
+{% if not has_contact_information %}
+    {{ CONTACT_INFO_ERROR }}
+{% endif %}
+{% if form.popular_tags|length > 0 %}
+    {{ form.popular_tags.errors }}
+    <div class="form-unit">
+        <label>Browse popular tags:</label><br/>
+        <fieldset class="scrollable-checkboxes" data-size="3">
+            {% if form.popular_tags|length > 3 %}
+                <button type="button" class="btn btn-primary">Clear</button>
+            {% endif %}
+            {% for checkbox in form.popular_tags %}
+                <div>
+                    {{ checkbox.tag }}
+                    {{ checkbox.choice_label }}
+                </div>
+            {% endfor %}
+        </fieldset>
+    </div>
+{% endif %}
+{{ form.tags.errors }}
+<table class="form">
+    <tr>
+        <th><label id="tag-list-label" for="id_tags">Tag list:</label></th>
+        <td>{{ form.tags }}</td>
+    </tr>
+</table>
+{{ form.is_publicly_listed.errors }}
+<div class="checkbox has-custom-checkbox text-center">
+    <label>
+    <div class="custom-checkbox">
+        {{ form.is_publicly_listed }}
+        {% include "en/public/elements/custom_checkmark.html" %}
+    </div>
+    <span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.
+    </label>
+</div>
+{{ form.uploader_has_disabled_comments.errors }}
+<div class="checkbox has-custom-checkbox">
+    <label>
+    <div class="custom-checkbox">
+        {{ form.uploader_has_disabled_comments }}
+        {% include "en/public/elements/custom_checkmark.html" %}
+    </div>
+    Disable comments
+    </label>
+</div>

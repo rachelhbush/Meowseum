@@ -1,0 +1,26 @@
+/* File names: login_v0_1_5.html, signup_v0_1_4.html, login-signup_v0_1_8.css, login-signup_night_v0_1_4.css
+   Version date: Author: Rachel Bush
+   Version description:  */
+
+body {
+    /* If the landscape background image is wide enough, black bars are visible, such as on a landscape iPad. Replace the default off-blackness with the blackest black. */
+    background-color: rgb(0,0,0);
+}
+#login-form-box, #signup-form-box {
+    /* Change the color of the boxed area surrounding the form, separating it from the background image. Make it dark and semitransparent, with a slight bluish tint. */
+    background-color: rgba(30,30,40,0.25);
+    border: none;
+}
+@media (min-width: 1200px) {
+    /* Make the boxed area larger on laptops and desktops, to compensate for the previous ruleset making it more difficult to distinguish from the background. */
+    #login-form-box {
+        width: 450px;
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+    #signup-form-box {
+        width: 450px;
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+}

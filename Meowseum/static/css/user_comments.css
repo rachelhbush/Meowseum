@@ -1,0 +1,166 @@
+/* File names: user_comments_v0_0_5.css, user_comments_night_v0_0_2.css, user_comments_v0_0_7.html, user_comments_v0_0_4.js    Version date: 3/27/2017 2:22 PM  Author: Rachel Bush
+   Version description: 
+   
+   user_comments_v0_0_7.html: Minor change. I changed "username" to "profile_username". First version using Meowseum. 3/20/2017 2:26 PM
+   user_comments_v0_0_8.html: In the HTML, I added the playsinline attribute and a poster image to the <video> so that it would display on mobile devices.
+   I added the muted attribute if the video doesn't have sound so the JS library that adds GIF support to iOS 8 and iOS 9 will work. 3/28/2017 3:12 PM
+   user_comments_v0_0_9.html: 1. I changed "Your comments" to "{{ profile_username }}'s comments" in the page's title.
+   2. I moved the poster directory into the directory for uploads, because this structure makes it easier to manage directories where uploads
+   will be temporarily stored while they are being processed so that files that can be deleted are kept separate. 4/8/2017 8:47 PM */
+
+/* 1. This section is for the navigation bar, the Enlarge checkbox, and the message appears when the user hasn't posted a comment yet. */
+
+#navigation-and-comment-controls {
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+#navigation-and-comment-controls nav > ul > li {
+    border-right: none;
+}
+@media (min-width: 600px) {
+    #navigation-and-comment-controls {
+        position: relative;
+    }
+    #navigation-and-comment-controls .checkbox-inline {
+        /* Position the "Enlarge" checkbox. Above 600px, the checkbox can be absolutely positioned, because there will be enough room for a username with 30 characters.
+           In most cases, this looks better because the navigation bar becomes centered in the viewport.  */
+        position: absolute;
+        top: 6px;
+        right: 10px;
+    }
+}
+@media (max-width: 599px) {
+    #navigation-and-comment-controls .checkbox-inline {
+        /* Below 600px, the checkbox has to be floated so it can be on a separate line from the navigation bar, or else the navigation bar text starts to collide with the checkbox text. */
+        float: right;
+        margin-bottom: 5px;
+    }
+}
+#no-comments {
+    padding: 5px;
+    text-align: center;
+}
+
+/* 2. Style the class of user comments and the contents of each <div>. */
+.user-comment:not(.enlarged) {
+    padding: 10px;
+    border-top: 1px solid rgb(180,180,180);
+    /* This rule makes sure the borders take up 100% of the viewport width.
+       Also, without this rule, at large enough viewport widths, the widths of each .user-comment will differ by comment length.
+       .user-comment needs to be 100% of the viewport size in order for widths of nested images to be relative to the viewport width. */
+    width: 100%;
+    /* This rule prevents the floating images from hanging over the border if the comment is shorter than the image.
+       I tried clear: both;, and it was only able to prevent two images from being next to each other while this was happening. */
+    display: table;
+}
+.user-comment:not(.enlarged):last-child {
+    border-bottom: 1px solid rgb(180,180,180);
+}
+
+/* Style the image the user commented on. */
+.user-comment:not(.enlarged) img, .user-comment:not(.enlarged) .gif-container {
+    float: left;
+    /* Set the gutter width between the right edge of the image and the left edge of the comment. */
+    margin-right: 15px;
+    width: 30%;
+}
+@media (min-width: 544px) {
+    .user-comment:not(.enlarged) img, .user-comment:not(.enlarged) .gif-container {
+        width: 15%;
+    }
+}
+
+/* Style the time, as in "3 months ago", that the comment was posted. */
+.user-comment .comment-time {
+    font-size: 10.67px;
+    /* Place the time in the top-right corner. The comment will wrap left of the time and then underneath it. */
+    float: right;
+    padding-right: 5px;
+    /* Provide enough padding for the time and the comment to be visually separate. */
+    padding-left: 10px;
+    padding-bottom: 3px;
+}
+
+/* Style the comment itself. */
+.user-comment:not(.enlarged) .comment-text {
+    font-size: 12px;
+}
+.comment-text p:last-child {
+    margin-bottom:0px;
+}
+
+/* 3. On smartphones, clicking the Enlarge button makes images take up 100% of the viewport width and places the comment underneath the image. */
+@media (max-width: 768px) {
+    .user-comment.enlarged {
+        width: 100%;
+    }
+    .user-comment.enlarged img, .user-comment.enlarged .gif-container {
+        width: 100%;
+    }
+    .user-comment.enlarged .comment-time {
+         padding-top: 3px;
+    }
+    .user-comment.enlarged .comment-text {
+        margin: 10px;
+    }
+}
+
+/* 4. Style the user comments for tablets, laptops, and desktops. */
+
+@media (min-width: 1000px) {
+    #user-comments {
+        /* The dividers between user comments are no longer full-width. */
+        max-width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    /* For larger viewports, the only thing checking the Enlarged checkbox will change is the image size.
+       The remaining rulesets in this media query had to be copied from the ruleset that excluded the .enlarged class. */
+    .user-comment.enlarged {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-top: 1px solid rgb(180,180,180);
+        width: 100%;
+        display: table;
+    }
+    .user-comment.enlarged:last-child {
+        border-bottom: 1px solid rgb(180,180,180);
+    }
+    .user-comment.enlarged img, .user-comment.enlarged .gif-container {
+        float: left;
+        margin-right: 15px;
+        /* This is the only change from the ruleset earlier in this style sheet. */
+        width: 50%;
+    }
+    .user-comment.enlarged .comment-time {
+        font-size: 14px;
+        float: right;
+        padding-right: 5px;
+        padding-left: 10px;
+        padding-bottom: 3px;
+    }
+    .user-comment.enlarged .comment-text {
+        font-size: 14px;
+        margin-bottom: 0px;
+    }
+}
+
+@media (min-width: 1200px) {
+    #user-comments {
+        max-width: 90%;
+    }
+    .user-comment:not(.enlarged) .comment-time {
+        font-size: 12px;
+    }
+    .user-comment:not(.enlarged) .comment-text {
+        font-size: 14px;
+    }
+}
+@media (min-width: 1500px) {
+    .user-comment:not(.enlarged) .comment-time {
+        font-size: 14px;
+    }
+}

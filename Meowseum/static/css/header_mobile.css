@@ -1,0 +1,292 @@
+/* File names: header_mobile_v0_0_1_8.html, modals_mobile_v0_0_1_9.html, header_mobile_v0_0_1_5.js, header_mobile_v0_0_1_7.css, header_mobile_night_v0_0_1_0.css
+   Version date: Author: Rachel Bush
+   Version description: 
+*/
+
+/* 0. Always-visible part of the header */
+
+#header-desktop, footer {
+    display: none;
+}
+#header-mobile {
+    display: block;
+    padding-top: 9.5px;
+}
+.mobile-icon {
+    width: 30px;
+    vertical-align: top;
+}
+
+/* On portrait smartphones, include an extra Home icon. All the icons are list items with a <ul>, which is styled as a flexbox so that the icons can be equally spaced.
+   On landscape smartphones, the Home icon is replaced with a logo that takes the user home instead. There two separate lists on each side of the screen, and the icons are equally spaced by a fixed width.
+   This requires having two separate rows in the HTML and making one hidden. */
+#portrait-smartphone-icons ul {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    justify-content: space-between;
+}
+
+#left-icons-container > ul > li {
+    margin-right: 17px;
+}
+#right-icons-container {
+    text-align: right;
+}
+#right-icons-container > ul > li {
+    margin-left: 17px;
+}
+/* In case the device allows using a mouse, indicate the search icon image is clickable. */
+#search-toggle {
+    cursor: pointer;
+}
+
+/* Show the logo only on devices that are wider than landscape phones and "phablets". Below 544px, there isn't enough room. */
+@media (max-width: 544px) {
+    #mobile-logo-container {
+        display: none;
+    }
+}
+#mobile-logo-container {
+    text-align: center;
+}
+.mobile-logo {
+    height: 30px;
+    /* Vertically center the logo in the header with a minor adjustment. I tried using padding and margins, but they increased the header height. */
+    position: relative;
+    top: -1px;
+}
+
+/* 1. Search bar part of the header */
+
+#search-row {
+    margin-top: 5px;
+    /* The feedback page involves vertical centering with absolute positioning, and this can make its transparent areas overlap the search bar for some viewport dimensions.
+       These two rules keep the search bar clickable. */
+    position: relative;
+    z-index: 1;
+    /* Hide the search bar until the user clicks the magnifying glass. */
+    display: none;
+}
+#search-row > .col-xs-12 {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+}
+#search-row form {
+    -ms-flex: auto;
+    -webkit-flex: auto;
+    -moz-flex: auto;
+    flex: auto;
+    height:30px;
+}
+#mobile-searchbar {
+    width:98%;
+    height: 30px;
+    padding-right: 23px;
+    font-size: 14.67px;
+}
+/* This ruleset aligns the left edge of the search bar with the left edge of the gallery, which is designed to have increasing left and right margins with viewport width. */
+@media (max-width: 500px) {
+    #search-row > .col-xs-12 {
+        padding-left: 10px;
+    }
+}
+
+#header-mobile .glyphicon-search {
+    float:right;
+    position: relative;
+    right: 15px;
+    top: -22px;
+}
+#filter-btn {
+    font-size: 12px;
+    color: black; /* This rule overrides the link coloring. */
+    background-color: rgb(211,211,211);
+    height: 29px;
+    width: 34px;
+    padding: 0px;
+    font-weight: bold;
+    position: relative;
+    left: 2px;
+}
+#filter-btn:hover, #filter-btn:active {
+    background-color: rgb(180,180,180);
+}
+
+
+/* Minor manual "band-aid" tweaking: At larger widths, the search icon starts to move out from under the cat icon. Extending the search bar slightly and moving the search icon to
+   compensate brings them back into alignment. */
+@media (min-width: 500px) and (max-width: 1199px) {
+        #mobile-searchbar {
+        width:99%;
+        }
+        #header-mobile .glyphicon-search {
+            right: 15px;
+        }
+}
+
+/* 2. Create classes that will be common to many of the mobile modals. */
+
+/* This class, which goes on .modal, is for a narrow modal with nothing but links to other pages inside it. When there are too many options to fit into the .modal, the last menu option is replaced with a
+   Bootstrap dropdown. The dropdown is scrollable and contains the less important options. Landscape mode uses sidebar instead of a modal, and it uses multiple columns when there are too many options instead of the
+   dropdown. This requires the .dynamic-width class on .modal-dialog. */
+.browse-menu .modal-dialog  {
+    text-align: left;
+    max-width: 200px;
+}
+/* This ruleset was written when there were too many menu options to fit into the modal, and there wasn't enough header space for another button for a separate menu.
+   This ruleset is used when the last menu option is replaced with a Bootstrap dropdown. This dropdown is scrollable and should contain the less important options. */
+.browse-menu .dropdown-toggle {
+    font-family: "Helvetica Neue", Arial;
+}
+.browse-menu .dropdown-menu {
+    /* With four options above the dropdown, this setting leaves 20-30px between the bottom of the dropdown and the bottom of the viewport. */
+    max-height: calc(45vh - 110px);
+    overflow-y: auto;
+}
+
+/* On landscape phones, the modal moves to the top-left. The portrait-mode modal doesn't look good vertically centered on landscape phones because there isn't enough room left above and below the modal. */
+@media (max-height: 420px) {
+    /* The .modal in this selector is for specificity purposes. */
+    .modal.browse-menu .modal-dialog {
+        margin-left: 0px;
+        margin-right: 0px;
+        top: 0px;
+        left: 0px;
+        transform: none !important;
+    }
+    .browse-menu .modal-content {
+        /* The corners of the modal should be sharp, or else the interstices between the curves of the modal and the sharp corners of the viewport will be noticable.
+           The default black outline of the modal also becomes too noticable when it is right up against the edge of the screen. */
+        border-radius: 0px;
+        border: none;
+    }
+    .browse-menu.dynamic-width .modal-dialog {
+        /* Remove the fixed-width constraint again -- it was removed in the sitewide CSS and added back by .browse-menu's default.  */
+        max-width: none;
+    }
+    .browse-menu.dynamic-width .modal-content {
+        /* Extend the modal down to the bottom of the viewport, so that the columns of options will still have a background-color, even though they're floating. */
+        height: 100vh;
+    }
+    .browse-menu.dynamic-width .modal-body .list-menu {
+        float: left;
+    }
+    .browse-menu .modal-body .list-menu {
+        margin-right: 50px;
+    }
+    /* The selector assumes that in this situation, .list-menu will be the only type of item in .modal-body. */
+    .browse-menu .modal-body .list-menu:last-child {
+        margin-right: 25px;
+    }
+    /* If there are multiple <ul>s, then this ruleset assumes that there are enough menu items for a dropdown menu or multiple columns.
+       Hide the last list-item, which contains portrait mode's Bootstrap dropdown for more options. */
+    .browse-menu .modal-body .list-menu:first-child:not(:only-of-type) li:last-child {
+        display: none;
+    }
+}
+@media (min-height: 421px) {
+    /* Hide all list-menus after the first, which are used by landscape mode for presenting options in multiple columns. */
+    .browse-menu .list-menu ~ .list-menu {
+        display: none;
+    }
+}
+.browse-menu h4 {
+        text-align: left;
+}
+/* Browse-menus in day mode uses the same rulesets as the default night mode modal: borderless and with less padding. */
+.browse-menu .modal-header {
+    border:none;
+    padding-bottom: 0px;
+}
+.browse-menu .modal-body {
+    padding-top: 5px;
+}
+/* The .has-footer class, used with .modal, will reduce the padding on the body of night mode modals and .browse-menu day mode modals.
+   The class exists because there is no CSS selector involving whether a parent contains a child with a certain tag, only the other way around. */
+.browse-menu.has-footer .modal-body {
+    padding-bottom: 5px;
+}
+.browse-menu .modal-footer {
+    border: none;
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+/* If a browse-menu has a footer, so far I have only used it for sign up, log in, and log out buttons, wrapped in links to the relevant pages.
+   Center the buttons in the footer and put 5px of space between them if there are two. */
+.browse-menu .modal-footer {
+    text-align: center;
+}
+.browse-menu .modal-footer > a+a {
+    margin-left: 5px;
+}
+
+/* This class vertically spaces out a list of links. I also use it to vertically space out a list of settings options which have buttons positioned to the far-right. */ 
+ul.list-menu {
+    /* Remove the rules intended for lists that use bullet points. */
+    padding-left: 0px;
+    list-style: none;
+    margin-bottom: 0px;
+}
+/* Provide spacing for menu items. Make them stand out from the body text by using a different font. */
+.list-menu > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: Corbel, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 110%;
+}
+.list-menu a {
+    color: black;
+}
+.list-menu a:hover, .list-menu a:active {
+    text-decoration: underline;
+}
+/* The options of Bootstrap dropdowns nested in a list-item use the same styling as list-items, but with half as much vertical padding. */
+.list-menu .dropdown-menu > li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: Corbel, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 110%;
+}
+
+
+.list-menu .default-font {
+    /* Reset back to the default font for @username (follower_count) or #hashtag (subscriber_count) because the Corbel font makes a 0 look like an o. Going back to the default font for the whole
+       string is simpler than using it only on the count, and it makes the menu option unique to the user or tag page stand out. */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* 3. Style specific elements within the modals. */
+
+/* Within the Settings modal, style the symbols indicating day mode or night mode. */
+.toggle-night-day {
+    width: 33px;
+    float: right;
+    margin-right: 15px;
+    /* Relative positioning was needed to vertically center the center of the Sun icon within the list item, so it would be at the same level as the text.
+       Margin-bottom and vertical-align had no effect on the icon's position. */
+    position: relative;
+    top: -7px;
+    cursor: pointer;
+}
+
+/* 4. Style the Layout menu modal header, modal footer, and the modal buttons. */
+
+#layout-menu-mobile .modal-footer {
+    text-align: right;
+}
+#layout-menu-mobile h4 {
+    text-align:center;
+}
+
+.nav-btn-mobile, .nav-btn-mobile:hover, .nav-btn-mobile:focus {
+    background-color: rgb(0,128,0);
+    color: white; /* Override link and button default styles */
+}
+.nav-btn-mobile:hover, .nav-btn-mobile:focus {
+    background-color: rgb(0,118,0);
+}

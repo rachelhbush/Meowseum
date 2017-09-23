@@ -1,0 +1,39 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>About Us - {{ app_name }}</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/about_us.css" %}"/>
+        <script>settings.prepareDayModeBackground();</script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    <main id="about-us">
+        <h1>About Us</h1>
+        <p>
+            {{ app_name }} is a website for uploading photos, GIFs, and looping videos under 10 seconds. You can use multiple hashtags and search within captions. You can use the <a href="{% url "advanced_search" %}" class="emphasized">search page</a> to show specific types of content. Users have pages where you can view their uploaded content, their likes, and the uploads which they've commented on. Search for a @username to be redirected to the user's uploaded content gallery. Type a #hashtag into the search bar, and you'll be able to use the Browse menu to subscribe to uploads that have the tag.
+        </p>
+        <p>
+            The site is currently in its open alpha stage. If you have any suggestions for improving the site, send me a message through the <a href="{% url "feedback" %}">feedback page</a> and I'll be sure to read it. Currently, the site doesn't support cropping photos, clipping videos down to the maximum length, or uploading from a URL, and I'll be working on all of those features. Together, we'll make the site as fun to use as possible before the official launch.
+        </p>
+    </main>
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+{% endblock %}

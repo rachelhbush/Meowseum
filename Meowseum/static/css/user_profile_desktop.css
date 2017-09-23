@@ -1,0 +1,363 @@
+/* File names: user_profile_v0_1_0.js, user_profile_desktop_v0_1_0.html, user_profile_desktop_v0_1_0.css, user_profile_mobile_v0_1_0.html, user_profile_mobile_v0_1_0.css, user_profile_night_v0_1_0.css
+   Version date: 11/7/2016 8:26AM    Author: Rachel Bush
+   Changes applicable to        1. In the HTML and CSS, I replaced the #recommended-gif-toggle ID selector with [data-target="#recommended-gif"] / [data-target="#recommended-gif-mobile"].
+   both desktop and mobile:     2. In the HTML, I moved .dynamic-content from the .modal-dialog to the .modal level (needed to solve an IE bug in the sitewide CSS).
+   Minor changes: I increased the space between the "Recommended webpage" button and the video by 5px.
+*/
+
+/* Section 1. Rulesets applicable to the entire page. */
+
+/* Hide the mobile version. The second selector determines the section shown below the main section by default. 
+   If the user is a regular user, this will be the "About me and cats" section. If the user is an animal shelter or rescue group, this will be the When and Where section. */
+#user-profile-mobile, #user-profile-desktop section:not(#about-me-and-cats) {
+    display: none;
+}
+
+@media (min-width: 1200px) {
+    #user-profile-desktop .container-fluid, #user-profile-desktop section {
+        /* At viewport widths near the lower boundary of the desktop range, the total margin between the content and viewport edge will be 90px on each side
+           (half the fixed-width value plus container padding). This allows room for an Edit button in the top-right corner of each section. */
+        width: calc(100vw - 150px);
+        /* Compared to the usual .container fixed width of 1170px, these rules give the page up to 80px more room for the layout as the viewport expands.
+           Any more than this and inline material becomes spread over too wide an area. */        
+        max-width: 1250px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* The selectors for this page's sections have to have the <div> with the page's ID as an ancestor, so that they won't affect the <section>s in the modals
+   that are accessible sitewide. */
+#user-profile-desktop section {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Each user profile section has a corresponding "edit" section with a form for editing the section's fields.
+   Prevent the textareas in "edit" sections' forms from becoming too wide by limiting the width of the section. In order to keep the left margin of the section aligned with the
+   left margin of the main area, the rule has to be applied to a <div> wrapping the content of the section. */
+section[id*="edit"] > div {
+    max-width: 950px;
+}
+
+#user-profile-desktop .container-fluid, #user-profile-desktop section {
+    /* Allow each edit button to be positioned relative to the top-right corner of each section of the page. */
+    position: relative;
+}
+/* If Django detects that the user viewing this page is the one who created it, then the server will add an edit button. */
+.edit-btn {
+    height: 24px;
+    padding-left: 8px;
+    padding-right: 8px;
+    position: absolute;
+    /* At this Y coordinate, the top of the button will be 1px below where the 12px of the section's top padding ends. */
+    top: 13px;
+    /* At this X coordinate, the center of the button will be halfway between the edge of the text and the edge of the viewport. */
+    right: -50px;
+}
+@media (min-width: 1425px) {
+    /* This is 25px beyond the breakpoint at which the containers will stop expanding.
+       Now the right edge of the viewport will be a long way away from the Edit button, so the Edit button can be moved slightly rightward. */
+    .edit-btn {
+        right: -60px;
+    }
+}
+.edit-btn .glyphicon-pencil {
+    font-size: 13px;
+}
+
+#user-profile-desktop section h1 {
+    margin-top: 2px;
+    margin-bottom: 8px;
+}
+#user-profile-desktop section h1+table.form tr:first-child th, #user-profile-desktop section h1+table.form tr:first-child td {
+    padding-top: 0px;
+}
+/* Enlarge the buttons at the bottom of the editing form for each profile section. */
+#user-profile-desktop section .form-buttons .btn-primary {
+    height: 28px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+#user-profile-desktop section .form-buttons .btn-default {
+    height: 30px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+/* Space apart the enlarged buttons. */
+#user-profile-desktop section .form-buttons .btn-default+.btn-primary {
+    margin-left: 4px;
+}
+
+/* Section 2. Rulesets for the banner image and website dropdown. */ 
+
+#banner-image-container {
+    /* Set the container of the banner image to have a relative position, so that the website dropdown can be absolutely positioned relative to one of its corners. */
+    position: relative;
+}
+#banner-image-container > img {
+    width: 100%;
+}
+#banner-image-container > .btn-group {
+    position: absolute;
+    bottom: 10px;
+    right: 40px;
+}
+/* Adjust the official website dropdown button dimensions. */
+#banner-image-container button {
+    height: 25px;
+}
+/* Make the website dropdown options narrower. */
+#banner-image-container .dropdown-menu > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+/* Each website has an image the same size as the favicon used by browsers on laptops and desktops in tabs at 1dppx.
+   The user can exclude the image for the dropdown button label, but if it has an image, the rule is also applies there. */
+#banner-image-container .dropdown-menu img, #banner-image-container button img {
+    width: 16px;
+    margin-right: 4px;
+}
+/* This class is used to stand in for the favicon in the website dropdown if the site does not have one. */
+#banner-image-container .placeholder {
+    margin-right: 20px;
+}
+
+/* Section 3. Main section of the page. */
+
+main {
+    padding-top: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgb(211,211,211);
+}
+/* Style the username or Firstname Lastname */
+h1 {
+    font-size: 21.33px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+main h1 {
+    /* Allow the field to not wrap and thereby overflow the container. There is only empty space until the navigation button-group.
+       Judging by tests with filler characters, the field may have up to 28 characters until the layout glitches. */
+    white-space: nowrap;
+}
+/* Style the Location, State subheading. This ruleset is specific to the Main section so that Bootstrap's default h3 for its thumbnails will not be affected in the Interests section. */
+main h3 {
+    font-size: 15px;
+    margin-top: 0px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+/* Give the container with the username, follow button, and follower count the same height as the maximum avatar height, so that the About Me description field can wrap underneath it. */
+#follow-container {
+    height: 160px;
+/* There was too much space in the layout with two grid units, so I manually shortened the amount. Even though Bootstrap column classes with the same name are expected to have equal
+   width, the layout looks better with this space (about 35px) given to the description field, and doing that another way would require reorganizing the code over a few hours. */
+    width: 170px;
+}
+@media (min-width: 1200px) and (max-width: 1269px) {
+    #follow-container {
+        /* As the viewport expands, space between Bootstrap columns will spread out, due to .fluid-container,
+           Reduce the amount of left padding when the columns have spread out sufficiently. */
+        padding-left: 30px;
+    }
+}
+.follow-btn .btn {
+    margin-bottom: 8px;
+}
+
+/* Style the number of followers or people the user is following. */
+.count-label {
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+/* Style the "followers" or "following" part. */
+.follow-label {
+    font-family: Arial, sans-serif;
+}
+
+/* These first three rulesets set the alignment of the user toolbar. */
+#user-toolbar-container {
+    text-align: center;
+}
+/* Regular users will see buttons for the section dropdown, Gallery, Likes, Comments, and Direct Message.
+   In >1200px viewport widths, these will be wrapped in a button group to make the toolbar.
+   Animal shelter/rescue group accounts will only see buttons for the section dropdown, Gallery, and Direct Message, spaced out individually instead of in a button group. */
+#user-toolbar-container > .btn-group, #user-toolbar-container > .btn {
+    margin-top: 5px;
+}
+#user-toolbar-container > .btn:not(:last-child) {
+    /* Set the separation between individual buttons seen by animal shelters and rescue groups. */
+    margin-right: 5px;
+}
+
+/* These next four rules make changes to the sizes of the glyphicons and move the labels to compensate. */
+#user-toolbar-container .glyphicon-heart {
+    font-size: 18px;
+}
+/* Move up the Likes label to keep it vertically centered. It became uncentered when the heart glyphicon was enlarged. */
+#likes {
+    position: relative;
+    top: -2px;
+}
+/* Enlarge and vertically recenter more glyphicons, which Bootstrap relatively positions by default */
+#user-toolbar-container .glyphicon-comment {
+    font-size: 16px;
+    top: 2px;
+}
+#user-toolbar-container .glyphicon-envelope {
+    font-size: 15px;
+    top: 2px;
+}
+
+/* The edit button for the main section, in particular, should be vertically centered at the same level as the user toolbar. */
+main .edit-btn {
+    top: 6px;
+}
+
+#about-me {
+    padding-top: 18px;
+    width: 100%;
+    min-height: 100px;
+}
+/* To allow wrapping the About Me description field underneath the avatar and follow information, I took it outside the Bootstrap column, but in doing so, it lost the gutter with the left and right side of the screen.
+   The effect is noticable near 1201px screen width. This ruleset restores the gutters to the appearance they usually have. */
+#about-me p {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+/* If the About Me section only has one or two lines (it exceeds a certain amount of characters), it is assumed they put only one word like "Vegan" or a quote.
+   In this case, it should be vertically and horizontally centered within the minimum amount of height needed for the About Me section in the layout.
+   I could implement this via JavaScript, but it risks making the page jump, so I am waiting until I begin working on the back-end to see if I can do it with Django.
+   Django would add a class to section if the field is over a certain amount of characters.
+#about-me {
+    padding-top: 20px;
+    display: table;
+    width: 100%;
+    min-height: 100px;
+}
+#about-me p {
+    display:table-cell;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+*/
+
+/* Section 4. Style the section for Interests, which is the default section appearing below the main section for regular users. */
+
+/* 4a. Style the headings and buttons for each interest. */
+
+/* The headings of the Interest section should be aligned with the middle of the top row of buttons. */ 
+#interests h2 {
+    margin-top: 2px;
+    /* Keep the headings all on one line. */
+    white-space: nowrap;
+}
+/* Create an inline list of buttons for each interest. */
+#interests ul {
+    list-style: none;
+    margin-bottom: 0px;
+}
+#interests ul > li {
+   display: inline;
+}
+/* Each button has a fixed height, but they are free to expand on either side. They have 7px between rows. */
+#interests li .btn {
+    height: 25px;
+    padding-left: 9px;
+    padding-right: 9px;
+    margin-right: 2px;
+    margin-bottom: 7px;
+}
+
+/* 4b. User media: Style the Recommended Webpage button and thumbnails. */
+
+#user-media {
+    text-align: center;
+    padding-right: 50px;
+}
+
+#recommended-webpage {
+    font-size: 16px;
+    height: 50px;
+    padding-left: 9px;
+    padding-right: 9px;
+    vertical-align: top;
+    /* Distance the Internet section from the media section */
+    margin-left: 30px;
+}
+
+[data-target="#recommended-gif"] {
+    /* Vertically center the "GIF" button within the height of the "Recommended webpage" button. */
+    margin-top: 10px;
+    /* Set the horizontal space btween the "Recommended webpage" button and this button. */
+    margin-left: 15px;
+}
+
+.thumbnail {
+    /* Allow thumbnails to be displayed on the same row. */
+    display: inline-block;
+    vertical-align: top;
+    /* Get rid of the padding on the bottom side of the thumbnail so that the padding around the caption will only be affected by the caption's own ruleset.
+       Default Bootstrap had a much larger caption font and much more vertical padding; the unevenness becomes much more noticable with small font. */
+    padding-bottom: 0px;
+}
+.thumbnail .caption {
+    padding: 3px;
+}
+/* The caption is only slightly bigger than the body text size. */
+.thumbnail h3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 14.67px;
+    text-align: center;
+}
+#thumbnail-video {
+    width: 100%;
+    max-width: 415px;
+    /* Set the space between the video and the Recommended Webpages button. */
+    margin-top: 15px;
+}
+
+/* Section 5. Style the "When and where" section, which is the default section appearing below the main section for animal shelters and rescue organizations. */
+
+#when-and-where > div:not(:first-child) {
+    width: calc(100% - 230px);
+    margin-left: auto;
+}
+#hours-of-operation {
+    float: left;
+    width: 230px;
+}
+
+table#contact-info th {
+    vertical-align: top;
+    position: relative;
+    top: 2px;
+}
+table#contact-info th label:not(.optional) {
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+    margin-right: 13px;
+}
+
+textarea[name="hours-of-operation"] {
+    max-width: 340px;
+}
+#when-and-where-edit .form-buttons {
+    padding-top: 0px;
+}
+
+/* Section 6. Temporary rules */
+
+/* Hide the Direct Message button until this feature is implemented. */
+#direct-message {
+    display: none;
+}

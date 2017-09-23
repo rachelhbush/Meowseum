@@ -1,0 +1,22 @@
+/* File names: scrapbin_v0_0_0_2.css, scrapbin_night_v0_0_0_2.css Version date:  Author: Rachel Bush
+   Description: This file is for sitewide CSS that is specific to Meowseum.
+   Version description: 
+*/
+
+/* 1. Styling the Meowseum upload modal. */
+#upload-menu {
+    /* Most night mode modals use white font, which works well when they mostly use the body font size. The large font and icons in this modal make everything appear brighter than usual, so the font color was dimmed
+       in order to compensate. */
+    color: rgb(240,240,240);
+}
+#upload-menu .modal-header {
+    padding-top: 5px;
+}
+.upload-btn, .upload-btn:hover, .upload-btn:focus, .upload-btn:active {
+    background-color: rgb(35,35,35);
+    color: rgb(240,240,240); /* Override the link coloring for the button. Without this rule, the text appears black. */
+}
+#web-btn {
+  /* Keep the background color as black as the modal's, in order to let the text field stand out. */
+  background-color: rgb(15,15,15);
+}

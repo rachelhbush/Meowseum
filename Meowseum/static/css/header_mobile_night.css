@@ -1,0 +1,24 @@
+/* File names: header_mobile_v0_1_1.html, header_mobile_v0_1_0.js, header_mobile_v0_1_1.css, header_mobile_night_v0_1_0.css, modals_mobile_v0_1_0.html   Version date: 11/4/2016 10:06PM
+   Version description:  */
+  
+#filter-btn {
+    background-color: hsl(144,100%,33%);
+}
+#filter-btn:hover, #filter-btn:active {
+    background-color: hsl(144,100%,31%);
+}
+.list-menu a {
+    color: white;
+}
+.list-menu a:hover, .list-menu a:active {
+    color: rgb(211,211,211);
+    text-decoration: none;
+}
+
+.switch-box {
+    height: auto;
+    border-color: grey;
+}
+.switch-box img {
+    margin-top: 0px;
+}

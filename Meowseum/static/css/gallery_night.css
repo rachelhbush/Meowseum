@@ -1,0 +1,8 @@
+/* File names: gallery_v0_0_1_0.html, gallery_v0_0_1_0.js, gallery_v0_0_1_0.css, gallery_night_v0_0_1_0.css     Version date: 10/14/2016 4:17AM    Author: Rachel Bush
+   Description: This style sheet is only used for the desktop layout.
+   Version description: */
+
+/* The night laptop/desktop version of the gallery has the same gutter width with the header as mobile, and this is the only CSS change needed. */
+#gallery {
+    margin-top: 5px;
+}

@@ -1,0 +1,32 @@
+{% comment %}
+File name: upload_modal_v0_0_0_2.html
+Author: Rachel Bush
+Last modified: 
+Version description: 
+{% endcomment %}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>  
+            <h4 class="modal-title">Upload to {{ app_name }}</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post" enctype="multipart/form-data" action="{% url "from_device" %}">
+                {% csrf_token %}
+                {{ from_device_form.non_field_errors }}
+                {{ from_device_form.file.errors }}
+                <div>
+                    <label for="id_file" class="custom-file-browse">
+                        <a type="button" class="btn upload-btn"><span class="glyphicon glyphicon-phone"></span><div class="upload-button-label">Browse for file</div></a>
+                        {{ from_device_form.file }}
+                    </label>
+                </div>
+                {% comment %}
+                These buttons are commented out until I have time to implement these features, after the core functionality of the site is working.
+                <a type="button" class="btn upload-btn visible-lg visible-xl"><span class="glyphicon glyphicon-paste"></span><div class="upload-button-label">Copy file and Ctrl+V</div></a>
+                <a type="button" class="btn upload-btn visible-lg visible-xl"><span class="glyphicon glyphicon-save-file"></span><div class="upload-button-label">Drag file here</div></a>
+                {% endcomment %}
+            </form>
+        </div>
+    </div>
+</div>

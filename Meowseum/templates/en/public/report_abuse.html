@@ -1,0 +1,62 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Report abuse - Meowseum</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/report_abuse.css" %}"/>
+        <script>settings.prepareDayModeBackground();</script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    <main>
+        <form method="post" action="" id="report-abuse">
+            {% csrf_token %}
+            <h1>Report abuse</h1>
+            We take allegations of site abuse very seriously. Illegal content will be reported
+            to the appropriate authorities. Do not submit false reports.
+            {{ form.non_field_errors }}
+            {{ form.abuse_type.errors }}
+            <div class="field">
+                <label class="bold">Type of abuse</label><br/>
+                {{ form.abuse_type }}
+            </div>
+            {{ form.offending_username.errors }}
+            <div class="field get-parameter">
+                <label class="bold">Offending username</label><br/>
+                {{ form.offending_username }}
+            </div>
+            {{ form.abuse_description.errors }}
+            <div class="field">
+                <label class="bold">Description <span class="italic">(optional)</span></label><br/>
+                {{ form.abuse_description }}
+            </div>
+            {{ form.url.errors }}
+            <div class="field get-parameter">
+                <label class="bold">URL</label><br/>
+                {{ form.url }}
+            </div>
+            <div class="form-buttons">
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+            </div>
+        </form>
+    </main>
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+{% endblock %}

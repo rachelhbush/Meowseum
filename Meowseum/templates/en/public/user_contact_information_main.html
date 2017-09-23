@@ -1,0 +1,105 @@
+{% comment %}
+File name: user_contact_information_main_v0_0_2_5.html
+Author: Rachel Bush
+Version date: 
+Version description: 
+{% endcomment %}
+<div class="form-unit text-center">
+Filling out this form will allow you to upload to the Lost, Found, and Adoption sections.
+</div>
+{{ form1.non_field_errors }}
+{{ form2.non_field_errors }}
+<table class="form">
+    <tr>
+        <th><label>First name:</label></th>
+        <td>
+            {{ form2.first_name.errors }}
+            {{ form2.first_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Last name:</label></th>
+        <td>
+            {{ form2.last_name.errors }}
+            {{ form2.last_name }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Phone number:</label></th>
+        <td>
+            {{ form1.phone_number.errors }}
+            {{ form1.phone_number }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Email:</label></th>
+        <td>
+            {{ form2.email.errors }}
+            {{ form2.email }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Address line 1:</label></th>
+        <td>
+            {{ form1.address_line_1.errors }}
+            {{ form1.address_line_1 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Address line 2:</label></th>
+        <td>
+            {{ form1.address_line_2.errors }}
+            {{ form1.address_line_2 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>City:</label></th>
+        <td>
+            {{ form1.city.errors }}
+            {{ form1.city }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>State/Province:</label></th>
+        <td>
+            {{ form1.state_or_province.errors }}
+            {{ form1.state_or_province }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Country:</label></th>
+        <td>
+            {{ form1.country.errors }}
+            {{ form1.country }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>ZIP/Postal Code:</label></th>
+        <td>
+            {{ form1.zip_code.errors }}
+            {{ form1.zip_code }}
+        </td>
+    </tr>
+</table>
+<div class="field">
+    <label class="bold">Birthday <span class="italics">(optional except for volunteers)</span>:</label>
+    <div>
+        {{ form1.date_of_birth.errors }}
+        {{ form1.date_of_birth }}
+        <a data-toggle="instant-collapse" data-target="#birthday-info-request-explanation"> Why?<span class="minus">-</span></a>
+    </div>
+</div>
+<div class="form-unit collapse" id="birthday-info-request-explanation">
+    If you are 13-18 years old and want to volunteer, organizations which accept volunteers in that age range will be able to filter users according to their preference.
+    If you are over 18, your birthday will be used to filter out shelters/rescue centers with an age restriction on adoption during searches.
+</div>
+{{ form1.has_volunteering_interest.errors }}
+<div class="checkbox has-custom-checkbox">
+    <label>
+    <div class="custom-checkbox">
+        {{ form1.has_volunteering_interest }}
+        {% include "en/public/elements/custom_checkmark.html" %}
+    </div>
+    I am interested in volunteering with an animal shelter or rescue group.
+    </label>
+</div>

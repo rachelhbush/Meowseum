@@ -1,0 +1,25 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Log in - {{ app_name }}</title>
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/login-signup.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/login-signup_night.css" %}"/>
+{% endblock %}
+{% block body %}
+    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-night="{% static "images/login_signup_backgrounds/night/qWdbrsz.jpg" %}" data-day="{% static "images/login_signup_backgrounds/day/rqdnLBq.jpg" %}" id="background-image"/>
+    <a href="{% url "index" %}" class="close"><span>&times;</span></a>
+    <main id="login-page">
+        <div id="login-form-box">
+            <a href="{% url "index" %}"><img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" id="logo"/></a>
+            <form class="bright" method="post" action="{{ login }}">
+                {% csrf_token %}
+                <table>
+                {{ form.as_table }}
+                </table>
+                <button type="submit" class="btn auth-btn">Log in</button>
+            </form>
+            <a href="{% url "signup" %}"><button class="btn btn-primary" id="go-to-signup-btn">Sign up</button></a>
+        </div>
+    </main>
+{% endblock %}

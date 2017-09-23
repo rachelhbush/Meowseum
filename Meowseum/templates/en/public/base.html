@@ -1,0 +1,62 @@
+{% comment %}
+    File name: base_v0_0_0_19.html    Version date:    Author: Rachel Bush
+    Version description: 
+{% endcomment %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% load staticfiles %}
+        {% comment %}
+            Unless the user has JavaScript disabled, hide the body until the JavaScript is done reconfiguring the page in order to get the site's day mode ready.
+        {% endcomment %}
+        <style>
+            body {
+                display: none;
+            }
+        </style>
+        <noscript>
+            <style>
+                body {
+                    display: block;
+                }
+            </style>
+        </noscript>
+        <script src="{% static "javascript/lib/update-browser-notice-if-ie8-firefox25-opera25-safari6-or-chrome30.min.js" %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.10/es5-shim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.10/es5-sham.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{% static "javascript/lib/jquery-1.12.4.min.js" %}"><\/script>');</script>
+        <script src="{% static "javascript/lib/jquery.form.min.js" %}"></script>
+        <script src="{% static "javascript/lib/jquery.mobile.custom.min.js" %}"></script>
+        <script src="{% static "javascript/lib/iphone-inline-video.min.js" %}"></script>
+        <script src="{% static "javascript/lib/modernizr-form-input-types-only.min.js" %}"></script>
+        <script src="{% static "javascript/browser_investigator.js" %}"></script>
+        <script src="{% static "javascript/settings.js" %}"></script>
+        <script src="{% static "javascript/lib/bootstrap_without_dropdowns.js" %}"></script>
+        <script src="{% static "javascript/lib/dropdown_modified.js" %}"></script
+        <script src="{% static "javascript/lib/moment.min.js" %}"></script>
+        <script src="{% static "javascript/lib/placeholders.jquery.min.js" %}"></script>
+        <script src="{% static "javascript/forms.js" %}"></script>
+        <script src="{% static "javascript/bootstrap_extension.js" %}"></script>
+        <script src="{% static "javascript/ajax.js" %}"></script>
+        <script src="{% static "javascript/meowseum.js" %}"></script>
+        <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_customized.css" %}">
+        <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension.css" %}">
+        <link type="text/css" rel="stylesheet" href="{% static "css/meowseum.css" %}">
+        <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_night.css" %}">
+        <link type="text/css" rel="stylesheet" href="{% static "css/meowseum_night.css" %}">
+        <noscript>
+            <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_noscript.css" %}">
+        </noscript>
+        {% block head %}
+        {% endblock %}
+    </head>
+    {% load static %}
+    <body data-media-url="{% get_media_prefix %}">
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

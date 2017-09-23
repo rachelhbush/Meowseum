@@ -1,0 +1,25 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Upload image or GIF - {{ app_name }}</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/upload_page1.css" %}"/>
+        <script src="{% static "javascript/upload_page1.js" %}"></script>
+{% endblock %}
+{% block body %}
+    <div class="page form">
+        <form class="inner-layout" method="post" enctype="multipart/form-data" action="{% url "upload_page1" %}">
+            {% csrf_token %}
+            {% include "en/public/elements/full_page_form_header.html" with heading=heading %}
+            <main class="form">
+                {% include "en/public/upload_page1_main.html" %}
+            </main>
+            <footer class="form">
+                <button type="submit" class="btn btn-default" id="more-detail-btn">Next page</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </footer>
+        </form>
+    </div>
+{% endblock %}

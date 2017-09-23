@@ -1,0 +1,21 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Search - Meowseum</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <script>settings.prepareDayModeBackground("rgb(240,240,240)");</script>
+{% endblock %}
+{% block body %}
+    <header class="form">
+        <h1 id="search-heading">Shelter/rescue search</h1>
+        <a href="{% url "index" %}" id="close"><button type="button" class="close"><span>&times;</span></button></a>
+    </header>
+    <main class="form">
+        {% include "en/public/shelter_search_main.html" %}
+    </main>
+    <footer class="form">
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+    </footer>
+{% endblock %}

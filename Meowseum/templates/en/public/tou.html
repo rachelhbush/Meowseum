@@ -1,0 +1,71 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Terms of Use - {{ app_name }}</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/tou-privacy.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+        <script>settings.prepareDayModeBackground();</script>
+{% endblock %}
+{% block body %}
+    {% include "en/public/header_mobile.html" %}
+    {% include "en/public/header_desktop.html" %}
+    <main id="tou">
+        <h1>Terms of Use</h1>
+        <h5>Last updated 4/20/2017</h5>
+        <p>By accessing any page of our site, other than the home page and this page, you agree to let our website Terms and Conditions of Use govern your access to this site. This also constitutes agreement that you are responsible for compliance with any applicable local laws, as well as consent to our Privacy Policy. If you do not agree with any of these terms, you are prohibited from using or accessing this site.</p>
+        <h2>1. Account creation policies</h2>
+        <p>When you create your account, you must provide us with complete and accurate information. Any use or access by anyone under the age of 13 is prohibited. If you open an account on behalf of a company, organization, or other entity, then "you" includes you and that entity. You represent and warrant that you are authorized to bind the entity to these Terms and Conditions and agree to them on the entity's behalf.</p>
+        <h2>2. Intellectual property</h2>
+        <p>Only upload content for which you own the copyright. You retain all rights in and are solely responsible for user content you upload. In particular, unless the author has granted permission, do not upload content for which your creative contribution has only been clipping from a video and changing the file format to an animated file, such a GIF file.</p>
+        <p>Every time you upload a file, you represent that either you created the file or you have the necessary intellectual property rights to upload the file. You also represent that the file will not violate or infringe on the rights of someone else. {{ app_name }} may, at its discretion, terminate accounts of users whose profiles indicate they are repeat infringers.</p>
+        <p>Any file you upload grants {{ app_name }} a non-exclusive, royalty-free, transferable, irrevocable worldwide license to store, display, and distribute it in any form of media that currently exists or will exist. This license includes sublicense and assignment rights. We reserve the right to modify the file, create derivative works of the file, and the right to remove the file if we decide it violates these Terms and Conditions.</p>
+        <p>You may use user-generated content only for personal, non-commercial purposes. You may also use it for anything which qualifies as fair use, in which case we ask you provide attribution ("courtesy of {{ app_name }}") near where it is displayed. If you use our user-generated content, you indemnify {{ app_name }} and agree to hold it harmless from copyright infringement claims.</p>
+        <p>If you delete a file, the license which you grant {{ app_name }} will terminate, but it will not be revoked for content already copied or sublicensed. We may retain your content for backup, archival, or audit purposes for a commercially reasonable amount of time. Your file may continue to be used by the public pursuant to the preceding paragraph.</p>
+        <p>If you believe your copyright has been infringed upon or your intellectual property rights have been violated, please contact us with the following information:</p>
+        <ol>
+            <li>a description of the copyrighted work which you claim has been infringed</li>
+            <li>description of where the infringing material is on our site including the URL</li>
+            <li>instructions on how to contact you, preferably by email, but also including address and telephone number.</li>
+            <li>an electronic or physical signature that you are someone authorized to act on behalf of the copyright or other intellectual property</li>
+            <li>statement from you that you have a good faith belief that the material complained of is not authorized by the copyright owner, its agent, or the law.</li>
+            <li>a statement from you, under penalty of perjury, that the above information is accurate.</li>
+        </ol>
+        <table>
+            <tr>
+                <th>Email:</th>
+                <td><a class="email" href="mailto:{{ app_name }}.website@gmail.com">{{ app_name }}.website@gmail.com</a></td>
+            </tr>
+        </table>
+        <p>If we receive a DMCA takedown notice and decide the material qualifies as fair use, and you are the user who uploaded the content, we will attempt to notify you but are under no obligation. Even if we decide the material qualifies as fair use, we reserve the right to remove material whether or not it infringes on intellectual property.</p>
+        <h2>3. Submission policies, termination, feedback</h2>
+        <p>{{ app_name }} only allows the submission of materials featuring cats. Do not use {{ app_name }} as a content delivery network for your website by using it to host images. Do not impersonate someone else. Do not submit inappropriate or illegal material. If you do these things, we reserve the right to ban you or any hotlinking website from accessing our website or viewing any materials on it. We will report you to the authorities if, by uploading materials, you have engaged in illegal conduct. {{ app_name }} may terminate or suspend this license at any time without cause or notice to you.</p>
+        <p>If you choose to submit feedback or ideas, you agree that we are free to use them without restriction or compensation to you. By accepting your contribution, {{ app_name }} does not waive the right to use feedback or ideas developed by {{ app_name }} or the right to use feedback and ideas from other sources than you, including other instances of feedback previously known to {{ app_name }}.</p>
+        <h2>4. Security</h2>
+        <p>{{ app_name }} makes no guarantee that unauthorized third parties will not able to circumvent our security measures. Please notify us if your account has been compromised or is experiencing unauthorized activity. You are responsible for taking reasonable precautions not to let someone have unauthorized access to your account.</p>
+        <h2>5. Disclaimers, Limitations of Liability, Indemnity</h2>
+        <p>The materials on {{ app_name }}'s web site are provided "as is". {{ app_name }} makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties, including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights. You understand that you may be exposed to content which is inappropriate, objectionable, or otherwise unsuited for your purpose.</p>
+        <p>In no event shall {{ app_name }} be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption,) arising out of the use or inability to use the materials on this site, even if {{ app_name }} or a {{ app_name }} authorized representative has been notified orally or in writing of the possibility of such damage. No cause of action arising out of your use of {{ app_name }}'s services may be brought more than one year after it occurs. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.</p>
+        <p>You agree to indemnify {{ app_name }} for any loss, liability, claims, damages, and expenses. This indemnification includes any attorney fees arising out of violation of these Terms and Conditions, as well as any harm caused to a third party or infringement on a third party's rights as a result of uploading content.</p>
+        <h2>6. General terms</h2>
+        <p>If any provision in these Terms and Conditions is deemed invalid, the remaining provisions will remain unaffected. These Terms and Conditions, the Privacy Policy, and any additional agreements you may enter into constitute the entire agreement between you and {{ app_name }} relating to your access and use of this website. Even after you discontinue using {{ app_name }}'s services, they will continue to govern any issues that arise out of having used them.</p>
+        <p>We reserve the right to determine the form of providing notifications. If we choose to send legal notifications electronically, you agree to receive them. We may revise these terms at any time without notice, but the most current version will always be posted on our website with the date of the latest revision posted at the top. By continuing to access {{ app_name }}, you agree to be bound by the revised terms.</p>
+    </main>
+    {% include "en/public/footer.html" %}
+    <script>
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 1200) {
+            document.write('<script src="{% static "javascript/header_mobile.js" %}"><\/script>');
+        }
+        else {
+            document.write('<script src="{% static "javascript/header_desktop.js" %}"><\/script>');
+        }
+    </script>
+{% endblock %}

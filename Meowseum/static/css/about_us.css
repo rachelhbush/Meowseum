@@ -1,0 +1,16 @@
+/* File names: about_us_v0_0_0_3.html, about_us_v0_0_0_1.css    Version date: 3/14/2017 11:11 AM    Author: Rachel Bush
+*/
+
+#about-us {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+@media (min-width: 1000px) {
+    #about-us {
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+        /* Provide some separation from the footer. */
+        margin-bottom: 20px;
+    }
+}

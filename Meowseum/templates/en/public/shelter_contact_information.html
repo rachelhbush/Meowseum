@@ -1,0 +1,11 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Edit contact information - Meowseum</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+{% endblock %}
+{% block body %}
+    {% include "en/public/elements/full_page_form.html" with consistent_columns=True heading="Editing contact information" action="shelter_contact_information" main_template="en/public/shelter_contact_information_main.html" footer_button_label="Save changes" %}
+{% endblock %}

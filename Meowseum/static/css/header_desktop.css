@@ -1,0 +1,227 @@
+/* File names: header_desktop_v0_0_1_8.html, header_desktop_v0_0_1_5.js, header_desktop_v0_0_1_7.css, header_desktop_night_v0_0_1_2.css   Author: Rachel Bush
+   Version description:   */
+
+#header-mobile {
+    display: none;
+}
+
+#header-desktop {
+    border-bottom: 1px solid rgb(180,180,180);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 4%;
+}
+#logo-container {
+    text-align: right;
+}
+#logo-container img {
+    height: 38px;
+    position: relative;
+    top: 5px;
+    left: -10px;
+}
+.nav-btn-list {
+    /* Remove the rules intended for lists that use bullet points. */
+    padding-left: 0px;
+    list-style: none;
+    margin-bottom: 0px;
+    /* Adjust the position of the list within the Bootstrap column. */
+    margin-left: 25px;
+}
+@media (min-width: 1800px) {
+    .nav-btn-list {
+        margin-left: 10px;
+    }
+}
+.nav-btn-list > li {
+     display: inline-block;
+     margin-left: 4px;
+     margin-right: 4px;
+}
+.nav-btn {
+    line-height: 1.2;
+    background-color: hsl(152,39%,39%);
+    background-color: rgb(61,138,102);
+    width: 90px;
+    height: 42px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.nav-btn, .nav-btn:hover, .nav-btn:focus {
+    color: white; /* Override link and button default styles */
+}
+.nav-btn:hover, .nav-btn:focus {
+    background-color: hsl(139,36%,36%);
+    background-color: rgb(59,125,80);
+}
+
+/* These three classes are for buttons in the desktop header with a fixed aspect ratio, with two lines, and with a dropdown icon to the right. */
+.two-line-dropdown {
+    width: 68px;
+    height: 32px;
+    display: -webkit-flex;
+    display: flex;
+    /* The absence of this property or changing it to display: inline; or display: inline-block; makes the caret appear below the label.
+    I'm not sure why this works, but the others don't. There are some subtle difference that are hard to describe or decipher, maybe involving text-align: center; */
+}
+.two-line-dropdown-label {
+    width: 54px;
+}
+.two-line-dropdown-icon {
+    margin-left: 7px;
+    margin-top: 7px;
+}
+
+
+#header-desktop .dropdown-menu li {
+    /* Bootstrap dropdown dividers are meant for groups of list items. This page's dropdowns have no groups, and dividers are instead being used between every pair of items for
+       style purposes. CSS styling is being used instead of the divider class in order to preserve separation between structure and presentation. */
+    border-bottom: 1px solid #EEEEEE;
+}
+#header-desktop .dropdown-menu li:last-child {
+    border: none;
+}
+
+#search-elements {
+    padding-left: 0;
+}
+@media (max-width: 1799px)
+{
+    #search-elements form {
+    position: relative;
+    left: -40px;
+    }
+}
+#searchbar {
+    height: 30px;
+    /* Using viewport-relative units will make it easier to adjust the header's Bootstrap proportions in case I remove one of the navigation buttons. */
+    width: calc(100% - 20px);
+    margin-top: 6px;
+    padding-left: 4px;
+    padding-right: 23px;
+}
+@media (min-width: 1800px) {
+    #searchbar {
+        /* At this breakpoint, the header's fixed container width will expand, requiring the spacing to change. */
+        width: calc(100% - 40px);
+    }
+}
+
+
+#search-elements .glyphicon-search {
+    position: relative;
+    right: 28px;
+}
+#filter {
+    position: absolute;
+    top: 11px;
+}
+
+#sign-in-button {
+    margin-top: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#signin-question {
+    font-size: 0.8em;
+    margin-left: 6px;
+    margin-bottom: 0px;
+}
+#upload-btn {
+    /* Vertically center the upload button. A horizontal line through its center should align with the search bar and navigational buttons. */
+    margin-top: 3px;
+    height: 34px;
+    padding-top: 0px;
+    /* This rule vertically aligns both the button label and the button icon by the same amount. */
+    padding-bottom: 2px;
+    padding-left: 11px;
+    padding-right: 9px;
+}
+/* In the -lg- range, there is too much empty space between the search bar and the upload button using just the Bootstrap grid.
+   Use negative margins to move the upload button leftward. */
+@media (max-width: 1799px) {
+    #upload-btn {
+        margin-left: -15px;
+    }
+}
+#upload-btn img {
+    width: 20px;
+    /* Align the button icon relative to its label. */
+    vertical-align: -20%;
+}
+#signin-question {
+    font-size: 0.8em;
+    margin-left: 6px;
+    margin-bottom: 0px;
+}
+
+/* Layout menu */
+
+#layout-menu .modal-dialog {
+    max-width: 450px;
+}
+#layout-menu h4 {
+    text-align: center;
+}
+
+/* This part was copied from the mobile CSS and may be moved to the sitewide CSS. */
+ul.list-menu {
+    /* Remove the rules intended for lists that use bullet points. */
+    padding-left: 0px;
+    list-style: none;
+    margin-bottom: 0px;
+}
+/* Provide spacing for menu items. Make them stand out from the body text by using a different font. */
+.list-menu li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: Corbel, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 110%;
+}
+.list-menu a {
+    color: black;
+}
+.list-menu a:hover, .list-menu a:active {
+    text-decoration: underline;
+}
+.toggle-night-day {
+    width: 33px;
+    float: right;
+    margin-right: 15px;
+    /* Relative positioning was needed to vertically center the center of the Sun icon within the list item, so it would be at the same level as the text.
+       Margin-bottom and vertical-align had no effect on the icon's position. */
+    position: relative;
+    top: -7px;
+    cursor: pointer;
+}
+
+/* Style the button for autoplaying GIFs, or playing all GIFs and pausing them. */
+.list-menu li > .glyphicon-play, .list-menu li > .glyphicon-pause {
+    font-size: 18px;
+    float: right;
+    margin-right: 21px;
+    cursor: pointer;
+}
+#gif-mouseout-buttons {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#gif-mouseout-buttons > .btn {
+    /* Without specifying a fixed height, the top borders of the buttons would appear uneven.
+       The Pause button having a glyphicon and the Finish button not having one causes a 1px difference. */
+    height: 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#finish-option, #pause-option {
+    /* The Finish button and the Pause button each take up about half the width of the modal. Because there is a fixed-width gap between them, setting width: 50% caused the rightmost
+       button to wrap to the next line. Switching each to width: 49.5% solved the problem. */
+    width: 49.5%;
+    /* Separation between the two rows of buttons. */
+    margin-bottom: 5px;
+}
+#stop-option {
+    width: 100%;
+}

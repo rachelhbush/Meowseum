@@ -1,0 +1,32 @@
+{% comment %}
+File name: browse_menu_subscribe_options_v0_0_0_2.html
+Author: Rachel Bush
+Last modified: 
+Version description: 
+{% endcomment %}
+{% if gallery_type != None and profile_username != viewer_username %}
+    <li class="mutable">
+        <a href="#" class="ajax-btn header_follow_button" data-ajax-url="{% url "follow" profile_username %}?next={{ request.path | urlencode }}">
+            {% if following %}
+                Unfollow <div class="default-font inline-block">@{{ profile_username }} ({{ user_profile.followers.count }})</div></a></li>
+            {% else %}
+                Follow <div class="default-font inline-block">@{{ profile_username }} ({{ user_profile.followers.count }})</div></a></li>
+            {% endif %}
+        </a>
+    </li>
+{% else %}
+    {% if tag != None %}
+        <li class="mutable">
+            <a href="#" class="ajax-btn header_subscribe_button" data-ajax-url="{% url "subscribe" tag.name %}?next={{ request.path | urlencode }}">
+                {% comment %}
+                    The def is only relevant to styling the mobile version, in order to make programming the AJAX back end easier. It has no effect on the desktop layout.
+                {% endcomment %}
+                {% if subscribed %}
+                    Unsubscribe from <div class="default-font inline-block">#{{ tag.name }} ({{tag.subscribers.count}})</div>
+                {% else %}
+                    Subscribe to <div class="default-font inline-block">#{{ tag.name }} ({{tag.subscribers.count}})</div>
+                {% endif %}
+            </a>
+        </li>
+    {% endif %}
+{% endif %}

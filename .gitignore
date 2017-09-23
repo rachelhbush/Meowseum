@@ -1,0 +1,51 @@
+# Python-general rules
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging. This section is for choosing to also track
+# the project's dependencies by copying them over from wherever the
+# site-packages are being stored.
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django-specific rules
+
+*.log
+# Ignore uploads for testing purposes. The rule on GitHub is written as if
+# the .gitignore file is in the app directory, but it needs to be in the
+# project's root directory in order to track changes to urls.py.
+Meowseum/media/
+
+# Ignore changes to development database.
+Meowseum_Project/database.db

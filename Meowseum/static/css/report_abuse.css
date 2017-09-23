@@ -1,0 +1,94 @@
+/* File names: report_abuse_v0_0_5.css, report_abuse_v0_0_4.html   Version date:  Author: Rachel Bush
+   Version description: 
+*/
+
+/* Section 1. Rules applicable at nearly all viewport widths, or at 320px viewport width. */
+
+.get-parameter {
+    /* Hide the fields that are included in the query when the user clicks the option in the Follow button dropdown, except when the form has errors. */
+    display: none;
+}
+.errorlist+.get-parameter, .errorlist.nonfield~.get-parameter {
+    /* Show the field if there is an error just before it, or there are errors at the top of the form that could be related to the field. */
+    display: block;
+}
+
+/* The <div id="report-abuse"> is nested inside <main> because the leftover space on a laptop or desktop may be filled in the future with background images for theming,
+   such as splashed paint or a collage of cat photos. */
+#report-abuse {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* These rulesets convert the units of all the elements in the form, as set in the sitewide CSS, to ems. This way, changing the font-size in the upcoming media queries will change their dimensions.
+   Each width or height in px is divided by 14px, the height of the Bootstrap body font. */
+#report-abuse h1 {
+    font-size: 2em;
+}
+#report-abuse table.form th label, #report-abuse .bold {
+    font-size: 0.9286em;
+}
+#report-abuse input[type="text"], #report-abuse input[type="email"], #report-abuse input[type="url"], #report-abuse select:not(multiple) {
+    height: 1.856em;
+}
+#report-abuse .form-buttons .btn-primary {
+    /* This rule increases the size of the Submit button from its normal size by 5.4% with the font-size: 115% rule and by 10% with the font-size: 120% rule. */
+    font-size: 91.67%;
+    height: 1.856em;
+    padding-left: 0.714em;
+    padding-right: 0.714em;
+}
+
+/* Section 2. Responsiveness mostly for mobile devices (<1200px viewport width). */
+
+@media (min-height: 360px) {
+    #report-abuse textarea {
+        /* This ruleset applies to nearly all devices, only leaving out those as narrow as the iPhone 5. This keeps the Submit button in its viewport.
+           Fill the leftover height by increasing the number of rows on the Comments textarea. */
+        height: 90px;
+    }
+}
+
+@media (max-height: 500px) {
+    /* Reduce the margin between the heading and header on landscape smartphones. */
+    #report-abuse h1 {
+        margin-top: 10px;
+    }
+}
+@media (min-width: 750px) {
+    #report-abuse {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+}
+@media (min-height: 600px) and (max-width: 1200px) {
+    #report-abuse {
+        font-size: 110%;
+    }
+}
+@media (min-height: 650px) and (max-width: 1200px) {
+    #report-abuse h1 {
+        margin-top: 40px;
+    }
+}
+
+/* Section 3. Responsiveness for devices with >1200px viewport width, with media queries arranged by increasing height */
+
+@media (min-height: 600px) and (min-width: 1200px) {
+    #report-abuse {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #report-abuse h1 {
+        margin-top: 50px;
+    }
+}
+@media (min-height: 825px) and (min-width: 1200px) {
+    #report-abuse {
+        font-size: 110%;
+    }
+    #report-abuse textarea {
+        height: 180px;
+    }
+}
