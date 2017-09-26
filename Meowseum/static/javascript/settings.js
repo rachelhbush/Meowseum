@@ -1,10 +1,7 @@
-/* File name: settings_v0_0_15.js    Version date: Author: Rachel Bush
-   Version description: 
-   
-   File description: Within the "settings" namespace, this script provides functions for changing the sitewide CSS. It also provides functions for changing how GIFs behave on
-                     gallery pages. The main routine changes the sitewide CSS when the page loads. Abstracting away sitewide changes will allow someone reading the script for a
-                     settings modal to concentrate only on the DOM changes to the modal itself. All functions within this script have a designation for where they are in its
-                     hierarchy, unless they are not invoked during the main routine. */
+/* Description: Within the "settings" namespace, this script provides functions for changing the sitewide CSS. It also provides functions for changing how GIFs behave on
+                gallery pages. The main routine changes the sitewide CSS when the page loads. Abstracting away sitewide changes will allow someone reading the script for a
+                settings modal to concentrate only on the DOM changes to the modal itself. All functions within this script have a designation for where they are in its
+                hierarchy, unless they are not invoked during the main routine. */
 
 // Create a namespace for the sitewide JavaScript settings.
 window.settings = window.settings || {};

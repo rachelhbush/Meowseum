@@ -1,8 +1,6 @@
-/* File names: browser_investigator_v0_0_3.js    Version date:   Author: Rachel Bush
-   File description: This file contains a namespace for the sitewide JavaScript related to detecting information about the user agent.
-                     This is very helpful in situations where the bug is specific to a popular browser, and it isn't possible to detect support for a feature instead.
-                     Currently, this file is only used for detecting IE versions, Safari versions, and autoplay support.
-   Version description: 
+/* Description: This file contains a namespace for the sitewide JavaScript related to detecting information about the user agent.
+   This is very helpful in situations where the bug is specific to a popular browser, and it isn't possible to detect support for a feature instead.
+   Currently, this file is only used for detecting IE versions, Safari versions, and autoplay support.
 */
 
 // Don't wait until the DOM is loaded because this file doesn't manipulate the DOM, and it doesn't even use jQuery.

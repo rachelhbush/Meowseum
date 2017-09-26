@@ -1,6 +1,4 @@
-/* File names: meowseum_v0_0_0_2.js    Version date: Author: Rachel Bush
-   File description: This file is for JavaScript specific to the Meowseum project.
-   Version description: */
+/* Description: This file is for JavaScript specific to the Meowseum project. */
   
 $(document).ready(function() {
     // 2. Set up the button that changes the site from day mode to night mode. This is located in the mobile Settings modal and the desktop Layout modal.

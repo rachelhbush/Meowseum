@@ -1,6 +1,4 @@
-/* File names: user_profile_v0_1_0.js, user_profile_desktop_v0_1_0.html, user_profile_desktop_v0_1_0.css, user_profile_mobile_v0_1_0.html, user_profile_mobile_v0_1_0.css
-   Version date: 9/24/2016 1:25AM    Author: Rachel Bush
-   Version description:  */
+/* Associated files: user_profile.js, user_profile_desktop.html, user_profile_desktop.css, user_profile_mobile.html, user_profile_mobile.css, user_profile_night.css */
 
 $(document).ready(function() {
     /* 1. Set up the widgets for showing and hiding content. Prepare the dropdown in the toolbar and then the Edit buttons. */

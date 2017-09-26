@@ -1,7 +1,4 @@
-# stage2_processing_v0_0_0_10.py by Rachel Bush. Last modification:
-# PROGRAM ID: stage2_processing.py (_v0_0_0_10) / Extended file field
-# REMARKS: Process a validated file to meet hosting limits. These are limits for a file the user hasn't edited through cropping, clipping, etc.
-# VERSION REMARKS: 
+# Description: Process a validated file to meet hosting limits. These are limits for a file the user hasn't edited through cropping, clipping, etc.
 
 from django.conf import settings
 from Meowseum.models import TemporaryUpload

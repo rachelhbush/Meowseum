@@ -1,10 +1,7 @@
-# models_v0_0_0_55.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: models.py (_v0_0_0_55) / Models
-# REMARKS: This file contains the project's models -- databases structured using object-oriented programming.
+# Description: This file contains the project's models -- databases structured using object-oriented programming.
 # Class attributes correspond to the header row of a spreadsheet, and object attributes correspond to the record rows.
 # When I want to store all of a model's information related to a certain topic, I store everything related to the topic in another model and use a one-to-one-relationship.
 # Every Upload has a Metadata record. This organization is like nesting a JSON object or dictionary in another.
-# VERSION REMARKS: s
 
 from django.db import models
 from django.contrib.auth.models import User

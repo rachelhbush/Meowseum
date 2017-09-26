@@ -1,6 +1,4 @@
-/* File names: slide_page_v0_4_14.html, slide_page_author_box_v0_4_6.html, slide_page_v0_4_9.js, slide_page_v0_4_10.css, slide_page_night_v0_4_2.css 
-   Version description: See slide_page_v0_4_10.css. Author: Rachel Bush
-*/
+/* Associated files: slide_page.html, slide_page_author_box.html, slide_page.js, slide_page.css, slide_page_night.css */
 
 /* 1. Style the page as a whole. */
 body, #information, #information > :not(#comments) {

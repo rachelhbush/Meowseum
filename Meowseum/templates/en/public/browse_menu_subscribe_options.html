@@ -1,9 +1,3 @@
-{% comment %}
-File name: browse_menu_subscribe_options_v0_0_0_2.html
-Author: Rachel Bush
-Last modified: 
-Version description: 
-{% endcomment %}
 {% if gallery_type != None and profile_username != viewer_username %}
     <li class="mutable">
         <a href="#" class="ajax-btn header_follow_button" data-ajax-url="{% url "follow" profile_username %}?next={{ request.path | urlencode }}">

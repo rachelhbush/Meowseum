@@ -1,9 +1,4 @@
-# shelter_contact_information_v0_0_3.py by Rachel Bush. Date finished: 2/24/2017 10:18 PM
-# PROGRAM ID: shelter_contact_information.py (_v0_0_3) / Shelter contact information
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: This is the form for registering as a shelter and editing the information on file.
-# VERSION REMARKS: 1. I refactored the view using a simpler pattern, because I learned how to make a ModelForm's .save() method update a form, and I learned that
-# form constructors will accept "or None". 1/6/2017 9:06AM 2. I added the login decorator to prevent an exception from the user being logged out.
+# Description: This is the form for registering as a shelter and editing the information on file.
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render

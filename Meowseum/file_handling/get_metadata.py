@@ -1,8 +1,5 @@
-# get_metadata_v0_0_0_8.py by Rachel Bush. Last modification: 
-# PROGRAM ID: get_metadata.py (_v0_0_0_8) / Get metadata
-# REMARKS: This file contains the logic for gathering metadata from the file and storing it into a dictionary. This takes place
+# Description: This file contains the logic for gathering metadata from the file and storing it into a dictionary. This takes place
 # during validation and initial processing. Then, the dictionary will have its information stored into the database.
-# VERSION REMARKS: 
 
 from django.conf import settings
 import os

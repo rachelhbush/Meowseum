@@ -4,7 +4,7 @@ definition. Preferably, use names like 'validation_specifications_for_ModelName'
 generate the value for the HTML accept attribute based on your input. This field should be paired with a OneToOneField for a Metadata object if you plan on keeping the metadata.
 Some image/video modules require complicated procedures for collecting metadata, and a metadata field prevents having to do it twice.
 
-Uncomment this file to more easily see the documentation with example code.
+# Uncomment this file to more easily see the documentation with example code.
 # First, read and copy over code for settings.py. In models.py, use the syntax
 file = MetadataRestrictedFileField(upload_to="uploads", validation_specifications = validation_specifications_for_ModelName, keep_metadata = True, storage = StorageWithLooseNameValidation(), max_length = 250, verbose_name="file", blank=True, null=True, default="uploads/placeholder.png")
 # In the ModelForm or Form class, define
@@ -24,7 +24,7 @@ new_upload.save() # Removing this line will cause an exception. Saving the file 
 if new_upload.file != None: # This condition accounts for the file not being included when the field is optional.
     new_upload.file, metadata = process_to_meet_hosting_limits(new_upload.file, metadata, hosting_limits_for_Upload)
     new_upload.save()
-Last, if you want to keep the metadata, save it to a Metadata record.
+# Last, if you want to keep the metadata, save it to a Metadata record.
 
 # Upload limits are specifications for content allowed to be processed by the server. Arguments with a _ are on the to-do list to implement in the validation function.
 validation_specifications_for_ModelName = {

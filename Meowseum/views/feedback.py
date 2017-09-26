@@ -1,7 +1,4 @@
-# feedback_v0_0_6.py by Rachel Bush. Date finished: 
-# PROGRAM ID: feedback.py (_v0_0_6) / Feedback page
-# REMARKS: This is the form where a user can submit feedback on the site.
-# VERSION REMARKS: 
+# Description: This is the form where a user can submit feedback on the site.
 
 from Meowseum.models import Feedback, validation_specifications_for_Feedback, hosting_limits_for_Feedback
 from Meowseum.file_handling.file_validation import get_validated_metadata

@@ -1,8 +1,4 @@
-# adoption_upload_v0_0_0_6.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: adoption_upload.py (_v0_0_0_6) / Adoption section of the upload process
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: This form is for all of the fields relating to the Adoption category.
-# VERSION REMARKS: 
+# Description: This form is for all of the fields in the upload process relating to the Adoption category.
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render

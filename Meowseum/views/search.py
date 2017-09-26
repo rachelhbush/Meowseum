@@ -1,7 +1,5 @@
-# search_v0_0_10.py by Rachel Bush. Date finished: 
-# PROGRAM ID: search.py (_v0_0_10) / Search results
-# REMARKS: This is the page for processing all the search queries and displaying the appropriate gallery of results.
-# VERSION REMARKS: 
+# Description: This is the page for processing a search query and displaying the appropriate gallery of results.
+# This includes both header searches and advanced searches.
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect

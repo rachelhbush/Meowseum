@@ -1,7 +1,4 @@
-# report_abuse_v0_0_6.py by Rachel Bush. Date finished: 
-# PROGRAM ID: report_abuse.py (_v0_0_6) / Report abuse page
-# REMARKS: This is the form where a user files an abuse report about a user or post.
-# VERSION REMARKS: 
+# Description: This is the form where a user files an abuse report about a user or post.
 
 from Meowseum.models import AbuseReport
 from django.contrib.auth.models import User

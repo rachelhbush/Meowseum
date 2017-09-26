@@ -1,8 +1,6 @@
-/* File names: pet_upload_and_search_v0_0_3_2.js  Version date: Author: Rachel Bush
-   File description: This file contains all the JavaScript for searching and uploading to the Adoption, Lost, and Found categories.
-   Version description: 
+/* Associated files: pet_upload_and_search.css, pet_upload_and_search_night.css, pet_upload_and_search.js
+   Description: This file contains all the JavaScript for searching and uploading to the Adoption, Lost, and Found categories.
 */
-
 
 $(document).ready(function() {
     // 1. If the cat has multicolor or tortoiseshell fur, then hide the fields intended for other coat patterns and show the fields specifically for narrowing down this coat pattern.

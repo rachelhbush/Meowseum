@@ -1,6 +1,5 @@
-# CustomStorage_v0_0_3.py by Rachel Bush. Last modification: 
-# PROGRAM ID: CustomStorage.py (_v0_0_3) / Custom file storage
-# REMARKS: The CustomStorage class overrides get_valid_filename in django.utils.text.py, which is invoked every time Django saves a record with a file field
+# Description: Custom file storage
+# The CustomStorage class overrides get_valid_filename in django.utils.text.py, which is invoked every time Django saves a record with a file field
 # that has changed. It makes sure all the characters in the file name are among those the function accepts as valid, and it renames a file using a _
 # and random six letters if the file name already exists. This function improves on get_valid_name in two ways. First, the original version forgot to
 # make sure that the file name could not be a Windows reserved word or start with a . on Mac OS X. Second, this file offers extra keyword arguments
@@ -11,7 +10,6 @@
 # use UNIX command line. For example, if a program used the command "cat <filename>" without putting the file name in quotes, then it could interpret
 # the parts after the first space as being related to commands. Second, ALLOW_NON_UNICODE_ALPHANUMERIC=False by default. This setting allows accented characters, CJK characters,
 # and dashes and dots. Setting ALLOW_NON_UNICODE_ALPHANUMERIC=True will also let @, #, etc. through, but not anything disallowed by common file systems.
-# VERSION REMARKS: 
 
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings

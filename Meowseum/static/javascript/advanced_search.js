@@ -1,9 +1,3 @@
-/* File names: advanced_search_v0_0_2.js Author: Rachel Bush
-   Version date:  Author: Rachel Bush
-   Version description: 
-*/
-
-
 $(document).ready(function() {
     // 1.1 Turn on disabling attributes and classes for the video fields.
     var disableVideoFields = function() {

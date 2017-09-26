@@ -1,7 +1,4 @@
-# slide_page_v0_0_0_41.py by Rachel Bush. Last modified: 
-# PROGRAM ID: slide_page.py (_v0_0_0_41) / Slide page
-# REMARKS: This is a page for showing an upload, a file also referred to as a slide, and all the other database information about it.
-# VERSION REMARKS: 
+# Description: This is a page for showing an upload, a file also referred to as a slide, and all the other database information about it.
 
 from Meowseum.models import Upload, Metadata, Comment, Tag, Like, Page, hosting_limits_for_Upload
 from Meowseum.forms import CommentForm, TagForm

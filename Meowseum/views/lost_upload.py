@@ -1,8 +1,4 @@
-# lost_upload_v0_0_0_7.py by Rachel Bush. Date finished: 
-# PROGRAM ID: lost_upload.py (_v0_0_0_7) / Lost section of the upload process
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: This form is for all of the fields relating to the Lost category.
-# VERSION REMARKS: 
+# Description: This form is for all of the fields in the upload process relating to the Lost category.
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render

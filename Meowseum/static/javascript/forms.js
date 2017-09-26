@@ -1,12 +1,10 @@
-/* File names: forms_v0_0_0_44.js   Version date: Author: Rachel Bush
-   File description: This file contains functions that can be used with all forms. All functions are stored within the "forms" namespace.
+/* Description: This file contains functions that can be used with all forms. All functions are stored within the "forms" namespace.
    This is library JavaScript, written for sitewide use.
    
    In order to make sure the event handlers will still be attached to elements yet to be injected into the DOM by AJAX,
    the script attaches events to the document object when using event delegation, as in $(document).on("event", "selector", handler). I originally wrote this script while assuming
    static content, so not every function does this. If there any performance issues arise, efficiency may be able to be increased by rewriting the script to attach events to
    the static ancestor element closest to the dynamic content in the hierarchy.
-   Version description: 
 */
 
 $(document).ready(function() {

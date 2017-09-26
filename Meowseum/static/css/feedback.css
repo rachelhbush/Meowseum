@@ -1,6 +1,4 @@
-/* File names: feedback_v0_0_0_7.css, feedback_v0_0_0_4.html   Version date: Author: Rachel Bush
-   Version description: 
-*/
+/* Associated files: feedback.css, feedback.html */
 
 /* 1. These rulesets convert the units of all the elements in the form, as set in the sitewide CSS, to ems. This way, changing the font-size in the upcoming media queries will change their dimensions.
    Each width or height in px is divided by 14px, the height of the Bootstrap body font. This section also contains rules which increase the size of the font and textarea as the viewport increases in area. */

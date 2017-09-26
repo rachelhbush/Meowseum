@@ -1,8 +1,5 @@
-# mute_v0_0_0_6.py by Rachel Bush. Last modified: 
-# PROGRAM ID: mute.py (_v0_0_0_6) / Mute or unmute action
-# REMARKS: This is the page for processing a request from a slide page's Follow button's Mute option, using the URL "user/username/mute".
+# Description: Mute or unmute action. This is the page for processing a request from a slide page's Follow button's Mute option, using the URL "user/username/mute".
 # Currently, this is only for AJAX requests, but it is designed to handle requests when JavaScript is disabled.
-# VERSION REMARKS: 
 
 from django.contrib.auth.models import User
 from Meowseum.common_view_functions import ajaxWholePageRedirect

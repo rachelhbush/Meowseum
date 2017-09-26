@@ -1,8 +1,5 @@
-# common_view_functions_v0_0_0_11.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: common_view_functions.py (_v0_0_0_11) / Functions common to multiple views
-# REMARKS: This file contains all the functions that are common to multiple views, excluding those that are also used elsewhere by Django, such as filter functions used by templates.
+# Description: This file contains all the functions that are common to multiple views, excluding those that are also used elsewhere by Django, such as filter functions used by templates.
 # I had to create this file because Python does not allow two files to mutually import from one another.
-# Version description: 
 
 from Meowseum.models import Upload, Page, Like, hosting_limits_for_Upload
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

@@ -1,5 +1,4 @@
-/* File names: user_comments_v0_0_2.css, user_comments_night_v0_0_1.css, user_comments_v0_0_3.html, user_comments_v0_0_2.js    Version date: 2/12/2017 1:44 AM   Author: Rachel Bush
-   Version description: I deleted the dropdown for "Your comments / Mentions of your username" for now. */
+/* Associated files: user_comments.css, user_comments_night.css, user_comments.html, user_comments.js */
 
 #user-comments .user-comment {
     border-color: rgb(100,100,100);

@@ -1,7 +1,4 @@
-# random_upload_v0_0_0_7.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: random_upload.py (_v0_0_0_7) / Slide page
-# REMARKS: This page redirects the user to a random slide page.
-# VERSION REMARKS: 
+# Description: This page redirects the user to a random slide page.
 
 from Meowseum.models import Upload
 from Meowseum.common_view_functions import get_public_unmuted_uploads

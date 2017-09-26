@@ -1,7 +1,4 @@
-/* File names: slide_page_v0_0_0_4_20.html, slide_page_author_box_v0_0_0_4_10.html, slide_page_v0_0_0_4_15.js, slide_page_v0_0_0_4_13.css, slide_page_night_v0_0_0_4_2.css
-   Version date:  Author: Rachel Bush
-   Version description: 
-*/
+/* Associated files: slide_page.html, slide_page_author_box.html, slide_page.js, slide_page.css, slide_page_night.css */
 
 $(document).ready(function() {
     // 1.1.1 When the user gestures to go back, redirect to the previous page in the results list.

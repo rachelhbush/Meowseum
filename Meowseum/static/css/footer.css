@@ -1,9 +1,4 @@
-/* File names: footer_v0_0_0_3.css, footer_night_v0_0_0_1.css, footer_v0_0_0_2.html    Version date: 2/2/2017 1:56 AM   Author: Rachel Bush
-   Description: 1. I modified footer {} because a glitch was occurring when the height was set to 36px. It needed a larger height or for the rule to be removed to keep the top border a straight line.
-   2. I removed the height: 100vh; rule from body {} because I moved it to the sitewide CSS.
-   3. I modified footer ul because I switched to using plain bullet point lists as the default for <ul>.
-   
-   footer_v0_0_0_2.html: I added the Feedback link. 2/23/2017 8:58 PM */
+/* Associated files: footer.css, footer_night.css, footer.html */
 
 body {
     /* The absolute position of the footer will use coordinates relative to a corner of the body.

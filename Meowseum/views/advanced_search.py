@@ -1,8 +1,5 @@
-# advanced_search_v0_0_3.py by Rachel Bush. Date finished: 
-# PROGRAM ID: advanced_search.py (_v0_0_3) / Advanced search page
-# REMARKS: This is the form where a user can perform a search using a GUI instead of a single search field.
+# Description: This is the form where a user can perform a search using a GUI instead of a single search field.
 # If the form doesn't have errors, then the view redirects the user to a search gallery page.
-# VERSION REMARKS: 
 
 from Meowseum.forms import AdvancedSearchForm
 from django.shortcuts import render

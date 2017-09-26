@@ -1,6 +1,4 @@
-/* File names: header_desktop_v0_1_3.html, header_desktop_v0_1_5.js, header_desktop_v0_1_3.css, header_desktop_night_v0_1_2.css, modals_desktop_v0_1_4.html
-   Version date:    Author: Rachel Bush
-   Version description:  */
+/* Associated files: header_desktop.html, header_desktop.js, header_desktop.css, header_desktop_night.css */
 
 $(document).ready(function () {
     // 1. This function sets up the buttons in the Layout modal which change the playing behavior of GIFs wrapped in .gif-container. */

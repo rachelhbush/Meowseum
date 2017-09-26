@@ -1,9 +1,6 @@
-# login_v0_0_0_7.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: login.py (_v0_0_0_7) / Login form
-# REMARKS: This is the view for the login page. It uses an "email or username" field. One of the first people to leave feedback wrote to me "I can't
+# Description: Login form. This is the view for the login page. It uses an "email or username" field. One of the first people to leave feedback wrote to me "I can't
 # log in. It wants my email address", even though he gave it when he signed up. This kind of field is unconventional, but hopefully it will lower
 # barriers to logging in.
-# VERSION REMARKS: 
 
 from django import forms
 from django.contrib.auth.models import User

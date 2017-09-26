@@ -1,14 +1,4 @@
-/* File names: tou_v0_0_0_1.html/v2, privacy_v0_0_0_2.html/v0_0_0_3/v0_0_0_4, tou-privacy_v0_0_0_2.css    Version date: 11/4/2016 10:16PM    Author: Rachel Bush
-   Description: 1. 6/28/2016 5:14PM Removed the warrant canary HTML and CSS before publication. The government didn't send me an NSL.
-                   I just decided it'd be wiser not to risk legal fees over it.
-                2. Added data-day and data-night attributes to the cat photo at the end of the TOU. 8/14/2016 9:08PM
-                3. I decided the TOU is the only place I'd like the email to be underlined, so I moved a rule from the sitewide CSS to here.
-                   In the HTML, I also change .email-link to .email. I didn't make a new version for this, because the old version is
-                   in the backup of the whole site. 9/23/2016 11:56PM
-                4. tou_v0_0_0_2.html, privacy_v0_0_0_4.html: I changed the desktop header and mobile header file names. 11/4/2016 10:16PM
-                5. tou_v0_0_0_3.html: I temporarily removed the sentences from section 6 specifying that any legal disagreements must use a court that is convenient for me to appear at,
-                   in order to hide where I live until these sentences feel necessary. 4/21/2017 1:43 AM
-*/
+/* Associated files: tou.html, privacy.html, tou-privacy.css */
 
 /* Despite the id #tou, some of the rulesets are used by both the Terms of Use and the Privacy Policy. */
 #tou {

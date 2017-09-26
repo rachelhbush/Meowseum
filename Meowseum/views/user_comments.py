@@ -1,7 +1,4 @@
-# user_comments_v0_0_11.py by Rachel Bush. Date finished: 
-# PROGRAM ID: user_comments.py (_v0_0_11) / User comments
-# REMARKS: This page shows all of a user's comments, each to the right of the image on which the user commented.
-# VERSION REMARKS: 
+# Description: This page shows all of a user's comments, each to the right of the image on which the user commented.
 
 from django.contrib.auth.decorators import login_required
 from Meowseum.models import Upload, Comment, hosting_limits_for_Upload

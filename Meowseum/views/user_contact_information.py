@@ -1,8 +1,4 @@
-# user_contact_information_v0_0_3.py by Rachel Bush. Date finished: 2/24/2017 10:09 PM
-# PROGRAM ID: user_contact_information.py (_v0_0_3) / User contact information
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: This form allows the user to enter information that is required before they can post to the Adoption section (for fostering), the Lost section, or the Found section.
-# VERSION REMARKS: I added the login decorator to prevent an exception from the user being logged out.
+# Description: This form allows the user to enter information that is required before they can post to the Adoption section (for fostering), the Lost section, or the Found section.
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render

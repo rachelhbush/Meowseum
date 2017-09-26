@@ -1,10 +1,6 @@
-# forms_v0_0_0_43.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: forms.py (_v0_0_0_43) / Form and ModelForm classes
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: This file contains all the forms for the site, except for the login and signup forms.
+# Description: This file contains all the forms for the site, except for the login and signup forms.
 # Each page that includes the site header and its modals will import the blank form and pass the form as a variable to the template.
 # The completed form is then sent to a separate view for processing.
-# VERSION REMARKS: 
 
 from django import forms
 from django.forms import ModelForm

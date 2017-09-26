@@ -1,12 +1,4 @@
-/* File names: user_comments_v0_0_5.css, user_comments_night_v0_0_2.css, user_comments_v0_0_7.html, user_comments_v0_0_4.js    Version date: 3/27/2017 2:22 PM  Author: Rachel Bush
-   Version description: 
-   
-   user_comments_v0_0_7.html: Minor change. I changed "username" to "profile_username". First version using Meowseum. 3/20/2017 2:26 PM
-   user_comments_v0_0_8.html: In the HTML, I added the playsinline attribute and a poster image to the <video> so that it would display on mobile devices.
-   I added the muted attribute if the video doesn't have sound so the JS library that adds GIF support to iOS 8 and iOS 9 will work. 3/28/2017 3:12 PM
-   user_comments_v0_0_9.html: 1. I changed "Your comments" to "{{ profile_username }}'s comments" in the page's title.
-   2. I moved the poster directory into the directory for uploads, because this structure makes it easier to manage directories where uploads
-   will be temporarily stored while they are being processed so that files that can be deleted are kept separate. 4/8/2017 8:47 PM */
+/* Associated files: user_comments.css, user_comments_night.css, user_comments.html, user_comments.js */
 
 /* 1. This section is for the navigation bar, the Enlarge checkbox, and the message appears when the user hasn't posted a comment yet. */
 

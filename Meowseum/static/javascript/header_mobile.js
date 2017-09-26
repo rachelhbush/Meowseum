@@ -1,6 +1,3 @@
-/* File names: header_mobile_v0_1_6.js    Version date:  Author: Rachel Bush
-   Version description:  */
-
 $(document).ready(function() {
     // 1.2 The pause/play icon toggles whether the GIFs wrapped in .gif-container are playing. GIFs everywhere else on the site will always autoplay.
     preparePausePlayIcon = function() {

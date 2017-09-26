@@ -1,8 +1,5 @@
-# like_v0_0_0_4.py by Rachel Bush. Last modified: 
-# PROGRAM ID: like.py (_v0_0_0_4) / Like or unlike action
-# REMARKS: This is the page for processing a request from a slide page's Like button, using the URL "slide/relative_url/like".
+# Description: Like or unlike action. This is the page for processing a request from a slide page's Like button, using the URL "slide/relative_url/like".
 # Currently, this is only for AJAX requests, but it is designed to handle requests when JavaScript is disabled.
-# VERSION REMARKS: 
 
 from Meowseum.models import Upload, Like
 from Meowseum.common_view_functions import ajaxWholePageRedirect

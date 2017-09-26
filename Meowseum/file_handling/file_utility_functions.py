@@ -1,8 +1,4 @@
-# file_utility_functions_v0_0_4.py by Rachel Bush. Date finished: 
-# PROGRAM ID: file_utility_functions.py (_v0_0_4) / File utility functions
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: These are functions related to processing files that are used in more than one location throughout the site.
-# VERSION REMARKS: 
+# Description: These are functions related to processing files that are used in more than one location throughout the site.
 
 import os
 import string

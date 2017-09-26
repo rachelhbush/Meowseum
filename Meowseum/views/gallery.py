@@ -1,8 +1,5 @@
-# gallery_v0_0_26.py by Rachel Bush. Last modified: 
-# PROGRAM ID: gallery.py (_v0_0_26) / User gallery
-# REMARKS: Each view in this file defines a queryset or list of records and then passes it to a function which will paginate it and return the template.
+# Description: Each view in this file defines a queryset or list of records and then passes it to a function which will paginate it and return the template.
 # Results are usually sorted from newest to oldest, for pages like a user's upload gallery. Views that use a different sorting order will mention it in the view's description.
-# VERSION REMARKS: 
 
 from django.contrib.auth.decorators import login_required
 from Meowseum.models import Upload, Like, Tag

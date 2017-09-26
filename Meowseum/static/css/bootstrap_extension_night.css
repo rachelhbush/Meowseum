@@ -1,6 +1,6 @@
-/* File names: bootstrap_extension_v0_0_0_52.css, bootstrap_extension_night_v0_0_0_22.css, bootstrap_extension_noscript_v0_0_0_3.css  Version date:   Author: Rachel Bush
-   Description: This file extends Bootstrap with extra classes and widgets. It also sets up any CSS styling that I use consistently across all of my projects.
-   Version description:  */
+/* Associated files: bootstrap_extension.css, bootstrap_extension_night.css, bootstrap_extension_noscript.css
+   Description: This file extends Bootstrap with extra classes and widgets. It also sets up any CSS styling that I use consistently across all of my projects. 
+*/
    
 /* This document overrides the sitewide CSS to change the background and font colors. Until I institute a way to turn night mode on, this mode is enabled for mobile by applying a
    media query in the HTML. */

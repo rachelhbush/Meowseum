@@ -1,7 +1,4 @@
-/* File names: ajax_v0_0_0_3.js   Version date:  Author: Rachel Bush
-   File description: This file contains functions that make it easier to implement widgets which are dependent on AJAX. It is dependent on jQuery and the jQuery Form Plugin API.
-   Version description: 
-*/
+/* Description: This file contains functions that make it easier to implement widgets which are dependent on AJAX. It is dependent on jQuery and the jQuery Form Plugin API. */
 
 $(document).ready(function() {
     // Create a namespace for the sitewide AJAX functions.

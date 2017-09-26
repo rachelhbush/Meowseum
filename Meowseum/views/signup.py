@@ -1,7 +1,4 @@
-# signup_v0_0_6.py by Rachel Bush. Date finished: 
-# PROGRAM ID: signup.py (_v0_0_6) / Signup form
-# REMARKS: This is the page for signing up for an account on the website.
-# VERSION REMARKS: 
+# Description: Signup form. This is the page for signing up for an account on the website.
 
 from django import forms
 from django.contrib.auth.models import User

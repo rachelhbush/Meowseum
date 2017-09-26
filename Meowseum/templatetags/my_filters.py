@@ -1,7 +1,4 @@
-# my_filters_v0_0_14.py by Rachel Bush. Date finished: 
-# PROGRAM ID: my_filters.py (_v0_0_14) / Custom filters
-# REMARKS: This file contains custom filters for use in Django templates. The functions are compatible with testing in the Python shell via F5.
-# VERSION REMARKS: 
+# Description: This file contains custom filters for use in Django templates. The functions are compatible with testing in the Python shell via F5.
 
 from django import template
 from django.template import Library

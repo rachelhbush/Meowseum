@@ -1,8 +1,4 @@
-# signals_v0_0_0_13.py by Rachel Bush. Date finished: 
-# PROGRAM ID: signals.py (_v0_0_0_13) / Signals
-# INSTALLATION: Python 3.5, Django 1.9.2
-# REMARKS: This file is for altering the behavior of basic database actions, such as saving a record or deleting one, from the default.
-# VERSION REMARKS: 
+# Description: This file is for altering the behavior of basic database actions, such as saving a record or deleting one, from the default. 
 
 from Meowseum.models import Upload, Tag, hosting_limits_for_Upload
 from django.db.models.signals import pre_delete

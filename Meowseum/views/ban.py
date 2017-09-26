@@ -1,7 +1,4 @@
-# ban_v0_0_0_6.py by Rachel Bush. Last modified: 
-# PROGRAM ID: ban.py (_v0_0_0_6) / Ban or unban action
-# REMARKS: This is the page for processing a request from a Follow button's Ban option.
-# VERSION REMARKS: 
+# Description: This is the page for processing a request from a Follow button's Ban option.
 
 from django.contrib.auth.models import User
 from Meowseum.common_view_functions import ajaxWholePageRedirect

@@ -1,9 +1,3 @@
-{% comment %}
-File name: follow_button_v0_0_1_11.html
-Author: Rachel Bush
-Last modified: 
-Version description: 
-{% endcomment %}
 <div class="btn-group follow-btn">
     <button type="submit" name="submission_type" value="follow" class="btn follow_button ajax-btn" data-ajax-url="{% url "follow" upload.uploader.username %}?next={{ request.path | urlencode }}">
         {% if viewer in uploader.followers.all %}

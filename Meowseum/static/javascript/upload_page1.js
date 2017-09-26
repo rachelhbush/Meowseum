@@ -1,7 +1,4 @@
-/* File names: upload_page1_v0_0_0_2.js   Version date:     Author: Rachel Bush
-   Version description: 
-*/
-
+/* Associated files: upload_page1.html, upload_page1.css, upload_page1.js */
 
 $(document).ready(function() {
    // 1. First, while the "Up for adoption", "Lost", or "Found" button is pressed, it should hide the Submit button and replace it with a button labeled "Next page". 

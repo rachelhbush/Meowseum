@@ -1,12 +1,4 @@
-/* File names: gallery_main_v0_0_1_10.html, gallery_v0_0_1_5.js, gallery_v0_0_1_6.css, gallery_night_v0_0_1_0.css  Version date:  Author: Rachel Bush
-   Version description: 
-   
-   gallery_main_v0_0_1_10.html: Minor changes. I changed "username" to "profile_username". I corrected a syntax error with an extra quotation mark on line 114 that was already being ignored by browsers. 3/20/2017 2:23 PM
-   gallery_main_v0_0_1_11.html: I removed the 'thumbnail_directory' metadata key and replaced it with a template variable. 3/25/2017 1:52 AM
-   gallery_main_v0_0_1_12.html: I added a poster attribute, because without it videos weren't being shown until they started playing. I added the playsinline attribute, in order to support iPhones. 3/25/2017 6:11 PM
-   gallery_main_v0_0_1_13.html: 1. I changed "<" to "<=" because at the critical point, thumbnails were being created with the same dimensions as the original.
-   2. I moved the thumbnail directory and poster directory into the directory for uploads, because this structure makes it easier to manage directories where uploads
-   will be temporarily stored while they are being processed so that files that can be deleted are kept separate. 4/8/2017 9:35 PM */
+/* Associated files: gallery.html, gallery_main.html, gallery.js, gallery.css, gallery_night.css */
    
 /* 0. Style the gallery section as a whole. */
 

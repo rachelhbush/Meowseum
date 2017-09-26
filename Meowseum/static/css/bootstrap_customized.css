@@ -1,14 +1,3 @@
-/* Rulesets with preceded by a comment beginning with $ have changes. -- Rachel Bush
-   9-27-2016: Fixed a bug in the previous change where ".hidden-sm" was in the place where ".hidden-lsph" should have been.
-   8-11-2016: Added the range of viewport width "lsph" for "landscape phones and phablets", 544px to 767px.
-              This is used in Bootstrap 4. They made room for it by declaring it to be the new "sm" and the old "sm" to "md", but for backwards compatibility with
-              what I've already coded, I can't do that.
-   8-2-2016: Copied the changes from v3.3.6 to v3.3.7. I noticed I accidentally changed the vertical alignment of audio, canvas, progress, and video from baseline to middle
-             when I only meant to affect video, so I fixed that.
-   7-7-2016: I added an -xl- breakpoint at 1800px for desktop-sized devices: 1920x1080, 1ppx screens with a 23" diagonal at 96dpi.
-   6-7-2016: I made <video>s have vertical-align: middle; like Bootstrap uses for images, so GIFs inserted the same way as images will have the same margins.
-             Without editing the Bootstrap file, it would be very difficult to override due to specificity rules. */
-
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -44,7 +33,6 @@ progress {
   display: inline-block;
   vertical-align: baseline;
 }
-/* $ */
 video {
     display: inline-block;
     vertical-align: middle;
@@ -1632,7 +1620,6 @@ pre code {
   margin-right: -15px;
   margin-left: -15px;
 }
-/* $ */
 .col-xs-1, .col-lsph-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xl-1, .col-xs-2, .col-lsph-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xl-3, .col-xs-3, .col-lsph-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xl-3, .col-xs-4, .col-lsph-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xl-4, .col-xs-5, .col-lsph-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xl-5, .col-xs-6, .col-lsph-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xl-6, .col-xs-7, .col-lsph-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xl-7, .col-xs-8, .col-lsph-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xl-8, .col-xs-9, .col-lsph-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xl-9, .col-xs-10, .col-lsph-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xl-10, .col-xs-11, .col-lsph-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xl-11, .col-xs-12, .col-lsph-12, .col-sm-12, .col-md-12, .col-lg-12, .col-xl-12 {
   position: relative;
   min-height: 1px;
@@ -1795,7 +1782,6 @@ pre code {
 .col-xs-offset-0 {
   margin-left: 0;
 }
-/* $ */
 @media (min-width: 544px) {
   .col-lsph-1, .col-lsph-2, .col-lsph-3, .col-lsph-4, .col-lsph-5, .col-lsph-6, .col-lsph-7, .col-lsph-8, .col-lsph-9, .col-lsph-10, .col-lsph-11, .col-lsph-12 {
     float: left;
@@ -2428,7 +2414,6 @@ pre code {
     margin-left: 0;
   }
 }
-/* $ Added -xl-. The rules are the same as -sm-, -md-, and -lg-. They allow using different grid proportions on desktop-sized devices. */
 @media (min-width: 1800px) {
   .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
     float: left;
@@ -6887,19 +6872,16 @@ button.close {
   width: device-width;
 }
 .visible-xs,
-/* $ */
 .visible-lsph,
 .visible-sm,
 .visible-md,
 .visible-lg,
-/* $ */
 .visible-xl {
   display: none !important;
 }
 .visible-xs-block,
 .visible-xs-inline,
 .visible-xs-inline-block,
-/* $ */
 .visible-lsph-block,
 .visible-lsph-inline,
 .visible-lsph-inline-block,
@@ -6912,7 +6894,6 @@ button.close {
 .visible-lg-block,
 .visible-lg-inline,
 .visible-lg-inline-block,
-/* $ */
 .visible-xl-block,
 .visible-xl-inline,
 .visible-xl-inline-block {
@@ -6948,7 +6929,6 @@ button.close {
     display: inline-block !important;
   }
 }
-/* $ */
 @media (min-width: 544px) and (max-width: 767px) {
   .visible-lsph {
     display: block !important;
@@ -7070,7 +7050,6 @@ button.close {
     display: inline-block !important;
   }
 }
-/* $ */
 @media (min-width: 1800px) {
   .visible-xl {
     display: block !important;
@@ -7127,7 +7106,6 @@ button.close {
     display: none !important;
   }
 }
-/* $ */
 @media (min-width: 1800px) {
   .hidden-xl {
     display: none !important;

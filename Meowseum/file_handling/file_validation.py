@@ -1,7 +1,4 @@
-# file_validation_v0_0_0_5.py by Rachel Bush. Last modification: 
-# PROGRAM ID: file_validation.py (_v0_0_0_5) / File validation
-# REMARKS: This file contains the logic for validating an uploaded file while gathering its metadata.
-# VERSION REMARKS: 
+# Description: This file contains the logic for validating an uploaded file while gathering its metadata.
 
 from django.conf import settings
 import os

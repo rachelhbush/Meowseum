@@ -1,7 +1,4 @@
-# subscribe_v0_0_0_2.py by Rachel Bush. Last modified: 
-# PROGRAM ID: subscribe.py (_v0_0_0_2) / Subscribe to a tag
-# REMARKS: This is the page for processing a request to subscribe to a tag, either via a dropdown option in the header or via the URL bar.
-# VERSION REMARKS: 
+# Description: This is the page for processing a request to subscribe to a tag, either via a dropdown option in the header or via the URL bar.
 
 from Meowseum.models import Tag
 from Meowseum.common_view_functions import ajaxWholePageRedirect

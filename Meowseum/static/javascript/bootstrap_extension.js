@@ -1,8 +1,6 @@
-/* File names: bootstrap_extension_v0_0_0_23.js    Version date: Author: Rachel Bush
-   File description: This file extends Bootstrap with extra classes and widgets that I use across all of my projects.
+/* Description: This file extends Bootstrap with extra classes and widgets that I use across all of my projects.
    The extension's JavaScript is divided into several files by topic for ease of maintenance: forms.js, settings.js, and bootstrap_extension.js for miscellaneous classes.
-   
-   Version description:  */
+*/
 
 $(document).ready(function() {
     // The first part of this file is for library functions which are under the global namespace, aside from those in forms.js, and library functions in miscellaneous namespaces.

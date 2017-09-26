@@ -1,7 +1,4 @@
-# delete_upload_v0_0_0_5.py by Rachel Bush. Last modified: 
-# PROGRAM ID: delete_upload.py (_v0_0_0_5) / Delete upload action
-# REMARKS: This is the page for processing a request to delete the upload. The request can be from the uploader or from a moderator.
-# VERSION REMARKS: 
+# Description: This is the page for processing a request to delete the upload. The request can be from the uploader or from a moderator.
 
 from Meowseum.models import Upload
 from Meowseum.common_view_functions import ajaxWholePageRedirect

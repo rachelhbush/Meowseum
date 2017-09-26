@@ -1,5 +1,4 @@
-/* File names: gallery_main_v0_1_9.html, gallery_v0_1_9.js, gallery_v0_1_6.css, gallery_night_v0_1_0.css  Version date:  Author: Rachel Bush
-   Version description: 
+/* Associated files: gallery.html, gallery_main.html, gallery.js, gallery.css, gallery_night.css
    Known issues: The columns variable is a jQuery set, so by convention I should have written the name starting with a $.
 */
 

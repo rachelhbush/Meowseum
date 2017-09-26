@@ -1,5 +1,4 @@
-/* File names: user_comments_v0_0_5.css, user_comments_night_v0_0_2.css, user_comments_v0_0_6.html, user_comments_v0_0_4.js    Version date:  Author: Rachel Bush
-   Version description:   */
+/* Associated files: user_comments.css, user_comments_night.css, user_comments.html, user_comments.js */
 
 $(document).ready(function() {
     /* 1.1 If the user comment's height is less than the slide height, then vertically center it within the height of the slide.

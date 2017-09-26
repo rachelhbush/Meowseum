@@ -1,8 +1,4 @@
-# upload_page1_v0_0_29.py by Rachel Bush. Date last modified: 7/4/2017 11:31 PM
-# PROGRAM ID: upload_page1.py (_v0_0_29) / Upload from device form
-# REMARKS: This form is for adding a title, description, and tags to the most recent file that a user uploaded.
-# VERSION REMARKS: I'm transitioning the website from Scrapbin back to Meowseum and importing from project version 0.0.5.1 all the
-# models I previously removed.
+# REMARKS: Upload from device form. This form is for adding a title, description, and tags to the most recent file that a user uploaded.
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User

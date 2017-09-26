@@ -1,9 +1,6 @@
-# validators_v0_0_0_4.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: validators.py (_v0_0_0_4) / Validation functions
-# REMARKS: Callable classes and functions in this file validate data for individual fields. Functions are used when the validation has only one
+# Description: Callable classes and functions in this file validate data for individual fields. Functions are used when the validation has only one
 # parameter. This file will also contain functions that take input where the user is allowed to enter it approximately, and return output in a standard
 # format (process_noun), but none have been added yet. Validation functions are compatible with testing in the Python shell.
-# VERSION REMARKS: 
 
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError

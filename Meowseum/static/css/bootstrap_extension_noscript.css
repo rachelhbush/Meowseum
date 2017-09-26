@@ -1,10 +1,9 @@
-/* File names: bootstrap_extension_v0_0_0_51.css, bootstrap_extension_night_v0_0_0_21.css, bootstrap_extension_noscript_v0_0_0_3.css   Version date: 6/11/2017 10:46 AM  Author: Rachel Bush
+/* Associated files: bootstrap_extension.css, bootstrap_extension_night.css, bootstrap_extension_noscript.css
    File description: This style sheet contains sitewide rulesets for when JavaScript is disabled that were simplest to implement within <noscript>.
                      I avoid this practice when possible, because it can lead to individual pages' JavaScript-compatible style sheets overriding the <noscript> style sheet,
                      leading to individual pages needing their own <noscript>s just to keep these rules.
                      Sometimes I start out assuming JavaScript is disabled and have the JavaScript implement any CSS changes dependent on JavaScript being enabled.
-                     Most of the time, this isn't practical because the script takes long enough to complete that the user may see elements jumping around while it is running.
-   Version description:  */
+                     Most of the time, this isn't practical because the script takes long enough to complete that the user may see elements jumping around while it is running. */
 
 /* 1. General classes: When developing widgets, use these until <noscript> rulesets are added for the widget specifically. This will avoid cluttering up the HTML. */
 .hidden-noscript {

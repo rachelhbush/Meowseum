@@ -1,7 +1,4 @@
-# exception_logging_middleware_v0_0_2.py by Rachel Bush. Date finished: 
-# PROGRAM ID: exception_logging_middleware.py (_v0_0_2) / Exception logging middleware
-# REMARKS: This file contains middleware for processing exceptions. It creates a record in the database for each exception.
-# VERSION REMARKS: 
+# Description: This file contains middleware for processing exceptions. It creates a record in the database for each exception.
 
 import traceback
 from Meowseum.models import ExceptionRecord

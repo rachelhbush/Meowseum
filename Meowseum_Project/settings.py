@@ -1,14 +1,3 @@
-# settings_v0_0_0_15.py by Rachel Bush. Date last modified: 
-# Project dependencies: Python 3.5, Django 1.9.2. django-ipware 1.1.6. django-hitcount 1.2.2, which is dependent on pytz-2016.10 for datetimes with SQLLite on the development server.
-# I modified django-hitcount to be dependent on django-ipware 1.1.6.
-# My MetadataRestrictedFileField program is dependent on python-magic 0.4.12, Pillow-3.4.2, pymediainfo 2.1.5, qtfaststart 1.8, and MoviePy 0.2.2.13.
-# This version of MoviePy uses dependencies numpy 1.11.2, imageio 2.1.2, tdqm 4.10.0, and decorators 4.0.10. It also depends on Pillow.
-#
-# The development server was tested with ffmpeg N-83882-g580bbc (March 2017), and the production server was tested with ffmpeg 3.2.4 (March 2017), with the autorotation feature
-# introduced in 2015 being especially important. The development server uses ImageMagick-7.0.5-4-portable-Q16-x64 for EXIF orientation and JHEAD 3.0 for stripping EXIF data.
-# postgreSQL 9.4
-# VERSION REMARKS: 
-
 """
 Django settings for Meowseum_Project project.
 

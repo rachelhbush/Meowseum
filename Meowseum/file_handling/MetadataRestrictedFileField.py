@@ -1,10 +1,7 @@
-# MetadataRestrictedFileField_v0_0_62.py by Rachel Bush. Last modification: 
-# PROGRAM ID: MetadataRestrictedFileField.py (_v0_0_62) / Extended file field
-# REMARKS: MetadataRestrictedFileField, for models.py, allows restricting accepted files by type and metadata.
+# Description: MetadataRestrictedFileField, for models.py, allows restricting accepted files by type and metadata.
 # If you want to retain metadata after uploading, in the view that handles the uploaded file, you will need to invoke get_validated_metadata().
 # After the file is validated and the record is saved, pass the record to the other main function, process_to_meet_hosting_limits().
 # Read the comments on the field and the two main functions.
-# VERSION REMARKS: 
 
 from django.db.models import FileField
 from django import forms

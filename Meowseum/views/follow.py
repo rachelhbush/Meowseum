@@ -1,7 +1,5 @@
-# follow_v0_0_0_7.py by Rachel Bush. Last modified: 7/3/2017 10:31 PM
-# PROGRAM ID: follow.py (_v0_0_0_7) / Follow or unfollow action
-# REMARKS: This is the page for processing a request to a follow a user. The request will be from a slide page's Follow button or from a dropdown option on a user's gallery page.
-# VERSION REMARKS: I added the ability to Follow using an AJAX option in the sitewide Browse menu.
+# Description: Follow or unfollow action. This is the page for processing a request to a follow a user. The request will be from a slide page's Follow button or from a dropdown
+# option on a user's gallery page.
 
 from django.contrib.auth.models import User
 from Meowseum.common_view_functions import ajaxWholePageRedirect

@@ -1,6 +1,4 @@
-# from_device_v0_0_0_25.py by Rachel Bush. Date last modified: 
-# PROGRAM ID: from_device.py (_v0_0_0_25) / Upload from device form
-# REMARKS: This form is for uploading a file from your PC or mobile device. Both the desktop and mobile versions present it in a modal.
+# Description: This form is for uploading a file from your PC or mobile device. Both the desktop and mobile versions present it in a modal.
 
 # Because the site doesn't uses modals all over the place but doesn't use AJAX yet, when
 # a form is submitted using a modal, this form processing view will redirect the user back to the previous page. If the previous page is also this page, because it
@@ -8,9 +6,8 @@
 # The form will also store the ID of the form's modal, so that the same one will automatically open when the page redirects. The downside of this is that when an
 # error occurs, the modal will open on every page until the user successfully submits the form, and this can annoy the user if the user changes his or her mind.
 # Also, after successfully submitting a form that had an error before, Google Chrome will keep showing the error when the user opens the modal again until the cache is cleared.
-# SITE STRUCTURE NOTE: The non-AJAX version of the site will work for mobile-only, because the template structure that I've set up doesn't allow a separate forms
+# Site structure note: The non-AJAX version of the site will work for mobile-only, because the template structure that I've set up doesn't allow a separate forms
 # for mobile and desktop.
-# VERSION REMARKS: 
 
 from Meowseum.models import TemporaryUpload, Upload, validation_specifications_for_Upload, hosting_limits_for_Upload, Metadata
 from Meowseum.file_handling.file_validation import get_validated_metadata
