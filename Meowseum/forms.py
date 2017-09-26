@@ -197,6 +197,7 @@ class AdoptionForm(ModelForm):
                   'likes_kids_age', 'spayed_or_neutered', 'house_trained', 'declawed', 'vaccinated', 'microchipped', 'parasite_free', 'energy_level',
                   'adoption_fee', 'euthenasia_soon', 'internal_id', 'bonded_with')
     def clean_internal_id(self):
+        # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
 
 class LostForm(ModelForm):
@@ -245,3 +246,6 @@ class FoundForm(ModelForm):
         fields = ('is_sighting', 'pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2', 'hair_length',
                   'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information', 'eye_color', 'eye_color_other', 'nose_color', 'date',
                   'location', 'internal_id', 'other_special_markings', 'has_collar', 'collar_color', 'collar_description', 'has_spay_or_neuter_tattoo', 'no_microchip')
+    def clean_internal_id(self):
+        # This function is required for an optional unique field.
+        return self.cleaned_data['internal_id'] or None
