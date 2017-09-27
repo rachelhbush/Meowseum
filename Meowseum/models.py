@@ -137,7 +137,6 @@ hosting_limits_for_Upload = {
 
 class TemporaryUpload(models.Model):
     UPLOAD_TO = "stage2_processing"
-    
     # This model supports the processing stage which occurs after a file is validated. Exceptions are almost unavoidable during this stage, usually due to issues
     # such as the server running out of memory. In that case, there will be files leftover from the processing attempt. Using a separate model makes it easier
     # to keep separate the files and records which can be deleted.
@@ -258,15 +257,18 @@ class Comment(models.Model):
         return self.text
 
 class UserProfile(models.Model):
+    # 1. This section is for authentication information.
     # In views, remember to test for whether the user is logged in before referencing user_profile, or else an exception will occur,
     # as in "if request.user.is_authenticated() and request.user.user_profile".
     user_auth = models.OneToOneField(User, related_name="user_profile", primary_key=True)
     registered_with_ip_address = models.CharField(max_length=45, verbose_name="IP address at the time of registration", default="", blank=True)
     # Linked from User, required: username, password, email. Optional: is_active, date_joined, last_login, is_staff, first_name, last_name, get_full_name()
-    # 1. This section is for how the user is interacting with uploads and other users.
+    # 2. This section is for how the user is interacting with uploads and other users.
     following = models.ManyToManyField("self", verbose_name="following", symmetrical=False, related_name="followers", blank=True)
     muting = models.ManyToManyField("self", verbose_name="muting", symmetrical=False, related_name="muters", blank=True)
     subscribed_tags = models.ManyToManyField(Tag, verbose_name="subscribed tags", related_name="subscribers", blank=True)
+    # 3. This section is for the user's site settings.
+    night_mode = models.BooleanField(verbose_name="Night mode", default=True, blank=True)
     # Other relationship-setting models: Upload via uploader, Comment via commenter
     # For Meowseum, UserContactInfo ("user_contact_info") via account, Shelter via account
     def is_shelter(self):
@@ -523,7 +525,6 @@ class PetInfo(models.Model):
     age_units = models.CharField(max_length=255, verbose_name="age units", choices=(('', ''),) + AGE_UNIT_CHOICES, default="months", blank=True)
     public_contact_information = models.CharField(max_length=1000, verbose_name="public contact information", default="", blank=True)
     # The only required field for Adoption and Lost is the name. The only required field for Found is whether it is a sighting.
-
     # These are methods for making it easier to talk about the animal in a sentence.
     def subjective_pronoun(self):
         if self.sex == 'male':
