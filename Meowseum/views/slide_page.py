@@ -249,6 +249,7 @@ def format_adoption_record_for_display(upload):
                            'Weight',
                            'Energy level',
                            'Bonded with',
+                           'ID',
                            'Adoption fee')
     merged_field_values = (upload.adoption.pet_name,
                            get_adoption_merged_sex_field(upload.adoption),
@@ -260,6 +261,7 @@ def format_adoption_record_for_display(upload):
                            get_merged_weight_field(upload.adoption),
                            capfirst(upload.adoption.energy_level),
                            format_bonded_with_field(upload.adoption.bonded_with.all()),
+                           upload.adoption.internal_id,
                            format_currency(upload.adoption.adoption_fee, exact=False))
     boolean_answers = get_adoption_boolean_answers(upload.adoption, merged_field_values[1])
     return merged_field_labels, merged_field_values, boolean_answers
@@ -319,7 +321,8 @@ def format_found_record_for_display(upload):
                            'Other special characteristics',
                            'Disabilities',
                            'Age',
-                           'Weight')
+                           'Weight',
+                           'ID')
     merged_field_values = (upload.found.pet_name,
                            get_found_merged_sex_field(upload.found),
                            get_city_merged_field(upload),
@@ -332,7 +335,8 @@ def format_found_record_for_display(upload):
                            get_merged_other_special_characteristics_field(upload.found),
                            capfirst(humanize_list(upload.found.disabilities, "")),
                            get_merged_age_field(upload.found),
-                           get_merged_weight_field(upload.found))
+                           get_merged_weight_field(upload.found),
+                           upload.found.internal_id)
     boolean_answers = get_found_boolean_answers(upload.found, merged_field_values[4], merged_field_values[1])
     return merged_field_labels, merged_field_values, boolean_answers
 
