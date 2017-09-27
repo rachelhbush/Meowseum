@@ -489,9 +489,9 @@ def format_bonded_with_field(queryset):
     else:
         list_of_links = []
         for pet in queryset:
-            list_of_links = list_of_links + [mark_safe('<a class="emphasized" href="./' + pet.upload.relative_url + '">'\
-                            + pet.pet_name + '</a>')]
-        return humanize_list(list_of_links)
+            list_of_links = list_of_links + ['<a class="emphasized" href="../' + pet.upload.relative_url + '">'\
+                            + pet.pet_name + '</a>']
+        return mark_safe(humanize_list(list_of_links))
 
 # 5.1.8 Input: An Adoption record and the merged string with the labels 'Sex'.
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
