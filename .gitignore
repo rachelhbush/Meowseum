@@ -49,3 +49,7 @@ Meowseum/media/
 
 # Ignore changes to development database.
 Meowseum_Project/database.db
+# Ignore migrations in the development phase in order to keep diffs
+# from being cluttered whenever models.py changes. In the production
+# phase, migrations must be tracked in order to maintain the database.
+Meowseum/migrations/
