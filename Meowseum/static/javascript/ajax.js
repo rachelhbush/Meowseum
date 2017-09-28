@@ -1,4 +1,11 @@
-/* Description: This file contains functions that make it easier to implement widgets which are dependent on AJAX. It is dependent on jQuery and the jQuery Form Plugin API. */
+/* Description: This file contains functions that make it easier to implement widgets which are dependent on AJAX. It is dependent on jQuery and the jQuery Form Plugin API.
+   The functions with numbers are those which implement the classes, which don't require knowledge of JavaScript to use, during the main function.
+   The functions with letters are library functions for writing AJAX JavaScript.
+   Classes: 1. .ajax-btn, used with the attribute data-ajax-url and optionally the attributes name, value, data-name, and data-value.
+               Uses a JSON object to insert response HTML into the DOM on click.
+            2. .ajax-modal, which uses the attribute data-ajax-url and goes on .modal.
+               Upon showing the modal, load the content of the modal into the page from the specified URL.
+*/
 
 $(document).ready(function() {
     // Create a namespace for the sitewide AJAX functions.
@@ -188,8 +195,8 @@ $(document).ready(function() {
         }
     };
     
-    // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server using name, value, data-name, and/or data-value
-    // and then uses a JSON object to insert HTML into the DOM.
+    // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses a JSON object to insert HTML into the DOM.
+    // Use with .ajax-button the attributes data-ajax-url, name, value, data-name, and/or data-value.
     ajax.loadButtons = function() {
         $(".ajax-btn").submitOwnDataOnClickThen(ajax.loadAJAXHTML);
     };
