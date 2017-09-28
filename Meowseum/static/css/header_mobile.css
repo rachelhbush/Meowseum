@@ -260,7 +260,7 @@ ul.list-menu {
 /* 3. Style specific elements within the modals. */
 
 /* Within the Settings modal, style the symbols indicating day mode or night mode. */
-.toggle-night-day {
+.toggle-night-day > img {
     width: 33px;
     float: right;
     margin-right: 15px;

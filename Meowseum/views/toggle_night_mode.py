@@ -5,7 +5,10 @@ from Meowseum.common_view_functions import ajaxWholePageRedirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
 from django.template.defaultfilters import urlencode
+from django.contrib.staticfiles.templatetags.staticfiles import static
+import json
 
 # 0. Main function.
 def page(request):
@@ -35,7 +38,14 @@ def update_database(request):
 # 2. When night mode is toggled on, day mode HTML snippets will replace night mode HTML snippets in the settings menus and vice versa.
 # This function will be written after update_database() has been tested and verified to work, because it may require dismantling the JavaScript in order to test it.
 # Input: night_mode, Boolean.
-# Output: Dictionary in which the keys are selectors and the values are HTML snippets which AJAX will insert into selected elements.
+# Output: Dictionary in which the keys are selectors and the values are HTML snippets which AJAX will use to replace the content of selected elements.
 def get_response_data(night_mode):
     response_data = {}
+    if night_mode:
+        response_data['.toggle-night-day'] = mark_safe('Night mode<img src="' + static('images/Moon Icon - White.png') + '" alt="Moon icon"/>')
+        response_data['#sitewide-night-mode'] = mark_safe('<link type="text/css" rel="stylesheet" href="' + static('css/bootstrap_extension_night.css') +\
+                                                          '"><link type="text/css" rel="stylesheet" href="' + static('css/meowseum_night.css') + '">')
+    else:
+        response_data['.toggle-night-day'] = mark_safe('Day mode<img src="' + static('images/Sun Icon.png') + '" alt="Sun icon"/>')
+        response_data['#sitewide-night-mode'] = ''
     return response_data

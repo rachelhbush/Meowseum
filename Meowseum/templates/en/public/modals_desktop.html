@@ -8,7 +8,15 @@
             <div class="modal-body">
                 <ul class="list-menu">
                     {% load staticfiles %}
-                    <li>Night mode<img src="{% static "images/Moon Icon - White.png" %}" data-night="{% static "images/Moon Icon - White.png" %}" data-day="{% static "images/Sun Icon.png" %}" alt="Moon icon" class="toggle-night-day"/></li>
+                    <li class="toggle-night-day ajax-btn" data-ajax-url="{% url "toggle_night_mode" %}">
+                        {% if night_mode %}
+                        Night mode
+                        <img src="{% static "images/Moon Icon - White.png" %}" alt="Moon icon"/>
+                        {% else %}
+                        Day mode
+                        <img src="{% static "images/Sun Icon.png" %}" alt="Sun icon"/>
+                        {% endif %}
+                    </li>
                     <li>Play all GIFs<span class="glyphicon glyphicon-play" id="toggle-autoplay"></span></li>
                 </ul>
                 <div id="gif-mouseout-behavior">

@@ -185,7 +185,7 @@ ul.list-menu {
 .list-menu a:hover, .list-menu a:active {
     text-decoration: underline;
 }
-.toggle-night-day {
+.toggle-night-day > img {
     width: 33px;
     float: right;
     margin-right: 15px;
