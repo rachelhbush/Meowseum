@@ -267,8 +267,6 @@ class UserProfile(models.Model):
     following = models.ManyToManyField("self", verbose_name="following", symmetrical=False, related_name="followers", blank=True)
     muting = models.ManyToManyField("self", verbose_name="muting", symmetrical=False, related_name="muters", blank=True)
     subscribed_tags = models.ManyToManyField(Tag, verbose_name="subscribed tags", related_name="subscribers", blank=True)
-    # 3. This section is for the user's site settings.
-    night_mode = models.BooleanField(verbose_name="Night mode", default=True, blank=True)
     # Other relationship-setting models: Upload via uploader, Comment via commenter
     # For Meowseum, UserContactInfo ("user_contact_info") via account, Shelter via account
     def is_shelter(self):
