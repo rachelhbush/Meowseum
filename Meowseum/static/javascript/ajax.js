@@ -2,7 +2,7 @@
    The functions with numbers are those which implement the classes, which don't require knowledge of JavaScript to use, during the main function.
    The functions with letters are library functions for writing AJAX JavaScript.
    Classes: 1. .ajax-btn, used with the attribute data-ajax-url and optionally the attributes name, value, data-name, and data-value.
-               Uses a JSON object to insert response HTML into the DOM on click.
+               Uses a JSON object (dictionary) to insert response HTML into the DOM on click. This can only work by replacing the content of selected elements.
             2. .ajax-modal, which uses the attribute data-ajax-url and goes on .modal.
                Upon showing the modal, load the content of the modal into the page from the specified URL.
 */
@@ -177,10 +177,9 @@ $(document).ready(function() {
         });
     };
     
-    // D. This is a library function which is used when the server responds with a JSON object in which keys consist of jQuery selectors and values consist of HTML
-    // snippets to load into each corresponding jQuery set. The built-in .load() method is useful for loading HTML within a single frame like a modal, but this function is more useful for
-    // interactions which insert HTML into multiple places throughout the DOM.
-    //
+    // D. This is a library function which is used when the server responds with a JSON object, e.g. {selector1: HTML1, selector2: HTML2}. The keys consist of jQuery
+    // selectors and the values consist of HTML snippets to load into each corresponding jQuery set. The built-in .load() method is useful for loading HTML within
+    // a single frame like a modal, but this function is more useful for interactions which insert HTML into multiple places throughout the DOM.
     // When I use this, most of my selectors are classes, because elements that are otherwise unique may have a hidden duplicate for the sake of responsiveness.
     ajax.loadAJAXHTML = function(response) {
         var type = typeof response;
@@ -195,10 +194,13 @@ $(document).ready(function() {
         }
     };
     
+
+    
     // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses a JSON object to insert HTML into the DOM.
     // Use with .ajax-button the attributes data-ajax-url, name, value, data-name, and/or data-value.
     ajax.loadButtons = function() {
         $(".ajax-btn").submitOwnDataOnClickThen(ajax.loadAJAXHTML);
+        
     };
     
     // 1.1. After submitting a form in a modal, this function will load the response as HTML. To instruct the function to redirect to another page (the whole page, not the frame of the modal),
