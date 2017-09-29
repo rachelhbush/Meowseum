@@ -4,13 +4,8 @@
         <title>Report abuse - Meowseum</title>
         {% include "en/public/default_description.html" %}
         {% include "en/public/default_keywords.html" %}
+        {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
         {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
         <link type="text/css" rel="stylesheet" href="{% static "css/report_abuse.css" %}"/>
 {% endblock %}
 {% block body %}

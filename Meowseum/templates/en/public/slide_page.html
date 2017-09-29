@@ -7,7 +7,9 @@
         {% include "en/public/default_keywords.html" %}
         {% load staticfiles %}
         <link type="text/css" rel="stylesheet" href="{% static "css/slide_page.css" %}"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/slide_page_night.css" %}"/>
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/slide_page_night.css" %}"/>
+        {% endif %}
         <script src="{% static "javascript/lib/modernizr-detect-flexbox-support-only.min.js" %}"></script>
         <script src="{% static "javascript/slide_page.js" %}"></script>
 {% endblock %}

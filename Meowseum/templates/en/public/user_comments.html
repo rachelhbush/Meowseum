@@ -5,15 +5,12 @@
         <title>{{ app_name }} - {{ profile_username }}'s comments</title>
         {% include "en/public/default_description.html" %}
         {% include "en/public/default_keywords.html" %}
+        {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
         {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
         <link type="text/css" rel="stylesheet" href="{% static "css/user_comments.css" %}"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/user_comments_night.css" %}"/>
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/user_comments_night.css" %}"/>
+        {% endif %}
         <script src="{% static "javascript/user_comments.js" %}"></script>
 {% endblock %}
 {% block body %}

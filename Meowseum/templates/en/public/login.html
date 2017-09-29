@@ -4,7 +4,9 @@
         <title>Log in - {{ app_name }}</title>
         {% load staticfiles %}
         <link type="text/css" rel="stylesheet" href="{% static "css/login-signup.css" %}"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/login-signup_night.css" %}"/>
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/login-signup_night.css" %}"/>
+        {% endif %}
 {% endblock %}
 {% block body %}
     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-night="{% static "images/login_signup_backgrounds/night/qWdbrsz.jpg" %}" data-day="{% static "images/login_signup_backgrounds/day/rqdnLBq.jpg" %}" id="background-image"/>

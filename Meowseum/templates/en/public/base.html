@@ -28,8 +28,10 @@
         <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension.css" %}">
         <link type="text/css" rel="stylesheet" href="{% static "css/meowseum.css" %}">
         <div id="sitewide-night-mode">
-            <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_night.css" %}">
-            <link type="text/css" rel="stylesheet" href="{% static "css/meowseum_night.css" %}">
+            {% if night_mode %}
+                <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_night.css" %}">
+                <link type="text/css" rel="stylesheet" href="{% static "css/meowseum_night.css" %}">
+            {% endif %}
         </div>
         <noscript>
             <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_noscript.css" %}">

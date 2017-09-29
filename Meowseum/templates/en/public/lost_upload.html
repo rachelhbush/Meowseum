@@ -6,7 +6,9 @@
         {% include "en/public/default_keywords.html" %}
         {% load staticfiles %}
         <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search.css" %}"/>
-        <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search_night.css" %}"/>
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search_night.css" %}"/>
+        {% endif %}
         <script src="{% static "javascript/pet_upload_and_search.js" %}"></script>
 {% endblock %}
 {% block body %}
