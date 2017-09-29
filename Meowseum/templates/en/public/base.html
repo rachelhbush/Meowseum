@@ -25,14 +25,14 @@
         <script src="{% static "javascript/ajax.js" %}"></script>
         <script src="{% static "javascript/meowseum.js" %}"></script>
         <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_customized.css" %}">
-        <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension.css" %}">
-        <link type="text/css" rel="stylesheet" href="{% static "css/meowseum.css" %}">
-        <div id="sitewide-night-mode">
-            {% if night_mode %}
-                <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_night.css" %}">
-                <link type="text/css" rel="stylesheet" href="{% static "css/meowseum_night.css" %}">
-            {% endif %}
-        </div>
+        <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension.css" %}"  class="has-night-mode-version">
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_night.css" %}">
+        {% endif %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/meowseum.css" %}" class="has-night-mode-version">
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/meowseum_night.css" %}">
+        {% endif %}
         <noscript>
             <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_noscript.css" %}">
         </noscript>

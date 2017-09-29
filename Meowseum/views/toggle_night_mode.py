@@ -43,9 +43,6 @@ def get_response_data(night_mode):
     response_data = {}
     if night_mode:
         response_data['.toggle-night-day'] = mark_safe('Night mode<img src="' + static('images/Moon Icon - White.png') + '" alt="Moon icon"/>')
-        response_data['#sitewide-night-mode'] = mark_safe('<link type="text/css" rel="stylesheet" href="' + static('css/bootstrap_extension_night.css') +\
-                                                          '"><link type="text/css" rel="stylesheet" href="' + static('css/meowseum_night.css') + '">')
     else:
         response_data['.toggle-night-day'] = mark_safe('Day mode<img src="' + static('images/Sun Icon.png') + '" alt="Sun icon"/>')
-        response_data['#sitewide-night-mode'] = ''
     return response_data

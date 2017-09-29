@@ -6,7 +6,7 @@
         {% include "en/public/default_keywords.html" %}
         {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
         {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/gallery.css" %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static "css/gallery.css" %}" class="has-night-mode-version"/>
         {% if night_mode %}
             <link type="text/css" rel="stylesheet" href="{% static "css/gallery_night.css" %}" media="(min-width: 1200px)"/>
         {% endif %}

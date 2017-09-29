@@ -1,7 +1,11 @@
 /* Description: Within the "settings" namespace, this script provides functions for sitewide JavaScript settings, such as changing how GIFs behave on gallery pages.
                 Abstracting away sitewide changes will allow someone reading the script for a settings modal to concentrate only on the DOM changes to the modal itself.
-                All functions within this script have a designation for where they are in its hierarchy, unless they are not invoked during the main routine.
-                The main routine attaches all of the JavaScript event handlers when the page loads. */
+                The main routine attaches all of the JavaScript event handlers when the page loads. All functions within this script have a numerical designation for
+                where they are in its hierarchy, unless they are not invoked during the main routine.
+                                
+                Sections for library functions:
+                A. Night mode-related functions
+                B. GIF-related functions */
 
 // Create a namespace for the sitewide JavaScript settings.
 window.settings = window.settings || {};
@@ -30,8 +34,24 @@ var createSettingsObjects = function() {
 createSettingsObjects();
 
 $(document).ready(function() {
-    // This section provides functions affecting the behavior of <video>s on gallery pages, including the user comments page.
-    // To change the GIF behavior, these are also used by buttons scripted by mobile_header.js and laptop_desktop_header.js.
+    // A. This section is for library functions related to toggling night mode CSS and images.
+    //    Because this involves a page load effect, the setting information is on the back end. Updating the settings menus is handled by the AJAX response.
+    settings.turnOnNightMode = function() {
+        // The day mode style sheet uses the ".has-night-mode-version" class, rather than just putting day mode in the file name, in order to allow other site themes in the future.
+        $("link.has-night-mode-version").each(function() {
+            var path = $(this).attr("href");
+            $(this).after('<link type="text/css" rel="stylesheet" href="' + path.substring(0,path.length-4) + '_night.css">')
+        });
+    };
+    
+    settings.turnOnDayMode = function() {
+        $('link[href*="_night.css"]').each(function() {
+            $(this).remove();
+        });
+    };
+    
+    // B. This section provides library functions affecting the behavior of <video>s on gallery pages, including the user comments page.
+    // To change the GIF behavior, these are also used by buttons scripted by the mobile and desktop headers.
     // Functions with a hierarchy number are invoked by settings.prepareGIFs() sitewide when the page loads.
     
     // 1.1 Play all videos in the gallery.
@@ -222,8 +242,7 @@ $(document).ready(function() {
         }
     };
    
-    // 0b. Implement the user's settings.
-    // This is the second part of the main routine, after jQuery loads.
+    // 0b. Implement the user's settings. This is the second part of the main routine, after jQuery loads.
    var customizeSiteWithSettings = function () {
         settings.prepareGIFs();
         refreshWhenWidthPassesTheMobileBreakpoint();

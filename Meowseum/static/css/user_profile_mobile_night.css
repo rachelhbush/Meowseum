@@ -1,0 +1,5 @@
+/* Associated files: user_profile.js, user_profile_desktop.html, user_profile_mobile.html, user_profile_desktop.css, user_profile_mobile.css, user_profile_desktop_night.css, user_profile_mobile_night.css */
+
+#user-profile-mobile main {
+    border-bottom-color: rgb(80,80,80);
+}

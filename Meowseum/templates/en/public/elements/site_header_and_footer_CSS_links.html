@@ -1,13 +1,13 @@
 {% load staticfiles %}
-<link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)"/>
+<link type="text/css" rel="stylesheet" href="{% static "css/header_mobile.css" %}" media="(max-width: 1199px)" class="has-night-mode-version"/>
 {% if night_mode %}
     <link type="text/css" rel="stylesheet" href="{% static "css/header_mobile_night.css" %}" media="(max-width: 1199px)"/>
 {% endif %}
-<link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)"/>
+<link type="text/css" rel="stylesheet" href="{% static "css/header_desktop.css" %}" media="(min-width: 1200px)" class="has-night-mode-version"/>
 {% if night_mode %}
     <link type="text/css" rel="stylesheet" href="{% static "css/header_desktop_night.css" %}" media="(min-width: 1200px)"/>
 {% endif %}
-<link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)"/>
+<link type="text/css" rel="stylesheet" href="{% static "css/footer.css" %}" media="(min-width: 1200px)" class="has-night-mode-version"/>
 {% if night_mode %}
-    <link type="text/css" rel="stylesheet" href="{% static "css/footer-night.css" %}" media="(min-width: 1200px)"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/footer_night.css" %}" media="(min-width: 1200px)"/>
 {% endif %}
