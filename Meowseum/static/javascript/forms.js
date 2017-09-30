@@ -534,7 +534,7 @@ $(document).ready(function() {
         
         if ($("img",this).is("[data-day-active]")) {
             // The rating widget has a day mode version and a night mode version. The selector "img[data-day-active]" will be used to identify images that are for the button itself and not the label.
-            if (settings.layout["nightModeIsOn"]) {
+            if (settings.nightModeIsOn()) {
                 var activeIcon = $("img[data-day-active]",this).data("night-active");
                 var inactiveIcon = $("img[data-day-active]",this).data("night-inactive");
             }
@@ -548,7 +548,7 @@ $(document).ready(function() {
             $(window).on("toggleNightDay",function() {
                 // I don't know why, but activeIcon and inactiveIcon are intially undefined in this event, even though $parent and widgetHasBeenClicked are.
                 // It doesn't matter, because the value will be re-obtained.
-                if (settings.layout["nightModeIsOn"]) {
+                if (settings.nightModeIsOn()) {
                     // For all rating widget buttons which currently have src set to "day-active", set it to "night-active".
                     // For all rating widget buttons which currently have src set to "day-inactive", set it to "night-inactive".
                     $("img[data-day-active]",$parent).each(function() {

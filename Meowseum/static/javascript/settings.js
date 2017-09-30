@@ -58,6 +58,18 @@ $(document).ready(function() {
         });
     };
     
+    // This function detects whether night mode is on by looking at the file names of the style sheets in the header.
+    // Input: None. Output: Boolean.
+    settings.nightModeIsOn = function() {
+        // If a <link> exists in the page with a path ending with "_night.css", then night mode is on.
+        if ($('link[href*="_night.css"]')[0]) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    
     // B. This section provides library functions affecting the behavior of <video>s on gallery pages, including the user comments page.
     // To change the GIF behavior, these are also used by buttons scripted by the mobile and desktop headers.
     // Functions with a hierarchy number are invoked by settings.prepareGIFs() sitewide when the page loads.
