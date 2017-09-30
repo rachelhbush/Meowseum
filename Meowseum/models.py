@@ -2,6 +2,8 @@
 # Class attributes correspond to the header row of a spreadsheet, and object attributes correspond to the record rows.
 # When I want to store all of a model's information related to a certain topic, I store everything related to the topic in another model and use a one-to-one-relationship.
 # Every Upload has a Metadata record. This organization is like nesting a JSON object or dictionary in another.
+# Summary of models for Ctrl+F navigation: Page, ExceptionRecord, TemporaryUpload, Upload, Metadata, Tag, Like, Comment, UserProfile, AbuseReport, Feedback, UserContact, Shelter,
+#                                          Adoption, Lost, Found
 
 from django.db import models
 from django.contrib.auth.models import User
