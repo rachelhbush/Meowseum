@@ -30,9 +30,9 @@ class SignupForm(forms.Form):
     username = forms.CharField(max_length=30,
                                label="",
                                validators=[RegexValidator(r'^[\w.+-]+$', 'Enter a valid username. This value may contain only letters, numbers ' 'and ./+/-/_ characters.'),
-                                           UniquenessValidator(model=User, field_name='username', message="This username has already been taken.")],
+                                           UniquenessValidator(model=User, field_name='username', error_message="This username has already been taken.")],
                                widget=forms.TextInput(attrs={"placeholder":"Username"}))
-    email = forms.EmailField(label="", validators=[UniquenessValidator(model=User, field_name='email', message="This email address has already been used to create an account.")],
+    email = forms.EmailField(label="", validators=[UniquenessValidator(model=User, field_name='email', error_message="This email address has already been used to create an account.")],
                              widget=forms.EmailInput(attrs={"placeholder":"Email"}))
     password = forms.CharField(max_length=30, label="", widget=forms.PasswordInput(attrs={"placeholder":"Password"}))
     password_confirmation = forms.CharField(max_length=30, label="", widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))

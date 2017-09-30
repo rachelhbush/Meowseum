@@ -1,15 +1,17 @@
-# Description: Callable classes and functions in this file validate data for individual fields. Functions are used when the validation has only one
-# parameter. This file will also contain functions that take input where the user is allowed to enter it approximately, and return output in a standard
-# format (process_noun), but none have been added yet. Validation functions are compatible with testing in the Python shell.
+# Description: Functions and callable classes and functions in this file validate data for individual fields. Functions are used when the validator will accept
+# only one argument, the field data itself, and callable classes are used when the validator will accept other arguments. Validation functions are compatible
+# with testing in the Python shell.
 
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ObjectDoesNotExist
 
-# This class automatically fulfills one of the four requirements for making a custom validator. The first remaining requirement is taken care of by adding
-# a "@deconstructible" decorator above the custom class, which makes Django write the deconstruct() method for you. Second, the class must be in a file directly in the app
-# (such as this file). The third remaining requirement is defining __init__(), which is where the subclasses will vary.
+# 1. General. This section of the file is for validators which are very general or useful for all models.
+
+# Subclass from this class when creating a validator which accepts multiple arguments. This class automatically fulfills one of the four requirements for making a custom
+# validator class. The second requirement is adding a line with the "@deconstructible" decorator above the custom class, which makes Django write the deconstruct() method
+# for you. Third, the class must be in a file directly in the app (such as this file). The last requirement is defining __init__(), which is where the subclasses will vary.
 class CustomValidator(object):
     # Custom classes must have a __eq__() method comparing attributes with ==, so after the class is serialized, makemigrations can compare model states.
     def __eq__(self, other):
@@ -20,20 +22,23 @@ class CustomValidator(object):
         return True
 
 @deconstructible
-# Check if a record already exists with this value, for a given model and a given field. Use this class when a model field has unique=True and it
-# has a corresponding field in a Form class, or, in a ModelForm, the field will be overriden, in order to avoid a "IntegrityError: UNIQUE
-# constraint failed" exception.
+# Check if a record already exists with the value the user entered, for a given model and a given field. Use this class when a model field has unique=True and it
+# has a corresponding field in a Form class, or, in a ModelForm, the field will be overriden, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception.
+# Input (as keyword arguments): model, a class. field_name, a string. error_message, a string.
+# Output: None.
 class UniquenessValidator(CustomValidator):
-    def __init__(self, model, field_name, message):
+    def __init__(self, model, field_name, error_message):
         self.model = model
         self.field_name = field_name
-        self.message = message
+        self.error_message = error_message
     def __call__(self, value):
         try:
             record = self.model.objects.get(**{self.field_name:value})
-            raise ValidationError(self.message)
+            raise ValidationError(self.error_message)
         except ObjectDoesNotExist:
             pass
+
+# 2. Model-specific. This section is used to make forms.py shorter.
 
 # This function validates a string of tags for a new upload. Acceptable formats include "blep, catloaf" and "#blep, #catloaf".
 def validate_tags(string):
