@@ -3,7 +3,13 @@
         <div class="row">
             <div class="col-lg-2 col-xl-offset-1" id="logo-container">
         {% load staticfiles %}
-                <a href="{% url "index" %}"><img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" alt="Logo" id="logo"/></a>
+                <a href="{% url "index" %}">
+                    {% if night_mode %}
+                        <img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" alt="Logo" id="logo"/>
+                    {% else %}
+                        <img src="{% static "images/Logo.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" alt="Logo" id="logo"/>
+                    {% endif %}
+                </a>
             </div>
             <div class="col-lg-5 col-xl-3 no-left-gutter">
                 <ul class="nav-btn-list">

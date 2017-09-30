@@ -48,7 +48,17 @@
                 <p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.</p>
             </div>
             <ul id="user-toolbar">
-                <li><a href="#"><button type="button" class="btn btn-default"><img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery</button></a></li>
+                <li>
+                    <a href="#">
+                        <button type="button" class="btn btn-default">
+                            {% if night_mode %}
+                                <img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery
+                            {% else %}
+                                <img src="{% static "images/Album Icon - Black, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery
+                            {% endif %}
+                        </button>
+                    </a>
+                </li>
                 <li><a href="#"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-heart"></span><span id="likes"> Likes</span></button></a></li>
                 <li><a href="#"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Comments</button></a></li>
                 <li><a href="#"><button type="button" class="btn btn-default" id="direct-message"><span class="glyphicon glyphicon-envelope"></span> Direct message</button></a></li>

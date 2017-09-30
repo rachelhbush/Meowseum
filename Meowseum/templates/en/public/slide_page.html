@@ -96,7 +96,16 @@
                         {% if boolean_answers != None %}
                             <ul id="boolean-answers">
                                 {% for entry in boolean_answers %}
-                                    <li><img src="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-night="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-day="{% static "images/Cat Pawprint Icon.png" %}" %}"/>{{ entry }}</li>
+                                    <li>
+                                        {% if night_mode %}
+                                            <img src="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-night="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-day="{% static "images/Cat Pawprint Icon.png" %}" %}"/>{{ entry }}
+                                        {% else %}
+                                            <img src="{% static "images/Cat Pawprint Icon.png" %}" data-night="{% static "images/Cat Pawprint Icon - List marker, Night.png" %}" data-day="{% static "images/Cat Pawprint Icon.png" %}" %}"/>{{ entry }}
+                                        {% endif %}
+                                        {% comment %}
+                                        In this case, the text must be on the same line as the image because browsers tend to interpret the newline as a space.
+                                        {% endcomment %}
+                                    </li>
                                 {% endfor %}
                             </ul>
                         {% endif %}

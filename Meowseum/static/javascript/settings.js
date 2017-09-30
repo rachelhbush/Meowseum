@@ -42,11 +42,19 @@ $(document).ready(function() {
             var path = $(this).attr("href");
             $(this).after('<link type="text/css" rel="stylesheet" href="' + path.substring(0,path.length-4) + '_night.css">')
         });
+        // For each image with different versions for night mode and day mode, overwrite the src attribute's value with the value of the data-night attribute.
+        $("img[data-night]").each(function() {
+            $(this).attr("src",$(this).data("night"));
+        });
     };
     
     settings.turnOnDayMode = function() {
         $('link[href*="_night.css"]').each(function() {
             $(this).remove();
+            $("img[data-night]").each(function() {
+                // For each image with different versions for night mode and day mode, overwrite the src attribute's value with the value of the data-day attribute.
+                $(this).attr("src",$(this).data("day"));
+            });
         });
     };
     

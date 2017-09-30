@@ -9,11 +9,21 @@
         {% endif %}
 {% endblock %}
 {% block body %}
-    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-night="{% static "images/login_signup_backgrounds/night/qWdbrsz.jpg" %}" data-day="{% static "images/login_signup_backgrounds/day/rqdnLBq.jpg" %}" id="background-image"/>
+    {% if night_mode %}
+        <img src="{% static "images/login_signup_backgrounds/night/qWdbrsz.jpg" %}" id="background-image"/>
+    {% else %}
+        <img src="{% static "images/login_signup_backgrounds/day/rqdnLBq.jpg" %}" id="background-image"/>
+    {% endif %}
     <a href="{% url "index" %}" class="close"><span>&times;</span></a>
     <main id="login-page">
         <div id="login-form-box">
-            <a href="{% url "index" %}"><img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" id="logo"/></a>
+            <a href="{% url "index" %}">
+                {% if night_mode %}
+                    <img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" id="logo"/>
+                {% else %}
+                    <img src="{% static "images/Logo.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" id="logo"/>                    
+                {% endif %}
+            </a>
             <form class="bright" method="post" action="{{ login }}">
                 {% csrf_token %}
                 <table>

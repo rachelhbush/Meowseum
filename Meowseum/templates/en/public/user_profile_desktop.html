@@ -40,13 +40,25 @@
                                 <li><a href="#">Interests</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-default"><img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery</button>
+                        <button type="button" class="btn btn-default">
+                            {% if night_mode %}
+                                <img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery
+                            {% else %}
+                                <img src="{% static "images/Album Icon - Black, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery
+                            {% endif %}
+                        </button>
                         <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-heart"></span><span id="likes"> Likes</span></button>
                         <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Comments</button>
                         <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Direct message</button>
                     </div>-->
                     <!-- The following HTML will be used instead if Django detects an animal shelter/rescue group instead of a regular user. -->
-                    <button type="button" class="btn btn-default"><img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery</button>
+                    <button type="button" class="btn btn-default">
+                        {% if night_mode %}
+                            <img src="{% static "images/Album Icon - White, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery
+                        {% else %}
+                            <img src="{% static "images/Album Icon - Black, mini.png" %}" data-night="{% static "images/Album Icon - White, mini.png" %}" data-day="{% static "images/Album Icon - Black, mini.png" %}" alt="Gallery"> Gallery
+                        {% endif %}
+                    </button>
                     <button type="button" class="btn btn-default" id="direct-message"><span class="glyphicon glyphicon-envelope"></span> Direct message</button>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle change-label" data-toggle="dropdown">
