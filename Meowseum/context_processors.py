@@ -15,10 +15,7 @@ def settings_variables(request):
 # Input: request
 # Output: night_mode, a Boolean value for whether night mode is on
 def get_night_mode_status(request):
-    if 'night_mode' in request.session:
-        if request.session['night_mode']:
-            return True
-        else:
-            return False
+    if 'night_mode' in request.session and not request.session['night_mode']:
+        return False
     else:
         return True

@@ -22,18 +22,14 @@ def page(request):
 
 # 1. Toggle night mode in the database.
 # Input: request
-# Output: night_mode, a Boolean value for whether night mode is on after toggling
+# Output: night_mode, a Boolean value for whether night mode is on after toggling.
 def update_database(request):
-    if 'night_mode' in request.session:
-        if request.session['night_mode']:
-            request.session['night_mode'] = False
-        else:
-            request.session['night_mode'] = True
+    if 'night_mode' in request.session and not request.session['night_mode']:
+        request.session['night_mode'] = True
     else:
         # Night mode is the site default, so the first time the user toggles it, turn it off.
         request.session['night_mode'] = False
     return request.session['night_mode']
-
 
 # 2. When night mode is toggled on, day mode HTML snippets will replace night mode HTML snippets in the settings menus and vice versa.
 # This function will be written after update_database() has been tested and verified to work, because it may require dismantling the JavaScript in order to test it.
