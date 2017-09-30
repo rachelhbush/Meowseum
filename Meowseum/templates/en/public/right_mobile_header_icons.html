@@ -1,0 +1,36 @@
+{% comment %}
+Description: This file is for the three icons that are right of the home icon or logo in the mobile layout. Because the home icon changes to a logo at the landscape phone breakpoint, this template is used
+twice by the mobile header.
+{% endcomment %}
+{% load staticfiles %}
+<li>
+    {% if night_mode %}
+        <img src="{% static "images/Pause Icon - White.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
+    {% else %}
+        <img src="{% static "images/Pause Icon.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
+    {% endif %}
+</li>
+<li>
+    {% if night_mode %}
+        <img src="{% static "images/Cat Silhouette - White.png" %}" data-night="{% static "images/Cat Silhouette - White.png" %}" data-day="{% static "images/Cat Silhouette.png" %}" alt="Browse cats icon" class="mobile-icon" data-toggle="modal" data-target="#browsecats-menu"/>
+    {% else %}
+        <img src="{% static "images/Cat Silhouette.png" %}" data-night="{% static "images/Cat Silhouette - White.png" %}" data-day="{% static "images/Cat Silhouette.png" %}" alt="Browse cats icon" class="mobile-icon" data-toggle="modal" data-target="#browsecats-menu"/>
+    {% endif %}
+</li>
+<li>
+    {% if user.is_authenticated %}
+        {% if night_mode %}
+            <img src="{% static "images/Up Icon - White.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
+        {% else %}
+            <img src="{% static "images/Up Icon.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
+        {% endif %}
+    {% else %}
+        <a href="{% url "login" %}">
+            {% if night_mode %}
+                <img src="{% static "images/Up Icon - White.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
+            {% else %}
+                <img src="{% static "images/Up Icon.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
+            {% endif %}
+        </a>
+    {% endif %}
+</li>

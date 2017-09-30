@@ -1,40 +1,10 @@
 <header id="header-mobile">
+    {% load staticfiles %}
     <div class="container-fluid">
         <div class="row visible-xs" id="portrait-smartphone-icons">
             <div class="col-xs-12">
                 <ul class="list-unstyled list-inline">
-                    {% load staticfiles %}
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Gears - White.png" %}" data-night="{% static "images/Gears - White.png" %}" data-day="{% static "images/Gears.png" %}" alt="Settings icon" class="mobile-icon" data-toggle="modal" data-target="#settings-menu"/>
-                        {% else %}
-                            <img src="{% static "images/Gears.png" %}" data-night="{% static "images/Gears - White.png" %}" data-day="{% static "images/Gears.png" %}" alt="Settings icon" class="mobile-icon" data-toggle="modal" data-target="#settings-menu"/>
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if user.is_authenticated %}
-                            {% if night_mode %}
-                                <img src="{% static "images/User Icon - White.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                            {% else %}
-                                <img src="{% static "images/User Icon.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url "login" %}">
-                                {% if night_mode %}
-                                    <img src="{% static "images/User Icon - White.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                                {% else %}
-                                    <img src="{% static "images/User Icon.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                                {% endif %}
-                            </a>
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Search Icon - White.png" %}" data-night="{% static "images/Search Icon - White.png" %}" data-day="{% static "images/Search Icon.png" %}" alt="Search icon" class="mobile-icon" id="search-toggle">
-                        {% else %}
-                            <img src="{% static "images/Search Icon.png" %}" data-night="{% static "images/Search Icon - White.png" %}" data-day="{% static "images/Search Icon.png" %}" alt="Search icon" class="mobile-icon" id="search-toggle">
-                        {% endif %}
-                    </li>
+                    {% include "en/public/left_mobile_header_icons.html" %}
                     <li>
                         <a href="/">
                             {% if night_mode %}
@@ -44,74 +14,14 @@
                             {% endif %}
                         </a>
                     </li>
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Pause Icon - White.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
-                        {% else %}
-                            <img src="{% static "images/Pause Icon.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Cat Silhouette - White.png" %}" data-night="{% static "images/Cat Silhouette - White.png" %}" data-day="{% static "images/Cat Silhouette.png" %}" alt="Browse cats icon" class="mobile-icon" data-toggle="modal" data-target="#browsecats-menu"/>
-                        {% else %}
-                            <img src="{% static "images/Cat Silhouette.png" %}" data-night="{% static "images/Cat Silhouette - White.png" %}" data-day="{% static "images/Cat Silhouette.png" %}" alt="Browse cats icon" class="mobile-icon" data-toggle="modal" data-target="#browsecats-menu"/>
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if user.is_authenticated %}
-                            {% if night_mode %}
-                                <img src="{% static "images/Up Icon - White.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                            {% else %}
-                                <img src="{% static "images/Up Icon.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url "login" %}">
-                                {% if night_mode %}
-                                    <img src="{% static "images/Up Icon - White.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                                {% else %}
-                                    <img src="{% static "images/Up Icon.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                                {% endif %}
-                            </a>
-                        {% endif %}
-                    </li>
+                    {% include "en/public/right_mobile_header_icons.html" %}
                 </ul>
             </div>
         </div>
         <div class="row hidden-xs" id="landscape-smartphone-or-wider-icons">
             <div class="col-lsph-4" id="left-icons-container">
                 <ul class="list-unstyled list-inline">
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Gears - White.png" %}" data-night="{% static "images/Gears - White.png" %}" data-day="{% static "images/Gears.png" %}" alt="Settings icon" class="mobile-icon" data-toggle="modal" data-target="#settings-menu"/>
-                        {% else %}
-                            <img src="{% static "images/Gears.png" %}" data-night="{% static "images/Gears - White.png" %}" data-day="{% static "images/Gears.png" %}" alt="Settings icon" class="mobile-icon" data-toggle="modal" data-target="#settings-menu"/>
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if user.is_authenticated %}
-                            {% if night_mode %}
-                                <img src="{% static "images/User Icon - White.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                            {% else %}
-                                <img src="{% static "images/User Icon.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url "login" %}">
-                                {% if night_mode %}
-                                    <img src="{% static "images/User Icon - White.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                                {% else %}
-                                    <img src="{% static "images/User Icon.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
-                                {% endif %}
-                            </a>
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Search Icon - White.png" %}" data-night="{% static "images/Search Icon - White.png" %}" data-day="{% static "images/Search Icon.png" %}" alt="Search icon" class="mobile-icon" id="search-toggle">
-                        {% else %}
-                            <img src="{% static "images/Search Icon.png" %}" data-night="{% static "images/Search Icon - White.png" %}" data-day="{% static "images/Search Icon.png" %}" alt="Search icon" class="mobile-icon" id="search-toggle">
-                        {% endif %}
-                    </li>
+                    {% include "en/public/left_mobile_header_icons.html" %}
                 </ul>
             </div>
             <div class="col-lsph-4" id="mobile-logo-container">
@@ -119,37 +29,7 @@
             </div>
             <div class="col-lsph-4" id="right-icons-container">
                 <ul class="list-unstyled list-inline">
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Pause Icon - White.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
-                        {% else %}
-                            <img src="{% static "images/Pause Icon.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if night_mode %}
-                            <img src="{% static "images/Cat Silhouette - White.png" %}" data-night="{% static "images/Cat Silhouette - White.png" %}" data-day="{% static "images/Cat Silhouette.png" %}" alt="Browse cats icon" class="mobile-icon" data-toggle="modal" data-target="#browsecats-menu"/>
-                        {% else %}
-                            <img src="{% static "images/Cat Silhouette.png" %}" data-night="{% static "images/Cat Silhouette - White.png" %}" data-day="{% static "images/Cat Silhouette.png" %}" alt="Browse cats icon" class="mobile-icon" data-toggle="modal" data-target="#browsecats-menu"/>
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if user.is_authenticated %}
-                            {% if night_mode %}
-                                <img src="{% static "images/Up Icon - White.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                            {% else %}
-                                <img src="{% static "images/Up Icon.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url "login" %}">
-                                {% if night_mode %}
-                                    <img src="{% static "images/Up Icon - White.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                                {% else %}
-                                    <img src="{% static "images/Up Icon.png" %}" data-night="{% static "images/Up Icon - White.png" %}" data-day="{% static "images/Up Icon.png" %}" alt="Upload icon" class="mobile-icon" data-toggle="modal" data-target="#upload-menu">
-                                {% endif %}
-                            </a>
-                        {% endif %}
-                    </li>
+                    {% include "en/public/right_mobile_header_icons.html" %}
                 </ul>
             </div>
         </div>

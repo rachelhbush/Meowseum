@@ -1,0 +1,36 @@
+{% comment %}
+Description: This file is for the three icons that are left of the home icon or logo in the mobile layout. Because the home icon changes to a logo at the landscape phone breakpoint, this template is used
+twice by the mobile header.
+{% endcomment %}
+{% load staticfiles %}
+<li>
+    {% if night_mode %}
+        <img src="{% static "images/Gears - White.png" %}" data-night="{% static "images/Gears - White.png" %}" data-day="{% static "images/Gears.png" %}" alt="Settings icon" class="mobile-icon" data-toggle="modal" data-target="#settings-menu"/>
+    {% else %}
+        <img src="{% static "images/Gears.png" %}" data-night="{% static "images/Gears - White.png" %}" data-day="{% static "images/Gears.png" %}" alt="Settings icon" class="mobile-icon" data-toggle="modal" data-target="#settings-menu"/>
+    {% endif %}
+</li>
+<li>
+    {% if user.is_authenticated %}
+        {% if night_mode %}
+            <img src="{% static "images/User Icon - White.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
+        {% else %}
+            <img src="{% static "images/User Icon.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
+        {% endif %}
+    {% else %}
+        <a href="{% url "login" %}">
+            {% if night_mode %}
+                <img src="{% static "images/User Icon - White.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
+            {% else %}
+                <img src="{% static "images/User Icon.png" %}" data-night="{% static "images/User Icon - White.png" %}" data-day="{% static "images/User Icon.png" %}" alt="User profile icon" class="mobile-icon" data-toggle="modal" data-target="#profile-menu">
+            {% endif %}
+        </a>
+    {% endif %}
+</li>
+<li>
+    {% if night_mode %}
+        <img src="{% static "images/Search Icon - White.png" %}" data-night="{% static "images/Search Icon - White.png" %}" data-day="{% static "images/Search Icon.png" %}" alt="Search icon" class="mobile-icon" id="search-toggle">
+    {% else %}
+        <img src="{% static "images/Search Icon.png" %}" data-night="{% static "images/Search Icon - White.png" %}" data-day="{% static "images/Search Icon.png" %}" alt="Search icon" class="mobile-icon" id="search-toggle">
+    {% endif %}
+</li>
