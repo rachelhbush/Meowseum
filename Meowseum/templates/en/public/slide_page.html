@@ -126,7 +126,7 @@
                 </div>
             </main>
             <section id="tags">
-                <form method="post" action="">
+                <form method="post" action="{% url "add_tag" relative_url %}">
                     {% csrf_token %}
                     {{ tag_form.non_field_errors }}
                     {{ tag_form.name.errors }}
@@ -137,13 +137,13 @@
                             {% endfor %}
                             <div class="inline-block">
                                 {{ tag_form.name }}
-                                <button type="submit" name="submission_type" value="tag" class="btn btn-primary">Add tag</button>
+                                <button type="submit" class="btn btn-primary">Add tag</button>
                             </div>
                         </ul>
                     {% else %}
                         <div class="text-center">
                             {{ tag_form.name }}
-                            <button type="submit" name="submission_type" value="tag" class="btn btn-primary">Add tag</button>
+                            <button type="submit" class="btn btn-primary">Add tag</button>
                         </div>
                     {% endif %}
                 </form>

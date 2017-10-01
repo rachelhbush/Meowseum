@@ -17,8 +17,8 @@ from Meowseum.common_view_functions import ajaxWholePageRedirect
     
 # 0. Main function. Input: request. relative_url refers to a unique code which appears in the URL.
 def page(request, relative_url):
-    # First, interpret the URL.
-    template_variables = {}
+    # First, interpret the URL. Include the relative URL as a template variable in order to split forms into multiple views.
+    template_variables = {'relative_url':relative_url}
     if " " in relative_url:
         # This allows desktop users to share the slide by pasting the title onto the end of the prefix, while keeping the URL legible in the navigation bar.
         # Most of the time, users will be browsing and sharing using a URL with underscores.
@@ -117,24 +117,6 @@ def process_data_from_buttons(request, upload, uploader, viewer, template_variab
             new_comment_record.save()
         else:
             template_variables['comment_form'] = comment_form
-    elif submission_type == 'tag':
-        # Set up the form where any user can add a new tag to the slide.
-        tag_form = TagForm(request.POST)
-        if tag_form.is_valid():
-            name = tag_form.cleaned_data['name'].lstrip("#").lower()
-            try:
-                # If the tag does exist, then associate this upload record with it.
-                existing_tag = Tag.objects.get(name=name)
-                existing_tag.uploads.add(upload)
-                existing_tag.save()
-            except ObjectDoesNotExist:
-                # If the tag doesn't exist, create a new one and add the most recent upload as the first record.
-                new_tag = Tag(name=name)
-                new_tag.save()
-                new_tag.uploads.add(upload)
-                new_tag.save()
-        else:
-            template_variables['tag_form'] = tag_form
     else:
         if 'delete_comment' in submission_type and template_variables['can_delete_comments']:
             comment_id = int(submission_type.lstrip('delete_comment_'))
