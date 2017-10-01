@@ -86,7 +86,7 @@
                 {% if upload.adoption or upload.lost or upload.found %}
                     <div id="pet-profile">
                         {% for i in merged_field_values|length|times %}
-                            {% if merged_field_values|index:i != '' %}
+                            {% if merged_field_values|index:i != '' and merged_field_values|index:i != None %}
                                 <div class="profile-unit">
                                     <label>{{ merged_field_labels|index:i }}:</label>
                                     <div>{{ merged_field_values|index:i }}</div>
