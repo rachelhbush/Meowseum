@@ -82,10 +82,7 @@ def page(request, relative_url):
             return ajaxWholePageRedirect(request, reverse('login') + "?next="+ urlencode(request.path))
 
     template_variables = get_surrounding_slide_links(request, upload, template_variables)
-    if request.user.is_authenticated():
-        template_variables = get_comments_from_unmuted_users(template_variables, upload, viewer)
-    else:
-        template_variables = get_comments_from_unmuted_users(template_variables, upload)
+    template_variables['comments_from_unmuted_users'] = get_comments_from_unmuted_users(request, upload)
     template_variables = get_unique_views(request, relative_url, template_variables)
 
     upload_category = upload.get_category()
@@ -160,18 +157,17 @@ def get_surrounding_slide_links(request, upload, template_variables):
     return template_variables
 
 # 3. Retrieve the set of comments for the upload while excluding comments from muted users.
-def get_comments_from_unmuted_users(template_variables, upload, viewer=None):
-    if viewer == None:
-        # The user is logged out, so no users are muted.
-        template_variables['comments_from_unmuted_users'] = upload.comments.all()
-    else:
+def get_comments_from_unmuted_users(request, upload):
+    if request.user.is_authenticated():
         # Because muting is stored on UserProfile and the commenter uses the User object, retrieve an array of User objects.
         muted_users = []
-        for profile in viewer.muting.all():
+        for profile in request.user.user_profile.muting.all():
             muted_users = muted_users + [profile.user_auth]
         comments_from_unmuted_users = upload.comments.exclude(commenter__in=muted_users)
-        template_variables['comments_from_unmuted_users'] = comments_from_unmuted_users
-    return template_variables
+    else:
+        # The user is logged out, so no users are muted.
+        comments_from_unmuted_users = upload.comments.all()
+    return comments_from_unmuted_users
 
 # 4. Increment the hit count and get an estimate of unique hits, using settings for the django-hitcounts add-on specified in the site's settings.py file.
 # Input: request, the relative_url argument, template_variables

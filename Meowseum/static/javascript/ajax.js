@@ -216,8 +216,9 @@ $(document).ready(function() {
     // E. This is a library function which is used when the server responds with an array of arrays with three entries: [jQuery selector, HTML, method].
     // The method describes the way in which the HTML snippets will be inserted into the DOM, in relation to the elements selected by the corresponding selector.
     // It accepts a string for any of the standard jQuery methods for DOM manipulation, such as 'html' or 'load' for replacing the content of the selected element,
-    // or 'prependTo' for inserting the HTML at the beginning of the content of the selected element.
-    ajax.insertAJAXHTML = function(response) {
+    // or 'prependTo' for inserting the HTML at the beginning of the content of the selected element. If the method is one which only removes a DOM element, then
+    // use an empty string for the HTML_snippet argument.
+    ajax.manipulateDOM = function(response) {
         for (var i=0; i < response.length; i++) {
             var selector = response[i][0];
             var HTML_snippet = response[i][1];
@@ -234,9 +235,12 @@ $(document).ready(function() {
             else if (method == 'insertBefore') {
                 $(selector).insertBefore(HTML_snippet);
             }
-            else {
-                if (method == 'insertAfter') {
+            else if (method == 'insertAfter') {
                     $(selector).insertAfter(HTML_snippet);
+            }
+            else {
+                if (method == 'remove') {
+                    $(selector).remove();
                 }
             }
         }
@@ -244,7 +248,7 @@ $(document).ready(function() {
     
     // 3. This function sets the behavior for .ajax-form, a custom class for a submit button which indicates its form works with AJAX on the server-side.
     ajax.forms = function() {
-        $(".ajax-form").submitFormDataOnClickThen(ajax.insertAJAXHTML);
+        $(".ajax-form").submitFormDataOnClickThen(ajax.manipulateDOM);
     };
     
     // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses a JSON object to insert HTML into the DOM.
