@@ -1145,12 +1145,11 @@ div.radio-btn:last-of-type, div.check-btn:last-of-type, .rating-widget-btn:last-
     margin-right: 0px;
 }
 
-/* 5. Style the site's Bootstrap buttons. Then style the basic structure (header, body, footer, buttons) of the site's mobile forms.
-   A second set of rules lets them be re-used on tablets and larger devices as modals. */
+/* 5. Style the site's Bootstrap buttons. */
 
-/* Make Bootstrap buttons flatter. Several months into making the site, most Bootstrap buttons across this site had this height, and the ones that didn't set another height explicitly.
-   As individual pages are updated, their copy of this rule will be removed. */
 .btn {
+    /* Make Bootstrap buttons flatter. Several months into making the site, most Bootstrap buttons across this site had this height, and the ones that didn't set another height explicitly.
+       As individual pages are updated, their copy of this rule will be removed. */
     height: 30px;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -1159,8 +1158,9 @@ div.radio-btn:last-of-type, div.check-btn:last-of-type, .rating-widget-btn:last-
     /* Get rid of Chrome's rectangular outline when you left- or right-click a Bootstrap button. */
     outline:none !important; 
 }
-/* Darken the primary buttons compared to the Bootstrap default. */
+
 .btn-primary {
+  /* Darken the primary buttons compared to the Bootstrap default. */
   background-color: rgb(0,116,197);
 }
 .btn-primary:hover {
@@ -1170,12 +1170,24 @@ div.radio-btn:last-of-type, div.check-btn:last-of-type, .rating-widget-btn:last-
     /* Make the border closer to the color of the button, instead of a black outline. This color is already used by this button for the .active border. */
     border-color: rgb(32,77,116);
 }
-/* Keep Bootstrap primary buttons that are pressed from having an even darker color when you initially press them, and from appearing almost black when you hover over them.
-   They will stay the same color as when they aren't being interacted with. */
 .btn-primary.active:focus, .btn-primary.active:hover {
+    /* Keep Bootstrap primary buttons that are pressed from having an even darker color when you initially press them, and from appearing almost black when you hover over them.
+   They will stay the same color as when they aren't being interacted with. */
     background-color: rgb(40,96,144);
 }
 
+button[type="submit"].action-only, input[type="submit"].action-only {
+    /* This class is for a submit button in which only the content is intended to be visible, unlike the default browser styling or the default Bootstrap styling.
+       The default pointer cursor styling will still apply. Without using JavaScript, this is the only way to allow a non-button to submit the form when the user clicks it. */
+    background-color: transparent;
+    border: none;
+}
+button[type="submit"].action-only:focus, input[type="submit"].action-only:focus {
+    outline: none;
+}
+
+/* 6. Style the site's the basic structure (header, body, footer, buttons) of the site's mobile forms.
+   A second set of rules lets them be re-used on tablets and larger devices as modals. */
 
 .form .modal-dialog {
     /* Most forms will be visited directly from the site's navigation system. If the viewport is wider than 768px, a modal with the following width will pop up. */
@@ -1391,7 +1403,7 @@ main.form > img, main.form > form > img, main.form > video, main.form > form > v
     }
 }
 
-/* 6. Styling JavaScript widgets, the follow button, the site's dropdown menus, and pagination. */
+/* 7. Styling JavaScript widgets, the follow button, the site's dropdown menus, and pagination. */
 
 .rollover-content {
     /* This class is for rollover content that works by showing a separate element in the HTML while hiding the .default-content class. */

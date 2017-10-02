@@ -142,28 +142,26 @@
                     </div>
                 </form>
                 {% if comments_from_unmuted_users.count > 0 %}
-                    {% if can_delete_comments %}
-                        <form id="posted-comments" class="deletable" method="post" action="">
-                            {% for comment in comments_from_unmuted_users %}
-                                <div class="comment">
+                    <div id="posted-comments">
+                        {% for comment in comments_from_unmuted_users %}
+                            {% if can_delete_comments %}
+                                <form class="comment deletable" method="post" action="{% url "delete_comment" comment.id %}">
                                     {% csrf_token %}
                                     <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
-                                    <span class="glyphicon glyphicon-trash" data-name="submission_type" data-value="delete_comment_{{ comment.id }}"></span>
-                                </div>
-                            {% endfor %}
-                        </form>
-                    {% else %}
-                        <div id="posted-comments">
-                            {% for comment in comments_from_unmuted_users %}
+                                    <button type="submit" class="action-only">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </form>
+                            {% else %}
                                 <div class="comment">
                                     {% comment %}
                                         The filter's setting will merge a paragraph with the following paragraph if it isn't at least one line long.
                                     {% endcomment %}
                                     <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </section>
             {% endif %}

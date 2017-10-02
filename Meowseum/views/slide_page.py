@@ -106,23 +106,18 @@ def process_data_from_buttons(request, upload, uploader, viewer, template_variab
         return HttpResponseRedirect( reverse('like', args=[relative_url]))
     elif submission_type == 'follow':
         return HttpResponseRedirect( reverse('follow', args=[upload.uploader.username]) + "?next="+ urlencode(request.path))
-    elif submission_type == 'comment':
-        # Set up the form where the user can comment on the slide.
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            # Save the comment form.
-            new_comment_record = comment_form.save(commit=False)
-            new_comment_record.commenter = request.user
-            new_comment_record.upload = upload
-            new_comment_record.save()
-        else:
-            template_variables['comment_form'] = comment_form
     else:
-        if 'delete_comment' in submission_type and template_variables['can_delete_comments']:
-            comment_id = int(submission_type.lstrip('delete_comment_'))
-            comment = Comment.objects.get(id=comment_id)
-            if not comment.commenter.is_staff:
-                comment.delete()
+        if submission_type == 'comment':
+            # Set up the form where the user can comment on the slide.
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                # Save the comment form.
+                new_comment_record = comment_form.save(commit=False)
+                new_comment_record.commenter = request.user
+                new_comment_record.upload = upload
+                new_comment_record.save()
+            else:
+                template_variables['comment_form'] = comment_form
     return template_variables
 
 # 2. Store into 'previous_slide' and 'next_slide' the relative URLs for the neighboring slides in the queryset which the user has most recently been looking at.

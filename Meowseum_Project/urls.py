@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^slide/(?P<relative_url>.+)/like$', 'Meowseum.views.like.page', name="like"),
     url(r'^slide/(?P<relative_url>.+)/delete_upload$', 'Meowseum.views.delete_upload.page', name="delete_upload"),
     url(r'^slide/(?P<relative_url>.+)/add_tag$', 'Meowseum.views.add_tag.page', name="add_tag"),
+    url(r'^delete_comment/(?P<comment_id>.+)/$', 'Meowseum.views.delete_comment.page', name="delete_comment"),
     url(r'^user/(?P<username>.+)/follow$', 'Meowseum.views.follow.page', name="follow"),
     url(r'^user/(?P<username>.+)/mute$', 'Meowseum.views.mute.page', name="mute"),
     url(r'^user/(?P<username>.+)/ban$', 'Meowseum.views.ban.page', name="ban"),
