@@ -11,7 +11,7 @@ $(document).ready(function() {
     // Create a namespace for the sitewide AJAX functions.
     window.ajax = window.ajax || {};
     
-    // A.3. Test that a given url is a same-origin URL. The URL could be relative, scheme relative, or absolute.
+    // A.3.1. Test that a given url is a same-origin URL. The URL could be relative, scheme relative, or absolute.
     var sameOrigin = function(url) {
             var host = document.location.host; // host + port
             var protocol = document.location.protocol;
@@ -24,12 +24,12 @@ $(document).ready(function() {
                 !(/^(\/\/|http:|https:).*/.test(url));
    };
     
-    // A.2. Return whether the HTTP method is one which does not require CSRF protection.
+    // A.2.1. Return whether the HTTP method is one which does not require CSRF protection.
     var csrfSafeMethod = function(method) {
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     };
     
-    // A.1. This function gets the cookie with a given name.
+    // A.1.1. This function gets the cookie with a given name.
     var getCookie = function(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -46,9 +46,9 @@ $(document).ready(function() {
         return cookieValue;
     };
     
-    // A. This library function is invoked by every Django AJAX function. It implements CSRF protection without having to include a CSRF token in the HTML. The function allows AJAX requests from elements that are not nested
-    // inside a <form>, which makes coding the layout easier as long as the developer is willing to skip support for users with JavaScript disabled. See the Django documentation for an explanation of how it works:
-    // https://docs.djangoproject.com/en/1.11/ref/csrf/
+    // A.1. This library function is invoked by every Django AJAX function. It implements CSRF protection without having to include a CSRF token in the HTML. The function allows AJAX requests from elements that are
+    // not nested inside a <form>, which makes coding the layout easier as long as the developer is willing to skip support for users with JavaScript disabled. See the Django documentation for an explanation of how
+    // it works: https://docs.djangoproject.com/en/1.11/ref/csrf/
     ajax.setupXCSRFTokenHeader = function() {
         var csrftoken = getCookie('csrftoken');
         // Create a header with the csrftoken.
@@ -64,7 +64,7 @@ $(document).ready(function() {
         });
     };
     
-    // B. This library function improves on jQuery's $.post() function in several ways. First, it handles Django's CSRF token. Second, if a server error occurs, it sends the error to the development console.
+    // A. This library function improves on jQuery's $.post() function in three ways. First, it handles Django's CSRF token. Second, if a server error occurs, it sends the error to the development console.
     // Third, it supplies a standard way for the server to indicate that the JavaScript should redirect the user to another URL, by using the JSON object {'status':0, 'message': "Redirecting", 'url':url}.
     // Input: url, data, success, dataType. The last three arguments are optional.
     // The success callback can be entered as the second argument without supplying data to the server.
@@ -84,6 +84,7 @@ $(document).ready(function() {
             
             if (arguments.length == 2) {
                 if (Object.prototype.toString.call(arg2) == "[object Function]") {
+                    // url, success
                     options["success"] = function(response, textStatus, jqXHR) {
                             // This is the function which handles a successful response. Depending on the response, it will either redirect the user or it will invoke the "success" function object.
                             var type = typeof response;
@@ -97,10 +98,13 @@ $(document).ready(function() {
                     };
                 }
                 else {
+                    // url, data
                     options["data"] = arg2;
                 }
             }
             if (arguments.length >= 3 && Object.prototype.toString.call(arg2) != "[object Function]") {
+                // url, data, success
+                options["data"] = arg2;
                 options["success"] = function(response, textStatus, jqXHR) {
                             // This is the function which handles a successful response. Depending on the response, it will either redirect the user or it will invoke the "success" function object.
                             var type = typeof response;
@@ -120,7 +124,7 @@ $(document).ready(function() {
             $.ajax(options);
     };
     
-    // C.2. Input: An element which the user clicks to send its name, value, data-name, and data-value values to the server.
+    // B.2. Input: An element which the user clicks to send its name, value, data-name, and data-value values to the server.
     // Output: A JSON object. Its keys are from name and data-name and its values are from value and data-value.
     var getDataFromButtonAttributes = function(element) {
         // Create an empty JSON object into which the function will collect data to be sent to the server from various sources. $.ajax() will turn it into a querystring before sending it to the server.
@@ -149,7 +153,7 @@ $(document).ready(function() {
         return data;
     };
     
-    // C.1. Input: An element which the user clicks to communicate to the server to send data solely from its own attributes.
+    // B.1. Input: An element which the user clicks to communicate to the server to send data solely from its own attributes.
     // The function will retrieve the URL from data-ajax-url attribute on the clickable element. If this attribute is absent, the function falls back to retrieving the URL
     // from the element's closest <form> ancestor.
     // Output: URL string
@@ -162,22 +166,37 @@ $(document).ready(function() {
         return url;
     };
     
-    // C. This AJAX method is a higher order function for an element which is the only element in a form, aside from Django's CSRF token. The element has all the data in name, value, data-name,
-    // or data-value attributes, or the element has its own view for processing so no data is necessary. The element can be a button, but it can also be something like a Bootstrap dropdown option.
-    // The element is wrapped in a <form> for compatibility with JavaScript being disabled. The method submits to the path specified by data-ajax-url and, without it, defaults to the same path as the
-    // form's action attribute. Using a separate page for AJAX allows saving computation time by not re-rendering the whole page. The element will submit the data when clicked using the POST method and
-    // then execute the callback function. data-name and data-value allow a comma-separated series of values, as in 'data-name="name1, name2"'.
+    // B. This AJAX method is a higher order function for an element which is the only element in a form, aside from Django's CSRF token. In summary, the method sends the data on the element's attributes
+    // to the server and then executes the callback function.
+    //
+    // The element has all the data in name, value, data-name, or data-value attributes, or the element has its own view for processing so no data is necessary. The element can be a button, but it can also
+    // be something like a Bootstrap dropdown option. The element is wrapped in a <form> for compatibility with JavaScript being disabled. The method submits to the path specified by data-ajax-url and, without it,
+    // defaults to the same path as the form's action attribute. Using a separate page for AJAX allows saving computation time by not re-rendering the whole page. The element will submit the data when clicked using
+    // the POST method and then execute the callback function. data-name and data-value allow a comma-separated series of values, as in 'data-name="name1, name2"'.
     $.fn.submitOwnDataOnClickThen = function(success) {
         $(this, "form").click(function(e) {
             e.preventDefault();
             
-            url = getURLFromAttributes(this);
-            data = getDataFromButtonAttributes(this);
+            var url = getURLFromAttributes(this);
+            var data = getDataFromButtonAttributes(this);
             ajax.post(url, data, success);
         });
     };
     
-    // D. This is a library function which is used when the server responds with a JSON object, e.g. {selector1: HTML1, selector2: HTML2}. The keys consist of jQuery
+    // C. This AJAX method is a higher order function for a submit button which sends its form's data to the server with AJAX, then executes a callback function.
+    $.fn.submitFormDataOnClickThen = function(success) {
+        $(this, "form").click(function(e) {
+            e.preventDefault();
+            
+            var $form = $(this).closest("form");
+            var url = $form.attr("action");
+            // Gather data from form elements within the form into a querystring to submit to the server.
+            var data = $form.serialize();
+            ajax.post(url, data, success);
+        });
+    };
+    
+    // D. This library function is used when the server responds with a JSON object, e.g. {selector1: HTML1, selector2: HTML2}. The keys consist of jQuery
     // selectors and the values consist of HTML snippets to load into each corresponding jQuery set. The built-in .load() method is useful for loading HTML within
     // a single frame like a modal, but this function is more useful for interactions which insert HTML into multiple places throughout the DOM.
     // When I use this, most of my selectors are classes, because elements that are otherwise unique may have a hidden duplicate for the sake of responsiveness.
@@ -194,13 +213,10 @@ $(document).ready(function() {
         }
     };
     
-
-    
     // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses a JSON object to insert HTML into the DOM.
     // Use with .ajax-button the attributes data-ajax-url, name, value, data-name, and/or data-value.
     ajax.loadButtons = function() {
         $(".ajax-btn").submitOwnDataOnClickThen(ajax.loadAJAXHTML);
-        
     };
     
     // 1.1. After submitting a form in a modal, this function will load the response as HTML. To instruct the function to redirect to another page (the whole page, not the frame of the modal),
