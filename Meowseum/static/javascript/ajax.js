@@ -185,10 +185,10 @@ $(document).ready(function() {
     
     // C. This AJAX method is a higher order function for a submit button which sends its form's data to the server with AJAX, then executes a callback function.
     $.fn.submitFormDataOnClickThen = function(success) {
-        $(this, "form").click(function(e) {
+        $(".ajax-form").submit(function(e) {
             e.preventDefault();
             
-            var $form = $(this).closest("form");
+            var $form = $(this);
             var url = $form.attr("action");
             // Gather data from form elements within the form into a querystring to submit to the server.
             var data = $form.serialize();
@@ -211,6 +211,40 @@ $(document).ready(function() {
                 }
             }
         }
+    };
+
+    // E. This is a library function which is used when the server responds with an array of arrays with three entries: [jQuery selector, HTML, method].
+    // The method describes the way in which the HTML snippets will be inserted into the DOM, in relation to the elements selected by the corresponding selector.
+    // It accepts a string for any of the standard jQuery methods for DOM manipulation, such as 'html' or 'load' for replacing the content of the selected element,
+    // or 'prependTo' for inserting the HTML at the beginning of the content of the selected element.
+    ajax.insertAJAXHTML = function(response) {
+        for (var i=0; i < response.length; i++) {
+            var selector = response[i][0];
+            var HTML_snippet = response[i][1];
+            var method = response[i][2];
+            if (method == 'html' || method == 'load') {
+                $(selector).html(HTML_snippet);
+            }
+            else if (method == 'appendTo') {
+                $(selector).appendTo(HTML_snippet);
+            }
+            else if (method == 'prependTo') {
+                $(selector).prependTo(HTML_snippet);
+            }
+            else if (method == 'insertBefore') {
+                $(selector).insertBefore(HTML_snippet);
+            }
+            else {
+                if (method == 'insertAfter') {
+                    $(selector).insertAfter(HTML_snippet);
+                }
+            }
+        }
+    };
+    
+    // 3. This function sets the behavior for .ajax-form, a custom class for a submit button which indicates its form works with AJAX on the server-side.
+    ajax.forms = function() {
+        $(".ajax-form").submitFormDataOnClickThen(ajax.insertAJAXHTML);
     };
     
     // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses a JSON object to insert HTML into the DOM.
@@ -258,6 +292,7 @@ $(document).ready(function() {
     var main = function(){
         ajax.setupModals();
         ajax.loadButtons();
+        ajax.forms();
     };
     main();
 });

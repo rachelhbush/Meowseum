@@ -126,26 +126,8 @@
                 </div>
             </main>
             <section id="tags">
-                <form method="post" action="{% url "add_tag" relative_url %}">
-                    {% csrf_token %}
-                    {{ tag_form.non_field_errors }}
-                    {{ tag_form.name.errors }}
-                    {% if upload.tags.count > 0 %}
-                        <ul id="tag-list">
-                            {% for tag in upload.tags.all %}
-                                <li><a class="emphasized" href="{% url "tag_gallery" tag %}">#{{ tag }}</a></li>
-                            {% endfor %}
-                            <div class="inline-block">
-                                {{ tag_form.name }}
-                                <button type="submit" class="btn btn-primary">Add tag</button>
-                            </div>
-                        </ul>
-                    {% else %}
-                        <div class="text-center">
-                            {{ tag_form.name }}
-                            <button type="submit" class="btn btn-primary">Add tag</button>
-                        </div>
-                    {% endif %}
+                <form method="post" action="{% url "add_tag" relative_url %}" class="ajax-form">
+                    {% include "en/public/slide_page_tag_form.html" %}
                 </form>
             </section>
             {% if not upload.uploader_has_disabled_comments %}
