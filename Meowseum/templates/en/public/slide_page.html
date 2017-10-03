@@ -131,39 +131,39 @@
                 </form>
             </section>
             {% if not upload.uploader_has_disabled_comments %}
-            <section id="comments">
-                <form method="post" action="">
-                    {% csrf_token %}
-                    {{ comment_form.non_field_errors }}
-                    {{ comment_form.text.errors }}
-                    {{ comment_form.text }}
-                    <div id="reply-footer">
-                        <button type="submit" name="submission_type" value="comment" class="btn btn-primary"><div class="reply-btn-label">Submit</div></button>
-                    </div>
-                </form>
-                {% if comments_from_unmuted_users.count > 0 %}
-                    <div id="posted-comments">
-                        {% for comment in comments_from_unmuted_users %}
-                            {% if can_delete_comments %}
-                                <form class="comment deletable ajax-form" method="post" action="{% url "delete_comment" comment.id %}">
-                                    {% csrf_token %}
-                                    <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
-                                    <button type="submit" class="action-only">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                </form>
-                            {% else %}
-                                <div class="comment">
-                                    {% comment %}
-                                        The filter's setting will merge a paragraph with the following paragraph if it isn't at least one line long.
-                                    {% endcomment %}
-                                    <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </section>
+                <section id="comments">
+                    <form method="post" action="{% url "add_comment" relative_url %}">
+                        {% csrf_token %}
+                        {{ comment_form.non_field_errors }}
+                        {{ comment_form.text.errors }}
+                        {{ comment_form.text }}
+                        <div id="reply-footer">
+                            <button type="submit" name="submission_type" value="comment" class="btn btn-primary"><div class="reply-btn-label">Submit</div></button>
+                        </div>
+                    </form>
+                    {% if comments_from_unmuted_users.count > 0 %}
+                        <div id="posted-comments">
+                            {% for comment in comments_from_unmuted_users %}
+                                {% if can_delete_comments %}
+                                    <form class="comment deletable ajax-form" method="post" action="{% url "delete_comment" comment.id %}">
+                                        {% csrf_token %}
+                                        <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
+                                        <button type="submit" class="action-only">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <div class="comment">
+                                        {% comment %}
+                                            The filter's setting will merge a paragraph with the following paragraph if it isn't at least one line long.
+                                        {% endcomment %}
+                                        <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </section>
             {% endif %}
             <section id="share">
                 <p class="text-center">Tap a link to copy it.</p>
