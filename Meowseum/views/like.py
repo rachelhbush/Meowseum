@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import urlencode
 
+# 0. Main function.
 def page(request, relative_url):    
     if request.user.is_authenticated():
         try:
@@ -17,15 +18,7 @@ def page(request, relative_url):
             # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
             return HttpResponseRedirect(reverse('index'))
          
-        try:
-            # Try to obtain a Like record for this upload by this user.
-            like_record = Like.objects.get(upload=upload, liker=request.user)
-            # If there is a matching Like record, delete it.
-            like_record.delete()
-        except ObjectDoesNotExist:
-            # If there isn't a matching Like record, create it.
-            like_record = Like(upload=upload, liker=request.user)
-            like_record.save()
+        like_or_unlike(upload, request.user)
 
         if request.is_ajax():
             # If the request is AJAX, then knowing the request is successful, the Like count can be incremented or decremented client-side, rather than calculating it again.
@@ -38,3 +31,16 @@ def page(request, relative_url):
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the slide page after the user logs in.
         return ajaxWholePageRedirect(request, reverse('login') + "?next=" + urlencode(reverse('slide_page', args=[relative_url])))
+
+# 1. Update the database to show the user has liked or has unliked the upload.
+# Input: upload. request_user, a record for the User making the request. Output: None.
+def like_or_unlike(upload, request_user):
+    try:
+        # Try to obtain a Like record for this upload by this user.
+        like_record = Like.objects.get(upload=upload, liker=request_user)
+        # If there is a matching Like record, delete it.
+        like_record.delete()
+    except ObjectDoesNotExist:
+        # If there isn't a matching Like record, create it.
+        like_record = Like(upload=upload, liker=request_user)
+        like_record.save()

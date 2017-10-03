@@ -99,11 +99,8 @@ def process_data_from_buttons(request, upload, uploader, viewer, template_variab
     # First, redirect to separate separate views. This happens for users with JavaScript disabled, as well as the rare user who performs an action via the URL bar.
     # The redirects use a querystring to record the URL. Hidden form controls won't work because the submitted form is being sent back to this view, or else there wouldn't
     # be a neeed for the redirects.
-    if submission_type == 'like':
-        return HttpResponseRedirect( reverse('like', args=[relative_url]))
-    else:
-        if submission_type == 'follow':
-            return HttpResponseRedirect( reverse('follow', args=[upload.uploader.username]) + "?next="+ urlencode(request.path))
+    if submission_type == 'follow':
+        return HttpResponseRedirect( reverse('follow', args=[upload.uploader.username]) + "?next="+ urlencode(request.path))
     return template_variables
 
 # 2. Store into 'previous_slide' and 'next_slide' the relative URLs for the neighboring slides in the queryset which the user has most recently been looking at.

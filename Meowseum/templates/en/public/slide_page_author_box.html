@@ -4,7 +4,7 @@
     The author box is displayed below the description on a mobile device only when the upload is for Adoption, Lost, or Found.
     This required several copies in the slide_page.html template, so I separated the element into an included template.
 {% endcomment %}
-<form method="post" action="" id="author-box">
+<div id="author-box">
     {% csrf_token %}
     {% comment %}
         This is where the avatar will go when the back end for it is implemented.
@@ -41,12 +41,14 @@
         <button type="button" class="btn btn-default fixed-btn share-btn"><span class="glyphicon glyphicon-share"></span> Share</button>
         <button type="button" class="btn btn-default fixed-btn comment-btn"><span class="glyphicon glyphicon-comment"></span> Comment</button>
     </div>
-    <button type="submit" name="submission_type" value="like" class="btn btn-default like-btn pull-right" data-ajax-url="{% url "like" upload.relative_url %}">
-        {% if user_has_liked_this_upload %}
-            <span class="glyphicon glyphicon-heart"></span>
-        {% else %}
-            <span class="glyphicon glyphicon-heart-empty"></span>
-        {% endif %}
-        <span class="likes-label">{{ upload.likes.count }} like{{ upload.likes.count|pluralize }}</span>
-    </button>
-</form>
+    <form action="{% url "like" upload.relative_url %}" class="inline-block pull-right ajax-form">
+        <button type="submit" class="btn btn-default like-btn">
+            {% if user_has_liked_this_upload %}
+                <span class="glyphicon glyphicon-heart"></span>
+            {% else %}
+                <span class="glyphicon glyphicon-heart-empty"></span>
+            {% endif %}
+            <span class="likes-label">{{ upload.likes.count }} like{{ upload.likes.count|pluralize }}</span>
+        </button>
+    </form>
+</div>
