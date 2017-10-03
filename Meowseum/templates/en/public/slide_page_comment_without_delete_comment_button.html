@@ -1,0 +1,7 @@
+{% load my_filters %}
+<div class="comment">
+    {% comment %}
+        The filter's setting will merge a paragraph with the following paragraph if it isn't at least one line long.
+    {% endcomment %}
+    <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
+</div>

@@ -216,7 +216,7 @@ $(document).ready(function() {
     // E. This is a library function which is used when the server responds with an array of arrays with three entries: [jQuery selector, HTML, method].
     // The method describes the way in which the HTML snippets will be inserted into the DOM, in relation to the elements selected by the corresponding selector.
     // It accepts a string for any of the standard jQuery methods for DOM manipulation, such as 'html' or 'load' for replacing the content of the selected element,
-    // or 'prependTo' for inserting the HTML at the beginning of the content of the selected element. If the method is one which only removes a DOM element, then
+    // or 'prepend' for inserting the HTML at the beginning of the content of the selected element. If the method is one which only removes a DOM element, then
     // use an empty string for the HTML_snippet argument.
     ajax.manipulateDOM = function(response) {
         for (var i=0; i < response.length; i++) {
@@ -226,17 +226,17 @@ $(document).ready(function() {
             if (method == 'html' || method == 'load') {
                 $(selector).html(HTML_snippet);
             }
-            else if (method == 'appendTo') {
-                $(selector).appendTo(HTML_snippet);
+            else if (method == 'append') {
+                $(selector).append(HTML_snippet);
             }
-            else if (method == 'prependTo') {
-                $(selector).prependTo(HTML_snippet);
+            else if (method == 'prepend') {
+                $(selector).prepend(HTML_snippet);
             }
-            else if (method == 'insertBefore') {
-                $(selector).insertBefore(HTML_snippet);
+            else if (method == 'before') {
+                $(selector).before(HTML_snippet);
             }
-            else if (method == 'insertAfter') {
-                    $(selector).insertAfter(HTML_snippet);
+            else if (method == 'after') {
+                    $(selector).after(HTML_snippet);
             }
             else {
                 if (method == 'remove') {

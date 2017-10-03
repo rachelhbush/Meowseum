@@ -1,0 +1,8 @@
+{% load my_filters %}
+<form class="comment deletable ajax-form" method="post" action="{% url "delete_comment" comment.id %}">
+    {% csrf_token %}
+    <a class="username">{{ comment.commenter }}</a>{{ comment.text | linebreaks:50 }}
+    <button type="submit" class="action-only">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</form>

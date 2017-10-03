@@ -1,0 +1,7 @@
+{% csrf_token %}
+{{ comment_form.non_field_errors }}
+{{ comment_form.text.errors }}
+{{ comment_form.text }}
+<div id="reply-footer">
+    <button type="submit" name="submission_type" value="comment" class="btn btn-primary"><div class="reply-btn-label">Submit</div></button>
+</div>
