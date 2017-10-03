@@ -1,5 +1,5 @@
-<div class="btn-group follow-btn">
-    <button type="submit" name="submission_type" value="follow" class="btn follow_button ajax-btn" data-ajax-url="{% url "follow" upload.uploader.username %}?next={{ request.path | urlencode }}">
+<form method="post" action="{% url "follow" upload.uploader.username %}?next={{ request.path | urlencode }}" class="btn-group follow-btn ajax-form">
+    <button type="submit" name="submission_type" value="follow" class="btn follow_button">
         {% if viewer in uploader.followers.all %}
             <span class="default-content">Following</span><span class="rollover-content">Unfollow</span>
         {% else %}
@@ -11,6 +11,9 @@
         <ul class="dropdown-menu">
             {% csrf_token %}
             <li>
+                {% comment %}
+                    This option is temporarily broken because .ajax-btn isn't compatible with .ajax-form.
+                {% endcomment %}
                 <a href="#" class="dropdown_follow_option ajax-btn" data-ajax-url="{% url "follow" upload.uploader.username %}?next={{ request.path | urlencode }}">
                     {% if viewer in uploader.followers.all %}
                         Unfollow
@@ -46,4 +49,4 @@
             {% endif %}
         </ul>
     </div>
-</div>
+</form>

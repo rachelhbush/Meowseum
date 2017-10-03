@@ -64,22 +64,8 @@ def page(request, relative_url):
     template_variables['poster_directory'] = hosting_limits_for_Upload['poster_directory']
     template_variables['upload_directory'] = Upload.UPLOAD_TO
     # Set up the blank forms for the page that include a field aside from the button itself.
-    # If a form is submitted and has errors, it is simpler to replace it later than handle all the invalid conditions.
     template_variables['comment_form'] = CommentForm()
     template_variables['tag_form'] = TagForm()
-
-    # Last, process the data that will be sent to the template or retrieved from the user.
-    if request.POST:
-        if request.user.is_authenticated():
-            return_value = process_data_from_buttons(request, upload, uploader, viewer, template_variables)
-            if type(return_value).__name__ == 'HttpResponseRedirect':
-                return return_value
-            else:
-                template_variables = return_value
-        else:
-            # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
-            # Redirect back the user back to the slide page after the user logs in.
-            return ajaxWholePageRedirect(request, reverse('login') + "?next="+ urlencode(request.path))
 
     template_variables = get_surrounding_slide_links(request, upload, template_variables)
     template_variables['comments_from_unmuted_users'] = get_comments_from_unmuted_users(request, upload)
@@ -90,20 +76,7 @@ def page(request, relative_url):
         template_variables = get_pet_information_record(upload, template_variables)
     return render(request, 'en/public/slide_page.html', template_variables)
 
-# 1. This function handles the buttons for liking, following, muting, commenting, and tagging.
-# If the page is being reloaded because of one of these actions, then process and save the data.
-def process_data_from_buttons(request, upload, uploader, viewer, template_variables):
-    # Identify which form was submitted by retrieving a value from the submit button.
-    submission_type = request.POST.get('submission_type')
-
-    # First, redirect to separate separate views. This happens for users with JavaScript disabled, as well as the rare user who performs an action via the URL bar.
-    # The redirects use a querystring to record the URL. Hidden form controls won't work because the submitted form is being sent back to this view, or else there wouldn't
-    # be a neeed for the redirects.
-    if submission_type == 'follow':
-        return HttpResponseRedirect( reverse('follow', args=[upload.uploader.username]) + "?next="+ urlencode(request.path))
-    return template_variables
-
-# 2. Store into 'previous_slide' and 'next_slide' the relative URLs for the neighboring slides in the queryset which the user has most recently been looking at.
+# 1. Store into 'previous_slide' and 'next_slide' the relative URLs for the neighboring slides in the queryset which the user has most recently been looking at.
 # If the user was redirected from the "Random cat" page, this will also make the right arrow link back to the "Random cat" page.
 def get_surrounding_slide_links(request, upload, template_variables):
     if 'current_gallery' in request.session and len(request.session['current_gallery']) != 0:
@@ -142,7 +115,7 @@ def get_surrounding_slide_links(request, upload, template_variables):
         
     return template_variables
 
-# 3. Retrieve the set of comments for the upload while excluding comments from muted users.
+# 2. Retrieve the set of comments for the upload while excluding comments from muted users.
 def get_comments_from_unmuted_users(request, upload):
     if request.user.is_authenticated():
         # Because muting is stored on UserProfile and the commenter uses the User object, retrieve an array of User objects.
@@ -155,7 +128,7 @@ def get_comments_from_unmuted_users(request, upload):
         comments_from_unmuted_users = upload.comments.all()
     return comments_from_unmuted_users
 
-# 4. Increment the hit count and get an estimate of unique hits, using settings for the django-hitcounts add-on specified in the site's settings.py file.
+# 3. Increment the hit count and get an estimate of unique hits, using settings for the django-hitcounts add-on specified in the site's settings.py file.
 # Input: request, the relative_url argument, template_variables
 # Output: The function adds the 'views' key with an integer value to template_variables.
 def get_unique_views(request, relative_url, template_variables):
@@ -169,7 +142,7 @@ def get_unique_views(request, relative_url, template_variables):
         template_variables['views'] = 1
     return template_variables
 
-# 5. For displaying an Adoption, Lost, or Found record, the output will be more human-readable when the values of form fields on the same topic are merged.
+# 4. For displaying an Adoption, Lost, or Found record, the output will be more human-readable when the values of form fields on the same topic are merged.
 # For example, on the form, it made sense to ask for the overall coat color, coat pattern, and nose color separately, in order to get as much information as possible.
 # For the output, the reader doesn't need to see all the labels, so their values are merged beside one "Color:" label.
 # As well, there are Boolean fields that shouldn't be shown if the user has entered in the affirmative and then filled out a follow-up question.
@@ -193,7 +166,7 @@ def get_pet_information_record(upload, template_variables):
     template_variables['boolean_answers'] = boolean_answers
     return template_variables
 
-# 5.1 For an Upload record in the Adoption category, merge all the related fields and omit the fields without any relevant information.
+# 4.1 For an Upload record in the Adoption category, merge all the related fields and omit the fields without any relevant information.
 # Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
 def format_adoption_record_for_display(upload):
     # Create a tuple for the merged data. Create a separate tuple for the corresponding labels.
@@ -225,7 +198,7 @@ def format_adoption_record_for_display(upload):
     boolean_answers = get_adoption_boolean_answers(upload.adoption, merged_field_values[1])
     return merged_field_labels, merged_field_values, boolean_answers
 
-# 5.2. For an Upload record in the Lost category, merge all the related fields and omit the fields without any relevant information.
+# 4.2. For an Upload record in the Lost category, merge all the related fields and omit the fields without any relevant information.
 # Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
 def format_lost_record_for_display(upload):
     microchip_ID, tattoo_ID = get_microchip_or_tattoo_ID(upload.lost)
@@ -265,7 +238,7 @@ def format_lost_record_for_display(upload):
     boolean_answers = get_lost_boolean_answers(upload.lost, merged_field_values[4], merged_field_values[1])
     return merged_field_labels, merged_field_values, boolean_answers
 
-# 5.3. For an Upload record in the Found category, merge all the related fields and omit the fields without any relevant information.
+# 4.3. For an Upload record in the Found category, merge all the related fields and omit the fields without any relevant information.
 # Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
 def format_found_record_for_display(upload):
     merged_field_labels = ('Name',
@@ -299,7 +272,7 @@ def format_found_record_for_display(upload):
     boolean_answers = get_found_boolean_answers(upload.found, merged_field_values[4], merged_field_values[1])
     return merged_field_labels, merged_field_values, boolean_answers
 
-# 5.1.1 For the Adoption record, the Sex label will use merged strings for the sex field and the spay/neuter field.
+# 4.1.1 For the Adoption record, the Sex label will use merged strings for the sex field and the spay/neuter field.
 # Input: An Adoption record. Output: The string for the merged field.
 def get_adoption_merged_sex_field(record):
     sex = capfirst(record.sex)
@@ -311,12 +284,12 @@ def get_adoption_merged_sex_field(record):
                 sex = sex + ', spayed'
     return sex
 
-# 5.1.2 The City label will use merged strings for the city, state or province, and ZIP or postal code. These three fields are currently required.
+# 4.1.2 The City label will use merged strings for the city, state or province, and ZIP or postal code. These three fields are currently required.
 # Input: An Upload record. Output: The string for the merged field.
 def get_city_merged_field(upload):
     return upload.uploader.user_contact.city + ", " + upload.uploader.user_contact.state_or_province + " (" + upload.uploader.user_contact.zip_code + ")"
 
-# 5.1.3 The Breed label will use merged strings for the breed field and the hair length field.
+# 4.1.3 The Breed label will use merged strings for the breed field and the hair length field.
 # Input: An Adoption, Lost, or Found record. Output: The string for the merged field.
 def get_merged_breed_field(record):
     breed = ''
@@ -342,7 +315,7 @@ def get_merged_breed_field(record):
                 breed = breed + " with " + 'long hair'
     return breed
 
-# 5.1.4 The Coat description label will use merged strings for the Pattern field, the Color 1 field, the Color 2 field, the fields related to tortoiseshell (multicolor) cats,
+# 4.1.4 The Coat description label will use merged strings for the Pattern field, the Color 1 field, the Color 2 field, the fields related to tortoiseshell (multicolor) cats,
 # and the 'socks' option under "Other physical characteristics".
 # Input: An Adoption, Lost, or Found record. Output: The string for the merged field.
 def get_coat_description_field(record):
@@ -420,7 +393,7 @@ def get_coat_description_field(record):
             coat_description = coat_description + ". " + socks_sentence
     return coat_description
 
-# 5.1.5 The 'Age' label will merge the field for the age rating (using four qualitiative terms) with the fields for the numerical age in months or years.
+# 4.1.5 The 'Age' label will merge the field for the age rating (using four qualitiative terms) with the fields for the numerical age in months or years.
 # Input: An Adoption, Lost, or Found record. Output: The string for the merged field.
 def get_merged_age_field(record):
     age = ''
@@ -434,7 +407,7 @@ def get_merged_age_field(record):
             age = str(int(record.precise_age)) + " " + record.age_units
     return age
 
-# 5.1.6 The 'Weight' label will merge the fields for the weight and its units.
+# 4.1.6 The 'Weight' label will merge the fields for the weight and its units.
 # Input: An Adoption, Lost, or Found record. Output: The string for the merged field.
 def get_merged_weight_field(record):
     weight = ''
@@ -442,7 +415,7 @@ def get_merged_weight_field(record):
         weight = str(int(record.weight)) + " " + record.weight_units
     return weight
 
-# 5.1.7 Input: A queryset of records for adoptable animals with which this pet has bonded.
+# 4.1.7 Input: A queryset of records for adoptable animals with which this pet has bonded.
 # These are the pet's friends and relatives that would be better off taken to one home together when possible.
 # Output: HTML for links to each profile.
 # If the queryset contains no records, then return an empty string.
@@ -456,7 +429,7 @@ def format_bonded_with_field(queryset):
                             + pet.pet_name + '</a>']
         return mark_safe(humanize_list(list_of_links))
 
-# 5.1.8 Input: An Adoption record and the merged string with the labels 'Sex'.
+# 4.1.8 Input: An Adoption record and the merged string with the labels 'Sex'.
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
 def get_adoption_boolean_answers(record, sex):
     boolean_answers = tuple()
@@ -481,7 +454,7 @@ def get_adoption_boolean_answers(record, sex):
         boolean_answers = None
     return boolean_answers
 
-# 5.1.7.1 Merge the Boolean "Gets along well with" fields so that the "Gets along well with" part won't be repeated several times.
+# 4.1.7.1 Merge the Boolean "Gets along well with" fields so that the "Gets along well with" part won't be repeated several times.
 # Input: An Adoption record. Output: The string for the merged fields. If the cat is not on record as getting along well with anything, then return None.
 def get_likes_string(record):
     if record.likes_cats or record.likes_dogs or record.likes_kids:
@@ -499,7 +472,7 @@ def get_likes_string(record):
     else:
         return None
 
-# 5.2.1 For the Lost record, the Sex label will use merged strings for the sex field, the spay/neuter field, and the spay/neuter tattoo field.
+# 4.2.1 For the Lost record, the Sex label will use merged strings for the sex field, the spay/neuter field, and the spay/neuter tattoo field.
 # Input: A Lost record. Output: The string for the merged field.
 def get_lost_merged_sex_field(record):
     sex = capfirst(record.sex)
@@ -515,7 +488,7 @@ def get_lost_merged_sex_field(record):
                     sex = sex + '. Has a spay tattoo.'
     return sex
 
-# 5.2.2 The Collar label will use merged strings for the collar color field and the collar description field.
+# 4.2.2 The Collar label will use merged strings for the collar color field and the collar description field.
 # Input: A Lost or Found record. Output: The string for the merged field.
 def get_collar_merged_field(record):
     collar = ''
@@ -533,7 +506,7 @@ def get_collar_merged_field(record):
                 collar = capfirst(record.collar_color)
     return collar
 
-# 5.2.3 Return the data for the 'Microchip ID' and 'Tattoo ID' labels.
+# 4.2.3 Return the data for the 'Microchip ID' and 'Tattoo ID' labels.
 # Input: A Lost record. Output: A string for the microchip ID and a string for the tattoo ID. The site assumes having a microchip and a serial number tattoo are mutually
 # exclusive for simplicity, because most sites talk about it in terms of the pros and cons of one or the other. So, at least one of the two outputs will always be an empty string.
 def get_microchip_or_tattoo_ID(record):
@@ -546,7 +519,7 @@ def get_microchip_or_tattoo_ID(record):
             tattoo_ID = record.id_number_description
     return microchip_ID, tattoo_ID
 
-# 5.2.4 The Eye color label will use the merged fields "eye color", "eye color - other", and the heterochromia option under "other physical features".
+# 4.2.4 The Eye color label will use the merged fields "eye color", "eye color - other", and the heterochromia option under "other physical features".
 # Input: A Lost or Found record. Output: The string for the merged field.
 def get_merged_eye_color_field(record):
     eye_color = record.eye_color
@@ -560,7 +533,7 @@ def get_merged_eye_color_field(record):
                 eye_color = 'Has a different eye color in each eye.'
     return eye_color
 
-# 5.2.5 The 'Other special characteristics' label will merge the 'Other special characteristics' field with data concerning whether the user checked "Bobtail" or "Polydactyl".
+# 4.2.5 The 'Other special characteristics' label will merge the 'Other special characteristics' field with data concerning whether the user checked "Bobtail" or "Polydactyl".
 # Input: A Lost or Found record. Output: The string for the merged field.
 def get_merged_other_special_characteristics_field(record):
     other_special_characteristics = record.other_special_markings
@@ -571,7 +544,7 @@ def get_merged_other_special_characteristics_field(record):
             "Polydactyl (more than five toes on at least one paw). " + other_special_characteristics
     return other_special_characteristics
 
-# 5.2.6 Input: A Lost record and the merged strings with the labels 'Sex' and 'Collar'.
+# 4.2.6 Input: A Lost record and the merged strings with the labels 'Sex' and 'Collar'.
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
 def get_lost_boolean_answers(record, collar, sex):
     boolean_answers = tuple()
@@ -594,7 +567,7 @@ def get_lost_boolean_answers(record, collar, sex):
 
     return boolean_answers
 
-# 5.3.1 For the Found record, the Sex label will use merged strings for the sex field and the spay/neuter tattoo field.
+# 4.3.1 For the Found record, the Sex label will use merged strings for the sex field and the spay/neuter tattoo field.
 # Input: A Found record. Output: The string for the merged field.
 def get_found_merged_sex_field(record):
     sex = capfirst(record.sex)
@@ -606,7 +579,7 @@ def get_found_merged_sex_field(record):
                 sex = sex + ', spayed'
     return sex
 
-# 5.3.2 Input: A Found record and the merged strings with the labels 'Sex' and 'Collar'.
+# 4.3.2 Input: A Found record and the merged strings with the labels 'Sex' and 'Collar'.
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
 def get_found_boolean_answers(record, collar, sex):
     boolean_answers = tuple()
