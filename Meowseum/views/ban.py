@@ -19,22 +19,23 @@ def page(request, username):
             uploader_user = User.objects.get(username=username)
         except ObjectDoesNotExist:
             return HttpResponseRedirect(reverse('index'))
-        response_data = {}
+        response_data = [{}]
+        response_data[0]['selector'] = '.dropdown_ban_option'
 
         if uploader_user.is_active:
             if uploader_user.is_staff:
-                response_data['.dropdown_ban_option'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span><div class="inline-block">You can't ban another moderator.<br>Please contact an administrator!</div>""")
+                response_data[0]['HTML_snippet'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span><div class="inline-block">You can't ban another moderator.<br>Please contact an administrator!</div>""")
             else:
                 uploader_user.is_active = False
                 uploader_user.save()
-                response_data['.dropdown_ban_option'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span>Unban from Meowseum""")
+                response_data[0]['HTML_snippet']  = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span>Unban from Meowseum""")
         else:
             if uploader_user.is_staff:
-                response_data['.dropdown_ban_option'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span><div class="inline-block">You can't unban another moderator.<br>Please contact an administrator!</div>""")
+                response_data[0]['HTML_snippet'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span><div class="inline-block">You can't unban another moderator.<br>Please contact an administrator!</div>""")
             else:
                 uploader_user.is_active = True
                 uploader_user.save()
-                response_data['.dropdown_ban_option'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span>Ban from Meowseum""")
+                response_data[0]['HTML_snippet'] = mark_safe("""<span class="glyphicon glyphicon-exclamation-sign"></span>Ban from Meowseum""")
 
         if request.is_ajax():
             return HttpResponse(json.dumps(response_data), content_type="application/json")

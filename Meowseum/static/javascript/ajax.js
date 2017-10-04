@@ -1,10 +1,10 @@
-/* Description: This file contains functions that make it easier to implement widgets which are dependent on AJAX. It is dependent on jQuery and the jQuery Form Plugin API.
-   The functions with numbers are those which implement the classes, which don't require knowledge of JavaScript to use, during the main function.
-   The functions with letters are library functions for writing AJAX JavaScript.
-   Classes: 1. .ajax-btn, used with the attribute data-ajax-url and optionally the attributes name, value, data-name, and data-value.
-               Uses a JSON object (dictionary) to insert response HTML into the DOM on click. This can only work by replacing the content of selected elements.
-            2. .ajax-modal, which uses the attribute data-ajax-url and goes on .modal.
+/* Description: This file contains functions for developing AJAX widgets. It is dependent on jQuery and the jQuery Form Plugin API.
+   The functions with numbers are those which implement the classes during the main function. The functions with letters are library functions for writing AJAX JavaScript.
+   Classes: 1. .ajax-modal, which uses the attribute data-ajax-url and goes on .modal.
                Upon showing the modal, load the content of the modal into the page from the specified URL.
+            2. .ajax-form, goes on <form> and makes it work with AJAX. See ajax.manipulateDOM() for server response syntax.
+            3. .ajax-btn, used with the attribute data-ajax-url and optionally the attributes name, value, data-name, and data-value.
+               This is for an individual element which sends the data on its attributes to the server when clicked.
 */
 
 $(document).ready(function() {
@@ -195,66 +195,77 @@ $(document).ready(function() {
             ajax.post(url, data, success);
         });
     };
-    
-    // D. This library function is used when the server responds with a JSON object, e.g. {selector1: HTML1, selector2: HTML2}. The keys consist of jQuery
-    // selectors and the values consist of HTML snippets to load into each corresponding jQuery set. The built-in .load() method is useful for loading HTML within
-    // a single frame like a modal, but this function is more useful for interactions which insert HTML into multiple places throughout the DOM.
-    // When I use this, most of my selectors are classes, because elements that are otherwise unique may have a hidden duplicate for the sake of responsiveness.
-    ajax.loadAJAXHTML = function(response) {
-        var type = typeof response;
-        if (type == 'object') {
-            for (var property in response) {
-                if (response.hasOwnProperty(property)) {
-                    var selector = property;
-                    var HTML_to_load = response[selector];
-                    $(selector).html(HTML_to_load);
-                }
+
+    // D.1. This function executes a single jQuery statement for manipulating the DOM, given elements of a JSON server response.
+    // Input: selector. method, the name of a jQuery method. HTML_snippet (do not include if the jQuery method only removes elements). Output: None. 
+    var executejQueryStatement = function(selector, method, HTML_snippet) {
+        if (method == 'html' || method == 'load') {
+            $(selector).html(HTML_snippet);
+        }
+        else if (method == 'append') {
+            $(selector).append(HTML_snippet);
+        }
+        else if (method == 'prepend') {
+            $(selector).prepend(HTML_snippet);
+        }
+        else if (method == 'before') {
+            $(selector).before(HTML_snippet);
+        }
+        else if (method == 'after') {
+                $(selector).after(HTML_snippet);
+        }
+        else {
+            if (method == 'remove') {
+                $(selector).remove();
             }
         }
     };
 
-    // E. This is a library function which is used when the server responds with an array of arrays with three entries: [jQuery selector, HTML, method].
-    // The method describes the way in which the HTML snippets will be inserted into the DOM, in relation to the elements selected by the corresponding selector.
-    // It accepts a string for any of the standard jQuery methods for DOM manipulation, such as 'html' or 'load' for replacing the content of the selected element,
-    // or 'prepend' for inserting the HTML at the beginning of the content of the selected element. If the method is one which only removes a DOM element, then
-    // use an empty string for the HTML_snippet argument.
+    // D. This is a library function which is used when the server responds with an array of objects describing how the DOM should be manipulated. If the post-response JavaScript will
+    // be entirely client-side, such that the server will only return an empty HTTPResponse, then this function will do nothing, so classes involving this function can be used more generally.
+    // Because the HTML has to be returned by the server, it is easiest to specify what the JavaScript should do with the response within the server response. Post-response JavaScript is
+    // rarely more complicated than a series of these jQuery statements, making this a good default function for handling the response.
+    //
+    // Input: An array in which each object takes the format {'selector': value, 'method': value, 'HTML_snippet': value}. The method describes the way in which the HTML snippets
+    // will be inserted into the DOM, in relation to the elements selected by the corresponding selector. The method parameter accepts a string for any of the standard jQuery methods
+    // for DOM manipulation, such as 'html' or 'load' for replacing the content of the selected element, or 'prepend' for inserting the HTML at the beginning of the content of the
+    // selected element. If the method argument is excluded, it defaults to 'load'. The HTML argument should be excluded when the method only removes elements from the DOM. Output: None.
+    //
+    // On a server using Python, initializing the response will most often look like
+    // response_data = [{},{}]
+    // response_data[0]['selector'] = value
+    // response_data[0]['HTML_snippet'] = value
     ajax.manipulateDOM = function(response) {
         for (var i=0; i < response.length; i++) {
-            var selector = response[i][0];
-            var HTML_snippet = response[i][1];
-            var method = response[i][2];
-            if (method == 'html' || method == 'load') {
-                $(selector).html(HTML_snippet);
-            }
-            else if (method == 'append') {
-                $(selector).append(HTML_snippet);
-            }
-            else if (method == 'prepend') {
-                $(selector).prepend(HTML_snippet);
-            }
-            else if (method == 'before') {
-                $(selector).before(HTML_snippet);
-            }
-            else if (method == 'after') {
-                    $(selector).after(HTML_snippet);
+            // Gather the values from the element of the array.
+            var selector = response[i]['selector']
+            if ('method' in response[i]) {
+                var method = response[i]['method']
             }
             else {
-                if (method == 'remove') {
-                    $(selector).remove();
-                }
+                var method = 'html'
             }
+            if ('HTML_snippet' in response[i]) {
+                var HTML_snippet = response[i]['HTML_snippet']
+            }
+
+            executejQueryStatement(selector, method, HTML_snippet);
         }
     };
     
-    // 3. This function sets the behavior for .ajax-form, a custom class for a submit button which indicates its form works with AJAX on the server-side.
-    ajax.forms = function() {
-        $(".ajax-form").submitFormDataOnClickThen(ajax.manipulateDOM);
+    // 3. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses an array of JSON objects to manipulate the DOM.
+    // Use .ajax-btn when the element would be the only one in a form, if it were wrapped in <form>. It is most useful when the element can only be accessed via JavaScript, so wrapping it
+    // in <form> for users with JavaScript disabled isn't a concern, and when wrapping it would throw off the CSS, like an option in a Bootstrap dropdown.
+    // Use .ajax-btn with the attributes data-ajax-url, name, value, data-name, and/or data-value.
+    ajax.buttons = function() {
+        $(".ajax-btn").submitOwnDataOnClickThen(ajax.manipulateDOM);
     };
     
-    // 2. This function sets the behavior for .ajax-btn, a custom class which indicates the element sends data to the server and then uses a JSON object to insert HTML into the DOM.
-    // Use with .ajax-button the attributes data-ajax-url, name, value, data-name, and/or data-value.
-    ajax.loadButtons = function() {
-        $(".ajax-btn").submitOwnDataOnClickThen(ajax.loadAJAXHTML);
+    // 2. This function sets the behavior for .ajax-form, a custom class for a submit button which indicates its form works with AJAX. This means that instead of a whole page having to be loaded
+    // once the form is submitted, JavaScript can manipulate a part of the page, making the user have a faster experience. If the server can detect whether the request is from AJAX, the form will
+    // still work when JavaScript is disabled.
+    ajax.forms = function() {
+        $(".ajax-form").submitFormDataOnClickThen(ajax.manipulateDOM);
     };
     
     // 1.1. After submitting a form in a modal, this function will load the response as HTML. To instruct the function to redirect to another page (the whole page, not the frame of the modal),
@@ -276,7 +287,7 @@ $(document).ready(function() {
     // which hides the modal. If the server encounters an error, it will show the usual error page within the modal.
     // The function relies on jQuery Form Plugin (http://jquery.malsup.com/form/#ajaxSubmit), which uses a lengthy iframe workaround to implement submitting a file with AJAX.
     // IE10+ support the HTML5 File API which permits sending a file without the plugin, so once IE9 popularity falls enough for it to be dropped, this function should be rewritten to avoid using it.
-    ajax.setupModals = function() {
+    ajax.modals = function() {
         $(".ajax-modal").on("show.bs.modal", function() {
             var url = $(this).data("ajax-url");
             $(this).load(url);
@@ -294,9 +305,9 @@ $(document).ready(function() {
     
     // 0. Main function
     var main = function(){
-        ajax.setupModals();
-        ajax.loadButtons();
+        ajax.modals();
         ajax.forms();
+        ajax.buttons();
     };
     main();
 });

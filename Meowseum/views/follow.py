@@ -56,32 +56,28 @@ def follow_or_unfollow(request_user, uploader_user):
 # Input: request_user, uploader_user. Output: response_data
 def get_follow_button_response(request_user, uploader_user):
     if request_user.user_profile in uploader_user.user_profile.followers.all():
-        response_data = [[0,0,0],[0,0,0],[0,0,0]]
-        response_data[0][0] = '.follow_button'
-        response_data[0][1] = mark_safe('<span class="default-content">Following</span><span class="rollover-content">Unfollow</span>')
-        response_data[0][2] = 'load'
-        response_data[1][0] = '.dropdown_follow_option'
-        response_data[1][1] = 'Unfollow'
-        response_data[1][2] = 'load'
-        response_data[2][0] = '.dropdown_mute_option'
-        response_data[2][1] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Mute all activity')
-        response_data[2][2] = 'load'
+        response_data = [{},{},{}]
+        response_data[0]['selector'] = '.follow_button'
+        response_data[0]['HTML_snippet'] = mark_safe('<span class="default-content">Following</span><span class="rollover-content">Unfollow</span>')
+        response_data[1]['selector'] = '.dropdown_follow_option'
+        response_data[1]['HTML_snippet'] = 'Unfollow'
+        response_data[2]['selector'] = '.dropdown_mute_option'
+        response_data[2]['HTML_snippet'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Mute all activity')
     else:
-        response_data = [[0,0,0],[0,0,0]]
-        response_data[0][0] = '.follow_button'
-        response_data[0][1] = 'Follow'
-        response_data[0][2] = 'load'
-        response_data[1][0] = '.dropdown_follow_option'
-        response_data[1][1] = 'Follow'
-        response_data[1][2] = 'load'
+        response_data = [{},{}]
+        response_data[0]['selector'] = '.follow_button'
+        response_data[0]['HTML_snippet'] = 'Follow'
+        response_data[1]['selector'] = '.dropdown_follow_option'
+        response_data[1]['HTML_snippet'] = 'Follow'
     return response_data
 
 # 3. Put together the AJAX response data for when the previous page has a follow option in a dropdown header, such as on the user gallery page.
 # Input: request_user, uploader_user, username of the uploader. Output: response_data
 def get_follow_option_in_dropdown_header_response(request_user, uploader_user, username):
-    response_data = {}
+    response_data = [{}]
+    response_data[0]['selector'] = '.header_follow_button'
     if request_user.user_profile in uploader_user.user_profile.followers.all():
-        response_data['.header_follow_button'] = 'Unfollow <div class="default-font inline-block">@' + username + " (" + str(uploader_user.user_profile.followers.count()) + ")</div>"
+        response_data[0]['HTML_snippet'] = 'Unfollow <div class="default-font inline-block">@' + username + " (" + str(uploader_user.user_profile.followers.count()) + ")</div>"
     else:
-        response_data['.header_follow_button'] = 'Follow <div class="default-font inline-block">@' + username + " (" + str(uploader_user.user_profile.followers.count()) + ")</div>" 
+        response_data[0]['HTML_snippet'] = 'Follow <div class="default-font inline-block">@' + username + " (" + str(uploader_user.user_profile.followers.count()) + ")</div>" 
     return response_data

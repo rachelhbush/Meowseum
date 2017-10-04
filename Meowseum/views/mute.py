@@ -21,18 +21,23 @@ def page(request, username):
             return HttpResponseRedirect(reverse('index'))
         uploader = uploader_user.user_profile
         viewer = request.user.user_profile
-        response_data = {}
 
         if viewer in uploader.muters.all():
             uploader.muters.remove(viewer)
-            response_data['.dropdown_mute_option'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Mute all activity')
+            response_data = [{}]
+            response_data[0]['selector'] = '.dropdown_mute_option'
+            response_data[0]['HTML_snippet'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Mute all activity')
         else:
             uploader.muters.add(viewer)
             # In Meowseum's current system, muting silences all activity. A user cannot be muted and followed at the same time. When either status is added, the other needs to be removed.
             uploader.followers.remove(viewer)
-            response_data['.dropdown_mute_option'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Unmute all activity')
-            response_data['.follow_button'] = 'Follow'
-            response_data['.dropdown_follow_option'] = 'Follow'
+            response_data = [{},{},{}]
+            response_data[0]['selector'] = '.dropdown_mute_option'
+            response_data[0]['HTML_snippet'] = mark_safe('<span class="glyphicon glyphicon-ban-circle"></span>Unmute all activity')
+            response_data[1]['selector'] = '.follow_button'
+            response_data[1]['HTML_snippet'] = 'Follow'
+            response_data[2]['selector'] = '.dropdown_follow_option'
+            response_data[2]['HTML_snippet'] = 'Follow'
         uploader.save()
 
         if request.is_ajax():

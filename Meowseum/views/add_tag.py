@@ -73,34 +73,31 @@ def process_tag_form(upload, relative_url, tag_form):
 # 2. Put together the AJAX response for when the server has successfully processed the form.
 # Input: request, upload, relative_url, tag_form. Output: An HTTP response containing a JSON object to be sent back to AJAX.
 def get_successful_submission_response(request, upload, relative_url):
-    response_data = [[0,0,0],[0,0,0]]
+    response_data = [{},{}]
     # The new HTML will replace the content of the <form> within the #tags section.
-    response_data[0][0] = '#tags > form'
+    response_data[0]['selector'] = '#tags > form'
     # After the form it successfully submitted, it will be reset to its original state.
     tag_form = TagForm()
     tags_form_HTTP_response = render(request, 'en/public/slide_page_tag_form.html', \
                                            {'upload':upload, 'relative_url': relative_url, 'tag_form': tag_form})
     # Convert the byte string content of the HTTP response to UTF-8 character encoding, then have Django recognize it as safe HTML
     # rather than an ordinary string.
-    response_data[0][1] = mark_safe(tags_form_HTTP_response.content.decode('utf-8'))
-    response_data[0][2] = 'load'
+    response_data[0]['HTML_snippet'] = mark_safe(tags_form_HTTP_response.content.decode('utf-8'))
     # Update the page with the new tag count.
     new_tag_count = upload.tags.count()
-    response_data[1][0] = '.tag-btn'
-    response_data[1][1] = mark_safe('<span class="glyphicon glyphicon-tag"></span> ' + str(new_tag_count))
-    response_data[1][2] = 'load'
+    response_data[1]['selector'] = '.tag-btn'
+    response_data[1]['HTML_snippet'] = mark_safe('<span class="glyphicon glyphicon-tag"></span> ' + str(new_tag_count))
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # 3. Put together the AJAX response for when the user provided erroneous data.
 # Input: request, upload, relative_url, tag_form. Output: An HTTP response containing a JSON object to be sent back to AJAX.
 def get_response_to_erroneous_data(request, upload, relative_url, tag_form):
-    response_data = [[0,0,0]]
+    response_data = [{}]
     # The new HTML will replace the content of the <form> within the #tags section.
-    response_data[0][0] = '#tags > form'
+    response_data[0]['selector'] = '#tags > form'
     tags_form_HTTP_response = render(request, 'en/public/slide_page_tag_form.html', \
                                            {'upload':upload, 'relative_url': relative_url, 'tag_form':tag_form})
     # Convert the byte string content of the HTTP response to UTF-8 character encoding, then have Django recognize it as safe HTML
     # rather than an ordinary string.
-    response_data[0][1] = mark_safe(tags_form_HTTP_response.content.decode('utf-8'))
-    response_data[0][2] = 'load'
+    response_data[0]['HTML_snippet'] = mark_safe(tags_form_HTTP_response.content.decode('utf-8'))
     return HttpResponse(json.dumps(response_data), content_type="application/json")

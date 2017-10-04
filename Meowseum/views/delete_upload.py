@@ -17,7 +17,7 @@ def page(request, relative_url):
             return HttpResponseRedirect(reverse('index'))
         uploader = upload.uploader.user_profile
         viewer = request.user.user_profile
-        response_data = {}
+        response_data = [{}]
 
         if viewer == uploader or (request.user.has_perm('Meowseum.delete_upload') and not upload.uploader.is_staff):
             upload.delete()
@@ -27,7 +27,8 @@ def page(request, relative_url):
             # needs to be a redirect because Django requires returning an HTTPResponse.
             return ajaxWholePageRedirect(request, reverse('index'))
         elif viewer != uploader and (request.user.has_perm('Meowseum.delete_upload') and upload.uploader.is_staff):
-            response_data['.dropdown_delete_option'] = """<span class="glyphicon glyphicon-remove-circle"></span><div class="inline-block">You can't delete an upload from another moderator.<br>Please contact an administrator!</div>"""
+            response_data[0]['selector'] = '.dropdown_delete_option'
+            response_data[0]['HTML_snippet'] = """<span class="glyphicon glyphicon-remove-circle"></span><div class="inline-block">You can't delete an upload from another moderator.<br>Please contact an administrator!</div>"""
         else:
             # A regular user accessed the page, probably via the URL bar, for an upload without user permissions. Return a 403 error.
             return HttpResponseForbidden()

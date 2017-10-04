@@ -25,14 +25,13 @@ def page(request, tag_name):
         request.user.user_profile.save() 
 
         if request.is_ajax():
-            response_data = {}
+            response_data = [{}]
+            response_data[0]['selector'] = '.header_subscribe_button'
             # Having already changed the Subscribe status, the if suites are now reversed.
             if tag in request.user.user_profile.subscribed_tags.all():
-                response_data['.header_subscribe_button'] = mark_safe('Unsubscribe from <div class="default-font inline-block">#' + tag_name +  ' (' +\
-                                                                      str(tag.subscribers.count()) + ')</span></div>')
+                response_data[0]['HTML_snippet'] = mark_safe('Unsubscribe from <div class="default-font inline-block">#' + tag_name +  ' (' + str(tag.subscribers.count()) + ')</span></div>')
             else:
-                response_data['.header_subscribe_button'] = mark_safe('Subscribe to <div class="default-font inline-block">#' + tag_name + ' (' +\
-                                                                      str(tag.subscribers.count()) + ')</span></div>')
+                response_data[0]['HTML_snippet'] = mark_safe('Subscribe to <div class="default-font inline-block">#' + tag_name + ' (' + str(tag.subscribers.count()) + ')</span></div>')
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             # If the request isn't AJAX (JavaScript is disabled), redirect back to the previous page.

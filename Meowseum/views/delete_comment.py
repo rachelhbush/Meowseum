@@ -40,13 +40,12 @@ def delete_comment(request, comment_id):
 # Input: request, comment_id. Output: An HTTP response containing a JSON object to be sent back to AJAX.
 def get_server_response(request, comment_id, upload):
     comments_from_unmuted_users = get_comments_from_unmuted_users(request, upload)
-    response_data = [[0,0,0]]
+    response_data = [{}]
     
     if comments_from_unmuted_users.count() > 0:
-        response_data[0][0] = '.comment[action*="/' + comment_id + '/"]'
+        response_data[0]['selector'] = '.comment[action*="/' + comment_id + '/"]'
     else:
-        response_data[0][0] = '#posted-comments'    
-    response_data[0][1] = ''
-    response_data[0][2] = 'remove'
+        response_data[0]['selector'] = '#posted-comments'    
+    response_data[0]['method'] = 'remove'
     
     return HttpResponse(json.dumps(response_data), content_type="application/json")

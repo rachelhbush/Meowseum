@@ -67,16 +67,15 @@ def save_comment_form(upload, comment_form, request_user):
 # 2. Put together the AJAX response for when the server has successfully processed the form.
 # Input: request, upload, relative_url, tag_form. Output: An HTTP response containing a JSON object to be sent back to AJAX.
 def get_successful_submission_response(request, comment):
-    response_data = [[0,0,0],[0,0,0]]
+    response_data = [{},{}]
     # The new HTML will replace the content of the <form> within the #tags section.
-    response_data[0][0] = '#comments > form'
+    response_data[0]['selector'] = '#comments > form'
     # After the form it successfully submitted, it will be reset to its original state.
     comment_form = CommentForm()
     comment_form_HTML = render(request, 'en/public/slide_page_add_comment_form.html', {'comment_form': comment_form})
     # Convert the byte string content of the HTTP response to UTF-8 character encoding, then have Django recognize it as safe HTML
     # rather than an ordinary string.
-    response_data[0][1] = mark_safe(comment_form_HTML.content.decode('utf-8'))
-    response_data[0][2] = 'load'
+    response_data[0]['HTML_snippet'] = mark_safe(comment_form_HTML.content.decode('utf-8'))
 
     if request.user.has_perm('Meowseum.delete_comment'):
         new_comment_section_HTML = render(request, 'en/public/slide_page_comment_with_delete_comment_button.html', {'comment': comment})
@@ -86,23 +85,22 @@ def get_successful_submission_response(request, comment):
     comments_from_unmuted_users = get_comments_from_unmuted_users(request, comment.upload)
     if comments_from_unmuted_users.count() == 1:
         new_comment_section_HTML = '<div id="posted-comments">' + new_comment_section_HTML + '</div>'
-        response_data[1][0] = '#comments > form'
+        response_data[1]['selector'] = '#comments > form'
     else:
-        response_data[1][0] = '#comments .comment:last'
-    response_data[1][1] = new_comment_section_HTML
-    response_data[1][2] = 'after'
+        response_data[1]['selector'] = '#comments .comment:last'
+    response_data[1]['method'] = 'after'
+    response_data[1]['HTML_snippet'] = new_comment_section_HTML
     
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # 3. Put together the AJAX response for when the user provided erroneous data.
 # Input: request, upload, relative_url, tag_form. Output: An HTTP response containing a JSON object to be sent back to AJAX.
 def get_response_to_erroneous_data(request, comment_form):
-    response_data = [[0,0,0]]
+    response_data = [{}]
     # The new HTML will replace the content of the <form> within the #tags section.
-    response_data[0][0] = '#comments > form'
+    response_data[0]['selector'] = '#comments > form'
     comment_form_HTML = render(request, 'en/public/slide_page_add_comment_form.html', {'comment_form': comment_form})
     # Convert the byte string content of the HTTP response to UTF-8 character encoding, then have Django recognize it as safe HTML
     # rather than an ordinary string.
-    response_data[0][1] = mark_safe(comment_form_HTML.content.decode('utf-8'))
-    response_data[0][2] = 'load'
+    response_data[0]['HTML_snippet'] = mark_safe(comment_form_HTML.content.decode('utf-8'))
     return HttpResponse(json.dumps(response_data), content_type="application/json")
