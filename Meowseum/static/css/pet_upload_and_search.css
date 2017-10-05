@@ -58,6 +58,17 @@
     padding-top: 7px;
 }
 
+#delete-btn {
+    /* Style the delete button on the page for editing an upload. */
+   height: 28px;
+   padding-left: 9px;
+   padding-right: 9px;
+   float: right;
+   /* This rule positions the delete button to be vertically level with the center of the heading to the left. */
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
 /* 2. Style elements only on the Adoption page. */
 
 /* At a viewport width of 350px or greater, the checkbox label "Tested and treated for worms, ticks, and fleas" appears all on one line,

@@ -1,9 +1,10 @@
 {% comment %}
     This template contains the basic information used by all categories of upload. It is shown below the editing forms for Adoption, Lost, and Found, and it is the only template shown for the Pets category.
 {% endcomment %}
-{% if upload_category != 'pets' %}
-    <h2>Upload information</h2>
-{% endif %}
+<h2>Upload information</h2>
+<a href="{% url "delete_upload" relative_url %}">
+    <button type="button" class="btn btn-default" id="delete-btn"><span class="glyphicon glyphicon-trash"></span> Delete upload</button>
+</a>
 {{ edit_upload_form.non_field_errors }}
 {{ edit_upload_form.title.errors }}
 <div class="field">
