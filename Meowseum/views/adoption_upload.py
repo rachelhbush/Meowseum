@@ -28,11 +28,11 @@ def page(request):
             save_bonded_with_information(new_adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
             return HttpResponseRedirect(reverse('index'))
         else:
-            return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'upload_record':upload, 'heading':heading})
+            return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
     else:
         adoption_form = AdoptionForm()
         bonded_with_form = BondedWithForm()
-        return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'upload_record':upload, 'heading':heading})
+        return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
 
 # 1. If the "bonded_with_IDs" field was filled out, use its comma-separated list field to associate the new adoption record with a list of other adoption records.
 # Input: new_adoption_record, bonded_with_IDs string. Output: None.

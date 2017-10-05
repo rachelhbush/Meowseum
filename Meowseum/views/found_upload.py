@@ -18,18 +18,18 @@ def page(request):
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
     if request.POST:
-        form = FoundForm(request.POST)
+        found_form = FoundForm(request.POST)
         verify_description_form = VerifyDescriptionForm(request.POST)
         if form.is_valid() and verify_description_form.is_valid():
-            new_found_record = form.save(commit=False)
+            new_found_record = found_form.save(commit=False)
             new_found_record.upload = upload
             new_found_record.save()
             upload.description = verify_description_form.cleaned_data['description']
             upload.save()
             return HttpResponseRedirect(reverse('index'))
         else:
-            return render(request, 'en/public/found_upload.html', {'form':form, 'verify_description_form':verify_description_form, 'upload_record':upload, 'is_shelter':request.user.user_profile.is_shelter(), 'heading':heading})
+            return render(request, 'en/public/found_upload.html', {'found_form':found_form, 'verify_description_form':verify_description_form, 'is_shelter':request.user.user_profile.is_shelter(), 'heading':heading})
     else:
-        form = FoundForm()
+        found_form = FoundForm()
         verify_description_form = VerifyDescriptionForm(initial={"description":upload.description})
-        return render(request, 'en/public/found_upload.html', {'form':form, 'verify_description_form':verify_description_form, 'upload_record':upload, 'is_shelter':request.user.user_profile.is_shelter(), 'heading':heading})
+        return render(request, 'en/public/found_upload.html', {'found_form':found_form, 'verify_description_form':verify_description_form, 'is_shelter':request.user.user_profile.is_shelter(), 'heading':heading})

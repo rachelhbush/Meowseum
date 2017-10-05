@@ -4,7 +4,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from Meowseum.models import Upload, Adoption, Lost, Found
-from Meowseum.forms import AdoptionForm, BondedWithForm, LostForm, FoundForm, VerifyDescriptionForm
+from Meowseum.forms import EditUploadForm, AdoptionForm, BondedWithForm, LostForm, FoundForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -23,25 +23,59 @@ def page(request, relative_url):
     upload_category = upload.get_category()
     if upload_category == 'adoption':
         return render_adoption_editing_view(request, upload, heading)
-# I'll program the other editing forms later.
-##    elif upload_category == 'lost':
-##        return render_lost_editing_view(request, upload, heading)
-##    elif upload_category == 'found':
-##        return render_found_editing_view(request, upload, heading)
-##    else:
-##        return render_pet_editing_view(request, upload, heading)
+    elif upload_category == 'lost':
+        return render_lost_editing_view(request, upload, heading)
+    elif upload_category == 'found':
+        return render_found_editing_view(request, upload, heading)
+    else:
+        return render_pet_editing_view(request, upload, heading)
 
-# 1. Render a form for editing an Adoption upload.
+# 1. Render a form for editing an upload in the Adoption category.
 def render_adoption_editing_view(request, upload, heading):
     adoption_form = AdoptionForm(request.POST or None, instance=upload.adoption)
     bonded_with_form = BondedWithForm(request.POST or None, initial=initialize_bonded_with_information(upload))
-    if adoption_form.is_valid() and bonded_with_form.is_valid():
+    edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
+    if adoption_form.is_valid() and bonded_with_form.is_valid() and edit_upload_form.is_valid():
         adoption_record = adoption_form.save()
         edit_bonded_with_information(adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
+        edit_upload_form.save()
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'adoption', 'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'upload':upload, 'heading':heading})
+                      {'upload_category': 'adoption', 'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+
+# 2. Render a form for editing an upload in the Lost category.
+def render_lost_editing_view(request, upload, heading):
+    lost_form = LostForm(request.POST or None, instance=upload.lost)
+    edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
+    if lost_form.is_valid() and edit_upload_form.is_valid():
+        lost_form.save()
+        edit_upload_form.save()
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        return render(request, 'en/public/edit_upload.html', \
+                      {'upload_category': 'lost', 'lost_form':lost_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+        
+# 3. Render a form for editing an upload in the Found category.
+def render_found_editing_view(request, upload, heading):
+    found_form = FoundForm(request.POST or None, instance=upload.found)
+    edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
+    if found_form.is_valid() and edit_upload_form.is_valid():
+        found_form.save()
+        edit_upload_form.save()
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        return render(request, 'en/public/edit_upload.html', \
+                      {'upload_category': 'found', 'found_form':found_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+
+# 4. Render a form for editing an upload in the Pets category.
+def render_pet_editing_view(request, upload, heading):
+    edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
+    if edit_upload_form.is_valid():
+        edit_upload_form.save()
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        return render(request, 'en/public/edit_upload.html', {'upload_category': 'pets', 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
 
 # 1.1. Input: upload, an Upload record.
 # Output: A dictionary containing the values with which the BondedWithForm should be initialized.

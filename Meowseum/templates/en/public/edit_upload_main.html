@@ -1,0 +1,35 @@
+{% comment %}
+    This template contains the basic information used by all categories of upload. It is shown below the editing forms for Adoption, Lost, and Found, and it is the only template shown for the Pets category.
+{% endcomment %}
+{% if upload_category != 'pets' %}
+    <h2>Upload information</h2>
+{% endif %}
+{{ edit_upload_form.non_field_errors }}
+{{ edit_upload_form.title.errors }}
+<div class="field">
+    {{ edit_upload_form.title }}
+</div>
+{{ edit_upload_form.description.errors }}
+<div class="field">
+    {{ edit_upload_form.description }}
+</div>
+{{ edit_upload_form.is_publicly_listed.errors }}
+<div class="checkbox has-custom-checkbox text-center">
+    <label>
+    <div class="custom-checkbox">
+        {{ edit_upload_form.is_publicly_listed }}
+        {% include "en/public/elements/custom_checkmark.html" %}
+    </div>
+    <span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.
+    </label>
+</div>
+{{ edit_upload_form.uploader_has_disabled_comments.errors }}
+<div class="checkbox has-custom-checkbox">
+    <label>
+    <div class="custom-checkbox">
+        {{ edit_upload_form.uploader_has_disabled_comments }}
+        {% include "en/public/elements/custom_checkmark.html" %}
+    </div>
+    Disable comments
+    </label>
+</div>

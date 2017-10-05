@@ -92,6 +92,14 @@ class UploadPage1(forms.Form):
     is_publicly_listed = forms.BooleanField(required=False)
     uploader_has_disabled_comments = forms.BooleanField(required=False)
 
+class EditUploadForm(ModelForm):
+    # This is a form for modifying the fields of UploadPage1, except for the upload category and tags.
+    title = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"Title (optional)"}) )
+    description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
+    class Meta:
+        model = Upload
+        fields = ('title', 'description', 'is_publicly_listed', 'uploader_has_disabled_comments')
+
 class CommentForm(ModelForm):
     text = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={"placeholder":"Write something here..."}) )
     class Meta:
