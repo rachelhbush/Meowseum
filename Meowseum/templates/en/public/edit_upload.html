@@ -1,0 +1,27 @@
+{% extends "en/public/base.html" %}
+{% block head %}
+        {{ block.super }}
+        <title>Editing "{{ upload.title }}" - Meowseum</title>
+        {% include "en/public/default_description.html" %}
+        {% include "en/public/default_keywords.html" %}
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search.css" %}" class="has-night-mode-version"/>
+        {% if night_mode %}
+            <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search_night.css" %}"/>
+        {% endif %}
+        <script src="{% static "javascript/pet_upload_and_search.js" %}"></script>
+{% endblock %}
+{% block body %}
+    <div class="page form">
+        <form class="inner-layout" method="post" enctype="multipart/form-data" action="{% url "edit_upload" upload.relative_url %}">
+            {% csrf_token %}
+            {% include "en/public/elements/full_page_form_header.html" with heading=heading %}
+            <main class="form">
+                {% if upload_category == 'adoption' %}
+                    {% include "en/public/adoption_upload_main.html" %}
+                {% endif %}
+            </main>
+            {% include "en/public/elements/full_page_form_footer.html" with footer_button_label=footer_button_label %}
+        </form>
+    </div>
+{% endblock %}

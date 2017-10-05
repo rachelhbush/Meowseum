@@ -29,8 +29,8 @@
         {% endif %}
     </div>
     {% if viewer == uploader %}
-        <a href="{% url "delete_upload" upload.relative_url %}">
-            <button type="button" class="btn btn-default fixed-btn" id="delete-btn"><span class="glyphicon glyphicon-trash"></span> Delete upload</button>
+        <a href="{% url "edit_upload" upload.relative_url %}">
+            <button type="button" class="btn btn-default fixed-btn" id="edit-btn"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
         </a>
     {% else %}
         {% include "en/public/follow_button.html" %}

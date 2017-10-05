@@ -281,12 +281,9 @@ body {
     /* Set the gap between the top edge of the button and "submitted by". */
     margin-top: 6px;
 }
-#delete-btn {
+#edit-btn {
     /* Set the gap between the top edge of the button and "submitted by". */
     margin-top: 3px;
-}
-#delete-btn .glyphicon-trash {
-    top: 2px;
 }
 
 /* This ruleset is used for all buttons of fixed height in the main area, except for the follow button and Likes button. */
