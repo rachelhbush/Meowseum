@@ -154,7 +154,7 @@ def get_pet_information_record(upload, template_variables):
     upload_category = upload.get_category()
 
     if upload_category == 'pets':
-        return
+        return template_variables
     elif upload_category == 'adoption':
         merged_field_labels, merged_field_values, boolean_answers = format_adoption_record_for_display(upload)
     elif upload_category == 'lost':
