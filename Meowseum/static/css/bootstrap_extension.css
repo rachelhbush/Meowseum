@@ -513,7 +513,7 @@ input[type="date"]+a[data-toggle] {
     /* <div class="nested-form collapse"> is for a container of form fields that are hidden until certain options are selected in other form controls above it.
        When any field inside the .nested-form is shown, then .nested-form is shown, and when the last visible field is hidden, then .nested-form is hidden.
        Inside the .nested-form, use <fieldset> to wrap multiple fields that will be toggled together. For now, .collapse is being used to hide the structure when JavaScript is turned off. HTML: 
-       <div class="nested-form">
+       <div class="nested-form collapse">
            <fieldset class="collapse">
                fields
            </fieldset>

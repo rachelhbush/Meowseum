@@ -242,8 +242,16 @@
         Has a spay or neuter tattoo
     </label>
 </div>
+{% if upload.lost.has_collar or upload.lost.microchipped or upload.lost.has_serial_number_tattoo %}
+<div class="nested-form collapse in">
+{% else %}
 <div class="nested-form collapse">
+{% endif %}
+{% if upload.lost.has_collar %}
+    <fieldset class="collapse in" id="collar-fieldset">
+{% else %}
     <fieldset class="collapse" id="collar-fieldset">
+{% endif %}
         <table class="form">
             <tr>
                <th><label>Collar color:</label></td>
@@ -260,7 +268,11 @@
         </div>
     </fieldset>
     {{ lost_form.id_number_description.errors }}
+{% if upload.lost.microchipped or upload.lost.has_serial_number_tattoo %}
+    <div class="field collapse in" id="id-number-description-field">
+{% else %}
     <div class="field collapse" id="id-number-description-field">
+{% endif %}
         <label class="bold">Microchip or tattoo ID:</label><br/>
         {{ lost_form.id_number_description }}
     </div>

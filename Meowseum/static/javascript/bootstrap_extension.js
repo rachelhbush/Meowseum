@@ -139,9 +139,9 @@ $(document).ready(function() {
     //    as well as the target element. By default, these use a slide-down/slide-up animation. This function extends this system by allowing elements to be hidden or shown instantly.
     //    This function also allows links to have a - at the end that will be shown whenever the collapsible is expanded.
     
-    //    The HTML on the clicked element is data-toggle="instant-collapse" (the traditional slide-up uses data-toggle="collapse") and data-target="#ID".
-    //    The HTML on the target element is class="collapse", which hides the target when the page loads, and id="ID". If the target is shown when the page loads, use class="collapse in".
-    //    In this case, it has no effect, but it makes the HTML consistent with the case where a slide animation is being used, and helps identify the visibility of the element in the structure.
+    //    The HTML on the clicked element is data-toggle="instant-collapse", or data-toggle="collapse" for the traditional slide-up, and data-target="#ID".
+    //    The HTML on the target element is class="collapse (in)" and id="ID". The optional .in class means the target will be shown instead of hidden when the page loads.
+    //    Known issues: If the toggling element is a checkbox and the user clicks Back, then the collapsible will be out of sync.
     var improveCollapsibles = function() {
         $('[data-toggle="instant-collapse"]').mousedown(function() {
             var targetID = $(this).data("target");

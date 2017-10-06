@@ -42,7 +42,7 @@ def render_adoption_editing_view(request, upload, heading):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'adoption', 'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+                      {'upload_category': 'adoption', 'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 2. Render a form for editing an upload in the Lost category.
 def render_lost_editing_view(request, upload, heading):
@@ -53,8 +53,9 @@ def render_lost_editing_view(request, upload, heading):
         edit_upload_form.save()
         return HttpResponseRedirect(reverse('index'))
     else:
+        # The upload record is being passed as context in order to use it to know whether to show or hide the nested form for describing any collar or microchip the pet may have.
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'lost', 'lost_form':lost_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+                      {'upload_category': 'lost', 'lost_form':lost_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
         
 # 3. Render a form for editing an upload in the Found category.
 def render_found_editing_view(request, upload, heading):
@@ -66,7 +67,7 @@ def render_found_editing_view(request, upload, heading):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'found', 'found_form':found_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+                      {'upload_category': 'found', 'found_form':found_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 4. Render a form for editing an upload in the Pets category.
 def render_pet_editing_view(request, upload, heading):
@@ -75,7 +76,7 @@ def render_pet_editing_view(request, upload, heading):
         edit_upload_form.save()
         return HttpResponseRedirect(reverse('index'))
     else:
-        return render(request, 'en/public/edit_upload.html', {'upload_category': 'pets', 'edit_upload_form':edit_upload_form, 'heading':heading, 'relative_url': upload.relative_url})
+        return render(request, 'en/public/edit_upload.html', {'upload_category': 'pets', 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 1.1. Input: upload, an Upload record.
 # Output: A dictionary containing the values with which the BondedWithForm should be initialized.

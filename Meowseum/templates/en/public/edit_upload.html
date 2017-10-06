@@ -13,7 +13,7 @@
 {% endblock %}
 {% block body %}
     <div class="page form">
-        <form class="inner-layout" method="post" enctype="multipart/form-data" action="{% url "edit_upload" relative_url %}">
+        <form class="inner-layout" method="post" enctype="multipart/form-data" action="{% url "edit_upload" upload.relative_url %}">
             {% csrf_token %}
             {% include "en/public/elements/full_page_form_header.html" with heading=heading %}
             <main class="form">

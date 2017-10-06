@@ -256,8 +256,13 @@
         No microchip detected during scan
     </label>
 </div>
+{% if upload.found.has_collar %}
+<div class="nested-form collapse in">
+    <fieldset class="collapse in" id="collar-fieldset">
+{% else %}
 <div class="nested-form collapse">
     <fieldset class="collapse" id="collar-fieldset">
+{% endif %}
         <table class="form">
             <tr>
                <th><label>Collar color:</label></td>
