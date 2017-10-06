@@ -6,6 +6,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ObjectDoesNotExist
+from django.template.defaultfilters import capfirst
 
 # 1. General. This section of the file is for validators which are very general or useful for all models.
 
@@ -24,13 +25,19 @@ class CustomValidator(object):
 @deconstructible
 # Check if a record already exists with the value the user entered, for a given model and a given field. Use this class when a model field has unique=True and it
 # has a corresponding field in a Form class, or, in a ModelForm, the field will be overriden, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception.
-# Input (as keyword arguments): model, a class. field_name, a string. error_message, a string.
+# Input (as keyword arguments): model, a class. field_name, a string. error_message, a string (optional). If the last argument is not provided, the function uses
+# Django's default "not unique" error message, "[Model name] with this [field's verbose name, with the first letter capitalized] already exists."
 # Output: None.
 class UniquenessValidator(CustomValidator):
-    def __init__(self, model, field_name, error_message):
+    def __init__(self, model, field_name, error_message='default'):
         self.model = model
         self.field_name = field_name
-        self.error_message = error_message
+        if error_message == 'default':
+            # Supply Django's default "not unique" error message. The .title() is needed in order for the first letter to be capitalized, but I'm not sure whether Django's
+            # default uses titlecase or just capitalizes the first letter. 
+            self.error_message = str(model._meta.verbose_name.title()) + " with this " + capfirst(model._meta.get_field(field_name).verbose_name) + " already exists."
+        else:
+            self.error_message = error_message
     def __call__(self, value):
         try:
             record = self.model.objects.get(**{self.field_name:value})
