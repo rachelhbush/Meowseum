@@ -202,15 +202,17 @@ class AdoptionForm(ModelForm):
         fields = ('pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2', 'hair_length',
                   'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information', 'likes_cats', 'likes_dogs', 'likes_kids',
                   'likes_kids_age', 'spayed_or_neutered', 'house_trained', 'declawed', 'vaccinated', 'microchipped', 'parasite_free', 'energy_level',
-                  'adoption_fee', 'euthenasia_soon', 'internal_id')
-    def clean_internal_id(self):
-        # This function is required for an optional unique field.
-        return self.cleaned_data['internal_id'] or None
+                  'adoption_fee', 'euthenasia_soon')
 
 class BondedWithForm(forms.Form):
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
+    internal_id = forms.CharField(required=False, max_length=255, label="Pet ID",
+                                  validators=[UniquenessValidator(model=Adoption, field_name='internal_id', error_message="An adoption record with this pet ID already exists.")])
     bonded_with_IDs = forms.CharField(required=False)
-    def clean_bonded_with(self):
+    def clean(self):
+        cleaned_data = super(BondedWithForm, self).clean()
+        if self.cleaned_data['bonded_with_IDs'] != '' and self.cleaned_data.get('internal_id') == '':
+            raise forms.ValidationError('This field is required in order to fill out the "bonded with" field.')
         if self.cleaned_data['bonded_with_IDs'] != '':
             list_of_IDs = self.cleaned_data['bonded_with_IDs'].split(',')
             # For each internal ID, check whether the ID is valid. The only rule is that an ID can't be an empty string. Then, check whether the cat is in the database.
@@ -223,7 +225,7 @@ class BondedWithForm(forms.Form):
                         animal = Adoption.objects.get(internal_id=list_of_IDs[x])
                     except ObjectDoesNotExist:
                         raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
-        return self.cleaned_data['bonded_with_IDs']
+        return self.cleaned_data
 
 class LostForm(ModelForm):
     pet_name = forms.CharField()

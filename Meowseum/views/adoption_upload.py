@@ -24,6 +24,7 @@ def page(request):
         if adoption_form.is_valid() and bonded_with_form.is_valid():
             new_adoption_record = adoption_form.save(commit=False)
             new_adoption_record.upload = upload
+            new_adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
             new_adoption_record.save()
             save_bonded_with_information(new_adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
             return HttpResponseRedirect(reverse('index'))

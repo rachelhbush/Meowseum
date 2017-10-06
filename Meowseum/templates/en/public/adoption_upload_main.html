@@ -270,21 +270,21 @@
     <tr>
         <th><label>Pet ID:</label></th>
         <td>
-            {{ adoption_form.internal_id.errors }}
-            {{ adoption_form.internal_id }}
+            {{ bonded_with_form.non_field_errors }}
+            {{ bonded_with_form.internal_id.errors }}
+            {{ bonded_with_form.internal_id }}
         </td>
     </tr>
     <tr>
         <th><label>Bonded with:</label></th>
         <td>
-            {{ bonded_with_form.non_field_errors }}
             {{ bonded_with_form.bonded_with_IDs.errors }}
             {{ bonded_with_form.bonded_with_IDs }}
         </td>
     </tr>
 </table>
 <div class="form-unit">
-    For the "bonded with" field, copy and paste the ID listed on a pet's adoption page. To specify multiple pets, separate their IDs with commas.
+    For the "bonded with" field, copy and paste the ID listed on a pet's adoption page. To specify multiple pets, separate their IDs with commas. If you are filling out the "bonded with" field, you will need to provide an ID for the pet.
 </div>
 {{ adoption_form.weight.errors }}
 {{ adoption_form.weight_units.errors }}
