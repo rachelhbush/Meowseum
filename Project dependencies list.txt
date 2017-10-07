@@ -1,5 +1,6 @@
 Dependencies with a * have been undergone customization for this project.
 
+Back end:
 - Python 3.5
 - django 1.9.2*
 - postgreSQL 9.4 on production server
@@ -29,3 +30,23 @@ File upload process:
   - numpy 1.11.2
     - cython 0.27
   - ffmpeg
+
+Front end dependencies:
+- Bootstrap CSS* and JavaScript, with modified dropdowns
+  in a separate file
+- iphone-inline-video.min.js allows iOS8 and iOS9 to use an attribute
+  which exempts a video from default iOS behavior where a video goes
+  fullscreen when the user plays it.
+- jquery.form.min.js allows submitting a file in a form via AJAX
+- jQuery Mobile is used for supporting JavaScript events related to
+  mobile devices, such as swiping, but its CSS framework isn't used.
+- jQuery 1.12.4, the latest version compatible with jQuery Mobile
+- Modernizr Boolean tests for HTML5 <input> type support, such as for
+  "email" and "color". Modernizr Boolean tests for flexbox support.
+- moment.js for dates and times
+- placeholders.jquery.min.js for supporting the placeholder attribute
+  in IE9
+- update-browser-notice-if-ie8-firefox25-opera25-safari6-or-chrome30.min.js
+  will show the site with a fixed header warning the user the browser
+  isn't supported. It includes a link which will take them to a browser
+  update page.
