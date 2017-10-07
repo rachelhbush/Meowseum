@@ -13,6 +13,7 @@ from Meowseum.file_handling.CustomStorage import CustomStorage
 from django.db.models import Count
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import RegexValidator
 
 YES_OR_NO_CHOICES = ((True, 'Yes'), (False, 'No'))
 SEX_CHOICES = (('male', 'Male'), ('female', 'Female'))
@@ -585,7 +586,8 @@ class Adoption(PetInfo):
     adoption_fee = models.FloatField(verbose_name="adoption fee", null=True, blank=True)
     euthenasia_soon = models.BooleanField(verbose_name="euthenasia soon", default=False, blank=True)
     # To fill out the "Bonded with" field, the user will enter the ID used internally by the organization or the relative URL.
-    internal_id = models.CharField(max_length=255, verbose_name="pet ID", unique=True, null=True, blank=True)
+    internal_id = models.CharField(max_length=255, verbose_name="pet ID", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
+                                   unique=True, null=True, blank=True)
     bonded_with = models.ManyToManyField("self", blank=True)
     def __str__(self):
         return self.pet_name
@@ -650,7 +652,8 @@ class Found(LostFoundInfo):
     no_microchip = models.BooleanField(verbose_name="no microchip", default=False, blank=True)
     # This field is for shelters that post pets to the Found section for a few weeks before moving them to the Adoption section
     # and use IDs for those pets, like the pets they have available for adoption.
-    internal_id = models.CharField(max_length=255, verbose_name="iD (shelters)", unique=True, null=True, blank=True)
+    internal_id = models.CharField(max_length=255, verbose_name="iD (shelters)", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
+                                   unique=True, null=True, blank=True)
     def __str__(self):
         return "Found pet #" + self.id
     class Meta:

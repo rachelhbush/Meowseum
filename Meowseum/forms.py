@@ -207,7 +207,8 @@ class AdoptionForm(ModelForm):
 class BondedWithForm(forms.Form):
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
     internal_id = forms.CharField(required=False, max_length=255, label="Pet ID",
-                                  validators=[UniquenessValidator(model=Adoption, field_name='internal_id', error_message="An adoption record with this pet ID already exists.")])
+                                  validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.'),
+                                              UniquenessValidator(model=Adoption, field_name='internal_id', error_message="An adoption record with this pet ID already exists.")])
     bonded_with_IDs = forms.CharField(required=False)
     def clean(self):
         cleaned_data = super(BondedWithForm, self).clean()
