@@ -3,7 +3,6 @@
 # The completed form is then sent to a separate view for processing.
 
 from django import forms
-from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, Adoption, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
@@ -73,7 +72,7 @@ class LoginForm(forms.Form):
             raise forms.ValidationError("Wrong email or password")
         return self.cleaned_data
 
-class FromDeviceForm(ModelForm):
+class FromDeviceForm(forms.ModelForm):
     file = MetadataRestrictedFileField()
     def __init__(self, *args, **kwargs):
         super(FromDeviceForm,self).__init__(*args, **kwargs)
@@ -92,7 +91,7 @@ class UploadPage1(forms.Form):
     is_publicly_listed = forms.BooleanField(required=False)
     uploader_has_disabled_comments = forms.BooleanField(required=False)
 
-class EditUploadForm(ModelForm):
+class EditUploadForm(forms.ModelForm):
     # This is a form for modifying the fields of UploadPage1, except for the upload category and tags.
     title = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"Title (optional)"}) )
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
@@ -100,13 +99,13 @@ class EditUploadForm(ModelForm):
         model = Upload
         fields = ('title', 'description', 'is_publicly_listed', 'uploader_has_disabled_comments')
 
-class CommentForm(ModelForm):
+class CommentForm(forms.ModelForm):
     text = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={"placeholder":"Write something here..."}) )
     class Meta:
         model = Comment
         fields = ('text',)
 
-class TagForm(ModelForm):
+class TagForm(forms.ModelForm):
     name = forms.CharField(max_length=255, validators=[validate_tag], widget=forms.TextInput(attrs={"value":"#"}) )
     class Meta:
         model = Tag
@@ -130,14 +129,14 @@ class AbuseReportForm(forms.Form):
             if offending_username != None:
                 raise forms.ValidationError("No user with this username exists.")
 
-class FeedbackForm(ModelForm):
+class FeedbackForm(forms.ModelForm):
     screenshot = MetadataRestrictedFileField()
     class Meta:
         model = Feedback
         fields = ('subject', 'comments', 'email', 'screenshot')
 
 class AdvancedSearchForm(forms.Form):
-    # This form doesn't include a ModelForm because the metadata-related form controls will mostly be different from the Metadata model field. For
+    # This form doesn't include a forms.ModelForm because the metadata-related form controls will mostly be different from the Metadata model field. For
     # example, minimum and maximum duration instead of a duration field. I considered including searching for minimum dimensions, but I expect most
     # uploads to be 1080p, so users won't be needing it. Right now, the search engine will only be able to match each word exactly, not account for
     # things like plurals, common misspellings, and common synonyms. Searches will also threaten to overwhelm the server if there are too many. I have
@@ -159,17 +158,17 @@ class AdvancedSearchForm(forms.Form):
 
 # Forms below this line are used for Meowseum specifically, rather than a general social media site.
 
-class UserContactForm1(ModelForm):
+class UserContactForm1(forms.ModelForm):
     date_of_birth = HTML5DateField(required=False)
     class Meta:
         model = UserContact
         fields = ('phone_number', 'address_line_1', 'address_line_2', 'city', 'state_or_province', 'country', 'zip_code', 'date_of_birth', 'has_volunteering_interest')
-class UserContactForm2(ModelForm):
+class UserContactForm2(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email')
 
-class ShelterForm(ModelForm):
+class ShelterForm(forms.ModelForm):
     is_nonprofit = forms.ChoiceField(choices=YES_OR_NO_CHOICES, widget=forms.RadioSelect())
     age_prohibition = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={"min":"19"}) )
     is_lost_found_meeting_place = forms.ChoiceField(required=False, initial=False, choices=YES_OR_NO_CHOICES, widget=forms.RadioSelect())
@@ -186,7 +185,7 @@ class ShelterForm(ModelForm):
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'spaying_or_neutering_included', 'vaccination_included', 'microchipping_included',
                   'parasite_treatment_included')
 
-class AdoptionForm(ModelForm):
+class AdoptionForm(forms.ModelForm):
     pet_name = forms.CharField()
     sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
     is_dilute = forms.ChoiceField(required=False, choices=Adoption.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
@@ -228,7 +227,7 @@ class BondedWithForm(forms.Form):
                         raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
         return self.cleaned_data
 
-class LostForm(ModelForm):
+class LostForm(forms.ModelForm):
     pet_name = forms.CharField()
     sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
     is_dilute = forms.ChoiceField(required=False, choices=Lost.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
@@ -250,13 +249,13 @@ class LostForm(ModelForm):
                   'location', 'other_special_markings', 'has_collar', 'collar_color', 'collar_description', 'has_spay_or_neuter_tattoo', 'spayed_or_neutered',
                   'microchipped', 'has_serial_number_tattoo', 'id_number_description', 'reward')
 
-class VerifyDescriptionForm(ModelForm):
+class VerifyDescriptionForm(forms.ModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
     class Meta:
         model = Upload
         fields = ('description',)
  
-class FoundForm(ModelForm):
+class FoundForm(forms.ModelForm):
     sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
     is_dilute = forms.ChoiceField(required=False, choices=Found.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
     other_physical = forms.MultipleChoiceField(required=False, choices=Found.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
