@@ -10,6 +10,7 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
+from django.utils.safestring import mark_safe
 
 # Custom widgets
 class HTML5DateInput(forms.DateInput):
@@ -81,15 +82,27 @@ class FromDeviceForm(forms.ModelForm):
         model = TemporaryUpload
         fields = ('file',)
 
-UPLOAD_TYPES = (('adoption', 'adoption'), ('lost', 'lost'), ('found','found'), ('pets','pets'))
+CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
+information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
+related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
 class UploadPage1(forms.Form):
     title = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"Title (optional)"}) )
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
-    upload_type = forms.ChoiceField(required=False, choices=UPLOAD_TYPES, widget=forms.RadioSelect() )
+    upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'adoption'), ('lost', 'lost'), ('found','found'), ('pets','pets')), widget=forms.RadioSelect() )
     tags = forms.CharField(required=False, validators=[validate_tags])
     popular_tags = forms.MultipleChoiceField(required=False, choices=popular_tags, widget=forms.CheckboxSelectMultiple() )
     is_publicly_listed = forms.BooleanField(required=False)
     uploader_has_disabled_comments = forms.BooleanField(required=False)
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(UploadPage1, self).__init__(*args, **kwargs)
+    def clean(self):
+        cleaned_data = super(UploadPage1, self).clean()
+        user = self.cleaned_data.get('user')
+        upload_type = self.cleaned_data.get('upload_type')
+        if upload_type != 'pets' and not self.request.user.user_profile.has_contact_information():
+            raise forms.ValidationError(CONTACT_INFO_ERROR)
+        return self.cleaned_data   
 
 class EditUploadForm(forms.ModelForm):
     # This is a form for modifying the fields of UploadPage1, except for the upload category and tags.
@@ -128,6 +141,7 @@ class AbuseReportForm(forms.Form):
             # In that case, the error message would be redundant with the "This field is required." message, so it shouldn't be added.
             if offending_username != None:
                 raise forms.ValidationError("No user with this username exists.")
+        return self.cleaned_data
 
 class FeedbackForm(forms.ModelForm):
     screenshot = MetadataRestrictedFileField()

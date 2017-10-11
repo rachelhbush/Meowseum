@@ -8,17 +8,12 @@ from django.core.urlresolvers import reverse
 from Meowseum.common_view_functions import increment_hit_count
 
 def page(request):
-    if request.GET:
-        form = AdvancedSearchForm(request.GET)
-        if form.is_valid():
-            # Retrieve the query string for the search. It will have the parameters listed in the same order as in the HTML, which
-            # will make the URL more readable than other ways of retrieving the query string.
-            query_string = request.META['QUERY_STRING']
-            # Redirect to the search page, where the querying will be done using the query string.
-            return HttpResponseRedirect(reverse('search')+"?"+query_string)
-        else:
-            return render(request, 'en/public/advanced_search.html', {'form':form})
+    form = AdvancedSearchForm(request.GET or None)
+    if form.is_valid():
+        # Redirect to the search page, where the querying will be done.
+        # The method this page uses for retrieving the querystring was chosen because it lists the parameters in the same order as the HTML.
+        return HttpResponseRedirect(reverse('search')+"?"+request.META['QUERY_STRING'])
     else:
-        increment_hit_count(request, "advanced_search")
-        form = AdvancedSearchForm()
-        return render(request, 'en/public/advanced_search.html', {'form':form})
+        if str(request.GET) == '<QueryDict: {}>':
+            increment_hit_count(request, "advanced_search")
+    return render(request, 'en/public/advanced_search.html', {'form':form})

@@ -12,48 +12,44 @@ import json
 
 # 0. Main function.
 def page(request, relative_url):
-    if request.method == 'POST':
-        if request.is_ajax():
-            if request.user.is_authenticated():
-                try:
-                    # Retrieve the appropriate slide for the URL.
-                    upload = Upload.objects.get(relative_url=relative_url)
-                except ObjectDoesNotExist:
-                    # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-                    return ajaxWholePageRedirect(request, reverse('index'))
-                
-                tag_form = TagForm(request.POST)
-                if tag_form.is_valid():
-                    process_tag_form(upload, relative_url, tag_form)
-                    return get_successful_submission_response(request, upload, relative_url)
-                else:
-                    return get_response_to_erroneous_data(request, upload, relative_url, tag_form)
+    if request.is_ajax():
+        if request.user.is_authenticated():
+            try:
+                # Retrieve the appropriate slide for the URL.
+                upload = Upload.objects.get(relative_url=relative_url)
+            except ObjectDoesNotExist:
+                # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
+                return ajaxWholePageRedirect(request, reverse('index'))
+            
+            tag_form = TagForm(request.POST or None)
+            if tag_form.is_valid():
+                process_tag_form(upload, relative_url, tag_form)
+                return get_successful_submission_response(request, upload, relative_url)
             else:
-                # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
-                # Redirect the user back to the previous page after the user logs in.
-                return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+                return get_response_to_erroneous_data(request, upload, relative_url, tag_form)
         else:
-            if request.user.is_authenticated():
-                try:
-                    # Retrieve the appropriate slide for the URL.
-                    upload = Upload.objects.get(relative_url=relative_url)
-                except ObjectDoesNotExist:
-                    # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-                    return HttpResponseRedirect(request, reverse('index'))
-                
-                tag_form = TagForm(request.POST)
-                if tag_form.is_valid():
-                    process_tag_form(upload, relative_url, tag_form)
-                    return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))
-                else:
-                    # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
-                    # and implementing this is a lower priority than getting the form working with AJAX.
-                    return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))
-            else:
-                return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+            # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
+            # Redirect the user back to the previous page after the user logs in.
+            return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
     else:
-        # The user visited by navigation bar for some reason and shouldn't be here. Redirect to the front page.
-        return HttpResponseRedirect(reverse('index'))
+        if request.user.is_authenticated():
+            try:
+                # Retrieve the appropriate slide for the URL.
+                upload = Upload.objects.get(relative_url=relative_url)
+            except ObjectDoesNotExist:
+                # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
+                return HttpResponseRedirect(request, reverse('index'))
+            
+            tag_form = TagForm(request.POST or None)
+            if tag_form.is_valid():
+                process_tag_form(upload, relative_url, tag_form)
+                return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))
+            else:
+                # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
+                # and implementing this is a lower priority than getting the form working with AJAX.
+                return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))
+        else:
+            return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
 
 # 1. Input: upload, relative_url, tag_form. Output: None.
 def process_tag_form(upload, relative_url, tag_form):

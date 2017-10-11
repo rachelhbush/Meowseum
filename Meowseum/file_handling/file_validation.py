@@ -20,24 +20,27 @@ from Meowseum.templatetags.my_filters import timeelapsed
 # Output: First, the metadata dictionary, except for the 'name' key, which Django may change during .save() as part of its built-in validation.
 # If no file was uploaded, then return an empty string to store into the metadata variable in order to keep the logic the same. Second, the form.
 def get_validated_metadata(field, form, request_files, validation_specifications):
-    try:
-        file = request_files[field]
-        metadata = validate_file(file, validation_specifications)
-    except ValidationError as error:
-        form.add_error(field, error)
-        metadata = ''
-    except MultiValueDictKeyError as error:
-        # When no file is uploaded, there is no key for the field in request.FILES, so trying to reference it causes an exception.
-        # This is convenient, because we have to check for a file before trying to validate it.
-        if form.fields[field].required:
-            # Return an error if the field is required.
-            if form.fields[field].error_messages['required'] == None:
-                form.add_error('file', ValidationError("This field is required."))
-            else:
-                # Return the custom error message.
-                form.add_error('file', ValidationError(form.fields[field].error_messages['required']))
-        metadata = ''
-    return metadata, form
+        try:
+            file = request_files[field]
+            metadata = validate_file(file, validation_specifications)
+        except KeyError:
+            # The user is loading a blank form from a view written using the FormName(request.POST or None, request.FILES or None) format.
+            return '', form
+        except ValidationError as error:
+            form.add_error(field, error)
+            metadata = ''
+        except MultiValueDictKeyError as error:
+            # When no file is uploaded, there is no key for the field in request.FILES, so trying to reference it causes an exception.
+            # This is convenient, because we have to check for a file before trying to validate it.
+            if form.fields[field].required:
+                # Return an error if the field is required.
+                if form.fields[field].error_messages['required'] == None:
+                    form.add_error('file', ValidationError("This field is required."))
+                else:
+                    # Return the custom error message.
+                    form.add_error('file', ValidationError(form.fields[field].error_messages['required']))
+            metadata = ''
+        return metadata, form
 
 # 1. This function contains the main logic for gathering the metadata from the file and validating it.
 # Input: uploaded_file. The input file will be of the class InMemoryUploadedFile or TemporaryUploadedFile depending on the file size.

@@ -12,48 +12,44 @@ from Meowseum.views.slide_page import get_comments_from_unmuted_users
 
 # 0. Main function.
 def page(request, relative_url):
-    if request.method == 'POST':
-        if request.is_ajax():
-            if request.user.is_authenticated():
-                try:
-                    # Retrieve the appropriate slide for the URL.
-                    upload = Upload.objects.get(relative_url=relative_url)
-                except ObjectDoesNotExist:
-                    # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-                    return ajaxWholePageRedirect(request, reverse('index'))
+    if request.is_ajax():
+        if request.user.is_authenticated():
+            try:
+                # Retrieve the appropriate slide for the URL.
+                upload = Upload.objects.get(relative_url=relative_url)
+            except ObjectDoesNotExist:
+                # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
+                return ajaxWholePageRedirect(request, reverse('index'))
 
-                comment_form = CommentForm(request.POST)
-                if comment_form.is_valid():
-                    comment = save_comment_form(upload, comment_form, request.user)
-                    return get_successful_submission_response(request, comment)
-                else:
-                    return get_response_to_erroneous_data(request, comment_form)
+            comment_form = CommentForm(request.POST or None)
+            if comment_form.is_valid():
+                comment = save_comment_form(upload, comment_form, request.user)
+                return get_successful_submission_response(request, comment)
             else:
-                # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
-                # Redirect the user back to the previous page after the user logs in.
-                return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+                return get_response_to_erroneous_data(request, comment_form)
         else:
-            if request.user.is_authenticated():
-                try:
-                    # Retrieve the appropriate slide for the URL.
-                    upload = Upload.objects.get(relative_url=relative_url)
-                except ObjectDoesNotExist:
-                    # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-                    return HttpResponseRedirect(request, reverse('index'))
-
-                comment_form = CommentForm(request.POST)
-                if comment_form.is_valid():
-                    save_comment_form(upload, comment_form, request.user)
-                    return HttpResponseRedirect( reverse('slide_page', args=[relative_url])) 
-                else:
-                    # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
-                    # and implementing this is a lower priority than getting the form working with AJAX.
-                    return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))    
-            else:
-                return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+            # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
+            # Redirect the user back to the previous page after the user logs in.
+            return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
     else:
-        # The user visited by navigation bar for some reason and shouldn't be here. Redirect to the front page.
-        return HttpResponseRedirect(reverse('index'))    
+        if request.user.is_authenticated():
+            try:
+                # Retrieve the appropriate slide for the URL.
+                upload = Upload.objects.get(relative_url=relative_url)
+            except ObjectDoesNotExist:
+                # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
+                return HttpResponseRedirect(request, reverse('index'))
+
+            comment_form = CommentForm(request.POST or None)
+            if comment_form.is_valid():
+                save_comment_form(upload, comment_form, request.user)
+                return HttpResponseRedirect( reverse('slide_page', args=[relative_url])) 
+            else:
+                # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
+                # and implementing this is a lower priority than getting the form working with AJAX.
+                return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))    
+        else:
+            return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
 
 # 1. Save the comment form.
 # Input: upload, comment_form. Output: new_comment_record

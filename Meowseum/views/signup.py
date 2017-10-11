@@ -15,33 +15,27 @@ from Meowseum.common_view_functions import increment_hit_count
 from ipware.ip import get_real_ip
 
 def page(request):
-    if request.POST:
-        # The user accessed the view by sending a POST request (form). Create a form object from the request data.
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            # Register.
-            username = form.cleaned_data["username"]
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-            new_user = User.objects.create_user(username=username, email=email, password=password)
-            new_user.is_active=True
-            new_user.save()
-            ip_address = get_real_ip(request)
-            if ip_address is not None:
-                new_profile = UserProfile(user_auth = new_user, registered_with_ip_address = get_real_ip(request))
-            else:
-                new_profile = UserProfile(user_auth = new_user)
-            new_profile.save()
-            # Log in as the newly registered user.
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            # Redirect to the front page.
-            return HttpResponseRedirect(reverse('index'))
+    form = SignupForm(request.POST or None)
+    if form.is_valid():
+        # Register.
+        username = form.cleaned_data["username"]
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
+        new_user = User.objects.create_user(username=username, email=email, password=password)
+        new_user.is_active=True
+        new_user.save()
+        ip_address = get_real_ip(request)
+        if ip_address is not None:
+            new_profile = UserProfile(user_auth = new_user, registered_with_ip_address = get_real_ip(request))
         else:
-            # Return the form with error messages.
-            return render(request, 'en/public/signup.html', {'form':form})
+            new_profile = UserProfile(user_auth = new_user)
+        new_profile.save()
+        # Log in as the newly registered user.
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        # Redirect to the front page.
+        return HttpResponseRedirect(reverse('index'))
     else:
-        increment_hit_count(request, "signup")
-        # The user accessed the view by navigating to a page that uses it. Load the page with a blank form.
-        form = SignupForm()
+        if request.method == 'GET':
+            increment_hit_count(request, "signup")
         return render(request, 'en/public/signup.html', {'form':form})

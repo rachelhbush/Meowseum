@@ -278,6 +278,19 @@ class UserProfile(models.Model):
             return True
         except ObjectDoesNotExist:
             return False
+    def has_contact_information(self):
+        # This method is used by the upload_page1.py view, for detecting whether the user needs to be warned, and it is used by the UploadPage1 form for validation.
+        # Determine whether the user has contact information on file, either via a UserContact (regular user) or Shelter account record. Only users with account
+        # information can upload to the Adoption, Lost, and Found sections.
+        try:
+           Shelter.objects.get(account = self.user_auth)
+           return True
+        except Shelter.DoesNotExist:
+            try:
+                UserContact.objects.get(account = self.user_auth)
+                return True
+            except UserContact.DoesNotExist:
+                return False
     def __str__(self):
         return self.user_auth.username
 

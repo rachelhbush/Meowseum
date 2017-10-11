@@ -17,19 +17,14 @@ def page(request):
     # Define the heading that will be used in the form's header.
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
-    if request.POST:
-        lost_form = LostForm(request.POST)
-        verify_description_form = VerifyDescriptionForm(request.POST)
-        if lost_form.is_valid() and verify_description_form.is_valid():
-            new_lost_record = lost_form.save(commit=False)
-            new_lost_record.upload = upload
-            new_lost_record.save()
-            upload.description = verify_description_form.cleaned_data['description']
-            upload.save()
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            return render(request, 'en/public/lost_upload.html', {'lost_form':lost_form, 'verify_description_form':verify_description_form, 'heading':heading})
+    lost_form = LostForm(request.POST or None)
+    verify_description_form = VerifyDescriptionForm(request.POST or None, initial={'description':upload.description})
+    if lost_form.is_valid() and verify_description_form.is_valid():
+        new_lost_record = lost_form.save(commit=False)
+        new_lost_record.upload = upload
+        new_lost_record.save()
+        upload.description = verify_description_form.cleaned_data['description']
+        upload.save()
+        return HttpResponseRedirect(reverse('index'))
     else:
-        lost_form = LostForm()
-        verify_description_form = VerifyDescriptionForm(initial={"description":upload.description})
         return render(request, 'en/public/lost_upload.html', {'lost_form':lost_form, 'verify_description_form':verify_description_form, 'heading':heading})

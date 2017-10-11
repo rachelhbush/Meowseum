@@ -3,20 +3,15 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from Meowseum.models import Upload, hosting_limits_for_Upload, Tag, Like, Shelter, UserContact
-from Meowseum.forms import UploadPage1
+from Meowseum.forms import UploadPage1, CONTACT_INFO_ERROR
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.safestring import mark_safe
 import os
 from django.conf import settings
 from Meowseum.file_handling.CustomStorage import get_valid_file_name
 from Meowseum.file_handling.file_utility_functions import make_unique_with_random_id_suffix_within_character_limit, file_name_and_url_will_be_unique, move_file
-
-CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
-information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
-related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
 
 # 0. Main function.
 @login_required
@@ -25,55 +20,29 @@ def page(request):
     # Try to get the logged-in user's most recent file submission.
     # If the user is logged out or hasn't submitted a file yet, then redirect to the homepage.
     try:
-        record = Upload.objects.filter(uploader=request.user).order_by("-id")[0]
+        record = Upload.objects.filter(uploader=request.user).order_by('-id')[0]
         template_variables['upload'] = record
     except IndexError:
         return HttpResponseRedirect(reverse('index'))
     
-    template_variables['heading'] = "Uploading " + record.metadata.original_file_name + record.metadata.original_extension
+    template_variables['heading'] = 'Uploading ' + record.metadata.original_file_name + record.metadata.original_extension
     template_variables['upload_directory'] = Upload.UPLOAD_TO
     template_variables['poster_directory'] = hosting_limits_for_Upload['poster_directory']
-    has_contact_information = determine_if_user_has_contact_information(request.user)
-    template_variables['has_contact_information'] = has_contact_information
+    template_variables['has_contact_information'] = request.user.user_profile.has_contact_information()
     template_variables['CONTACT_INFO_ERROR'] = CONTACT_INFO_ERROR
     
-    if request.POST:
-        # The user accessed the view by sending a POST request (form). Create a Form object from the request data and validate the form.
-        form = UploadPage1(request.POST)
-        if request.POST.get('upload_type') != 'pets' and not has_contact_information:
-            form.add_error('upload_type', CONTACT_INFO_ERROR)
-        if form.is_valid():
-            update_and_save_upload_record(form, record)
-            rename_upload_file(record, hosting_limits_for_Upload['poster_directory'])
-            # Users will automatically Like their own uploads. Use get_or_create because there is nothing stopping a user from
-            # going back to this page again after the upload has been submitted and using it to edit the user's most recent upload, even though when
-            # the editing feature is introduced, it will use a separate view.
-            Like.objects.get_or_create(upload=record, liker=request.user)
-            return redirect_to_next_page(form.cleaned_data['upload_type'], record.relative_url)
-        else:
-            # Return the form with error messages.
-            template_variables['form'] = form
-            return render(request, 'en/public/upload_page1.html', template_variables)
+    form = UploadPage1(request.POST or None, initial={'upload_type':'pets', 'tags':'#'}, request=request)
+    if form.is_valid():
+        update_and_save_upload_record(form, record)
+        rename_upload_file(record, hosting_limits_for_Upload['poster_directory'])
+        # Users will automatically Like their own uploads. Use get_or_create because there is nothing stopping a user from
+        # going back to this page again after the upload has been submitted and using it to edit the user's most recent upload, even though when
+        # the editing feature is introduced, it will use a separate view.
+        Like.objects.get_or_create(upload=record, liker=request.user)
+        return redirect_to_next_page(form.cleaned_data['upload_type'], record.relative_url)
     else:
-        # The user accessed the view by navigating to it.
-        form = UploadPage1(initial={"upload_type":"pets", "tags":"#"})
         template_variables['form'] = form
         return render(request, 'en/public/upload_page1.html', template_variables)
-
-# 1. Detect whether the user is a shelter or has a contact information record on file.
-# The returned value will be sent to the template, even if the user hasn't yet submitted the form yet. That way, the user will be warned to fill out
-# contact information when he or she first presses Adoption, Lost, or Found, which is easier than filling out the rest of the information and the
-# form returning an error.
-def determine_if_user_has_contact_information(user):
-    try:
-       Shelter.objects.get(account = user)
-       return True
-    except ObjectDoesNotExist:
-        try:
-            UserContact.objects.get(account = user)
-            return True
-        except ObjectDoesNotExist:
-            return False
 
 # 2. Update the upload record with the title, description, tags, and whether or not the upload is publicly listed, then save.
 def update_and_save_upload_record(form, record):

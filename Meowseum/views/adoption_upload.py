@@ -18,21 +18,16 @@ def page(request):
     # Define the heading that will be used in the form's header.
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
-    if request.POST:
-        adoption_form = AdoptionForm(request.POST)
-        bonded_with_form = BondedWithForm(request.POST)
-        if adoption_form.is_valid() and bonded_with_form.is_valid():
-            new_adoption_record = adoption_form.save(commit=False)
-            new_adoption_record.upload = upload
-            new_adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
-            new_adoption_record.save()
-            save_bonded_with_information(new_adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
+    adoption_form = AdoptionForm(request.POST or None)
+    bonded_with_form = BondedWithForm(request.POST or None)
+    if adoption_form.is_valid() and bonded_with_form.is_valid():
+        new_adoption_record = adoption_form.save(commit=False)
+        new_adoption_record.upload = upload
+        new_adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
+        new_adoption_record.save()
+        save_bonded_with_information(new_adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
+        return HttpResponseRedirect(reverse('index'))
     else:
-        adoption_form = AdoptionForm()
-        bonded_with_form = BondedWithForm()
         return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
 
 # 1. If the "bonded_with_IDs" field was filled out, use its comma-separated list field to associate the new adoption record with a list of other adoption records.

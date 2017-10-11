@@ -1,21 +1,12 @@
 # Description: This form is for uploading a file from your PC or mobile device. Both the desktop and mobile versions present it in a modal.
 
-# Because the site doesn't uses modals all over the place but doesn't use AJAX yet, when
-# a form is submitted using a modal, this form processing view will redirect the user back to the previous page. If the previous page is also this page, because it
-# returned an error before successful submission of the form, the best that it can do is redirect to the front page while using the same URL.
-# The form will also store the ID of the form's modal, so that the same one will automatically open when the page redirects. The downside of this is that when an
-# error occurs, the modal will open on every page until the user successfully submits the form, and this can annoy the user if the user changes his or her mind.
-# Also, after successfully submitting a form that had an error before, Google Chrome will keep showing the error when the user opens the modal again until the cache is cleared.
-# Site structure note: The non-AJAX version of the site will work for mobile-only, because the template structure that I've set up doesn't allow a separate forms
-# for mobile and desktop.
-
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from Meowseum.models import TemporaryUpload, Upload, validation_specifications_for_Upload, hosting_limits_for_Upload, Metadata
 from Meowseum.file_handling.file_validation import get_validated_metadata
 from Meowseum.file_handling.stage2_processing import process_to_meet_hosting_limits
 from Meowseum.forms import FromDeviceForm
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 import os
 from django.conf import settings
 from ipware.ip import get_real_ip
@@ -24,25 +15,19 @@ from Meowseum.common_view_functions import ajaxWholePageRedirect
 
 # 0. Main function
 def page(request):
+    # This is the outermost if-statement because a user shouldn't be accessing this page via AJAX unless the user is logged in.
     if request.user.is_authenticated():
-        # This is the outermost if-statement because a user shouldn't be accessing this page via AJAX unless the user is logged in.
-        if request.method == 'POST':
-            # The user accessed the view by sending a POST request. Create a form object from the request data.
-            form = FromDeviceForm(request.POST, request.FILES)
-            # Validate the form.
-            metadata, form = get_validated_metadata('file', form, request.FILES, validation_specifications_for_Upload)
-            if form.is_valid():
-                # Processing.
-                temporary_upload, metadata = create_temporary_upload_record(form, metadata)
-                new_upload, metadata = create_new_upload_record(temporary_upload, metadata, request)
-                create_metadata_record(new_upload, metadata)
-                # Redirect to the page for adding the title, description, and tags.
-                return ajaxWholePageRedirect(request, reverse('upload_page1'))
-            else:
-                # Return the form with error messages.
-                return render(request, 'en/public/upload_modal.html', {'from_device_form' : form})
+        form = FromDeviceForm(request.POST or None, request.FILES or None)
+        # If the user has submitted a form, begin validation.
+        metadata, form = get_validated_metadata('file', form, request.FILES, validation_specifications_for_Upload)
+        if form.is_valid():
+            # Begin processing.
+            temporary_upload, metadata = create_temporary_upload_record(form, metadata)
+            new_upload, metadata = create_new_upload_record(temporary_upload, metadata, request)
+            create_metadata_record(new_upload, metadata)
+            # Redirect to the page for adding the title, description, and tags.
+            return ajaxWholePageRedirect(request, reverse('upload_page1'))
         else:
-            form = FromDeviceForm()
             return render(request, 'en/public/upload_modal.html', {'from_device_form' : form})
     else:
         return ajaxWholePageRedirect(request, reverse('login'))
