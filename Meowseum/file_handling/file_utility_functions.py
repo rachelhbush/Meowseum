@@ -3,7 +3,6 @@
 import os
 import string
 import random
-from django.core.exceptions import ObjectDoesNotExist
 from Meowseum.models import Upload, Metadata
 
 # A. Try to rename or move the file if it exists at the specified location. Do nothing if the file is not there. This is easier than testing for the conditions
@@ -75,7 +74,7 @@ def url_will_be_unique(hypothetical_file_name, record=None):
             return True
         else:
             return False
-    except ObjectDoesNotExist:
+    except Upload.DoesNotExist:
         return True
 
 # D.2. This Boolean function queries the database to determine if a file already exists with a given name.
@@ -89,5 +88,5 @@ def file_name_will_be_unique(hypothetical_file_name, record=None):
             return True
         else:
             return False
-    except ObjectDoesNotExist:
+    except Metadata.DoesNotExist:
         return True

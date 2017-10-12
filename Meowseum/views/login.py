@@ -7,9 +7,7 @@ from django.contrib.auth.models import User
 from Meowseum.forms import LoginForm
 from django.contrib.auth import authenticate, login
 from django.utils import timezone
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from Meowseum.common_view_functions import increment_hit_count
 
 def page(request):
@@ -28,10 +26,10 @@ def page(request):
             user.user_profile.save()
             # If the user was redirected to the login page because the user was looking at a page restricted to logged in users, then redirect to the page the user had been trying to access.
             if request.GET.get('next') is not None:
-                return HttpResponseRedirect(request.GET['next'])
+                return redirect(request.GET['next'])
             else:
                 # If the user came across the login page by navigating to it, then redirect to the front page.
-                return HttpResponseRedirect(reverse('index'))
+                return redirect('index')
     else:
         if request.method == 'GET':
             increment_hit_count(request, "login")

@@ -1,7 +1,7 @@
 # Description: This is the page for processing a search query and displaying the appropriate gallery of results.
 # This includes both header searches and advanced searches.
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from Meowseum.common_view_functions import get_public_unmuted_uploads, generate_gallery
@@ -15,7 +15,6 @@ from functools import reduce
 import datetime
 from django.db.models import Count
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from urllib.parse import quote_plus
 from Meowseum.common_view_functions import increment_hit_count
 
@@ -36,18 +35,18 @@ FORM_DICTIONARY = {'filtering_by_photos':'BooleanField',
 # Otherwise, redirect to the view for the advanced search page and use its "all words" field. This leaves open the possibility of programming
 # other standard header search bar features, such as using " for an exact phrase or - for excluding, and breaking these down into values for the different advanced search fields.
 def header_search(request):
-    increment_hit_count(request, "header_search")
+    increment_hit_count(request, 'header_search')
     header_search = request.GET.get('header_search')
     if header_search == '' or header_search == None:
         # The user didn't submit anything, which shouldn't be possible unless the user deleted all the arguments from the URL. Redirect to the front page.
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     elif header_search.startswith('@') and ' ' not in header_search:
         header_search = header_search.lstrip('@')
         try:
             username = User.objects.get(username = header_search).username
             # If the value is a valid username, redirect to the user page in a later version. Redirect to the user's gallery for now.
-            return HttpResponseRedirect(reverse('gallery', args=[username]))
-        except ObjectDoesNotExist:
+            return redirect('gallery', args=[username])
+        except User.DoesNotExist:
             header_search = '@' + header_search
             # Adapt the user's input for transmission via URL and redirect to the main view for search queries.
             return HttpResponseRedirect(reverse('search') + "?" + "all_words=" + quote_plus(header_search))
@@ -56,8 +55,8 @@ def header_search(request):
         try:
             tag = Tag.objects.get(name = header_search)
             # If the value is a valid tag, redirect to the tag gallery page so the user will be able to subscribe/unsubscribe to the tag.
-            return HttpResponseRedirect(reverse('tag_gallery', args=[tag.name]))
-        except ObjectDoesNotExist:
+            return redirect('tag_gallery', args=[tag.name])
+        except Tag.DoesNotExist:
             header_search = '#' + header_search
             return HttpResponseRedirect(reverse('search') + "?" + "all_words=" + quote_plus(header_search))
     else:
@@ -75,7 +74,7 @@ def page(request):
                 # then delete the saved search setting and begin using the default front page again.
                 del request.session['saved_search']
             # Redirect to the front page.
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
         else:
             request.session['saved_search'] = form
     list_of_uploads = list(get_search_queryset(form, request.user))

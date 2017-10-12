@@ -1,10 +1,9 @@
 # Description: Process a request from a moderator to delete a comment.
 
 from Meowseum.models import Upload, Comment
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 from django.utils.safestring import mark_safe
 import json
 from Meowseum.views.slide_page import get_comments_from_unmuted_users
@@ -16,14 +15,14 @@ def page(request, comment_id):
             upload = delete_comment(request, comment_id)
             return get_server_response(request, comment_id, upload)
         else:
-            return HttpResponse(status=403)
+            raise PermissionDenied
     else:
         if request.user.has_perm('Meowseum.delete_comment'):
             delete_comment(request, comment)
-            return HttpResponseRedirect( reverse('slide_page', args=[comment.upload.relative_url]))
+            return redirect('slide_page', args=[comment.upload.relative_url])
         else:
             # The user visited by navigation bar for some reason and shouldn't be here. Return a 403.
-            return HttpResponse(status=403)
+            raise PermissionDenied
 
 # 1. Delete the comment.
 # Input: request, comment_id. Output: upload, the upload record associated with the comment.

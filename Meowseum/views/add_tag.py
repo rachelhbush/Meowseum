@@ -3,24 +3,18 @@
 
 from Meowseum.models import Upload, Tag
 from Meowseum.forms import TagForm
-from django.shortcuts import render
+from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 import json
 
 # 0. Main function.
 def page(request, relative_url):
+    upload = get_object_or_404(Upload, relative_url=relative_url)
+    
     if request.is_ajax():
         if request.user.is_authenticated():
-            try:
-                # Retrieve the appropriate slide for the URL.
-                upload = Upload.objects.get(relative_url=relative_url)
-            except ObjectDoesNotExist:
-                # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-                return ajaxWholePageRedirect(request, reverse('index'))
-            
             tag_form = TagForm(request.POST or None)
             if tag_form.is_valid():
                 process_tag_form(upload, relative_url, tag_form)
@@ -33,21 +27,14 @@ def page(request, relative_url):
             return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
     else:
         if request.user.is_authenticated():
-            try:
-                # Retrieve the appropriate slide for the URL.
-                upload = Upload.objects.get(relative_url=relative_url)
-            except ObjectDoesNotExist:
-                # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-                return HttpResponseRedirect(request, reverse('index'))
-            
             tag_form = TagForm(request.POST or None)
             if tag_form.is_valid():
                 process_tag_form(upload, relative_url, tag_form)
-                return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))
+                return redirect('slide_page', args=[relative_url])
             else:
                 # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
                 # and implementing this is a lower priority than getting the form working with AJAX.
-                return HttpResponseRedirect( reverse('slide_page', args=[relative_url]))
+                return redirect('slide_page', args=[relative_url])
         else:
             return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
 
@@ -59,7 +46,7 @@ def process_tag_form(upload, relative_url, tag_form):
         existing_tag = Tag.objects.get(name=tag_name)
         existing_tag.uploads.add(upload)
         existing_tag.save()
-    except ObjectDoesNotExist:
+    except Tag.DoesNotExist:
         # If the tag doesn't exist, create a new one and add the most recent upload as the first record.
         new_tag = Tag(name=tag_name)
         new_tag.save()

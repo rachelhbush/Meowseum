@@ -2,21 +2,14 @@
 # At first, this will only affect the fields for Adoption, Lost, and Found.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from Meowseum.models import Upload, Adoption, Lost, Found
 from Meowseum.forms import EditUploadForm, AdoptionForm, BondedWithForm, LostForm, FoundForm
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 
 @login_required
 # 0. Main function.
 def page(request, relative_url):
-    try:
-        # Retrieve the appropriate slide for the URL.
-        upload = Upload.objects.get(relative_url=relative_url)
-    except ObjectDoesNotExist:
-        # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-        return HttpResponseRedirect(reverse('index'))
+    upload = get_object_or_404(Upload, relative_url=relative_url)
     # Define the heading that will be used in the form's header.
     heading = 'Editing "'+ upload.title + '"'
 
@@ -41,7 +34,7 @@ def render_adoption_editing_view(request, upload, heading):
         adoption_record.save()
         edit_bonded_with_information(adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
         edit_upload_form.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         return render(request, 'en/public/edit_upload.html', \
                       {'upload_category': 'adoption', 'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
@@ -53,7 +46,7 @@ def render_lost_editing_view(request, upload, heading):
     if lost_form.is_valid() and edit_upload_form.is_valid():
         lost_form.save()
         edit_upload_form.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         # The upload record is being passed as context in order to use it to know whether to show or hide the nested form for describing any collar or microchip the pet may have.
         return render(request, 'en/public/edit_upload.html', \
@@ -66,7 +59,7 @@ def render_found_editing_view(request, upload, heading):
     if found_form.is_valid() and edit_upload_form.is_valid():
         found_form.save()
         edit_upload_form.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         return render(request, 'en/public/edit_upload.html', \
                       {'upload_category': 'found', 'found_form':found_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
@@ -76,7 +69,7 @@ def render_pet_editing_view(request, upload, heading):
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
     if edit_upload_form.is_valid():
         edit_upload_form.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         return render(request, 'en/public/edit_upload.html', {'upload_category': 'pets', 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 

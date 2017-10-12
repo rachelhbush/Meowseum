@@ -3,9 +3,9 @@
 
 from django.contrib.auth.models import User
 from Meowseum.common_view_functions import ajaxWholePageRedirect
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect, get_object_or_404
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 from django.template.defaultfilters import urlencode
 import json
@@ -16,11 +16,7 @@ def page(request, username):
     # Redirect to the user uploads gallery page when the previous URL is unknown.
     previous_URL = urlencode(request.GET.get('next', reverse('gallery', args=[username])))
     if request.user.is_authenticated():
-        try:
-            uploader_user = User.objects.get(username=username)
-        except ObjectDoesNotExist:
-            return HttpResponseRedirect(reverse('index'))
-
+        uploader_user = get_object_or_404(User, username=username)
         follow_or_unfollow(request.user, uploader_user)
 
         if request.is_ajax():
@@ -32,7 +28,7 @@ def page(request, username):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             # If the request isn't AJAX (JavaScript is disabled), redirect back to the previous page.
-            return HttpResponseRedirect(previous_URL)
+            return redirect(previous_URL)
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the previous page after the user logs in.

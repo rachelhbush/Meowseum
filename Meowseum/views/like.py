@@ -3,30 +3,22 @@
 
 from Meowseum.models import Upload, Like
 from Meowseum.common_view_functions import ajaxWholePageRedirect
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import urlencode
 
 # 0. Main function.
 def page(request, relative_url):    
     if request.user.is_authenticated():
-        try:
-            # Retrieve the appropriate slide for the URL.
-            upload = Upload.objects.get(relative_url=relative_url)
-        except ObjectDoesNotExist:
-            # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-            return HttpResponseRedirect(reverse('index'))
-         
+        upload = get_object_or_404(Upload, relative_url=relative_url)
         like_or_unlike(upload, request.user)
-
         if request.is_ajax():
             # If the request is AJAX, then knowing the request is successful, the Like count can be incremented or decremented client-side, rather than calculating it again.
             # So, nothing further needs to be done, except returning the required HTTPResponse.
             return HttpResponse()
         else:
             # If the request isn't AJAX (JavaScript is disabled), redirect back to the slide page to update it.
-            return HttpResponseRedirect( reverse('slide_page', args=[relative_url]) )
+            return redirect('slide_page', args=[relative_url])
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the slide page after the user logs in.
@@ -40,7 +32,7 @@ def like_or_unlike(upload, request_user):
         like_record = Like.objects.get(upload=upload, liker=request_user)
         # If there is a matching Like record, delete it.
         like_record.delete()
-    except ObjectDoesNotExist:
+    except Like.DoesNotExist:
         # If there isn't a matching Like record, create it.
         like_record = Like(upload=upload, liker=request_user)
         like_record.save()

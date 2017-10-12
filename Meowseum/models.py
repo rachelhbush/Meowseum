@@ -12,7 +12,6 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.file_handling.CustomStorage import CustomStorage
 from django.db.models import Count
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 
 YES_OR_NO_CHOICES = ((True, 'Yes'), (False, 'No'))
@@ -168,15 +167,15 @@ class Upload(models.Model):
         try:
             self.adoption
             return "adoption"
-        except ObjectDoesNotExist:
+        except Adoption.DoesNotExist:
             try:
                 self.lost
                 return "lost"
-            except ObjectDoesNotExist:
+            except Lost.DoesNotExist:
                 try:
                     self.found
                     return "found"
-                except ObjectDoesNotExist:
+                except Found.DoesNotExist:
                     return "pets"
     def __str__(self):
         if self.title:
@@ -276,7 +275,7 @@ class UserProfile(models.Model):
         try:
             self.user_auth.shelter
             return True
-        except ObjectDoesNotExist:
+        except Shelter.DoesNotExist:
             return False
     def has_contact_information(self):
         # This method is used by the upload_page1.py view, for detecting whether the user needs to be warned, and it is used by the UploadPage1 form for validation.

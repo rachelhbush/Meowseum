@@ -5,7 +5,6 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import os
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from Meowseum.file_handling.file_utility_functions import remove_file
 
 # When the last Upload record associated with a Tag record is deleted, delete the Tag record.

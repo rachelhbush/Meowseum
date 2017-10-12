@@ -4,9 +4,7 @@ from Meowseum.models import Feedback, validation_specifications_for_Feedback, ho
 from Meowseum.file_handling.file_validation import get_validated_metadata
 from Meowseum.file_handling.stage2_processing import process_to_meet_hosting_limits
 from Meowseum.forms import FeedbackForm
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from Meowseum.common_view_functions import increment_hit_count
 
 def page(request):
@@ -21,7 +19,7 @@ def page(request):
         if new_feedback.screenshot != None:
             new_feedback.screenshot, metadata = process_to_meet_hosting_limits(new_feedback.screenshot, metadata, hosting_limits_for_Feedback)
             new_feedback.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         template_variables['form'] = form
         if request.method == 'GET':

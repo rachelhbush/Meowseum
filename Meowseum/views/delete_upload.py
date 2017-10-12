@@ -2,23 +2,19 @@
 
 from Meowseum.models import Upload
 from Meowseum.common_view_functions import ajaxWholePageRedirect
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.shortcuts import redirect, get_object_or_404
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import PermissionDenied
 import json
 
 def page(request, relative_url):    
     if request.user.is_authenticated():
-        try:
-            # Retrieve the appropriate slide for the URL.
-            upload = Upload.objects.get(relative_url=relative_url)
-        except ObjectDoesNotExist:
-            # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-            return HttpResponseRedirect(reverse('index'))
+        upload = get_object_or_404(Upload, relative_url=relative_url)
         uploader = upload.uploader.user_profile
         viewer = request.user.user_profile
+        
         response_data = [{}]
-
         if viewer == uploader or (request.user.has_perm('Meowseum.delete_upload') and not upload.uploader.is_staff):
             upload.delete()
             # After deletion, the user needs to immediately be redirected to another page, or else exceptions from expecting the upload such as
@@ -30,8 +26,8 @@ def page(request, relative_url):
             response_data[0]['selector'] = '.dropdown_delete_option'
             response_data[0]['HTML_snippet'] = """<span class="glyphicon glyphicon-remove-circle"></span><div class="inline-block">You can't delete an upload from another moderator.<br>Please contact an administrator!</div>"""
         else:
-            # A regular user accessed the page, probably via the URL bar, for an upload without user permissions. Return a 403 error.
-            return HttpResponseForbidden()
+            # A regular user accessed the page, probably via the URL bar, for an upload without user permissions.
+            raise PermissionDenied
     
         if request.is_ajax():
             # The request is AJAX when using the Follow button dropdown to moderate, in order to relay the error when the upload is from a moderator.
@@ -39,7 +35,7 @@ def page(request, relative_url):
         else:
             # The request is a regular GET request when the user visits via the Delete button (link) on one of the user's uploads. The URL bar also works.
             # Redirect to the front page after processing.
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the slide page after the user logs in.

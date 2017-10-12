@@ -3,9 +3,7 @@
 from Meowseum.models import AbuseReport
 from django.contrib.auth.models import User
 from Meowseum.forms import AbuseReportForm
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from Meowseum.common_view_functions import increment_hit_count
 
 def page(request):
@@ -36,7 +34,7 @@ def page(request):
                                      abuse_description=form.cleaned_data['abuse_description'],
                                      url=form.cleaned_data['url'])
         new_record.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         if request.method == 'GET':
             increment_hit_count(request, "report_abuse")

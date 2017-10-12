@@ -8,9 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.utils import timezone
 import string
 import random
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from Meowseum.common_view_functions import increment_hit_count
 from ipware.ip import get_real_ip
 
@@ -34,7 +32,7 @@ def page(request):
         user = authenticate(username=username, password=password)
         login(request, user)
         # Redirect to the front page.
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         if request.method == 'GET':
             increment_hit_count(request, "signup")

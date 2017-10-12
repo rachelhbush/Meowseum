@@ -8,7 +8,6 @@ from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, Adoption, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
 from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 
@@ -58,13 +57,13 @@ class LoginForm(forms.Form):
             try:
                 user = User.objects.get(email=email_or_username)
                 username = user.username
-            except ObjectDoesNotExist:
+            except User.DoesNotExist:
                 raise forms.ValidationError("No username with this email exists.")
         else:
             try:
                 user = User.objects.get(username=email_or_username)
                 username = email_or_username
-            except ObjectDoesNotExist:
+            except User.DoesNotExist:
                 raise forms.ValidationError("No account with this username exists.")
 
         if not user.is_active:
@@ -136,7 +135,7 @@ class AbuseReportForm(forms.Form):
         offending_username = self.cleaned_data.get('offending_username')
         try:
             offending_user = User.objects.get(username=offending_username)
-        except ObjectDoesNotExist:
+        except User.DoesNotExist:
             # If the user doesn't exist, then first check if the user left the field blank.
             # In that case, the error message would be redundant with the "This field is required." message, so it shouldn't be added.
             if offending_username != None:
@@ -237,7 +236,7 @@ class BondedWithForm(forms.Form):
                 else:
                     try:
                         animal = Adoption.objects.get(internal_id=list_of_IDs[x])
-                    except ObjectDoesNotExist:
+                    except Adoption.DoesNotExist:
                         raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
         return self.cleaned_data
 

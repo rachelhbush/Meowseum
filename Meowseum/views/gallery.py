@@ -4,13 +4,12 @@
 from django.contrib.auth.decorators import login_required
 from Meowseum.models import Upload, Like, Tag
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from operator import attrgetter
 from django.db.models import Count
 import datetime
-from django.core.exceptions import ObjectDoesNotExist
 from Meowseum.common_view_functions import get_public_unmuted_uploads, generate_gallery, increment_hit_count, sort_by_popularity, sort_by_trending
 from Meowseum.views.search import get_search_queryset
 
@@ -84,7 +83,7 @@ def tag_gallery(request, tag_name):
             template_variables['subscribed'] = True
         else:
             template_variables['subscribed'] = False
-    except ObjectDoesNotExist:
+    except Tag.DoesNotExist:
         upload_queryset = []
         template_variables['subscribed'] = None
     return generate_gallery(request, upload_queryset, "No uploads currently have this tag.", template_variables)
@@ -92,7 +91,7 @@ def tag_gallery(request, tag_name):
 @login_required
 def your_uploads(request):
     # Shortcut for the link in the header. This exists because it is currently faster than having request.user stored as a variable in the template on every page.
-    return HttpResponseRedirect(reverse('gallery', args=[request.user.username]))
+    return redirect('gallery', args=[request.user.username])
 
 # Main function for the 'gallery' page.
 def uploads(request, username):
@@ -140,7 +139,7 @@ def uploads(request, username):
 @login_required
 def your_likes(request):
     # Shortcut for the link in the header
-    return HttpResponseRedirect(reverse('likes', args=[request.user.username]))
+    return redirect('likes', args=[request.user.username])
 
 # Main function for the 'likes' page.
 def likes(request, username):

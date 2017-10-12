@@ -3,7 +3,7 @@
 from django.contrib.auth.decorators import login_required
 from Meowseum.models import Upload, Comment, hosting_limits_for_Upload
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -13,12 +13,12 @@ from Meowseum.common_view_functions import get_public_unmuted_uploads
 @login_required
 def your_comments(request):
     # Shortcut for the link in the header
-    return HttpResponseRedirect(reverse('user_comments', args=[request.user.username]))
+    return redirect('user_comments', args=[request.user.username])
 
 # 0. Main function.
 def page(request, username):
     template_variables = {}
-    increment_hit_count(request, "user_comments")
+    increment_hit_count(request, 'user_comments')
     # Send the username to the template in order to use it in the navigation bar.
     template_variables['profile_username'] = username
 

@@ -1,13 +1,11 @@
 # REMARKS: Upload from device form. This form is for adding a title, description, and tags to the most recent file that a user uploaded.
 
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from Meowseum.models import Upload, hosting_limits_for_Upload, Tag, Like, Shelter, UserContact
 from Meowseum.forms import UploadPage1, CONTACT_INFO_ERROR
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 import os
 from django.conf import settings
 from Meowseum.file_handling.CustomStorage import get_valid_file_name
@@ -18,12 +16,12 @@ from Meowseum.file_handling.file_utility_functions import make_unique_with_rando
 def page(request):
     template_variables = {}
     # Try to get the logged-in user's most recent file submission.
-    # If the user is logged out or hasn't submitted a file yet, then redirect to the homepage.
     try:
         record = Upload.objects.filter(uploader=request.user).order_by('-id')[0]
         template_variables['upload'] = record
     except IndexError:
-        return HttpResponseRedirect(reverse('index'))
+        # If the user hasn't submitted a file yet, then the user shouldn't be here.
+        raise PermissionDenied
     
     template_variables['heading'] = 'Uploading ' + record.metadata.original_file_name + record.metadata.original_extension
     template_variables['upload_directory'] = Upload.UPLOAD_TO
@@ -63,7 +61,7 @@ def update_and_save_upload_record(form, record):
             existing_tag = Tag.objects.get(name=tag)
             existing_tag.uploads.add(record)
             existing_tag.save()
-        except ObjectDoesNotExist:
+        except Tag.DoesNotExist:
             # If the tag doesn't exist, create a new one and add the most recent upload as the first record.
             new_tag = Tag(name=tag)
             new_tag.save()
@@ -161,11 +159,11 @@ def get_new_file_name(record):
 # Input: upload_type, a string for the category. relative_url, a string which will be used when the upload is in the Pets category.
 # In this case, the user doesn't need to fill out a second form, so the user will be redirected to the slide page for the new upload.
 def redirect_to_next_page(upload_type, relative_url):
-    if upload_type == "adoption":
-        return HttpResponseRedirect(reverse('adoption_upload'))
-    elif upload_type == "lost":
-        return HttpResponseRedirect(reverse('lost_upload'))
-    elif upload_type == "found":
-        return HttpResponseRedirect(reverse('found_upload'))
+    if upload_type == 'adoption':
+        return redirect('adoption_upload')
+    elif upload_type == 'lost':
+        return redirect('lost_upload')
+    elif upload_type == 'found':
+        return redirect('found_upload')
     else:
-        return HttpResponseRedirect(reverse('slide_page', args=[relative_url]))
+        return redirect('slide_page', args=[relative_url])

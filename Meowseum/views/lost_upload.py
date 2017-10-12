@@ -1,11 +1,9 @@
 # Description: This form is for all of the fields in the upload process relating to the Lost category.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from Meowseum.models import Upload, Lost
 from Meowseum.forms import LostForm, VerifyDescriptionForm
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 
 @login_required
 def page(request):
@@ -13,7 +11,8 @@ def page(request):
     try:
         upload = Upload.objects.filter(uploader=request.user).order_by("-id")[0]
     except IndexError:
-        return HttpResponseRedirect(reverse('index'))
+        # If the user hasn't submitted a file yet, then the user shouldn't be here.
+        raise PermissionDenied
     # Define the heading that will be used in the form's header.
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
@@ -25,6 +24,6 @@ def page(request):
         new_lost_record.save()
         upload.description = verify_description_form.cleaned_data['description']
         upload.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         return render(request, 'en/public/lost_upload.html', {'lost_form':lost_form, 'verify_description_form':verify_description_form, 'heading':heading})

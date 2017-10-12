@@ -1,12 +1,9 @@
 # Description: This is the form for registering as a shelter and editing the information on file.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from Meowseum.models import Shelter
 from Meowseum.forms import ShelterForm
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def page(request):
@@ -16,7 +13,7 @@ def page(request):
     try:
         shelter = Shelter.objects.get(account = request.user)
         form = ShelterForm(request.POST or None, instance=shelter)
-    except ObjectDoesNotExist:
+    except Shelter.DoesNotExist:
         user_has_shelter_record_on_file = False
         form = ShelterForm(request.POST or None)
             
@@ -24,6 +21,6 @@ def page(request):
         shelter = form.save(commit=False)
         shelter.account = request.user
         shelter.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         return render(request, 'en/public/shelter_contact_information.html', {'form':form, 'user_has_shelter_record_on_file':user_has_shelter_record_on_file})

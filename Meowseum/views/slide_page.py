@@ -2,18 +2,14 @@
 
 from Meowseum.models import Upload, Metadata, Comment, Tag, Like, Page, hosting_limits_for_Upload
 from Meowseum.forms import CommentForm, TagForm
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import capfirst
 from Meowseum.templatetags.my_filters import humanize_list, format_currency
 from django.utils.safestring import mark_safe
 from django.template.defaultfilters import urlencode
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
-from django.utils.timezone import is_aware
-from Meowseum.common_view_functions import ajaxWholePageRedirect
     
 # 0. Main function. Input: request. relative_url refers to a unique code which appears in the URL.
 def page(request, relative_url):
@@ -22,14 +18,9 @@ def page(request, relative_url):
     if " " in relative_url:
         # This allows desktop users to share the slide by pasting the title onto the end of the prefix, while keeping the URL legible in the navigation bar.
         # Most of the time, users will be browsing and sharing using a URL with underscores.
-        return HttpResponseRedirect( reverse('slide_page', args=[relative_url.replace(" ","_")]) )
+        return redirect('slide_page', args=[relative_url.replace(" ","_")])
     else:
-        try:
-            # Retrieve the appropriate slide for the URL.
-            upload = Upload.objects.get(relative_url=relative_url)
-        except ObjectDoesNotExist:
-            # There isn't a slide for this URL, so redirect to the homepage in order to avoid an exception.
-            return HttpResponseRedirect(reverse('index'))
+        upload = get_object_or_404(Upload, relative_url=relative_url)
 
     # Next, set up all the remaining variables that will be used by functions in the view.
     template_variables['upload'] = upload
@@ -42,7 +33,7 @@ def page(request, relative_url):
         try:
             like_record = Like.objects.get(upload=upload, liker=request.user)
             template_variables['user_has_liked_this_upload'] = True
-        except ObjectDoesNotExist:
+        except Like.DoesNotExist:
             template_variables['user_has_liked_this_upload'] = False
     # Store the absolute URL used for the report abuse option.
     template_variables['report_abuse_url'] = reverse('report_abuse') + "?offending_username=" + urlencode(upload.uploader.username) + "&referral_url=" + urlencode(request.path)

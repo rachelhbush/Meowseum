@@ -1,20 +1,20 @@
 # Description: This form is for all of the fields in the upload process relating to the Adoption category.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.exceptions import PermissionDenied
 from Meowseum.models import Upload, Adoption
 from Meowseum.forms import AdoptionForm, BondedWithForm
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 
 @login_required
 # 0. Main function.
 def page(request):
-    # Obtain the logged-in user's most recent file submission. If the user hasn't submitted a file yet, then redirect to the homepage.
+    # Obtain the logged-in user's most recent file submission.
     try:
         upload = Upload.objects.filter(uploader=request.user).order_by("-id")[0]
     except IndexError:
-        return HttpResponseRedirect(reverse('index'))
+        # If the user hasn't submitted a file yet, then the user shouldn't be here.
+        raise PermissionDenied
     # Define the heading that will be used in the form's header.
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
@@ -26,7 +26,7 @@ def page(request):
         new_adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
         new_adoption_record.save()
         save_bonded_with_information(new_adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     else:
         return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
 
