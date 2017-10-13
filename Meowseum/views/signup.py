@@ -8,8 +8,8 @@ from django.contrib.auth import authenticate, login
 from django.utils import timezone
 import string
 import random
-from django.shortcuts import render, redirect
-from Meowseum.common_view_functions import increment_hit_count
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect, increment_hit_count
 from ipware.ip import get_real_ip
 
 def page(request):

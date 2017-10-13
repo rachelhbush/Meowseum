@@ -1,7 +1,7 @@
 # Description: Process a request from a moderator to delete a comment.
 
 from Meowseum.models import Upload, Comment
-from django.shortcuts import redirect
+from Meowseum.common_view_functions import redirect
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.safestring import mark_safe

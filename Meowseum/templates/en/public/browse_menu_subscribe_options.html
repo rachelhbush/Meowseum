@@ -11,7 +11,7 @@
 {% else %}
     {% if tag != None %}
         <li class="mutable">
-            <a href="#" class="ajax-btn header_subscribe_button" data-ajax-url="{% url "subscribe" tag.name %}?next={{ request.path | urlencode }}">
+            <a href="#" class="ajax-btn header_subscribe_button" data-ajax-url="{% url "subscribe" tag.name %}">
                 {% comment %}
                     The def is only relevant to styling the mobile version, in order to make programming the AJAX back end easier. It has no effect on the desktop layout.
                 {% endcomment %}

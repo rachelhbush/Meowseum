@@ -3,8 +3,8 @@
 from Meowseum.models import AbuseReport
 from django.contrib.auth.models import User
 from Meowseum.forms import AbuseReportForm
-from django.shortcuts import render, redirect
-from Meowseum.common_view_functions import increment_hit_count
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect, increment_hit_count
 
 def page(request):
     template_variables, initial_data = {}, {}

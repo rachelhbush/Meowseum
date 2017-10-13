@@ -1,7 +1,8 @@
 # REMARKS: Upload from device form. This form is for adding a title, description, and tags to the most recent file that a user uploaded.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from Meowseum.models import Upload, hosting_limits_for_Upload, Tag, Like, Shelter, UserContact

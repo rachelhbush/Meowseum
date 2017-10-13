@@ -2,8 +2,8 @@
 # Currently, this is only for AJAX requests, but it is designed to handle requests when JavaScript is disabled.
 
 from django.contrib.auth.models import User
-from Meowseum.common_view_functions import ajaxWholePageRedirect
-from django.shortcuts import redirect, get_object_or_404
+from Meowseum.common_view_functions import redirect, ajaxWholePageRedirect
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
@@ -46,4 +46,4 @@ def page(request, username):
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the previous page after the user logs in.
-        return ajaxWholePageRedirect(request, reverse('login') + "?next=" + previous_URL)
+        return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + previous_URL)

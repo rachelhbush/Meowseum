@@ -2,7 +2,8 @@
 
 from Meowseum.models import Upload
 from Meowseum.common_view_functions import ajaxWholePageRedirect
-from django.shortcuts import redirect, get_object_or_404
+from Meowseum.common_view_functions import redirect
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
@@ -39,4 +40,4 @@ def page(request, relative_url):
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the slide page after the user logs in.
-        return ajaxWholePageRedirect(request, reverse('login')+ "?next=" + urlencode(reverse('slide_page', args=[relative_url])))
+        return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))

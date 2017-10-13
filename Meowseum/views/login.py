@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from Meowseum.forms import LoginForm
 from django.contrib.auth import authenticate, login
 from django.utils import timezone
-from django.shortcuts import render, redirect
-from Meowseum.common_view_functions import increment_hit_count
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect, increment_hit_count
 
 def page(request):
     form = LoginForm(request.POST or None)

@@ -1,7 +1,8 @@
 # Description: This is the form for registering as a shelter and editing the information on file.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect
 from Meowseum.models import Shelter
 from Meowseum.forms import ShelterForm
 

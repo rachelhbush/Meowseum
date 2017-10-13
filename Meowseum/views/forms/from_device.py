@@ -3,6 +3,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from Meowseum.common_view_functions import ajaxWholePageRedirect
 from Meowseum.models import TemporaryUpload, Upload, validation_specifications_for_Upload, hosting_limits_for_Upload, Metadata
 from Meowseum.file_handling.file_validation import get_validated_metadata
 from Meowseum.file_handling.stage2_processing import process_to_meet_hosting_limits
@@ -11,7 +12,6 @@ import os
 from django.conf import settings
 from ipware.ip import get_real_ip
 from Meowseum.file_handling.file_utility_functions import move_file, make_unique_with_random_id_suffix_within_character_limit, file_name_and_url_will_be_unique
-from Meowseum.common_view_functions import ajaxWholePageRedirect
 
 # 0. Main function
 def page(request):
@@ -26,11 +26,11 @@ def page(request):
             new_upload, metadata = create_new_upload_record(temporary_upload, metadata, request)
             create_metadata_record(new_upload, metadata)
             # Redirect to the page for adding the title, description, and tags.
-            return ajaxWholePageRedirect(request, reverse('upload_page1'))
+            return ajaxWholePageRedirect(request, 'upload_page1')
         else:
             return render(request, 'en/public/upload_modal.html', {'from_device_form' : form})
     else:
-        return ajaxWholePageRedirect(request, reverse('login'))
+        return ajaxWholePageRedirect(request, 'login')
         
 # 1. Create a temporary upload record. The TemporaryUpload model is used with a separate directory in case an exception occurs, including the server running
 # out of memory. When this happens, the record and associated files can be deleted after the administrator examines what went wrong.

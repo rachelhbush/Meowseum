@@ -2,12 +2,13 @@
 
 from Meowseum.models import Upload, Metadata, Comment, Tag, Like, Page, hosting_limits_for_Upload
 from Meowseum.forms import CommentForm, TagForm
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
+from Meowseum.common_view_functions import redirect
+from django.utils.http import urlquote_plus
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import capfirst
 from Meowseum.templatetags.my_filters import humanize_list, format_currency
 from django.utils.safestring import mark_safe
-from django.template.defaultfilters import urlencode
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
     
@@ -36,7 +37,7 @@ def page(request, relative_url):
         except Like.DoesNotExist:
             template_variables['user_has_liked_this_upload'] = False
     # Store the absolute URL used for the report abuse option.
-    template_variables['report_abuse_url'] = reverse('report_abuse') + "?offending_username=" + urlencode(upload.uploader.username) + "&referral_url=" + urlencode(request.path)
+    template_variables['report_abuse_url'] = reverse('report_abuse') + "?offending_username=" + urlquote_plus(upload.uploader.username) + "&referral_url=" + urlquote_plus(request.path, safe='/')
     # Set up permission-related template variables.
     template_variables['can_delete_upload'] = False
     template_variables['can_ban_users'] = False

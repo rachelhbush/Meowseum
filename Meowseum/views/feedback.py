@@ -4,8 +4,8 @@ from Meowseum.models import Feedback, validation_specifications_for_Feedback, ho
 from Meowseum.file_handling.file_validation import get_validated_metadata
 from Meowseum.file_handling.stage2_processing import process_to_meet_hosting_limits
 from Meowseum.forms import FeedbackForm
-from django.shortcuts import render, redirect
-from Meowseum.common_view_functions import increment_hit_count
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect, increment_hit_count
 
 def page(request):
     template_variables = {}

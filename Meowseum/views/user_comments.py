@@ -3,8 +3,8 @@
 from django.contrib.auth.decorators import login_required
 from Meowseum.models import Upload, Comment, hosting_limits_for_Upload
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from Meowseum.common_view_functions import increment_hit_count
@@ -54,7 +54,7 @@ def page(request, username):
             request.user.user_profile.save()
         else:
             # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return HttpResponseRedirect(reverse('login')+"?next=/user/"+username+"/comments/")
+            return redirect('login', GET_args = '?next=' + reverse('user_comments', args=[request.user.username]))
         
     template_variables = paginate_queryset(request, comments, 'comments', no_results_message, template_variables)
     return render(request, 'en/public/user_comments.html', template_variables)

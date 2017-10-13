@@ -1,10 +1,8 @@
 # Description: This page redirects the user to a random slide page.
 
 from Meowseum.models import Upload
-from Meowseum.common_view_functions import get_public_unmuted_uploads
-from django.shortcuts import redirect
+from Meowseum.common_view_functions import redirect, get_public_unmuted_uploads, increment_hit_count
 from random import randint
-from Meowseum.common_view_functions import increment_hit_count
 
 # 0. Main function
 def page(request):

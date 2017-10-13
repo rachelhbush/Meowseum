@@ -2,7 +2,8 @@
 # At first, this will only affect the fields for Adoption, Lost, and Found.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
+from Meowseum.common_view_functions import redirect
 from Meowseum.models import Upload, Adoption, Lost, Found
 from Meowseum.forms import EditUploadForm, AdoptionForm, BondedWithForm, LostForm, FoundForm
 

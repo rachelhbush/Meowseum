@@ -1,9 +1,7 @@
-from django.shortcuts import render
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from Meowseum.common_view_functions import redirect
 
 def page(request):
   logout(request)
   # After logging out, redirect to the front page.
-  return HttpResponseRedirect(reverse('index'))
+  return redirect('index')

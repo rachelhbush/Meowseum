@@ -1,17 +1,15 @@
 # Description: This is the page for processing a request to subscribe to a tag, either via a dropdown option in the header or via the URL bar.
 
 from Meowseum.models import Tag
-from Meowseum.common_view_functions import ajaxWholePageRedirect
-from django.shortcuts import redirect, get_object_or_404
+from Meowseum.common_view_functions import redirect, ajaxWholePageRedirect
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
-from django.template.defaultfilters import urlencode
 import json
 
 def page(request, tag_name):
     template_variables = {}
-    previous_URL = urlencode(reverse('tag_gallery', args=[tag_name.lower()]))
     if request.user.is_authenticated():
         tag = get_object_or_404(Tag, name=tag_name.lower())
         
@@ -32,8 +30,8 @@ def page(request, tag_name):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             # If the request isn't AJAX (JavaScript is disabled), redirect back to the previous page.
-            return redirect(previous_URL)
+            return redirect('tag_gallery', args=[tag_name.lower()])
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the previous page after the user logs in.
-        return ajaxWholePageRedirect(request, reverse('login') + "?next=" + previous_URL)
+        return ajaxWholePageRedirect(request, 'login', GET_args =  "?next=" + reverse('tag_gallery', args=[tag_name.lower()]))

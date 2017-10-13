@@ -1,8 +1,7 @@
 # Description: Toggle night/day mode. This is the page for processing an AJAX request from clicking the night/day option in a settings menu.
 
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
-from Meowseum.common_view_functions import ajaxWholePageRedirect
+from Meowseum.common_view_functions import redirect, ajaxWholePageRedirect
 from django.http import HttpResponse
 from django.utils.safestring import mark_safe
 from django.template.defaultfilters import urlencode

@@ -1,7 +1,8 @@
 # Description: This form is for all of the fields in the upload process relating to the Lost category.
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect
 from Meowseum.models import Upload, Lost
 from Meowseum.forms import LostForm, VerifyDescriptionForm
 

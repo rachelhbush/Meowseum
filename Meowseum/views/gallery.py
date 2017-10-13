@@ -4,8 +4,8 @@
 from django.contrib.auth.decorators import login_required
 from Meowseum.models import Upload, Like, Tag
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from Meowseum.common_view_functions import redirect
 from django.core.urlresolvers import reverse
 from operator import attrgetter
 from django.db.models import Count
@@ -132,7 +132,7 @@ def uploads(request, username):
             request.user.user_profile.save()
         else:
             # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return HttpResponseRedirect(reverse('login')+"?next=/user/"+username+"/gallery/")
+            return redirect('login', GET_args = '?next=/user/"+username+"/gallery/')
         
     return generate_gallery(request, upload_queryset, no_results_message, template_variables)
 
@@ -185,7 +185,7 @@ def likes(request, username):
             request.user.user_profile.save()
         else:
             # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return HttpResponseRedirect(reverse('login')+"?next=/user/"+username+"/likes/")
+            return redirect('login', GET_args = '?next=/user/"+username+"/likes/')
     
     return generate_gallery(request, list_of_uploads, no_results_message, template_variables)
 

@@ -1,10 +1,9 @@
 # Description: This is the page for processing a search query and displaying the appropriate gallery of results.
 # This includes both header searches and advanced searches.
 
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from Meowseum.common_view_functions import get_public_unmuted_uploads, generate_gallery
+from Meowseum.common_view_functions import redirect, get_public_unmuted_uploads, generate_gallery
 from Meowseum.models import Upload, Metadata, Tag
 from django.db.models.functions import Concat
 from django.db.models import Value
@@ -49,7 +48,7 @@ def header_search(request):
         except User.DoesNotExist:
             header_search = '@' + header_search
             # Adapt the user's input for transmission via URL and redirect to the main view for search queries.
-            return HttpResponseRedirect(reverse('search') + "?" + "all_words=" + quote_plus(header_search))
+            return redirect('search', GET_args = {'all_words':header_search})
     elif header_search.startswith('#') and ' ' not in header_search:
         header_search = header_search.lstrip('#')
         try:
@@ -58,9 +57,9 @@ def header_search(request):
             return redirect('tag_gallery', args=[tag.name])
         except Tag.DoesNotExist:
             header_search = '#' + header_search
-            return HttpResponseRedirect(reverse('search') + "?" + "all_words=" + quote_plus(header_search))
+            return redirect('search', GET_args = {'all_words':header_search})
     else:
-        return HttpResponseRedirect(reverse('search') + "?" + "all_words=" + quote_plus(header_search))
+        return redirect('search', GET_args = {'all_words':header_search})
 
 # 0. Main function for search queries.
 def page(request):
