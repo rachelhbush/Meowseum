@@ -5,6 +5,7 @@ from Meowseum.models import Upload, Tag
 from Meowseum.forms import TagForm
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
+from Meowseum.common_view_functions import ajaxWholePageRedirect
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 import json

@@ -1,10 +1,14 @@
-# Description: This file contains all the functions that are common to multiple views, excluding those that are also used elsewhere by Django, such as filter functions used by templates.
-# I had to create this file because Python does not allow two files to mutually import from one another.
+# Description: The first section of this file contains utility functions for views, like an extension of redirect(). The second part contains utility functions that are more
+# specific to the site models, like retrieving uploads from unmuted users. Some of these are used in only two views, but they're here because Python does not allow two files to mutually
+# import from one another. There are separate files for filter functions and functions related to handling files.
 
 from Meowseum.models import Upload, Page, Like, hosting_limits_for_Upload
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect as default_redirect
+from django.core.urlresolvers import reverse, NoReverseMatch
+from django.utils.http import urlquote_plus
+from django.http import HttpResponse
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
 import datetime
@@ -12,7 +16,95 @@ from django.db.models import Count
 from django.utils import timezone
 import json
 
-# This function filters out private uploads and uploads from muted users. It is used by all galleries.
+# Section 1. Utility functions.
+
+# A. Extend Django's default redirect() shortcut with the ability to specify GET parameters and arguments.
+# The GET_args argument can be in the form of a tuple of 2-tuples, a dictionary, an ordered dictionary, or a querystring.
+# The querystring is expected to start with ? and already have its arguments properly encoded.
+def redirect(to, GET_args=None, *args, **kwargs):
+    if GET_args == None:
+        return default_redirect(to, *args, *kwargs)
+    else:
+        querystring = get_querystring_from_data_structure(GET_args)
+        return redirect_with_querystring(to, querystring, *args, **kwargs)
+            
+# A1. Construct a querystring from GET parameters and arguments via various data structures. Test in the Python shell.
+# Input: GET_args, a tuple of 2-tuples, a dictionary, an ordered dictionary, or a querystring starting with ?.
+# The querystring is expected to start with ? and already have its arguments properly encoded.
+# Output: querystring
+def get_querystring_from_data_structure(GET_args):
+    if GET_args.__class__.__name__ == 'tuple':
+        querystring = get_querystring_from_tuples(GET_args)
+    elif GET_args.__class__.__name__ == 'dict' or GET_args.__class__.__name__ == 'OrderedDict':
+        querystring = get_querystring_from_dict(GET_args)
+    else:
+        # The user supplied the GET arguments as a querystring.
+        querystring = GET_args
+    return querystring
+
+# 1.1. Input: Tuple of 2-tuples. Output: Querystring.
+def get_querystring_from_tuples(GET_args):
+    if len(GET_args) > 0:
+        querystring = '?'
+        for x in range(len(GET_args)-1):
+            querystring = querystring + urlquote_plus(GET_args[x][0], safe='/') + '=' + urlquote_plus(GET_args[x][1], safe='/') + '&'
+        querystring = querystring + urlquote_plus(GET_args[len(GET_args)-1][0], safe='/') + '=' + urlquote_plus(GET_args[len(GET_args)-1][1], safe='/')
+        return querystring
+    else:
+        return ''
+
+# 1.2. Input: Dictionary or an ordered dictionary. Output: Querystring.
+def get_querystring_from_dict(GET_args):
+    if len(GET_args) > 0:
+        querystring = '?'
+        keys = tuple(GET_args.keys())
+        values = tuple(GET_args.values())
+        for x in range(len(GET_args)-1):
+            querystring = querystring + urlquote_plus(keys[0], safe='/') + '=' + urlquote_plus(values[0], safe='/') + '&'
+        querystring = querystring + urlquote_plus(keys[len(GET_args)-1], safe='/') + '=' + urlquote_plus(values[len(GET_args)-1], safe='/')
+        return querystring
+    else:
+        return ''
+
+# B0. Use this function when the request may be made with AJAX and the server determines that the user needs to be redirected to another page.
+# The function will return a JSON object which will let a JavaScript function know to redirect the user. When the response is HTML being
+# loaded into an element like a modal, and the page redirects to another page which will be loaded into the same element, then redirect directly.
+# Input: request, url.
+# Output: JSON object.
+def ajaxWholePageRedirect(request, url):
+    if request.is_ajax():
+        response = {'status':0, 'message': "Redirecting", 'url':url}
+        return HttpResponse(json.dumps(response), content_type='application/json')
+    else:
+        return default_redirect(url)
+
+# 2. Redirect.
+# Input: to, a page name or a URL. querysting, a string beginning with '?'.
+# Output: Redirect response.
+def redirect_with_querystring(to, querystring, *args, **kwargs):
+    try:
+        # If this works, the 'to' argument is a page name.
+        return default_redirect(reverse(to) + querystring, *args, **kwargs)
+    except NoReverseMatch:
+        # The 'to' argument is a URL.
+        return default_redirect(to + querystring, *args, *kwargs)
+
+# Increment the hit count, using settings for the django-hitcounts add-on specified in the site's settings.py file.
+# Input: request, the name of the page in urls.py, and a list of arguments for the page.
+# Output: None.
+def increment_hit_count(request, name, args=None):
+    if args == None:
+        record = Page.objects.get_or_create(name=name)[0]
+    else:
+        record = Page.objects.get_or_create(name=name, argument1=args[0])[0]
+    hit_count = HitCount.objects.get_for_object(record)
+    hit_count_response = HitCountMixin.hit_count(request, hit_count)
+    return
+
+# Section 2. Site functions. The sorting functions are used by gallery pages which specifically use the sorting order, and they're included here because in the
+# future they'll be an option in the advanced search menu.
+
+# This function filters out private uploads and uploads from muted users. This function is used by any view which displays a gallery, including the search page.
 # Input: logged_in_user (request.user). Output: upload_queryset.
 def get_public_unmuted_uploads(logged_in_user):
     upload_queryset = Upload.objects.filter(is_publicly_listed=True)
@@ -66,25 +158,3 @@ def generate_gallery(request, list_of_uploads, no_results_message, template_vari
         # Delete a session storage variable that is used by the slide page to indicate that the user came from the "Random cat" page.
         del request.session['random']
     return render(request, 'en/public/gallery.html', template_variables)
-
-# Increment the hit count, using settings for the django-hitcounts add-on specified in the site's settings.py file.
-# Input: request, the name of the page in urls.py, and a list of arguments for the page.
-# Output: None.
-def increment_hit_count(request, name, args=None):
-    if args == None:
-        record = Page.objects.get_or_create(name=name)[0]
-    else:
-        record = Page.objects.get_or_create(name=name, argument1=args[0])[0]
-    hit_count = HitCount.objects.get_for_object(record)
-    hit_count_response = HitCountMixin.hit_count(request, hit_count)
-    return
-
-# Use this function when the request may be made with AJAX and the server determines that the user needs to be redirected to another page.
-# The function will return a JSON object which will let a JavaScript function know to redirect the user. When the response is HTML being
-# loaded into an element like a modal, and the page redirects to another page which will be loaded into the same element, then use HttpResponseRedirect directly.
-def ajaxWholePageRedirect(request, url):
-    if request.is_ajax():
-        response = {'status':0, 'message': "Redirecting", 'url':url}
-        return HttpResponse(json.dumps(response), content_type='application/json')
-    else:
-        return HttpResponseRedirect(url)

@@ -2,7 +2,8 @@
 
 from Meowseum.models import Upload, Comment
 from Meowseum.forms import CommentForm
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
+from Meowseum.common_view_functions import redirect, ajaxWholePageRedirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
@@ -34,9 +35,9 @@ def page(request, relative_url):
             else:
                 # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
                 # and implementing this is a lower priority than getting the form working with AJAX.
-                return redirect('slide_page', args=[relative_url]) 
+                return redirect('slide_page', args=[relative_url])
         else:
-            return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+            return redirect('login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
 
 # 1. Save the comment form.
 # Input: upload, comment_form. Output: new_comment_record
