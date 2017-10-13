@@ -5,7 +5,7 @@
 from django.shortcuts import render, resolve_url
 from django.shortcuts import redirect as default_redirect
 from django.core.urlresolvers import reverse, NoReverseMatch
-from django.utils.http import urlquote_plus
+from urllib.parse import urlencode
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 import json
 from hitcount.models import HitCount
@@ -53,44 +53,22 @@ def ajaxWholePageRedirect(request, to, GET_args=None, *args, **kwargs):
         return HttpResponse(json.dumps(response), content_type='application/json')
     else:
         return HttpResponseRedirect(url)
-     
+
 # 1. Construct a querystring from GET parameters and arguments via various data structures.  The exemption of '/' from URL encoding is nonstandard (see RFC 2396 sec. 2.2),
 # but it works, it's more readable, many sites do it, and Django does this in its built-in querystring for the login page. This function can be tested in the Python shell.
 # Input: GET_args, a tuple of 2-tuples, a dictionary, an ordered dictionary, or a querystring. The querystring is expected to start with ? and already have its arguments properly encoded.
 # Output: querystring
 def get_querystring_from_data_structure(GET_args):
-    if GET_args.__class__.__name__ == 'tuple':
-        querystring = get_querystring_from_tuples(GET_args)
-    elif GET_args.__class__.__name__ == 'dict' or GET_args.__class__.__name__ == 'OrderedDict':
-        querystring = get_querystring_from_dict(GET_args)
+    if GET_args.__class__.__name__ == 'tuple' or GET_args.__class__.__name__ == 'dict' or GET_args.__class__.__name__ == 'OrderedDict':
+        if len(GET_args) > 0:
+            querystring = '?' + urlencode(GET_args, safe='/')
+        else:
+            # The argument is an empty object, so return an empty string.
+            return ''
     else:
         # The user supplied the GET arguments as a querystring.
         querystring = GET_args
     return querystring
-
-# 1.1. Input: Tuple of 2-tuples. Output: Querystring.
-def get_querystring_from_tuples(GET_args):
-    if len(GET_args) > 0:
-        querystring = '?'
-        for x in range(len(GET_args)-1):
-            querystring = querystring + urlquote_plus(GET_args[x][0], safe='/') + '=' + urlquote_plus(GET_args[x][1], safe='/') + '&'
-        querystring = querystring + urlquote_plus(GET_args[len(GET_args)-1][0], safe='/') + '=' + urlquote_plus(GET_args[len(GET_args)-1][1], safe='/')
-        return querystring
-    else:
-        return ''
-
-# 1.2. Input: Dictionary or an ordered dictionary. Output: Querystring.
-def get_querystring_from_dict(GET_args):
-    if len(GET_args) > 0:
-        querystring = '?'
-        keys = tuple(GET_args.keys())
-        values = tuple(GET_args.values())
-        for x in range(len(GET_args)-1):
-            querystring = querystring + urlquote_plus(keys[0], safe='/') + '=' + urlquote_plus(values[0], safe='/') + '&'
-        querystring = querystring + urlquote_plus(keys[len(GET_args)-1], safe='/') + '=' + urlquote_plus(values[len(GET_args)-1], safe='/')
-        return querystring
-    else:
-        return ''
 
 # Increment the hit count, using settings for the django-hitcounts add-on specified in the site's settings.py file.
 # Input: request, the name of the page in urls.py, and a list of arguments for the page.
