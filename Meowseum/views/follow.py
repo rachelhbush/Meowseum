@@ -7,14 +7,13 @@ from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
-from django.template.defaultfilters import urlencode
 import json
 
 # 0. Main function.
 def page(request, username):
     # When JavaScript is disabled, the various pages redirect to this page, and this page redirects back.
     # Redirect to the user uploads gallery page when the previous URL is unknown.
-    previous_URL = urlencode(request.GET.get('next', reverse('gallery', args=[username])))
+    previous_URL = request.GET.get('next', reverse('gallery', args=[username]))
     if request.user.is_authenticated():
         uploader_user = get_object_or_404(User, username=username)
         follow_or_unfollow(request.user, uploader_user)

@@ -7,13 +7,12 @@ from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
-from django.template.defaultfilters import urlencode
 import json
 
 def page(request, username):
     # The user can navigate to this page from the slide page, the user page (in the future), or the URL bar. The first two pages redirect to this page with a querystring.
     # when JavaScript is disabled, then this page redirects back. When redirecting occurs, redirect to the user page when the previous URL is unknown.
-    previous_URL = urlencode(request.GET.get('next', reverse('gallery', args=[username])))
+    previous_URL = request.GET.get('next', reverse('gallery', args=[username]))
     if request.user.is_authenticated():
         uploader_user = get_object_or_404(User, username=username)
         uploader = uploader_user.user_profile
