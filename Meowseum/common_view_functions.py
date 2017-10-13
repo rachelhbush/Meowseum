@@ -2,35 +2,61 @@
 # specific to the site models, like retrieving uploads from unmuted users. Some of these are used in only two views, but they're here because Python does not allow two files to mutually
 # import from one another. There are separate files for filter functions and functions related to handling files.
 
-from Meowseum.models import Upload, Page, Like, hosting_limits_for_Upload
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render
+from django.shortcuts import render, resolve_url
 from django.shortcuts import redirect as default_redirect
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.http import urlquote_plus
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+import json
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
+from Meowseum.models import Upload, Page, Like, hosting_limits_for_Upload
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.db.models import Count
 from django.utils import timezone
-import json
 
 # Section 1. Utility functions.
 
-# A. Extend Django's default redirect() shortcut with the ability to specify GET parameters and arguments.
-# The GET_args argument can be in the form of a tuple of 2-tuples, a dictionary, an ordered dictionary, or a querystring.
-# The querystring is expected to start with ? and already have its arguments properly encoded.
+# 0. Extend Django's default redirect() shortcut with the ability to specify GET parameters and arguments.
+# Input: to, a URL or page name. args, a list of arguments for Django's URL parameters. GET_args is a 2-tuple, dictionary, ordered dictionary,
+# or URL-encoded querystring beginning with ?. This is useful when we're using a page name argument and a method like reverse() which returns a pre-encoded URL.
+# The remaining input is less important and covered by Django documentation.
 def redirect(to, GET_args=None, *args, **kwargs):
     if GET_args == None:
         return default_redirect(to, *args, *kwargs)
     else:
         querystring = get_querystring_from_data_structure(GET_args)
-        return redirect_with_querystring(to, querystring, *args, **kwargs)
-            
-# A1. Construct a querystring from GET parameters and arguments via various data structures. Test in the Python shell.
-# Input: GET_args, a tuple of 2-tuples, a dictionary, an ordered dictionary, or a querystring starting with ?.
-# The querystring is expected to start with ? and already have its arguments properly encoded.
+        url = resolve_url(to, *args, **kwargs) + querystring
+        # This somewhat repeats the definition of redirect() built into Django, which includes resolve_url().
+        # This variation excludes resolve_url() to avoids the work of resolving the URL again.
+        if kwargs.pop('permanent', False):
+            redirect_class = HttpResponsePermanentRedirect
+        else:
+            redirect_class = HttpResponseRedirect
+        return redirect_class(url)
+
+# 0. Use this function when the request may be made with AJAX and the server determines that the user needs to be redirected to another page.
+# The function will return a JSON object which will let a JavaScript function know to redirect the user. When the response is HTML being
+# loaded into an element like a modal, and the page redirects to another page which will be loaded into the same element, then redirect directly.
+# Input: request. to, a URL or page name. args, a list of arguments for Django's URL parameters. GET_args is a 2-tuple, dictionary, ordered dictionary,
+# or URL-encoded querystring beginning with ?. This is useful when we're using a page name argument and a method like reverse() which returns a pre-encoded URL.
+# Output: JSON object.
+def ajaxWholePageRedirect(request, to, GET_args=None, *args, **kwargs):
+    url = resolve_url(to, *args, **kwargs)
+    if GET_args != None:
+        querystring = get_querystring_from_data_structure(GET_args)
+        url = url + querystring
+        
+    if request.is_ajax():
+        response = {'status':0, 'message': "Redirecting", 'url':url}
+        return HttpResponse(json.dumps(response), content_type='application/json')
+    else:
+        return HttpResponseRedirect(url)
+     
+# 1. Construct a querystring from GET parameters and arguments via various data structures.  The exemption of '/' from URL encoding is nonstandard (see RFC 2396 sec. 2.2),
+# but it works, it's more readable, many sites do it, and Django does this in its built-in querystring for the login page. This function can be tested in the Python shell.
+# Input: GET_args, a tuple of 2-tuples, a dictionary, an ordered dictionary, or a querystring. The querystring is expected to start with ? and already have its arguments properly encoded.
 # Output: querystring
 def get_querystring_from_data_structure(GET_args):
     if GET_args.__class__.__name__ == 'tuple':
@@ -65,29 +91,6 @@ def get_querystring_from_dict(GET_args):
         return querystring
     else:
         return ''
-
-# B0. Use this function when the request may be made with AJAX and the server determines that the user needs to be redirected to another page.
-# The function will return a JSON object which will let a JavaScript function know to redirect the user. When the response is HTML being
-# loaded into an element like a modal, and the page redirects to another page which will be loaded into the same element, then redirect directly.
-# Input: request, url.
-# Output: JSON object.
-def ajaxWholePageRedirect(request, url):
-    if request.is_ajax():
-        response = {'status':0, 'message': "Redirecting", 'url':url}
-        return HttpResponse(json.dumps(response), content_type='application/json')
-    else:
-        return default_redirect(url)
-
-# 2. Redirect.
-# Input: to, a page name or a URL. querysting, a string beginning with '?'.
-# Output: Redirect response.
-def redirect_with_querystring(to, querystring, *args, **kwargs):
-    try:
-        # If this works, the 'to' argument is a page name.
-        return default_redirect(reverse(to) + querystring, *args, **kwargs)
-    except NoReverseMatch:
-        # The 'to' argument is a URL.
-        return default_redirect(to + querystring, *args, *kwargs)
 
 # Increment the hit count, using settings for the django-hitcounts add-on specified in the site's settings.py file.
 # Input: request, the name of the page in urls.py, and a list of arguments for the page.

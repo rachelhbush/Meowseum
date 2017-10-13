@@ -2,9 +2,9 @@
 
 from Meowseum.models import Upload, Comment
 from Meowseum.forms import CommentForm
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from Meowseum.common_view_functions import redirect, ajaxWholePageRedirect
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 import json
@@ -25,7 +25,7 @@ def page(request, relative_url):
         else:
             # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
             # Redirect the user back to the previous page after the user logs in.
-            return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+            return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
     else:
         if request.user.is_authenticated():
             comment_form = CommentForm(request.POST or None)

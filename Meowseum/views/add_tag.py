@@ -3,8 +3,8 @@
 
 from Meowseum.models import Upload, Tag
 from Meowseum.forms import TagForm
-from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from Meowseum.common_view_functions import ajaxWholePageRedirect
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
@@ -25,7 +25,7 @@ def page(request, relative_url):
         else:
             # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
             # Redirect the user back to the previous page after the user logs in.
-            return ajaxWholePageRedirect(request, reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+            return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
     else:
         if request.user.is_authenticated():
             tag_form = TagForm(request.POST or None)
@@ -37,7 +37,7 @@ def page(request, relative_url):
                 # and implementing this is a lower priority than getting the form working with AJAX.
                 return redirect('slide_page', args=[relative_url])
         else:
-            return HttpResponseRedirect(reverse('login') + "?next=" + reverse('slide_page', args=[relative_url]))
+            return redirect('login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
 
 # 1. Input: upload, relative_url, tag_form. Output: None.
 def process_tag_form(upload, relative_url, tag_form):
