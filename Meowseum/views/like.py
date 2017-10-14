@@ -5,6 +5,7 @@ from Meowseum.models import Upload, Like
 from Meowseum.common_view_functions import redirect, ajaxWholePageRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 
 # 0. Main function.
 def page(request, relative_url):    
