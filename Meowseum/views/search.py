@@ -48,7 +48,7 @@ def header_search(request):
         except User.DoesNotExist:
             header_search = '@' + header_search
             # Adapt the user's input for transmission via URL and redirect to the main view for search queries.
-            return redirect('search', GET_args = {'all_words':header_search})
+            return redirect('search', query = {'all_words':header_search})
     elif header_search.startswith('#') and ' ' not in header_search:
         header_search = header_search.lstrip('#')
         try:
@@ -57,9 +57,9 @@ def header_search(request):
             return redirect('tag_gallery', args=[tag.name])
         except Tag.DoesNotExist:
             header_search = '#' + header_search
-            return redirect('search', GET_args = {'all_words':header_search})
+            return redirect('search', query = {'all_words':header_search})
     else:
-        return redirect('search', GET_args = {'all_words':header_search})
+        return redirect('search', query = {'all_words':header_search})
 
 # 0. Main function for search queries.
 def page(request):

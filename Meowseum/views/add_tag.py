@@ -25,7 +25,7 @@ def page(request, relative_url):
         else:
             # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
             # Redirect the user back to the previous page after the user logs in.
-            return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
+            return ajaxWholePageRedirect(request, 'login', query = 'next=' + reverse('slide_page', args=[relative_url]))
     else:
         if request.user.is_authenticated():
             tag_form = TagForm(request.POST or None)
@@ -37,11 +37,11 @@ def page(request, relative_url):
                 # and implementing this is a lower priority than getting the form working with AJAX.
                 return redirect('slide_page', args=[relative_url])
         else:
-            return redirect('login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
+            return redirect('login', query = 'next=' + reverse('slide_page', args=[relative_url]))
 
 # 1. Input: upload, relative_url, tag_form. Output: None.
 def process_tag_form(upload, relative_url, tag_form):
-    tag_name = tag_form.cleaned_data['name'].lstrip("#").lower()
+    tag_name = tag_form.cleaned_data['name'].lstrip('#').lower()
     try:
         # If the tag does exist, then associate this upload record with it.
         existing_tag = Tag.objects.get(name=tag_name)

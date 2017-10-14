@@ -54,7 +54,7 @@ def page(request, username):
             request.user.user_profile.save()
         else:
             # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return redirect('login', GET_args = '?next=' + reverse('user_comments', args=[request.user.username]))
+            return redirect('login', query = 'next=' + reverse('user_comments', args=[request.user.username]))
         
     template_variables = paginate_queryset(request, comments, 'comments', no_results_message, template_variables)
     return render(request, 'en/public/user_comments.html', template_variables)

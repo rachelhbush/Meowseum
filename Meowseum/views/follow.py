@@ -31,7 +31,7 @@ def page(request, username):
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the previous page after the user logs in.
-        return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + previous_URL)
+        return ajaxWholePageRedirect(request, 'login', query = 'next=' + previous_URL)
 
 # 1. Update the followed/unfollowed status of the uploader.
 # Input: request_user, a record for the User making the request. uploader_user, a record for the User who contributed the upload.

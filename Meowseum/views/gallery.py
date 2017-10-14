@@ -132,7 +132,7 @@ def uploads(request, username):
             request.user.user_profile.save()
         else:
             # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return redirect('login', GET_args = '?next=/user/"+username+"/gallery/')
+            return redirect('login', query = 'next=/user/"+username+"/gallery/')
         
     return generate_gallery(request, upload_queryset, no_results_message, template_variables)
 
@@ -185,7 +185,7 @@ def likes(request, username):
             request.user.user_profile.save()
         else:
             # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return redirect('login', GET_args = '?next=/user/"+username+"/likes/')
+            return redirect('login', query = 'next=/user/"+username+"/likes/')
     
     return generate_gallery(request, list_of_uploads, no_results_message, template_variables)
 

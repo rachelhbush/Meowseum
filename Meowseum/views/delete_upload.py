@@ -40,4 +40,4 @@ def page(request, relative_url):
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the slide page after the user logs in.
-        return ajaxWholePageRedirect(request, 'login', GET_args = "?next=" + reverse('slide_page', args=[relative_url]))
+        return ajaxWholePageRedirect(request, 'login', query = 'next=' + reverse('slide_page', args=[relative_url]))

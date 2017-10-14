@@ -10,7 +10,7 @@ def page(request):
     if form.is_valid():
         ordered_querystring = get_ordered_querystring_from_form(form, excluding_blank_fields=True)        
         # Redirect to the search page, where the querying will be done.
-        return redirect('search', GET_args = '?'+ordered_querystring)
+        return redirect('search', query = ordered_querystring)
     else:
         if str(request.GET) == '<QueryDict: {}>':
             increment_hit_count(request, "advanced_search")

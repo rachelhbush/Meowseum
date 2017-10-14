@@ -34,4 +34,4 @@ def page(request, tag_name):
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the previous page after the user logs in.
-        return ajaxWholePageRedirect(request, 'login', GET_args =  "?next=" + reverse('tag_gallery', args=[tag_name.lower()]))
+        return ajaxWholePageRedirect(request, 'login', query = 'next=' + reverse('tag_gallery', args=[tag_name.lower()]))
