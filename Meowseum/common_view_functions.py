@@ -8,6 +8,8 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from urllib.parse import urlencode
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 import json
+from django.http.request import QueryDict
+from collections import OrderedDict
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
 from Meowseum.models import Upload, Page, Like, hosting_limits_for_Upload
@@ -17,6 +19,9 @@ from django.db.models import Count
 from django.utils import timezone
 
 # Section 1. Utility functions.
+
+class OrderedQueryDict(QueryDict, OrderedDict):
+    pass
 
 # 0. Extend Django's default redirect() shortcut with the ability to specify GET parameters and arguments.
 # Input: to, a URL or page name. args, a list of arguments for Django's URL parameters. GET_args is a 2-tuple, dictionary, ordered dictionary,
@@ -69,6 +74,26 @@ def get_querystring_from_data_structure(GET_args):
         # The user supplied the GET arguments as a querystring.
         querystring = GET_args
     return querystring
+
+# Generate a querystring from a form while listing the fields in the same order as the form's class definition. This function also allows
+# excluding fields left blank by the user from the querystring in order to make the querystring more readable.
+# If the form data has been altered during validation, the querystring will not be able to reflect any changes.
+# Input: form, a Django form which has been filled out by the user. remove_blank_fields, a Boolean value.
+#        safe, a string of characters to exclude from URL encoding such as '/'.
+# Output: ordered_querystring.
+def get_ordered_querystring_from_form(form, excluding_blank_fields=False, safe=''):
+    ordered_query_dictionary = OrderedQueryDict(mutable=True)
+    # Return a list of the form's fields in the same order as the form definition.
+    list_of_fields = tuple(form.fields.keys())
+    # Use the list to place values from the form.data's QueryDict into the OrderedQueryDict in the specified order.
+    for x in range(len(list_of_fields)):
+        field = list_of_fields[x]
+        # Transfer the list of values associated with the field. The forms.data part of this line is why the querystring won't reflect changes to data during validation.
+        # form.cleaned_data can't be used because, for example, a ModelChoiceField will contain an object and not the model IDs used for the querystring. 
+        value = form.data.getlist(field)
+        if value != [''] or not excluding_blank_fields:
+            ordered_query_dictionary.setlist(field, value)
+    return ordered_query_dictionary.urlencode(safe=safe)
 
 # Increment the hit count, using settings for the django-hitcounts add-on specified in the site's settings.py file.
 # Input: request, the name of the page in urls.py, and a list of arguments for the page.
