@@ -3,9 +3,10 @@
 # import from one another. There are separate files for filter functions and functions related to handling files.
 
 from django.shortcuts import render, resolve_url
-from django.shortcuts import redirect as default_redirect
+from django.shortcuts import redirect as original_redirect
 from django.core.urlresolvers import reverse, NoReverseMatch
-from urllib.parse import urlencode
+from urllib.parse import urlencode as original_urlencode
+from urllib.parse import quote
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 import json
 from django.http.request import QueryDict
@@ -26,12 +27,12 @@ class OrderedQueryDict(QueryDict, OrderedDict):
 
 # 0. Extend Django's default redirect() shortcut with the ability to specify GET parameters and arguments.
 # Input: to, a URL or page name. args, a list of arguments for Django's URL parameters. GET_args can be any of various data structures, most usefully
-# OrderedQueryDict, but it can also be a URL-encoded querystring beginning with ?. The remaining input is less important and covered by Django documentation.
+# OrderedQueryDict, but it can also be a URL-encoded querystring, excluding the ?. The remaining input is less important and covered by Django documentation.
 def redirect(to, GET_args=None, *args, **kwargs):
     if GET_args == None:
-        return default_redirect(to, *args, *kwargs)
+        return original_redirect(to, *args, *kwargs)
     else:
-        querystring = get_querystring_from_data_structure(GET_args)
+        querystring = urlencode(GET_args)
         url = resolve_url(to, *args, **kwargs) + querystring
         # This somewhat repeats the definition of redirect() built into Django, which includes resolve_url().
         # This variation excludes resolve_url() to avoids the work of resolving the URL again.
@@ -45,12 +46,12 @@ def redirect(to, GET_args=None, *args, **kwargs):
 # The function will return a JSON object which will let a JavaScript function know to redirect the user. When the response is HTML being
 # loaded into an element like a modal, and the page redirects to another page which will be loaded into the same element, then redirect directly.
 # Input: request. to, a URL or page name. args, a list of arguments for Django's URL parameters. GET_args can be any of various data structures, most usefully
-# OrderedQueryDict, but it can also be a URL-encoded querystring beginning with ?. The remaining input is less important and covered by Django documentation.
+# OrderedQueryDict, but it can also be a URL-encoded querystring, excluding the ?. The remaining input is less important and covered by Django documentation.
 # Output: JSON object.
 def ajaxWholePageRedirect(request, to, GET_args=None, *args, **kwargs):
     url = resolve_url(to, *args, **kwargs)
     if GET_args != None:
-        querystring = get_querystring_from_data_structure(GET_args)
+        querystring = urlencode(GET_args)
         url = url + querystring
         
     if request.is_ajax():
@@ -59,33 +60,34 @@ def ajaxWholePageRedirect(request, to, GET_args=None, *args, **kwargs):
     else:
         return HttpResponseRedirect(url)
 
-# 1. Construct a querystring from GET parameters and arguments via various data structures. The exemption of '/' from URL encoding is nonstandard (see RFC 2396 sec. 2.2),
-# but it works, it's more readable, many sites do it, and Django does this in its built-in querystring for the login page. This function can be tested in the Python shell.
-# If you are trying to emulate how Django renders a GET form int oa querystring, remember that Django will render the value of a checked BooleanField checkbox (True) as 'on'.
-# Input: GET_args. This can be one of the Django classes created in order to support dictionaries which can have multiple values, such as QueryDict, which are necessary for
-# fields which accept multiple values such as <select multiple> and checkboxes with the same name. This can also be a tuple of 2-tuples, a dictionary, an ordered dictionary,
-# or a querystring. If the input data type has ordering, the output querystring will use the same order. An input querystring is expected to start with ? and already have
-# its arguments properly encoded. Unlike the path part of the URL, it's not possible to write a querystring without encoding while writing because the values might contain
-# special characters like ?. This also helps because most of Django's methods such as reverse() already return an encoded URL, and encoding it twice would produce bad output.
+# 1. Construct a querystring from GET parameters and arguments via various data structures. This is an extended version of urllib.parse.urlencode(). First, it includes
+# changes from Django's version to support its dictionary classes with multiple values, rewritten for readability. Second, it returns the string if given a string, by assuming the
+# querystring is already encoded, which makes can simplify functions by having to include one less branch. Third, it makes '/' exempt from URL encoding as %2F. This is nonstandard
+# (see RFC 2396 sec. 2.2), but it's more readable and Django already does this in its built-in querystring for the login page. The last difference is that whether to encode ' ' as
+# '%20' or '+', which is still '+' by default, is handled by a Boolean instead of passing a function object.
+# Input: GET_args. All the keyword arguments of Python's urlencode(), except using_plus instead of quote_via. Like the original function, if the input data type has ordering, the output
+# querystring will use the same order. A data structure which simulates any form control will be equivalent to a list in which each element is a (string, list) tuple, such as Django's
+# QueryDict class. This structure is necessary for fields which accept multiple values such as <select multiple> and checkboxes with the same name. If you are trying to emulate how Django
+# renders a GET form as a querystring, remember that Django will render the value of a checked BooleanField checkbox (True) as 'on'.
 # Output: querystring
-def get_querystring_from_data_structure(GET_args, safe='/'):
+def urlencode(GET_args, safe='/', using_plus=True, *args, **kwargs):
     if GET_args.__class__.__name__ == 'str':
         querystring = GET_args
     else:
-        if len(GET_args) > 0:
-            if isinstance(GET_args, MultiValueDict):
-                GET_args = GET_args.lists()
-            elif hasattr(GET_args, 'items'):
-                GET_args = GET_args.items()
-            # After the preceding methods convert to an object similar to a tuple of 2-tuples with extra methods from the object's class, check whether each
-            # second entry is a list or tuple. If this is the case, then standardize the data structure. Write it as list in which each entry is a 2-tuple
-            # with a string for the first entry and a list or tuple for the second entry. Now urlencode can process extra classes such as dictionaries with
-            # multiple values. This code related to this was adapted for readability from Django's extended version of urlencode under django.utils.http.
-            GET_args = [(key, [i for i in value] if isinstance(value, (list, tuple)) else value) for key, value in GET_args]
-            querystring = '?' + urlencode(GET_args, safe=safe, doseq=True)
+        if isinstance(GET_args, MultiValueDict):
+            GET_args = GET_args.lists()
+        elif hasattr(GET_args, 'items'):
+            GET_args = GET_args.items()
+        # After the preceding methods convert to an object similar to a tuple of 2-tuples with extra methods from the object's class, check whether each
+        # second entry is a list or tuple. If this is the case, then standardize the data structure. Write it as list in which each entry is a 2-tuple
+        # with a string for the first entry and a list or tuple for the second entry. Now urlencode can process extra classes such as dictionaries with
+        # multiple values. This code related to this was adapted for readability from Django's extended version of urlencode under django.utils.http.
+        # I removed code for supporting pre-Python 3.2 versions in which the encoding format wasn't a keyword argument, and I used longer variable names.
+        GET_args = [(key, [i for i in value] if isinstance(value, (list, tuple)) else value) for key, value in GET_args]
+        if using_plus:
+            querystring = '?' + original_urlencode(GET_args, safe=safe, doseq=True, *args, **kwargs)
         else:
-            # The argument is an empty object, so return an empty string.
-            return ''
+            querystring = '?' + original_urlencode(GET_args, safe=safe, doseq=True, quote_via=quote, *args, **kwargs)
     return querystring
 
 # Generate a querystring from a form while listing the fields in the same order as the form's class definition. This function also allows
