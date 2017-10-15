@@ -44,7 +44,7 @@ def header_search(request):
         try:
             username = User.objects.get(username = header_search).username
             # If the value is a valid username, redirect to the user page in a later version. Redirect to the user's gallery for now.
-            return redirect('gallery', args=[username])
+            return redirect('gallery', username)
         except User.DoesNotExist:
             header_search = '@' + header_search
             # Adapt the user's input for transmission via URL and redirect to the main view for search queries.
@@ -54,7 +54,7 @@ def header_search(request):
         try:
             tag = Tag.objects.get(name = header_search)
             # If the value is a valid tag, redirect to the tag gallery page so the user will be able to subscribe/unsubscribe to the tag.
-            return redirect('tag_gallery', args=[tag.name])
+            return redirect('tag_gallery', tag.name)
         except Tag.DoesNotExist:
             header_search = '#' + header_search
             return redirect('search', query = {'all_words':header_search})

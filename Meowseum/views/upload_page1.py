@@ -166,4 +166,4 @@ def redirect_to_next_page(upload_type, relative_url):
     elif upload_type == 'found':
         return redirect('found_upload')
     else:
-        return redirect('slide_page', args=[relative_url])
+        return redirect('slide_page', relative_url)

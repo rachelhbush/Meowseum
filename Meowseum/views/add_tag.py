@@ -31,11 +31,11 @@ def page(request, relative_url):
             tag_form = TagForm(request.POST or None)
             if tag_form.is_valid():
                 process_tag_form(upload, relative_url, tag_form)
-                return redirect('slide_page', args=[relative_url])
+                return redirect('slide_page', relative_url)
             else:
                 # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
                 # and implementing this is a lower priority than getting the form working with AJAX.
-                return redirect('slide_page', args=[relative_url])
+                return redirect('slide_page', relative_url)
         else:
             return redirect('login', query = 'next=' + reverse('slide_page', args=[relative_url]))
 

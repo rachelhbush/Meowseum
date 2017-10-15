@@ -18,7 +18,7 @@ def page(request, relative_url):
             return HttpResponse()
         else:
             # If the request isn't AJAX (JavaScript is disabled), redirect back to the slide page to update it.
-            return redirect('slide_page', args=[relative_url])
+            return redirect('slide_page', relative_url)
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the slide page after the user logs in.

@@ -18,7 +18,7 @@ def page(request):
         if 'current_gallery' in request.session:
             del request.session['current_gallery']
         request.session['random'] = True
-        return redirect('slide_page', args=[relative_url])
+        return redirect('slide_page', relative_url)
 
 # 1. Retrieve a random relative URL in the Pets category.
 def get_random_relative_url(public_unmuted_uploads, count):

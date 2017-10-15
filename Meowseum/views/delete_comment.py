@@ -19,7 +19,7 @@ def page(request, comment_id):
     else:
         if request.user.has_perm('Meowseum.delete_comment'):
             delete_comment(request, comment)
-            return redirect('slide_page', args=[comment.upload.relative_url])
+            return redirect('slide_page', comment.upload.relative_url)
         else:
             # The user visited by navigation bar for some reason and shouldn't be here. Return a 403.
             raise PermissionDenied

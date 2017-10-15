@@ -29,7 +29,7 @@ def page(request, tag_name):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             # If the request isn't AJAX (JavaScript is disabled), redirect back to the previous page.
-            return redirect('tag_gallery', args=[tag_name.lower()])
+            return redirect('tag_gallery', tag_name.lower())
     else:
         # Redirect to the login page if the logged out user clicks a button that tries to submit a form that would modify the database.
         # Redirect the user back to the previous page after the user logs in.

@@ -92,7 +92,7 @@ def tag_gallery(request, tag_name):
 @login_required
 def your_uploads(request):
     # Shortcut for the link in the header. This exists because it is currently faster than having request.user stored as a variable in the template on every page.
-    return redirect('gallery', args=[request.user.username])
+    return redirect('gallery', request.user.username)
 
 # Main function for the 'gallery' page.
 def uploads(request, username):
@@ -125,7 +125,7 @@ def uploads(request, username):
 @login_required
 def your_likes(request):
     # Shortcut for the link in the header
-    return redirect('likes', args=[request.user.username])
+    return redirect('likes', request.user.username)
 
 # Main function for the 'likes' page.
 def likes(request, username):

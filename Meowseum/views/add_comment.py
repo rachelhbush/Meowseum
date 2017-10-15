@@ -31,11 +31,11 @@ def page(request, relative_url):
             comment_form = CommentForm(request.POST or None)
             if comment_form.is_valid():
                 save_comment_form(upload, comment_form, request.user)
-                return redirect('slide_page', args=[relative_url])
+                return redirect('slide_page', relative_url)
             else:
                 # The form has errors, but there isn't any way to return errors to the original view without using a querystring,
                 # and implementing this is a lower priority than getting the form working with AJAX.
-                return redirect('slide_page', args=[relative_url])
+                return redirect('slide_page', relative_url)
         else:
             return redirect('login', query = 'next=' + reverse('slide_page', args=[relative_url]))
 

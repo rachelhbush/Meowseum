@@ -13,7 +13,7 @@ from Meowseum.common_view_functions import get_public_unmuted_uploads
 @login_required
 def your_comments(request):
     # Shortcut for the link in the header
-    return redirect('user_comments', args=[request.user.username])
+    return redirect('user_comments', request.user.username)
 
 # 0. Main function.
 def page(request, username):
