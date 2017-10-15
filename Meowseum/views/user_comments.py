@@ -6,9 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from Meowseum.common_view_functions import redirect
 from django.core.urlresolvers import reverse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from Meowseum.common_view_functions import increment_hit_count
-from Meowseum.common_view_functions import get_public_unmuted_uploads
+from Meowseum.common_view_functions import increment_hit_count, get_public_unmuted_uploads, paginate_records
 
 @login_required
 def your_comments(request):
@@ -37,7 +35,7 @@ def page(request, username):
     else:
         following = False
         
-    comments = paginate_queryset(request, comments)
+    comments = paginate_records(request, comments)
     # Set up variables which will be used in the template.
     context = {'upload_directory': Upload.UPLOAD_TO,
                'thumbnail_directory': hosting_limits_for_Upload['thumbnail'][2],
@@ -50,16 +48,3 @@ def page(request, username):
                'viewer_username': request.user.username,
                'following': following}
     return render(request, 'en/public/user_comments.html', context)
-
-# 1. Paginate a queryset into pages of 25 results.
-def paginate_queryset(request, queryset):
-    paginator = Paginator(queryset, 25)
-    page = request.GET.get('page')
-    try:
-        paginated_queryset = paginator.page(page)
-    except PageNotAnInteger:
-        paginated_queryset = paginator.page(1)
-    except EmptyPage:
-        paginated_queryset = paginator.page(paginator.num_pages)
-
-    return paginated_queryset

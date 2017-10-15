@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from operator import attrgetter
 from django.db.models import Count
 import datetime
-from Meowseum.common_view_functions import get_public_unmuted_uploads, generate_gallery, increment_hit_count, sort_by_popularity, sort_by_trending
+from Meowseum.common_view_functions import get_public_unmuted_uploads, render_upload_gallery, increment_hit_count, sort_by_popularity, sort_by_trending
 from Meowseum.views.search import get_search_queryset
 
 # 0. Main function for the front page. If the user is logged out, then this is the same as the highest rated page.
@@ -32,8 +32,7 @@ def front_page(request):
 def process_saved_search(request):
     form = request.session['saved_search']
     list_of_uploads = list(get_search_queryset(form, request.user))
-    context = {}
-    return generate_gallery(request, list_of_uploads, "No results were found matching your search.", context)
+    return render_upload_gallery(request, list_of_uploads, {'no_results_message': "No results were found matching your search."})
 
 # 2. This is a copy of the 'subscribed_tags' view, used for redirecting from the front page so the hit count won't be incremented.
 def front_page_subscribed_tags(request):
@@ -41,23 +40,20 @@ def front_page_subscribed_tags(request):
     subscribed_tags = request.user.user_profile.subscribed_tags.all()
     upload_queryset = upload_queryset.filter(tags__in=subscribed_tags)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    context = {}
-    return generate_gallery(request, upload_queryset, "You haven't subscribed to a tag yet.", context)
+    return render_upload_gallery(request, upload_queryset, {'no_results_message': "You haven't subscribed to a tag yet."})
 
 # 3. This is a copy of the 'most_popular' view, used for redirecting from the front page so the hit count won't be incremented.
 def front_page_most_popular(request):
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    context = {}
-    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", context)
+    return render_upload_gallery(request, upload_queryset, {'no_results_message': "Nothing has been uploaded to the site yet."})
 
 # Main function for the 'most_popular' page, which uses the site's trending algorithm.
 def most_popular(request):
     increment_hit_count(request, "most_popular")
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    context = {}
-    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", context)
+    return render_upload_gallery(request, upload_queryset, {'no_results_message': "Nothing has been uploaded to the site yet."})
 
 # Main function for the 'new_submissions' page.
 def new_submissions(request):
@@ -65,8 +61,7 @@ def new_submissions(request):
     # Retrieve uploads ordered from latest to earliest.
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = list(upload_queryset.order_by("-id"))
-    context = {}
-    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", context)
+    return render_upload_gallery(request, upload_queryset, {'no_results_message': "Nothing has been uploaded to the site yet."})
 
 # Main function for the gallery for each tag. Results are sorted using the site's trending algorithm.
 def tag_gallery(request, tag_name):
@@ -86,8 +81,7 @@ def tag_gallery(request, tag_name):
         tag = None
         subscribed = None
 
-    context = {'tag': tag, 'subscribed': subscribed}
-    return generate_gallery(request, upload_queryset, "No uploads currently have this tag.", context)
+    return render_upload_gallery(request, upload_queryset, {'tag': tag, 'subscribed': subscribed, 'no_results_message': "No uploads currently have this tag."})
 
 @login_required
 def your_uploads(request):
@@ -119,8 +113,9 @@ def uploads(request, username):
                'profile_username': username,
                'user_profile': user.user_profile,
                'viewer_username': request.user.username,
-               'following': following}
-    return generate_gallery(request, upload_queryset, no_results_message, context)
+               'following': following,
+               'no_results_message': no_results_message}
+    return render_upload_gallery(request, upload_queryset, context)
 
 @login_required
 def your_likes(request):
@@ -157,8 +152,9 @@ def likes(request, username):
                'profile_username': username,
                'user_profile': user.user_profile,
                'viewer_username': request.user.username,
-               'following': following}
-    return generate_gallery(request, list_of_uploads, no_results_message, context)
+               'following': following,
+               'no_results_message': no_results_message}
+    return render_upload_gallery(request, list_of_uploads, context)
 
 # Main function for the 'from followed users' page.
 @login_required
@@ -168,13 +164,11 @@ def from_followed_users(request):
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = upload_queryset.filter(uploader__user_profile__in=followed_user_profiles).order_by("-id")
     upload_list = list(upload_queryset)
-            
     if len(followed_user_profiles) == 0:
         no_results_message = "You haven't followed any users yet."
     else:
         no_results_message = "None of your followed users have uploaded anything yet."
-    context = {}
-    return generate_gallery(request, upload_list, no_results_message, context)
+    return render_upload_gallery(request, upload_list, {'no_results_message': no_results_message})
 
 # Main function for the 'subscribed_tags' page. Results are sorted using the site's trending algorithm.
 @login_required
@@ -184,5 +178,4 @@ def subscribed_tags(request):
     subscribed_tags = request.user.user_profile.subscribed_tags.all()
     upload_queryset = upload_queryset.filter(tags__in=subscribed_tags)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    context = {}
-    return generate_gallery(request, upload_queryset, "You haven't subscribed to a tag yet.", context)
+    return render_upload_gallery(request, upload_queryset, {'no_results_message': "You haven't subscribed to a tag yet."})

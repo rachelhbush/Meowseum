@@ -3,7 +3,7 @@
 
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from Meowseum.common_view_functions import redirect, get_public_unmuted_uploads, generate_gallery
+from Meowseum.common_view_functions import redirect, get_public_unmuted_uploads, render_upload_gallery
 from Meowseum.models import Upload, Metadata, Tag
 from django.db.models.functions import Concat
 from django.db.models import Value
@@ -63,7 +63,6 @@ def header_search(request):
 
 # 0. Main function for search queries.
 def page(request):
-    template_variables = {}
     increment_hit_count(request, "search")
     form = process_GET_form(request, FORM_DICTIONARY)
     if form['save_search_to_front_page']:
@@ -77,7 +76,7 @@ def page(request):
         else:
             request.session['saved_search'] = form
     list_of_uploads = list(get_search_queryset(form, request.user))
-    return generate_gallery(request, list_of_uploads, "No results were found matching your search.", template_variables)
+    return render_upload_gallery(request, list_of_uploads, {'no_results_message': "No results were found matching your search."})
 
 # 1. Retrieve the values of the form from the querystring in the URL. For number fields, the value will be a string. Cast the values as the data type that will be used during querying.
 # String fields use None as the default when the parameter isn't in the URL and an empty string when it is. The user may remove empty string arguments from the URL to make it shorter,

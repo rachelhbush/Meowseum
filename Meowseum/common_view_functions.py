@@ -122,6 +122,19 @@ def increment_hit_count(request, name, args=None):
     hit_count_response = HitCountMixin.hit_count(request, hit_count)
     return
 
+# Input: request. records, a collection of records such as a queryset or list. records_per_page, an optional integer which defaults to 25.
+# Output: paginated_records, a paginated collection of records.
+def paginate_records(request, records, records_per_page=25):
+    paginator = Paginator(records, records_per_page)
+    page = request.GET.get('page')
+    try:
+        paginated_records = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_records = paginator.page(1)
+    except EmptyPage:
+        paginated_records = paginator.page(paginator.num_pages)
+    return paginated_records
+
 # Section 2. Site functions. The sorting functions are used by gallery pages which specifically use the sorting order, and they're included here because in the
 # future they'll be an option in the advanced search menu.
 
@@ -150,32 +163,30 @@ def sort_by_trending(upload_queryset):
 def sort_by_likes(upload_queryset):
     return upload_queryset.annotate(number_of_likes=Count('likes')).order_by("-number_of_likes")
 
-# Organize the list of uploads into pages with 25 uploads each. Store the relative URLs into a session variable in order to be able to navigate the queryset on slide pages.
-# Input: request, list_of_uploads. no_results_message is a message to display when there are no uploads matching the query. template_variables dictionary
-# Session variable output: current_gallery contains the list of relative URLs (after /slide/) for results in the gallery last viewed.
-# index will indicate the index of the result while navigating slide pages. The program stores -1 to indicate that no slide has been visited yet.
-# View output: The object which renders the template.
-def generate_gallery(request, list_of_uploads, no_results_message, template_variables):
-    paginator = Paginator(list_of_uploads, 25)
-    page = request.GET.get('page')
-    try:
-        paginated_list_of_uploads = paginator.page(page)
-    except PageNotAnInteger:
-        paginated_list_of_uploads = paginator.page(1)
-    except EmptyPage:
-        paginated_list_of_uploads = paginator.page(paginator.num_pages)
+# 0. Render a paginated gallery of Upload records. This function is invoked at the end of a view which gathers a collection of Uploads, such as those uploaded by user.
+# At the end of each view, if there are any variables unique to the view, define a 'context' dictionary of variables to send to the template. This function will add to it
+# the variables all Upload views should have in common. The 'context' dictionary should at least contain "no_results_message", a message to display if there are no uploads yet.
+# Input: request. uploads, a collection of upload records. context, a dictionary of template variables unique to the view, containing a "no_results_message" key.
+def render_upload_gallery(request, uploads, context):
+    store_gallery_upload_relative_urls(request, uploads)
+    paginated_uploads = paginate_records(request, uploads)
+    
+    context['uploads'] = paginated_uploads
+    context['upload_directory'] = Upload.UPLOAD_TO
+    context['thumbnail_directory'] = hosting_limits_for_Upload['thumbnail'][2]
+    context['poster_directory'] = hosting_limits_for_Upload['poster_directory']
+    return render(request, 'en/public/gallery.html', context)
 
-    template_variables['uploads'] = paginated_list_of_uploads
-    template_variables['upload_directory'] = Upload.UPLOAD_TO
-    template_variables['thumbnail_directory'] = hosting_limits_for_Upload['thumbnail'][2]
-    template_variables['poster_directory'] = hosting_limits_for_Upload['poster_directory']
-    template_variables['no_results_message'] = no_results_message
+# 1. For the gallery currently being viewed, store a list of unique upload relative URLs into session storage. This will allow the user to be able to navigate between
+# uploads after visiting another page. The function also switches off a "random browsing" flag in session storage enabled by the random upload page.
+# Input: request. uploads, an ordered collection of upload records for a gallery. This can be a queryset, list, tuple, etc.
+# Output: None.
+def store_gallery_upload_relative_urls(request, uploads):
     current_gallery = []
-    for x in range(len(list_of_uploads)):
-        current_gallery = current_gallery + [list_of_uploads[x].relative_url]
+    for x in range(len(uploads)):
+        current_gallery = current_gallery + [uploads[x].relative_url]
     # Store the list of relative URLs for each upload and the index of the previously viewed upload into a session variable.
     request.session['current_gallery'] = current_gallery
     if 'random' in request.session:
-        # Delete a session storage variable that is used by the slide page to indicate that the user came from the "Random cat" page.
+        # Delete a session storage variable that is used by the slide page to indicate that the user came from the "Random upload" page.
         del request.session['random']
-    return render(request, 'en/public/gallery.html', template_variables)
