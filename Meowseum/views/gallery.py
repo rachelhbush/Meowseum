@@ -30,63 +30,64 @@ def front_page(request):
 
 # 1. Retrieve the results from the user's saved search.
 def process_saved_search(request):
-    template_variables = {}
     form = request.session['saved_search']
     list_of_uploads = list(get_search_queryset(form, request.user))
-    return generate_gallery(request, list_of_uploads, "No results were found matching your search.", template_variables)
+    context = {}
+    return generate_gallery(request, list_of_uploads, "No results were found matching your search.", context)
 
 # 2. This is a copy of the 'subscribed_tags' view, used for redirecting from the front page so the hit count won't be incremented.
 def front_page_subscribed_tags(request):
-    template_variables = {}
     upload_queryset = get_public_unmuted_uploads(request.user)
     subscribed_tags = request.user.user_profile.subscribed_tags.all()
     upload_queryset = upload_queryset.filter(tags__in=subscribed_tags)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    return generate_gallery(request, upload_queryset, "You haven't subscribed to a tag yet.", template_variables)
+    context = {}
+    return generate_gallery(request, upload_queryset, "You haven't subscribed to a tag yet.", context)
 
 # 3. This is a copy of the 'most_popular' view, used for redirecting from the front page so the hit count won't be incremented.
 def front_page_most_popular(request):
-    template_variables = {}
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", template_variables)
+    context = {}
+    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", context)
 
 # Main function for the 'most_popular' page, which uses the site's trending algorithm.
 def most_popular(request):
-    template_variables = {}
     increment_hit_count(request, "most_popular")
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", template_variables)
+    context = {}
+    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", context)
 
 # Main function for the 'new_submissions' page.
 def new_submissions(request):
-    template_variables = {}
     increment_hit_count(request, "new_submissions")
     # Retrieve uploads ordered from latest to earliest.
     upload_queryset = get_public_unmuted_uploads(request.user)
     upload_queryset = list(upload_queryset.order_by("-id"))
-    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", template_variables)
+    context = {}
+    return generate_gallery(request, upload_queryset, "Nothing has been uploaded to the site yet.", context)
 
 # Main function for the gallery for each tag. Results are sorted using the site's trending algorithm.
 def tag_gallery(request, tag_name):
-    template_variables = {}
     increment_hit_count(request, "tag_gallery", [tag_name])
         
     try:
         tag = Tag.objects.get(name=tag_name.lower())
-        template_variables['tag'] = tag
         upload_queryset = get_public_unmuted_uploads(request.user)
         upload_queryset = upload_queryset.filter(tags=tag)
         upload_queryset = list(sort_by_trending(upload_queryset))
         if request.user.is_authenticated() and tag in request.user.user_profile.subscribed_tags.all():
-            template_variables['subscribed'] = True
+            subscribed = True
         else:
-            template_variables['subscribed'] = False
+            subscribed = False
     except Tag.DoesNotExist:
         upload_queryset = []
-        template_variables['subscribed'] = None
-    return generate_gallery(request, upload_queryset, "No uploads currently have this tag.", template_variables)
+        tag = None
+        subscribed = None
+
+    context = {'tag': tag, 'subscribed': subscribed}
+    return generate_gallery(request, upload_queryset, "No uploads currently have this tag.", context)
 
 @login_required
 def your_uploads(request):
@@ -96,11 +97,6 @@ def your_uploads(request):
 # Main function for the 'gallery' page.
 def uploads(request, username):
     increment_hit_count(request, "gallery", [username])
-    template_variables = {}
-    template_variables['gallery_type'] = 'uploads'
-    # Send the username to the template in order to use it in the navigation bar.
-    template_variables['profile_username'] = username
-
     # Retrieve the queryset of uploads from the owner of the profile. If the viewer isn't the owner of the profile,
     # then first filter down to the public uploads from unmuted users. The viewer sees nothing if the viewer is muting the profile owner.
     user = User.objects.get(username=username)
@@ -112,29 +108,19 @@ def uploads(request, username):
         no_results_message = "This user hasn't uploaded anything yet."
     upload_queryset = list(upload_queryset.order_by("-id"))
 
-    template_variables['user_profile'] = user.user_profile
-    template_variables['viewer_username'] = request.user.username
+    # Check whether the user is following the owner of the profile.
     # The first part of this predicate prevents an exception from occurring when the user is logged out and has no user_profile.
     if request.user.is_authenticated() and user.user_profile in request.user.user_profile.following.all():
-        template_variables['following'] = True
+        following = True
     else:
-        template_variables['following'] = False
-    if request.POST:
-        # If a logged in user clicks the option in the dropdown, then the logged in user follows or unfollows this user's gallery.
-        if request.user.is_authenticated():
-            if user.user_profile in request.user.user_profile.following.all():
-                request.user.user_profile.following.remove(user.user_profile)
-                template_variables['following'] = False
-            else:
-                request.user.user_profile.following.add(user.user_profile)
-                request.user.user_profile.muting.remove(user.user_profile)
-                template_variables['following'] = True
-            request.user.user_profile.save()
-        else:
-            # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return redirect('login', query = 'next=/user/"+username+"/gallery/')
-        
-    return generate_gallery(request, upload_queryset, no_results_message, template_variables)
+        following = False
+
+    context = {'gallery_type': 'uploads',
+               'profile_username': username,
+               'user_profile': user.user_profile,
+               'viewer_username': request.user.username,
+               'following': following}
+    return generate_gallery(request, upload_queryset, no_results_message, context)
 
 @login_required
 def your_likes(request):
@@ -143,12 +129,7 @@ def your_likes(request):
 
 # Main function for the 'likes' page.
 def likes(request, username):
-    template_variables = {}
     increment_hit_count(request, "gallery", [username])
-    template_variables['gallery_type'] = 'likes'
-    # Send the username to the template in order to use it in the navigation bar.
-    template_variables['profile_username'] = username
-
     # Begin retrieving the list of like records for the user specified by the URL.
     user = User.objects.get(username=username)
     # Retrieve public, unmuted uploads, excluding the user's own uploads.
@@ -165,34 +146,23 @@ def likes(request, username):
     else:
         no_results_message = "This user hasn't Liked any uploads yet."
 
-    template_variables['user_profile'] = user.user_profile
-    template_variables['viewer_username'] = request.user.username
+    # Check whether the user is following the owner of the profile.
     # The first part of this predicate prevents an exception from occurring when the user is logged out and has no user_profile.
     if request.user.is_authenticated() and user.user_profile in request.user.user_profile.following.all():
-        template_variables['following'] = True
+        following = True
     else:
-        template_variables['following'] = False
-    if request.POST:
-        # If a logged in user clicks the option in the dropdown, then the logged in user follows or unfollows this user's gallery.
-        if request.user.is_authenticated():
-            if user.user_profile in request.user.user_profile.following.all():
-                request.user.user_profile.following.remove(user.user_profile)
-                template_variables['following'] = False
-            else:
-                request.user.user_profile.following.add(user.user_profile)
-                request.user.user_profile.muting.remove(user.user_profile)
-                template_variables['following'] = True
-            request.user.user_profile.save()
-        else:
-            # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return redirect('login', query = 'next=/user/"+username+"/likes/')
-    
-    return generate_gallery(request, list_of_uploads, no_results_message, template_variables)
+        following = False
+
+    context = {'gallery_type': 'likes',
+               'profile_username': username,
+               'user_profile': user.user_profile,
+               'viewer_username': request.user.username,
+               'following': following}
+    return generate_gallery(request, list_of_uploads, no_results_message, context)
 
 # Main function for the 'from followed users' page.
 @login_required
 def from_followed_users(request):
-    template_variables = {}
     increment_hit_count(request, "followed_users")
     followed_user_profiles = request.user.user_profile.following.all()
     upload_queryset = get_public_unmuted_uploads(request.user)
@@ -203,15 +173,16 @@ def from_followed_users(request):
         no_results_message = "You haven't followed any users yet."
     else:
         no_results_message = "None of your followed users have uploaded anything yet."
-    return generate_gallery(request, upload_list, no_results_message, template_variables)
+    context = {}
+    return generate_gallery(request, upload_list, no_results_message, context)
 
 # Main function for the 'subscribed_tags' page. Results are sorted using the site's trending algorithm.
 @login_required
 def subscribed_tags(request):
-    template_variables = {}
     increment_hit_count(request, "subscribed_tags")
     upload_queryset = get_public_unmuted_uploads(request.user)
     subscribed_tags = request.user.user_profile.subscribed_tags.all()
     upload_queryset = upload_queryset.filter(tags__in=subscribed_tags)
     upload_queryset = list(sort_by_trending(upload_queryset))
-    return generate_gallery(request, upload_queryset, "You haven't subscribed to a tag yet.", template_variables)
+    context = {}
+    return generate_gallery(request, upload_queryset, "You haven't subscribed to a tag yet.", context)

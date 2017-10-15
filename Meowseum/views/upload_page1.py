@@ -15,20 +15,12 @@ from Meowseum.file_handling.file_utility_functions import make_unique_with_rando
 # 0. Main function.
 @login_required
 def page(request):
-    template_variables = {}
     # Try to get the logged-in user's most recent file submission.
     try:
         record = Upload.objects.filter(uploader=request.user).order_by('-id')[0]
-        template_variables['upload'] = record
     except IndexError:
         # If the user hasn't submitted a file yet, then the user shouldn't be here.
         raise PermissionDenied
-    
-    template_variables['heading'] = 'Uploading ' + record.metadata.original_file_name + record.metadata.original_extension
-    template_variables['upload_directory'] = Upload.UPLOAD_TO
-    template_variables['poster_directory'] = hosting_limits_for_Upload['poster_directory']
-    template_variables['has_contact_information'] = request.user.user_profile.has_contact_information()
-    template_variables['CONTACT_INFO_ERROR'] = CONTACT_INFO_ERROR
     
     form = UploadPage1(request.POST or None, initial={'upload_type':'pets', 'tags':'#'}, request=request)
     if form.is_valid():
@@ -40,8 +32,15 @@ def page(request):
         Like.objects.get_or_create(upload=record, liker=request.user)
         return redirect_to_next_page(form.cleaned_data['upload_type'], record.relative_url)
     else:
-        template_variables['form'] = form
-        return render(request, 'en/public/upload_page1.html', template_variables)
+        # Send the following variables to the template.
+        context = {'form': form,
+                   'upload': upload,
+                   'heading': 'Uploading ' + record.metadata.original_file_name + record.metadata.original_extension,
+                   'upload_directory': Upload.UPLOAD_TO,
+                   'poster_directory': hosting_limits_for_Upload['poster_directory'],
+                   'has_contact_information': request.user.user_profile.has_contact_information(),
+                   'CONTACT_INFO_ERROR': CONTACT_INFO_ERROR}
+        return render(request, 'en/public/upload_page1.html', context)
 
 # 2. Update the upload record with the title, description, tags, and whether or not the upload is publicly listed, then save.
 def update_and_save_upload_record(form, record):

@@ -52,8 +52,7 @@ def page(request, relative_url):
                'report_abuse_url': report_abuse_url,
                # Initialize the page's blank forms.
                'comment_form': CommentForm(),
-               'tag_form': TagForm()
-               }
+               'tag_form': TagForm()}
     context = get_pet_information_record(upload, context)
     return render(request, 'en/public/slide_page.html', context)
 

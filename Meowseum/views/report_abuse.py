@@ -7,8 +7,8 @@ from django.shortcuts import render
 from Meowseum.common_view_functions import redirect, increment_hit_count
 
 def page(request):
-    template_variables, initial_data = {}, {}
     # Automatically fill in two of the fields based on the page from which the user is visiting.
+    initial_data = {}
     try:
         initial_data['offending_username'] = request.GET['offending_username']
     except:
@@ -38,5 +38,4 @@ def page(request):
     else:
         if request.method == 'GET':
             increment_hit_count(request, "report_abuse")
-        template_variables['form'] = form
-        return render(request, 'en/public/report_abuse.html', template_variables)
+        return render(request, 'en/public/report_abuse.html', {'form': form})

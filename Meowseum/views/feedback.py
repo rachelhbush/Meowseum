@@ -8,7 +8,6 @@ from django.shortcuts import render
 from Meowseum.common_view_functions import redirect, increment_hit_count
 
 def page(request):
-    template_variables = {}
     form = FeedbackForm(request.POST or None, request.FILES or None)
     metadata, form = get_validated_metadata('screenshot', form, request.FILES, validation_specifications_for_Feedback)
     if form.is_valid():
@@ -21,7 +20,6 @@ def page(request):
             new_feedback.save()
         return redirect('index')
     else:
-        template_variables['form'] = form
         if request.method == 'GET':
             increment_hit_count(request, "feedback")
-        return render(request, 'en/public/feedback.html', template_variables)
+        return render(request, 'en/public/feedback.html', {'form': form})

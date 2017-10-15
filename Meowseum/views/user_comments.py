@@ -17,11 +17,7 @@ def your_comments(request):
 
 # 0. Main function.
 def page(request, username):
-    template_variables = {}
     increment_hit_count(request, 'user_comments')
-    # Send the username to the template in order to use it in the navigation bar.
-    template_variables['profile_username'] = username
-
     # Retrieve the queryset of comments from the owner of the profile. If the logged in user isn't the owner of the profile,
     # then filter the comments down to only the ones on public uploads from unmuted users.
     user = User.objects.get(username=username)
@@ -34,33 +30,29 @@ def page(request, username):
         no_results_message = "This user hasn't commented on an upload yet."
     comments = comments.order_by("-id")
 
-    template_variables['user_profile'] = user.user_profile
-    template_variables['viewer_username'] = request.user.username
+    # Check whether the user is following the owner of the profile.
     # The first part of this predicate prevents an exception from occurring when the user is logged out and has no user_profile.
     if request.user.is_authenticated() and user.user_profile in request.user.user_profile.following.all():
-        template_variables['following'] = True
+        following = True
     else:
-        template_variables['following'] = False
-    if request.POST:
-        # If a logged in user clicks the option in the dropdown, then the logged in user follows or unfollows this user's gallery.
-        if request.user.is_authenticated():
-            if user.user_profile in request.user.user_profile.following.all():
-                request.user.user_profile.following.remove(user.user_profile)
-                template_variables['following'] = False
-            else:
-                request.user.user_profile.following.add(user.user_profile)
-                request.user.user_profile.muting.remove(user.user_profile)
-                template_variables['following'] = True
-            request.user.user_profile.save()
-        else:
-            # Redirect the user to the login page, then back to this gallery after the user logs in.
-            return redirect('login', query = 'next=' + reverse('user_comments', args=[request.user.username]))
+        following = False
         
-    template_variables = paginate_queryset(request, comments, 'comments', no_results_message, template_variables)
-    return render(request, 'en/public/user_comments.html', template_variables)
+    comments = paginate_queryset(request, comments)
+    # Set up variables which will be used in the template.
+    context = {'upload_directory': Upload.UPLOAD_TO,
+               'thumbnail_directory': hosting_limits_for_Upload['thumbnail'][2],
+               'poster_directory': hosting_limits_for_Upload['poster_directory'],
+               'comments': comments,
+               'no_results_message': no_results_message,
+               # These template variables will be used for following the user whose profile is being viewed.
+               'profile_username': username,
+               'user_profile': user.user_profile,
+               'viewer_username': request.user.username,
+               'following': following}
+    return render(request, 'en/public/user_comments.html', context)
 
-# 1. Paginate a queryset into pages of 25 results. Store into the template_variables dictionary the following values: 1) the queryset 2) a message to be displayed if there are no results.
-def paginate_queryset(request, queryset, queryset_name, no_results_message, template_variables):
+# 1. Paginate a queryset into pages of 25 results.
+def paginate_queryset(request, queryset):
     paginator = Paginator(queryset, 25)
     page = request.GET.get('page')
     try:
@@ -70,9 +62,4 @@ def paginate_queryset(request, queryset, queryset_name, no_results_message, temp
     except EmptyPage:
         paginated_queryset = paginator.page(paginator.num_pages)
 
-    template_variables[queryset_name] = paginated_queryset
-    template_variables['upload_directory'] = Upload.UPLOAD_TO
-    template_variables['thumbnail_directory'] = hosting_limits_for_Upload['thumbnail'][2]
-    template_variables['poster_directory'] = hosting_limits_for_Upload['poster_directory']
-    template_variables['no_results_message'] = no_results_message
-    return template_variables
+    return paginated_queryset
