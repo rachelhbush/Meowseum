@@ -28,7 +28,7 @@ class OrderedQueryDict(QueryDict, OrderedDict):
 # 0. Extend Django's default redirect() shortcut with the ability to specify GET parameters and arguments.
 # Input: to, a URL or page name. args, a list of arguments for Django's URL parameters. query can be any of various data structures, most usefully
 # OrderedQueryDict, but it can also be a URL-encoded querystring, excluding the ?. The remaining input is less important and covered by Django documentation.
-def redirect(to, query=None, *args, **kwargs):
+def redirect(to, *args, query=None, permanent=False, **kwargs):
     if query == None:
         return original_redirect(to, *args, *kwargs)
     else:
@@ -36,7 +36,7 @@ def redirect(to, query=None, *args, **kwargs):
         url = resolve_url(to, *args, **kwargs) + '?' + querystring
         # This somewhat repeats the definition of redirect() built into Django, which includes resolve_url().
         # This variation excludes resolve_url() to avoids the work of resolving the URL again.
-        if kwargs.pop('permanent', False):
+        if permanent:
             redirect_class = HttpResponsePermanentRedirect
         else:
             redirect_class = HttpResponseRedirect
@@ -48,7 +48,7 @@ def redirect(to, query=None, *args, **kwargs):
 # Input: request. to, a URL or page name. args, a list of arguments for Django's URL parameters. query can be any of various data structures, most usefully
 # OrderedQueryDict, but it can also be a URL-encoded querystring, excluding the ?. The remaining input is less important and covered by Django documentation.
 # Output: JSON object.
-def ajaxWholePageRedirect(request, to, query=None, *args, **kwargs):
+def ajaxWholePageRedirect(request, to,  *args, query=None, **kwargs):
     url = resolve_url(to, *args, **kwargs)
     if query != None:
         querystring = urlencode(query)
@@ -70,7 +70,7 @@ def ajaxWholePageRedirect(request, to, query=None, *args, **kwargs):
 # QueryDict class. This structure is necessary for fields which accept multiple values such as <select multiple> and checkboxes with the same name. If you are trying to emulate how Django
 # renders a GET form as a querystring, remember that Django will render the value of a checked BooleanField checkbox (True) as 'on'.
 # Output: querystring
-def urlencode(query, safe='/', using_plus=True, *args, **kwargs):
+def urlencode(query, *args, safe='/', using_plus=True, **kwargs):
     if query.__class__.__name__ == 'str':
         querystring = query
     else:
@@ -85,9 +85,9 @@ def urlencode(query, safe='/', using_plus=True, *args, **kwargs):
         # I removed code for supporting pre-Python 3.2 versions in which the encoding format wasn't a keyword argument, and I used longer variable names.
         query = [(key, [i for i in value] if isinstance(value, (list, tuple)) else value) for key, value in query]
         if using_plus:
-            querystring = original_urlencode(query, safe=safe, doseq=True, *args, **kwargs)
+            querystring = original_urlencode(query, *args, doseq=True, **kwargs)
         else:
-            querystring = original_urlencode(query, safe=safe, doseq=True, quote_via=quote, *args, **kwargs)
+            querystring = original_urlencode(query, *args, doseq=True, quote_via=quote, **kwargs)
     return querystring
 
 # Generate a querystring from a form while listing the fields in the same order as the form's class definition. This function also allows
