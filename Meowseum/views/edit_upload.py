@@ -4,6 +4,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from Meowseum.common_view_functions import redirect
+from django.core.exceptions import PermissionDenied
 from Meowseum.models import Upload, Adoption, Lost, Found
 from Meowseum.forms import EditUploadForm, AdoptionForm, BondedWithForm, LostForm, FoundForm
 
@@ -11,9 +12,12 @@ from Meowseum.forms import EditUploadForm, AdoptionForm, BondedWithForm, LostFor
 # 0. Main function.
 def page(request, relative_url):
     upload = get_object_or_404(Upload, relative_url=relative_url)
+    if request.user != upload.uploader:
+        # Make sure only the author of the upload can edit it.
+        raise PermissionDenied
+    
     # Define the heading that will be used in the form's header.
     heading = 'Editing "'+ upload.title + '"'
-
     upload_category = upload.get_category()
     if upload_category == 'adoption':
         return render_adoption_editing_view(request, upload, heading)
