@@ -48,6 +48,7 @@ def update_and_save_upload_record(form, upload):
     upload.description = form.cleaned_data['description']
     upload.is_publicly_listed = form.cleaned_data['is_publicly_listed']
     upload.uploader_has_disabled_comments = form.cleaned_data['uploader_has_disabled_comments']
+    upload.save()
 
     tags_from_title_and_description = get_tags_from_title_and_description(form.cleaned_data['title'], form.cleaned_data['description'])
     tags_from_tag_form = get_tags_from_tag_form(form.cleaned_data['tags'])
@@ -60,16 +61,14 @@ def update_and_save_upload_record(form, upload):
             # If the tag does exist, then associate this upload record with it.
             existing_tag = Tag.objects.get(name=tag)
             existing_tag.uploads.add(upload)
-            existing_tag.save()
         except Tag.DoesNotExist:
             # If the tag doesn't exist, create a new one and add the most recent upload as its first record.
             new_tag = Tag(name=tag)
             new_tag.save()
             new_tag.uploads.add(upload)
-            new_tag.save()
-    upload.save()
 
-# 2.1. Input: title and description strings. Output: A list of tags using the format ["blep", "catloaf"]. All tags are stored in lowercase form.
+# 2.1. Input: title and description strings.
+#        Output: tag_list, a list of tags using the format ["blep", "catloaf"]. All tags are stored in lowercase form.
 def get_tags_from_title_and_description(title, description):
     word_list = title.split() + description.split()
     tag_list = []
@@ -120,7 +119,7 @@ def rename_upload_file(upload, poster_directory):
         os.rename(old_poster_path, new_poster_path)
         
     # If a thumbnail exists in the OS, then rename the thumbnail.
-    if .metadata.width > 600:
+    if upload.metadata.width > 600:
         thumbnail_directory = hosting_limits_for_Upload['thumbnail'][2]
         old_thumbnail_path = os.path.join(settings.MEDIA_PATH, Upload.UPLOAD_TO, thumbnail_directory, old_full_file_name)
         new_thumbnail_path = os.path.join(settings.MEDIA_PATH, Upload.UPLOAD_TO, thumbnail_directory, new_full_file_name)

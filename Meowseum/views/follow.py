@@ -43,7 +43,6 @@ def follow_or_unfollow(request_user, uploader_user):
         # In Meowseum's current system, muting silences all activity. A user cannot be muted and followed at the same time. When either status is added, the other needs to be removed.
         uploader_user.user_profile.followers.add(request_user.user_profile)
         uploader_user.user_profile.muters.remove(request_user.user_profile)
-    uploader_user.user_profile.save()
 
 # 2. Put together the AJAX response data for when the previous page has a Follow button.
 # The response_data has a different structure than for get_follow_button_response() because I'm in the middle of reorganizing. It works for the button itself because the

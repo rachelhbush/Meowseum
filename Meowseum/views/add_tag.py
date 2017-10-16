@@ -46,13 +46,11 @@ def process_tag_form(upload, relative_url, tag_form):
         # If the tag does exist, then associate this upload record with it.
         existing_tag = Tag.objects.get(name=tag_name)
         existing_tag.uploads.add(upload)
-        existing_tag.save()
     except Tag.DoesNotExist:
         # If the tag doesn't exist, create a new one and add the most recent upload as the first record.
         new_tag = Tag(name=tag_name)
         new_tag.save()
         new_tag.uploads.add(upload)
-        new_tag.save()
 
 # 2. Put together the AJAX response for when the server has successfully processed the form.
 # Input: request, upload, relative_url, tag_form. Output: An HTTP response containing a JSON object to be sent back to AJAX.

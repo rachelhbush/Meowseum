@@ -16,7 +16,6 @@ def page(request, tag_name):
             request.user.user_profile.subscribed_tags.remove(tag) # Unsubscribe
         else:
             request.user.user_profile.subscribed_tags.add(tag) # Subscribe
-        request.user.user_profile.save() 
 
         if request.is_ajax():
             response_data = [{}]

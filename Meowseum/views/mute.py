@@ -34,7 +34,6 @@ def page(request, username):
             response_data[1]['HTML_snippet'] = 'Follow'
             response_data[2]['selector'] = '.dropdown_follow_option'
             response_data[2]['HTML_snippet'] = 'Follow'
-        uploader.save()
 
         if request.is_ajax():
             # If the request is AJAX, then respond with a JSON object containing the new Follow button label, the new label for the Follow option in its dropdown, and the new label for the
