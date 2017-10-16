@@ -49,7 +49,10 @@ def update_and_save_upload_record(form, upload):
     upload.is_publicly_listed = form.cleaned_data['is_publicly_listed']
     upload.uploader_has_disabled_comments = form.cleaned_data['uploader_has_disabled_comments']
     upload.save()
+    update_tag_data(form, upload)
 
+# 2.1. Use the tag part of the form to update the database.
+def update_tag_data(form, upload):
     tags_from_title_and_description = get_tags_from_title_and_description(form.cleaned_data['title'], form.cleaned_data['description'])
     tags_from_tag_form = get_tags_from_tag_form(form.cleaned_data['tags'])
     # Merge the list of checked popular tags, the tags that the user typed into the title and description fields, and the tags that the user typed into the form in the tags section.
@@ -67,7 +70,7 @@ def update_and_save_upload_record(form, upload):
             new_tag.save()
             new_tag.uploads.add(upload)
 
-# 2.1. Input: title and description strings.
+# 2.1.1. Input: title and description strings.
 #        Output: tag_list, a list of tags using the format ["blep", "catloaf"]. All tags are stored in lowercase form.
 def get_tags_from_title_and_description(title, description):
     word_list = title.split() + description.split()
@@ -77,7 +80,7 @@ def get_tags_from_title_and_description(title, description):
             tag_list = tag_list + [word_list[x].lstrip("#").lower()]
     return tag_list
 
-# 2.1.1. Return True or False depending on whether the string follows the standard hashtag conventions. It should start with a #, then the next letter should be a letter or underscore,
+# 2.1.1.1. Return True or False depending on whether the string follows the standard hashtag conventions. It should start with a #, then the next letter should be a letter or underscore,
 # and the rest of the characters should be alphanumeric.
 def is_hashtag(string):
     if string[0] == "#" and (string[1].isalpha() or string[1] == '_') and string[2:].isalnum():
@@ -85,7 +88,7 @@ def is_hashtag(string):
     else:
         return False
 
-# 2.2. Input: A valid comma-delimited string of tags for an upload, such as "#blep, #catloaf".
+# 2.1.2. Input: A valid comma-delimited string of tags for an upload, such as "#blep, #catloaf".
 # Tags are case insensitive and stored as all lowercase in the database. Output: A list of tags using the format ["blep", "catloaf"].
 def get_tags_from_tag_form(string):
     tag_list = string.split(",")
