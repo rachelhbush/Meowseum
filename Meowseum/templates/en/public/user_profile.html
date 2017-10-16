@@ -1,8 +1,8 @@
 {% extends "en/public/base.html" %}
 {% block head %}
         {{ block.super }}
-        <title>raincloud - Photos and GIFs on Meowseum</title>
-        <meta name="description" content="I'm the owner of the Meowseum website. I started this site because I used to copy and paste links to cat images on the Internet all the time, and I really wanted to make a better image site. If you have any suggestions for the site, drop me a note on the Feedback page. The site is new and I'm the only employee right now, so I'll definitely be listening."/>
+        <title>raincloud - Photos and GIFs on {{ app_name }}</title>
+        <meta name="description" content="I'm the owner of the {{ app_name }} website. I started this site because I used to copy and paste links to cat images on the Internet all the time, and I really wanted to make a better image site. If you have any suggestions for the site, drop me a note on the Feedback page. The site is new and I'm the only employee right now, so I'll definitely be listening."/>
         {% include "en/public/default_keywords.html" %}
         {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
         {% load staticfiles %}

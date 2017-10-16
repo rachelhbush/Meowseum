@@ -2,7 +2,7 @@
 {% load my_filters %}
 {% block head %}
         {{ block.super }}
-        <title>{{ upload.title }} - Scrapbin</title>
+        <title>{{ upload.title }} - {{ app_name }}</title>
         {% include "en/public/default_description.html" %}
         {% include "en/public/default_keywords.html" %}
         {% load staticfiles %}
@@ -154,25 +154,25 @@
                     <label>Link to this page</label>
                     <div class="link-field">
                         <span class="glyphicon glyphicon-link"></span>
-                        <input type="text" value="http://www.{{ app_name|lower }}.tk/slide/{{ upload.relative_url }}/" spellcheck="false"/>
+                        <input type="text" value="https://www.{{ domain_name }}/slide/{{ upload.relative_url }}/" spellcheck="false"/>
                     </div>
                 </div>
                 <div class="copy-and-paste-set">
                     <label>Direct link to file</label>
                     <div class="link-field">
                         <span class="glyphicon glyphicon-link"></span>
-                        <input type="text" value="http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }}" spellcheck="false"/>
+                        <input type="text" value="https://www.{{ domain_name }}{{ MEDIA_URL }}{{ upload.file }}" spellcheck="false"/>
                     </div>
                 </div>
                 {% if 'image' in upload.metadata.mime_type %}
                     <div class="copy-and-paste-set">
                         <label>BB code forums</label>
-                        <input type="text" value="[timg]http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }}[/timg]" spellcheck="false"/>
+                        <input type="text" value="[timg]https://www.{{ domain_name }}{{ MEDIA_URL }}{{ upload.file }}[/timg]" spellcheck="false"/>
                     </div>
                 {% else %}
                     <div class="copy-and-paste-set">
                         <label>BB code forums</label>
-                        <input type="text" value="[url]http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }}[/url]" spellcheck="false"/>
+                        <input type="text" value="[url]https://www.{{ domain_name }}{{ MEDIA_URL }}{{ upload.file }}[/url]" spellcheck="false"/>
                         {% comment %}
                             On the SomethingAwful forums, one of the most popular BB code forums, this looks like a regular link in the preview, but it still renders correctly after submitting the post.
                         {% endcomment %}
@@ -180,7 +180,7 @@
                 {% endif %}
                 <div class="copy-and-paste-set">
                     <label>Reddit markdown</label>
-                    <input type="text" value="[{{ upload.title }}](http://www.{{ app_name|lower }}.tk{{ MEDIA_URL }}{{ upload.file }})" spellcheck="false"/>
+                    <input type="text" value="[{{ upload.title }}](https://www.{{ domain_name }}{{ MEDIA_URL }}{{ upload.file }})" spellcheck="false"/>
                 </div>
             </section>
         </section>

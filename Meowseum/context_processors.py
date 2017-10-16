@@ -4,8 +4,9 @@
 # Define variables that will always be the same throughout the site.
 def constant_variables(request):
     # The app_name variable will save a lot of work if the developer decides to rename the app, because it appears in page titles, the footer, etc.
-    # It can't be used for image attributes, however, because Django will interpret curly braces within quotation marks literally.
-    return {'app_name':'Meowseum'}
+    # It can't be used for image attributes, however, because Django will interpret curly braces within quotation marks literally. The domain name
+    # will probably change during production depending on which domain name ideas are available and affordable.
+    return {'app_name':'Meowseum', 'domain_name': 'meowseum.tk'}
 
 # 0. Define variables related to site settings.
 def settings_variables(request):

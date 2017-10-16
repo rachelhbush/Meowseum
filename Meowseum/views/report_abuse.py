@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from Meowseum.forms import AbuseReportForm
 from django.shortcuts import render
 from Meowseum.common_view_functions import redirect, increment_hit_count
+from Meowseum.context_processors import constant_variables
 
 # 0. Main function
 def page(request):
@@ -34,9 +35,9 @@ def get_initial_data_from_querystring(request):
     except KeyError:
         initial_data['offending_username'] = ''
     try:
-        # The referral URL is relative to the website domain name, but the URL validator will only validate a full URL.
-        # So, prefix a site domain name even though the domain name is liable to change in the future.
-        initial_data['url'] = 'http://www.meowseum.com' + request.GET['referral_url']
+        # The referral URL is relative to the website domain name, but the URL validator will only validate a full URL, so prefix the site domain name.
+        domain_name = constant_variables(request)['domain_name']
+        initial_data['url'] = 'https://www.' + domain_name + request.GET['referral_url']
     except KeyError:
         initial_data['url'] = ''
     return initial_data

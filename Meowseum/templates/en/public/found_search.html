@@ -1,7 +1,7 @@
 {% extends "en/public/base.html" %}
 {% block head %}
         {{ block.super }}
-        <title>Lost pet search - Meowseum</title>
+        <title>Found pet search - {{ app_name }}</title>
         {% include "en/public/default_description.html" %}
         {% include "en/public/default_keywords.html" %}
         {% load staticfiles %}
@@ -13,7 +13,7 @@
 {% endblock %}
 {% block body %}
     <header class="form">
-        <h1 id="search-heading">Lost cat search</h1>
+        <h1 id="search-heading">Found cat search</h1>
         <a href="{% url "index" %}" id="close"><button type="button" class="close"><span>&times;</span></button></a>
     </header>
     <main class="form">
