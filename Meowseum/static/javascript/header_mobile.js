@@ -48,11 +48,6 @@ $(document).ready(function() {
     
     // 1. If the search bar is hidden, clicking the magnifying glass icon brings it down. If the search bar is visible, clicking it hides it with a sliding-up animation.
     var prepareSearchIcon = function() {
-        // In the CSS, the search bar is shown so that users with JavaScript disabled can use it. I am assuming most users would prefer the search bar to be hidden by default.
-        // So, hide the search bar unless the user previously decided to have it shown.
-        if (settings.layout["mobileSearchBarIsHidden"]) {
-            $("#search-row").hide();
-        }
         $("#portrait-smartphone-icons #search-toggle, #landscape-smartphone-or-wider-icons #search-toggle ").click(function() {
             if ($("#search-row").css("display") == "none") {
                 $("#search-row").slideDown("fast");
