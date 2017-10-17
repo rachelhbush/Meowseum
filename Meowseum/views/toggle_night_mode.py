@@ -34,9 +34,9 @@ def update_database(request):
 # Input: night_mode, Boolean.
 # Output: Dictionary in which the keys are selectors and the values are HTML snippets which AJAX will use to replace the content of selected elements.
 def get_response_data(night_mode):
-    response_data = {}
+    response_data = [{'selector': '.toggle-night-day'}]
     if night_mode:
-        response_data['.toggle-night-day'] = mark_safe('Night mode<img src="' + static('images/Moon Icon - White.png') + '" alt="Moon icon"/>')
+        response_data[0]['HTML_snippet'] = mark_safe('Night mode<img src="' + static('images/Moon Icon - White.png') + '" alt="Moon icon">')
     else:
-        response_data['.toggle-night-day'] = mark_safe('Day mode<img src="' + static('images/Sun Icon.png') + '" alt="Sun icon"/>')
+        response_data[0]['HTML_snippet'] = mark_safe('Day mode<img src="' + static('images/Sun Icon.png') + '" alt="Sun icon">')
     return response_data
