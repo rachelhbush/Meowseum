@@ -191,7 +191,7 @@ class Metadata(models.Model):
     extension = models.CharField(max_length=255, verbose_name="extension", default="", blank=True)
     original_file_name = models.CharField(max_length=255, verbose_name="original file name", default="", blank=True)
     original_extension = models.CharField(max_length=255, verbose_name="original extension", default="", blank=True)
-    mime_type = models.CharField(max_length=255, verbose_name="mIME type", default="", blank=True)
+    mime_type = models.CharField(max_length=255, verbose_name="MIME type", default="", blank=True)
     width = models.IntegerField(verbose_name="width", null=True, blank=True)
     height = models.IntegerField(verbose_name="height", null=True, blank=True)
     file_size = models.IntegerField(verbose_name="file size", null=True, blank=True)
@@ -301,11 +301,11 @@ class AbuseReport(models.Model):
                           ('harassment or threats', 'Harassment/threats'),
                           ('other', 'Other'))
     
-    filer = models.ForeignKey(User, related_name="abuse_report", null=True, blank=True)
+    filer = models.ForeignKey(User, verbose_name="filer", related_name="abuse_report", null=True, blank=True)
     offending_user = models.ForeignKey(User, related_name="abuse_allegedly_committed", null=True, blank=True)
     abuse_type = models.CharField(max_length=255, choices=(('', 'Select a category'),) + ABUSE_TYPE_CHOICES, verbose_name="abuse type")
     abuse_description = models.TextField(max_length=100000, verbose_name="abuse description", default="", blank=True)
-    url = models.URLField(max_length=255, verbose_name="url", default="", blank=True)
+    url = models.URLField(max_length=255, verbose_name="URL", default="", blank=True)
     # A moderator will change this to True when the abuse report has been read and either action has been taken or action has been declined.
     has_been_processed = models.BooleanField(verbose_name="has been processed", default=False, blank=True)
     def __str__(self):
@@ -347,7 +347,7 @@ class UserContact(models.Model):
     city = models.CharField(max_length=60, verbose_name="city", default="", blank=True)
     state_or_province = models.CharField(max_length=60, verbose_name="state/Province", choices=(('', 'Select a state'),) + STATE_OR_PROVINCE_CHOICES, default="", blank=True)
     country = models.CharField(max_length=60, verbose_name="country", choices=(('', 'Select a country'),) + COUNTRY_CHOICES, default="", blank=True)
-    zip_code = models.CharField(max_length=20, verbose_name="zIP/Postal Code", default="", blank=True)
+    zip_code = models.CharField(max_length=20, verbose_name="ZIP/Postal Code", default="", blank=True)
     phone_number = models.CharField(max_length=20, verbose_name="phone number", default="", blank=True)
     date_of_birth = models.DateField(verbose_name="date of birth", null=True, blank=True)
     has_volunteering_interest = models.BooleanField(verbose_name="has an interest in volunteering", default=False, blank=True)
@@ -371,7 +371,7 @@ class Shelter(models.Model):
     profile_city = models.CharField(max_length=60, verbose_name="profile city", default="")
     profile_state_or_province = models.CharField(max_length=60, choices=(('', 'Select a state'),) + STATE_OR_PROVINCE_CHOICES, verbose_name="profile state/Province")
     profile_country = models.CharField(max_length=60, choices=(('', 'Select a country'),) + COUNTRY_CHOICES, verbose_name="profile country", default="")
-    profile_zip_code = models.CharField(max_length=20, verbose_name="profile zIP/Postal Code", default="")
+    profile_zip_code = models.CharField(max_length=20, verbose_name="profile ZIP/Postal Code", default="")
     profile_phone_number = models.CharField(max_length=20, verbose_name="profile phone number", default="", blank=True)
     profile_fax_number = models.CharField(max_length=20, verbose_name="profile fax number", default="", blank=True)
     profile_email = models.EmailField(max_length=60, verbose_name="profile email", default="", blank=True)
@@ -664,7 +664,7 @@ class Found(LostFoundInfo):
     no_microchip = models.BooleanField(verbose_name="no microchip", default=False, blank=True)
     # This field is for shelters that post pets to the Found section for a few weeks before moving them to the Adoption section
     # and use IDs for those pets, like the pets they have available for adoption.
-    internal_id = models.CharField(max_length=255, verbose_name="iD (shelters)", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
+    internal_id = models.CharField(max_length=255, verbose_name="ID (shelters)", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
                                    unique=True, null=True, blank=True)
     def __str__(self):
         return "Found pet #" + self.id
