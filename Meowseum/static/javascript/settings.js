@@ -1,11 +1,12 @@
-/* Description: Within the "settings" namespace, this script provides functions for sitewide JavaScript settings, such as changing how GIFs behave on gallery pages.
+/* Description: Within the "settings" namespace, this script provides functions for sitewide JavaScript settings. This includes functions which are related to back end
+                settings. Although the server handles 
                 Abstracting away sitewide changes will allow someone reading the script for a settings modal to concentrate only on the DOM changes to the modal itself.
                 The main routine attaches all of the JavaScript event handlers when the page loads. All functions within this script have a numerical designation for
                 where they are in its hierarchy, unless they are not invoked during the main routine.
                                 
                 Sections for library functions:
-                A. Night mode-related functions
-                B. GIF-related functions */
+                A. Night mode
+                B. How GIF videos in galleries will be played */
 
 // Create a namespace for the sitewide JavaScript settings.
 window.settings = window.settings || {};
@@ -27,7 +28,7 @@ var createSettingsObjects = function() {
     else {
         // Set the site's default layout settings. They cannot yet be saved to local storage, because their absence from local storage will be used to know that this is the
         // user's first time on the site. In that case, the device can skip the routine for checking whether anything has changed from the defaults.
-        settings.layout = {"mobileGIFsArePlaying":false, "playAllDesktopGIFs":false, "reactionToGIFMouseleave":"finish"}
+        settings.layout = {"playAllDesktopGIFs":false, "reactionToGIFMouseleave":"finish"}
         settings.update();
     }
 };
@@ -58,7 +59,7 @@ $(document).ready(function() {
         });
     };
     
-    // This function detects whether night mode is on by looking at the file names of the style sheets in the header.
+    // Detect whether night mode is on by looking at the file names of the style sheets in the header.
     // Input: None. Output: Boolean.
     settings.nightModeIsOn = function() {
         // If a <link> exists in the page with a path ending with "_night.css", then night mode is on.
@@ -74,7 +75,18 @@ $(document).ready(function() {
     // To change the GIF behavior, these are also used by buttons scripted by the mobile and desktop headers.
     // Functions with a hierarchy number are invoked by settings.prepareGIFs() sitewide when the page loads.
     
-    // 1.1 Play all videos in the gallery.
+    // 1.1. Detect whether GIFs in the gallery have been toggled to play on mobile devices by looking at the play/pause icon in the mobile header.
+    settings.mobileGIFsArePlaying = function() {
+        var iconStatus = $("#portrait-smartphone-icons #play-toggle > img, #landscape-smartphone-or-wider-icons #play-toggle > img").attr("alt");
+        if (iconStatus == "Pause Icon") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+
+    // 1.2. Play all videos in the gallery.
     settings.mobilePlayAll = function() {
         $(".gif-container video").each(function() {
             this.play();
@@ -88,7 +100,7 @@ $(document).ready(function() {
         });
     };
     
-    // 1.2 Play all videos. Remove any mouseover or mouseout event handlers associated with other settings.
+    // 1.3. Play all videos. Remove any mouseover or mouseout event handlers associated with other settings.
     settings.desktopPlayAll = function() {
         $(".gif-container video").each(function() {
             // Hide the play icons while videos are playing.
@@ -186,7 +198,7 @@ $(document).ready(function() {
         if (viewportWidth < 1200) {
             // When JavaScript moves around videos for layout purposes, videos are automatically paused, even if they have the autoplay attribute.
             // To work around this, play all GIFs when the page loads, unless the user has specified otherwise.
-            if (settings.layout["mobileGIFsArePlaying"]) {
+            if (settings.mobileGIFsArePlaying()) {
                 settings.mobilePlayAll();
             }
         }

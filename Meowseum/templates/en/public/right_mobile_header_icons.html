@@ -3,11 +3,19 @@ Description: This file is for the three icons that are right of the home icon or
 twice by the mobile header.
 {% endcomment %}
 {% load staticfiles %}
-<li>
+<li id="play-toggle" class="ajax-btn" data-ajax-url="{% url "toggle_mobile_play_button" %}">
     {% if night_mode %}
-        <img src="{% static "images/Pause Icon - White.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
+        {% if mobile_GIFs_are_playing %}
+            <img src="{% static "images/Pause Icon - White.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon">
+        {% else %}
+            <img src="{% static "images/Play Icon - White.png" %}" data-night="{% static "images/Play Icon - White.png" %}" data-day="{% static "images/Play Icon.png" %}" alt="Play Icon" class="mobile-icon">
+        {% endif %}
     {% else %}
-        <img src="{% static "images/Pause Icon.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon" id="play-toggle">
+        {% if mobile_GIFs_are_playing %}
+            <img src="{% static "images/Pause Icon.png" %}" data-night="{% static "images/Pause Icon - White.png" %}" data-day="{% static "images/Pause Icon.png" %}" alt="Pause Icon" class="mobile-icon">
+        {% else %}
+            <img src="{% static "images/Play Icon.png" %}" data-night="{% static "images/Play Icon - White.png" %}" data-day="{% static "images/Play Icon.png" %}" alt="Play Icon" class="mobile-icon">
+        {% endif %}
     {% endif %}
 </li>
 <li>

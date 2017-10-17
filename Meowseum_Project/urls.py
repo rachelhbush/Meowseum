@@ -75,5 +75,6 @@ urlpatterns = [
     url(r'^lost_search/$', 'Meowseum.views.lost_search.page', name="lost_search"),
     url(r'^found_search/$', 'Meowseum.views.found_search.page', name="found_search"),
     url(r'^shelter_search/$', 'Meowseum.views.shelter_search.page', name="shelter_search"),
+    url(r'^toggle_mobile_play_button/$', 'Meowseum.views.toggle_mobile_play_button.page', name="toggle_mobile_play_button"),
     url(r'^toggle_night_mode/$', 'Meowseum.views.toggle_night_mode.page', name="toggle_night_mode"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
