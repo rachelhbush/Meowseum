@@ -22,7 +22,7 @@ def page(request):
         # If the user hasn't submitted a file yet, then the user shouldn't be here.
         raise PermissionDenied
     
-    form = UploadPage1(request.POST or None, initial={'upload_type':'pets', 'tags':'#'}, request=request)
+    form = UploadPage1(request.POST or None, request=request)
     if form.is_valid():
         update_and_save_upload_record(form, upload)
         rename_upload_file(upload, hosting_limits_for_Upload['poster_directory'])

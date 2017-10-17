@@ -12,11 +12,12 @@
 </div>
 {% include "en/public/elements/file_element.html" %}
 <div class="form-unit text-center" id="upload-type-field">
-    <button type="button" class="btn btn-primary radio-btn hidden-noscript">Up for adoption</button>
-    <button type="button" class="btn btn-primary radio-btn hidden-noscript">Lost</button>
-    <button type="button" class="btn btn-primary radio-btn hidden-noscript">Found</button>
-    <button type="button" class="btn btn-primary radio-btn active hidden-noscript">Pets</button>
     {% for radio in form.upload_type %}
+        {% if radio.choice_value == form.upload_type.value %}
+            <button type="button" class="btn btn-primary radio-btn active hidden-noscript">{{ radio.choice_label }}</button>
+        {% else %}
+            <button type="button" class="btn btn-primary radio-btn hidden-noscript">{{ radio.choice_label }}</button>
+        {% endif %}
         <label for="{{ radio.id_for_label }}" class="radio-inline visible-noscript-inline">
             {{ radio.tag }}
             {{ radio.choice_label }}

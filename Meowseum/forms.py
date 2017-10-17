@@ -87,8 +87,8 @@ related to your post (found a lost pet, etc). If you are a shelter, <a href='/sh
 class UploadPage1(forms.Form):
     title = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"Title (optional)"}) )
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
-    upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'adoption'), ('lost', 'lost'), ('found','found'), ('pets','pets')), widget=forms.RadioSelect() )
-    tags = forms.CharField(required=False, validators=[validate_tags])
+    upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
+    tags = forms.CharField(required=False, validators=[validate_tags], initial='#')
     popular_tags = forms.MultipleChoiceField(required=False, choices=popular_tags, widget=forms.CheckboxSelectMultiple() )
     is_publicly_listed = forms.BooleanField(required=False)
     uploader_has_disabled_comments = forms.BooleanField(required=False)
