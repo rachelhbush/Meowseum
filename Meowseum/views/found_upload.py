@@ -20,7 +20,7 @@ def page(request):
     
     found_form = FoundForm(request.POST or None)
     verify_description_form = VerifyDescriptionForm(request.POST or None, initial={'description':upload.description})
-    if form.is_valid() and verify_description_form.is_valid():
+    if found_form.is_valid() and verify_description_form.is_valid():
         new_found_record = found_form.save(commit=False)
         new_found_record.upload = upload
         new_found_record.save()
