@@ -5,7 +5,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, Adoption, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
+from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
 from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag
 from django.core.validators import RegexValidator
@@ -198,23 +198,26 @@ class ShelterForm(forms.ModelForm):
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'spaying_or_neutering_included', 'vaccination_included', 'microchipping_included',
                   'parasite_treatment_included')
 
-class AdoptionForm(forms.ModelForm):
-    pet_name = forms.CharField()
+class PetInfoForm(forms.ModelForm):
     sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
-    is_dilute = forms.ChoiceField(required=False, choices=Adoption.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
-    other_physical = forms.MultipleChoiceField(required=False, choices=Adoption.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
-    age_rating = forms.ChoiceField(required=False, choices=Adoption.AGE_RATING_CHOICES, widget=forms.RadioSelect())
-    disabilities = forms.MultipleChoiceField(required=False, choices=Adoption.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
+    is_dilute = forms.ChoiceField(required=False, choices=PetInfo.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
+    other_physical = forms.MultipleChoiceField(required=False, choices=PetInfo.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
+    age_rating = forms.ChoiceField(required=False, choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
+    disabilities = forms.MultipleChoiceField(required=False, choices=PetInfo.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
     public_contact_information = forms.MultipleChoiceField(required=False, choices=Adoption.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
+    class Meta:
+        model = PetInfo
+        fields = ('pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2',
+                  'hair_length', 'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information')
 
+class AdoptionForm(PetInfoForm):
+    pet_name = forms.CharField()
     likes_kids_age = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0"}) )
     adoption_fee = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Adoption
-        fields = ('pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2', 'hair_length',
-                  'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information', 'likes_cats', 'likes_dogs', 'likes_kids',
-                  'likes_kids_age', 'spayed_or_neutered', 'house_trained', 'declawed', 'vaccinated', 'microchipped', 'parasite_free', 'energy_level',
-                  'adoption_fee', 'euthenasia_soon')
+        fields = PetInfoForm.Meta.fields + ('likes_cats', 'likes_dogs', 'likes_kids', 'likes_kids_age', 'spayed_or_neutered', 'house_trained',
+                                            'declawed', 'vaccinated', 'microchipped', 'parasite_free', 'energy_level', 'adoption_fee', 'euthenasia_soon')
 
 class BondedWithForm(forms.Form):
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
@@ -240,27 +243,23 @@ class BondedWithForm(forms.Form):
                         raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
         return self.cleaned_data
 
-class LostForm(forms.ModelForm):
-    pet_name = forms.CharField()
-    sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
-    is_dilute = forms.ChoiceField(required=False, choices=Lost.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
-    other_physical = forms.MultipleChoiceField(required=False, choices=Lost.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
-    age_rating = forms.ChoiceField(required=False, choices=Lost.AGE_RATING_CHOICES, widget=forms.RadioSelect())
-    disabilities = forms.MultipleChoiceField(required=False, choices=Lost.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
-    public_contact_information = forms.MultipleChoiceField(required=False, choices=Lost.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
-
-    eye_color = forms.ChoiceField(required=False, choices=Lost.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
+class LostFoundInfo(PetInfoForm):
+    eye_color = forms.ChoiceField(required=False, choices=Found.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
     eye_color_other = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"other"}) )
-    nose_color = forms.MultipleChoiceField(required=False, choices=Lost.NOSE_COLOR_CHOICES, widget=forms.CheckboxSelectMultiple())
+    nose_color = forms.MultipleChoiceField(required=False, choices=Found.NOSE_COLOR_CHOICES, widget=forms.CheckboxSelectMultiple())
     date = HTML5DateField()
+    class Meta:
+        model = Lost
+        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings',
+                                            'has_collar', 'collar_color', 'collar_description', 'has_spay_or_neuter_tattoo')
+
+class LostForm(LostFoundInfo):
+    pet_name = forms.CharField()
     has_spay_or_neuter_tattoo = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"data-dependent-on":"spayed_or_neutered"}) )
     reward = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Lost
-        fields = ('pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2', 'hair_length',
-                  'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information', 'eye_color', 'eye_color_other', 'nose_color', 'date',
-                  'location', 'other_special_markings', 'has_collar', 'collar_color', 'collar_description', 'has_spay_or_neuter_tattoo', 'spayed_or_neutered',
-                  'microchipped', 'has_serial_number_tattoo', 'id_number_description', 'reward')
+        fields = LostFoundInfo.Meta.fields +  ('spayed_or_neutered', 'microchipped', 'has_serial_number_tattoo', 'id_number_description', 'reward')
 
 class VerifyDescriptionForm(forms.ModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
@@ -268,24 +267,11 @@ class VerifyDescriptionForm(forms.ModelForm):
         model = Upload
         fields = ('description',)
  
-class FoundForm(forms.ModelForm):
-    sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
-    is_dilute = forms.ChoiceField(required=False, choices=Found.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
-    other_physical = forms.MultipleChoiceField(required=False, choices=Found.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
-    age_rating = forms.ChoiceField(required=False, choices=Found.AGE_RATING_CHOICES, widget=forms.RadioSelect())
-    disabilities = forms.MultipleChoiceField(required=False, choices=Found.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
-    public_contact_information = forms.MultipleChoiceField(required=False, choices=Found.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
-
+class FoundForm(LostFoundInfo):
     is_sighting = forms.ChoiceField(initial=False, choices=Found.IS_SIGHTING_CHOICES, widget=forms.RadioSelect())
-    eye_color = forms.ChoiceField(required=False, choices=Found.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
-    eye_color_other = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"other"}) )
-    nose_color = forms.MultipleChoiceField(required=False, choices=Found.NOSE_COLOR_CHOICES, widget=forms.CheckboxSelectMultiple())
-    date = HTML5DateField()
     class Meta:
         model = Found
-        fields = ('is_sighting', 'pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2', 'hair_length',
-                  'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information', 'eye_color', 'eye_color_other', 'nose_color', 'date',
-                  'location', 'internal_id', 'other_special_markings', 'has_collar', 'collar_color', 'collar_description', 'has_spay_or_neuter_tattoo', 'no_microchip')
+        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'internal_id', 'no_microchip')
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
