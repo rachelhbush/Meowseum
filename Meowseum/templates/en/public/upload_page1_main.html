@@ -30,7 +30,7 @@
 {% if form.popular_tags|length > 0 %}
     {{ form.popular_tags.errors }}
     <div class="form-unit">
-        <label>Browse popular tags:</label><br/>
+        {{ form.popular_tags.label_tag }}<br/>
         <fieldset class="scrollable-checkboxes" data-size="3">
             {% if form.popular_tags|length > 3 %}
                 <button type="button" class="btn btn-primary">Clear</button>
@@ -47,7 +47,7 @@
 {{ form.tags.errors }}
 <table class="form">
     <tr>
-        <th><label id="tag-list-label" for="id_tags">Tag list:</label></th>
+        <th><label id="tag-list-label" for="id_tags">{{ form.tags.label }}:</label></th>
         <td>{{ form.tags }}</td>
     </tr>
 </table>
@@ -58,7 +58,7 @@
         {{ form.is_publicly_listed }}
         {% include "en/public/elements/custom_checkmark.html" %}
     </div>
-    <span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.
+    {{ form.is_publicly_listed.label }}
     </label>
 </div>
 {{ form.uploader_has_disabled_comments.errors }}
@@ -68,6 +68,6 @@
         {{ form.uploader_has_disabled_comments }}
         {% include "en/public/elements/custom_checkmark.html" %}
     </div>
-    Disable comments
+    {{ form.uploader_has_disabled_comments.label }}
     </label>
 </div>
