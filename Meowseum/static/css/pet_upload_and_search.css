@@ -35,23 +35,23 @@
 }
 
 @media (max-width: 419px) {
-    #adoption-statistical-fields, #lostfound-statistical-fields {
+    #statistical-fields {
         text-align: center;
     }
-    #adoption-statistical-fields > div,  #lostfound-statistical-fields > div {
+    #statistical-fields > div {
         float: right;
         width: 50%;
     }
 }
 @media (min-width: 420px) {
-    #adoption-statistical-fields > div,  #lostfound-statistical-fields > div {
+    #statistical-fields > div {
         float: left;
     }
-    #adoption-statistical-fields > div:last-child /* age field */, #lostfound-statistical-fields > div:last-child  {
+    #statistical-fields > div:last-child /* age field */ {
         margin-left: 20px;
     }
 }
-#adoption-statistical-fields, #lostfound-statistical-fields {
+#statistical-fields {
     /* Chrome puts extra space in the content area of these <div>s under the text fields, so the padding needs to be larger on top in order to balance it out.
        The height of the <div> was 28px, and this puts the usual 5px separation on the top and bottom. */
     height: 37px;
