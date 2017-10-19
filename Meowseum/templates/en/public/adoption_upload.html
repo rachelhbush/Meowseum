@@ -1,16 +1,8 @@
-{% extends "en/public/base.html" %}
-{% block head %}
-        {{ block.super }}
-        <title>Adoption upload form - {{ app_name }}</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search.css" %}" class="has-night-mode-version"/>
-        {% if night_mode %}
-            <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search_night.css" %}"/>
-        {% endif %}
-        <script src="{% static "javascript/pet_upload_and_search.js" %}"></script>
+{% extends "en/public/petinfo_upload.html" %}
+{% load staticfiles %}
+{% block title %}
+    Adoption {{ block.super }}
 {% endblock %}
-{% block body %}
-    {% include "en/public/elements/full_page_form.html" with heading=heading action="adoption_upload" main_template="en/public/adoption_upload_main.html" footer_button_label="Submit" %}
+{% block main %}
+    {% include "en/public/adoption_upload_main.html" %}
 {% endblock %}

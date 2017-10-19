@@ -1,16 +1,14 @@
 {% extends "en/public/base.html" %}
 {% block head %}
-        {{ block.super }}
-        <title>Advanced search - {{ app_name }}</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% load staticfiles %}
-        <style>
-            h1#search-heading {
-                font-size: 18px;
-            }
-        </style>
-        <script src="{% static "javascript/advanced_search.js" %}"></script>
+    {{ block.super }}
+    <title>Advanced search - {{ app_name }}</title>
+    {% load staticfiles %}
+    <style>
+        h1#search-heading {
+            font-size: 18px;
+        }
+    </style>
+    <script src="{% static "javascript/advanced_search.js" %}"></script>
 {% endblock %}
 {% block body %}
     <div class="page form">

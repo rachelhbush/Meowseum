@@ -1,8 +1,8 @@
 {% extends "en/public/base.html" %}
+{% load staticfiles %}
 {% block head %}
         {{ block.super }}
         <title>Log in - {{ app_name }}</title>
-        {% load staticfiles %}
         <link type="text/css" rel="stylesheet" href="{% static "css/login-signup.css" %}" class="has-night-mode-version"/>
         {% if night_mode %}
             <link type="text/css" rel="stylesheet" href="{% static "css/login-signup_night.css" %}"/>

@@ -1,8 +1,8 @@
+{% load staticfiles %}
 <header id="header-desktop">
     <div class="container">
         <div class="row">
             <div class="col-lg-2 col-xl-offset-1" id="logo-container">
-        {% load staticfiles %}
                 <a href="{% url "index" %}">
                     {% if night_mode %}
                         <img src="{% static "images/Logo - White.png" %}" data-night="{% static "images/Logo - White.png" %}" data-day="{% static "images/Logo.png" %}" alt="Logo" id="logo"/>

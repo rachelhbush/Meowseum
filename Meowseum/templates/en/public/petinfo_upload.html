@@ -1,0 +1,24 @@
+{% extends "en/public/base.html" %}
+{% load staticfiles %}
+{% block head %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search.css" %}" class="has-night-mode-version"/>
+    {% if night_mode %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/pet_upload_and_search_night.css" %}"/>
+    {% endif %}
+    <script src="{% static "javascript/pet_upload_and_search.js" %}"></script>
+    <title>{% block title %}upload form - {{ app_name }}{% endblock %}</title>
+{% endblock %}
+{% block body %}
+    <div class="page form">
+        <form class="inner-layout" method="post" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            {% include "en/public/elements/full_page_form_header.html" with heading=heading %}
+            <main class="form">
+                {% block main %}
+                {% endblock %}
+            </main>
+            {% include "en/public/elements/full_page_form_footer.html" with footer_button_label="Submit" %}
+        </form>
+    </div>
+{% endblock %}

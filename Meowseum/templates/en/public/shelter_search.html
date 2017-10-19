@@ -1,10 +1,8 @@
 {% extends "en/public/base.html" %}
+{% load staticfiles %}
 {% block head %}
-        {{ block.super }}
-        <title>Search - {{ app_name }}</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% load staticfiles %}
+    {{ block.super }}
+    <title>Search - {{ app_name }}</title>
 {% endblock %}
 {% block body %}
     <header class="form">

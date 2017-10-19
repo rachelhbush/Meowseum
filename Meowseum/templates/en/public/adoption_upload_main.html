@@ -1,3 +1,4 @@
+{% load staticfiles %}
 {{ adoption_form.non_field_errors }}
 <div class="form-unit">
     <span class="required-asterisk">*</span> This is the only required field.
@@ -97,7 +98,6 @@
 {{ adoption_form.age_rating.errors }}
 <div class="form-unit text-center" id="age-rating-field">
     <label>Rate the cat's age on a scale of 1-4.</label><br/>
-    {% load staticfiles %}
     <div class="rating-widget-btn newborn hidden-noscript">
         {% if night_mode %}
             <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"

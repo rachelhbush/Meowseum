@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <table class="form">
     <tr>
         <th><label>Location:</label></th>
@@ -185,7 +186,6 @@
 </div>
 <div class="form-unit text-center" id="age-rating-field">
     <label class="bold">Age range:</label><br/>
-    {% load staticfiles %}
     <div class="check-btn newborn">
         {% if night_mode %}
             <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"

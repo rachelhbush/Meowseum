@@ -1,9 +1,10 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
+        {% block head %}
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% load staticfiles %}
         <script src="{% static "javascript/lib/update-browser-notice-if-ie8-firefox25-opera25-safari6-or-chrome30.min.js" %}"></script>
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <script>window.jQuery || document.write('<script src="{% static "javascript/lib/jquery-1.12.4.min.js" %}"><\/script>');</script>
@@ -33,8 +34,11 @@
         <noscript>
             <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap_extension_noscript.css" %}">
         </noscript>
-        {% block head %}
-        {% endblock %}
+        {% block seo %}
+        <meta name="description" content="{{ app_name }} - Browse photos and GIFs of cats and kittens. Look for lolcats, leave comments, and share content."/>
+        <meta name="keywords" content="cats, kitty, lolcat, funny, cute, images, pictures, GIFs, viral"/>
+        {% endblock seo %}
+        {% endblock head %}
     </head>
     {% load static %}
     <body data-media-url="{% get_media_prefix %}">

@@ -1,17 +1,15 @@
 {% extends "en/public/base.html" %}
+{% load staticfiles %}
 {% load my_filters %}
 {% block head %}
-        {{ block.super }}
-        <title>{{ app_name }} - {{ profile_username }}'s comments</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
-        {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/user_comments.css" %}" class="has-night-mode-version"/>
-        {% if night_mode %}
-            <link type="text/css" rel="stylesheet" href="{% static "css/user_comments_night.css" %}"/>
-        {% endif %}
-        <script src="{% static "javascript/user_comments.js" %}"></script>
+    {{ block.super }}
+    <title>{{ app_name }} - {{ profile_username }}'s comments</title>
+    {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/user_comments.css" %}" class="has-night-mode-version"/>
+    {% if night_mode %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/user_comments_night.css" %}"/>
+    {% endif %}
+    <script src="{% static "javascript/user_comments.js" %}"></script>
 {% endblock %}
 {% block body %}
     {% include "en/public/header_mobile.html" %}

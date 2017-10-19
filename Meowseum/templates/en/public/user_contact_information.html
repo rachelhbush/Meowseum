@@ -1,10 +1,8 @@
 {% extends "en/public/base.html" %}
+{% load staticfiles %}
 {% block head %}
-        {{ block.super }}
-        <title>Edit contact information - {{ app_name }}</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% load staticfiles %}
+    {{ block.super }}
+    <title>Edit contact information - {{ app_name }}</title>
 {% endblock %}
 {% block body %}
     {% include "en/public/elements/full_page_form.html" with heading="Contact information" action="user_contact_information" main_template="en/public/user_contact_information_main.html" footer_button_label="Save changes" %}

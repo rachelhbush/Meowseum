@@ -1,12 +1,10 @@
 {% extends "en/public/base.html" %}
+{% load staticfiles %}
 {% block head %}
-        {{ block.super }}
-        <title>Privacy Policy - {{ app_name }}</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
-        {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/tou-privacy.css" %}"/>
+    {{ block.super }}
+    <title>Privacy Policy - {{ app_name }}</title>
+    {% include "en/public/elements/site_header_and_footer_CSS_links.html" %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/tou-privacy.css" %}"/>
 {% endblock %}
 {% block body %}
     {% include "en/public/header_mobile.html" %}

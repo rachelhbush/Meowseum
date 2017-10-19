@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <div class="modal fade browse-menu has-footer" id="settings-menu">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -7,7 +8,6 @@
             </div>
             <div class="modal-body">
                 <ul class="list-menu">
-                    {% load staticfiles %}
                     <li class="toggle-night-day ajax-btn" data-ajax-url="{% url "toggle_night_mode" %}">
                         {% if night_mode %}
                         Night mode

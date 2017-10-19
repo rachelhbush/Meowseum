@@ -1,17 +1,15 @@
 {% extends "en/public/base.html" %}
+{% load staticfiles %}
 {% load my_filters %}
 {% block head %}
-        {{ block.super }}
-        <title>{{ upload.title }} - {{ app_name }}</title>
-        {% include "en/public/default_description.html" %}
-        {% include "en/public/default_keywords.html" %}
-        {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static "css/slide_page.css" %}"/>
-        {% if night_mode %}
-            <link type="text/css" rel="stylesheet" href="{% static "css/slide_page_night.css" %}"/>
-        {% endif %}
-        <script src="{% static "javascript/lib/modernizr-detect-flexbox-support-only.min.js" %}"></script>
-        <script src="{% static "javascript/slide_page.js" %}"></script>
+    {{ block.super }}
+    <title>{{ upload.title }} - {{ app_name }}</title>
+    <link type="text/css" rel="stylesheet" href="{% static "css/slide_page.css" %}"/>
+    {% if night_mode %}
+        <link type="text/css" rel="stylesheet" href="{% static "css/slide_page_night.css" %}"/>
+    {% endif %}
+    <script src="{% static "javascript/lib/modernizr-detect-flexbox-support-only.min.js" %}"></script>
+    <script src="{% static "javascript/slide_page.js" %}"></script>
 {% endblock %}
 {% block body %}
     <div class="page">
