@@ -1,126 +1,52 @@
+{% extends "en/public/petinfo_upload_main.html" %}
 {% load staticfiles %}
-{{ found_form.non_field_errors }}
-<div class="form-unit text-right">
-    <span class="required-asterisk">*</span> Required.
-</div>
-{{ found_form.is_sighting.errors }}
-{% for radio in found_form.is_sighting %}
-<div class="radio">
-    <label for="{{ radio.id_for_label }}">
-        {{ radio.tag }}
-        {{ radio.choice_label }}
-    </label>
-</div>
-{% endfor %}
-
-<table class="form">
-    
+{% block required_message %}
+    <div class="form-unit text-right">
+        <span class="required-asterisk">*</span> Required.
+    </div>
+{% endblock %}
+{% block is_sighting %}
+    {{ main_form.is_sighting.errors }}
+    {% for radio in main_form.is_sighting %}
+    <div class="radio">
+        <label for="{{ radio.id_for_label }}">
+            {{ radio.tag }}
+            {{ radio.choice_label }}
+        </label>
+    </div>
+    {% endfor %}
+{% endblock is_sighting %}
+{% block table_fields_at_top %}
     <tr>
        <th><label>Pet name:</label></th>
        <td>
-           {{ found_form.pet_name.errors }}
-           {{ found_form.pet_name }}
+           {{ main_form.pet_name.errors }}
+           {{ main_form.pet_name }}
        </td> 
     </tr>
-    
-    <tr>
-       <th><label>Sex:</label></td>
-       <td class="inline-radio-buttons">
-           {{ found_form.sex.errors }}
-            {% for radio in found_form.sex %}
-                <label for="{{ radio.id_for_label }}" class="radio-inline">
-                    {{ radio.tag }}
-                    {{ radio.choice_label }}
-                </label>
-            {% endfor %}
-       </td>
-    </tr>
-    
-    <tr>
-        <th><label>Breed:</label></td>
-        <td>
-            {{ found_form.subtype1.errors }}
-            {{ found_form.subtype1 }}
-        </td>
-    </tr>
-    
-    
-    <tr>
-        <th><label>Pattern:</label></th>
-        <td>
-            {{ found_form.pattern.errors }}
-            {{ found_form.pattern }}
-        </td>
-    </tr>
-    
-    <tr class="calico-field">
-        <th><label>Calico?</label></th>
-        <td>
-            {{ found_form.is_calico.errors }}
-            {{ found_form.is_calico }}
-        </td>
-    </tr>
-    
-    <tr class="tortie-tabby-field">
-        <th><label>Tabby?</label></th>
-        <td>
-            {{ found_form.has_tabby_stripes.errors }}
-            {{ found_form.has_tabby_stripes }}
-        </td>
-    </tr>
-    
-    <tr class="dilute-field">
-        <th><label>Dilute?</label></th>
-       <td class="inline-radio-buttons">
-           {{ found_form.is_dilute.errors }}
-            {% for radio in found_form.is_dilute %}
-                <label for="{{ radio.id_for_label }}" class="radio-inline">
-                    {{ radio.tag }}
-                    {{ radio.choice_label }}
-                </label>
-            {% endfor %}
-       </td>
-    </tr>
-    
-    <tr class="color1-field">
-        <th><label>Color 1:</label></th>
-        <td>
-            {{ found_form.color1.errors }}
-            {{ found_form.color1 }}
-        </td>
-    </tr>
-    
-    <tr class="color2-field">
-        <th><label>Color 2:</label></th>
-        <td>
-            {{ found_form.color2.errors }}
-            {{ found_form.color2 }}
-        </td>
-    </tr>
-    
+    {{ block.super }}
     <tr>
         <th><label>Eye color:</label></th>
         <td class="inline-radio-buttons">
-            {{ found_form.eye_color.errors }}
-            {{ found_form.eye_color_other.errors }}
-            {% for radio in found_form.eye_color %}
+            {{ main_form.eye_color.errors }}
+            {{ main_form.eye_color_other.errors }}
+            {% for radio in main_form.eye_color %}
                 <label for="{{ radio.id_for_label }}" class="radio-inline">
                     {{ radio.tag }}
                     {{ radio.choice_label }}
                 </label>
             {% endfor %}
-            {{ found_form.eye_color_other }}
+            {{ main_form.eye_color_other }}
         </td>
     </tr>
-    
     <tr>
         <th><label>Nose color:</label></th>
         <td>
-            {{ found_form.nose_color.errors }}
+            {{ main_form.nose_color.errors }}
             <fieldset class="checkbox-dropdown">
                 <label>Select applicable color(s)<span class="caret"></span></label>
                 <div>
-                    {% for checkbox in found_form.nose_color %}
+                    {% for checkbox in main_form.nose_color %}
                         <div>
                             {{ checkbox.tag }}
                             {{ checkbox.choice_label }}
@@ -130,215 +56,99 @@
             </fieldset>
         </td>
     </tr>
-</table>
-
-{{ found_form.age_rating.errors }}
-<div class="form-unit text-center" id="age-rating-field">
-    <label>Rate the cat's age on a scale of 1-4.</label><br/>
-    <div class="rating-widget-btn newborn hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
-        {% endif %}
-        <br/>
-        Newborn
-    </div>
-    <div class="rating-widget-btn young hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
-        {% endif %}
-        <br/>
-        Young
-    </div>
-    <div class="rating-widget-btn adult hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
-        {% endif %}
-        <br/>
-        Adult
-    </div>
-    <div class="rating-widget-btn senior hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
-        {% endif %}
-        <br/>
-        Senior
-    </div>
-    {% for radio in found_form.age_rating %}
-        <label for="{{ radio.id_for_label }}" class="radio-inline visible-noscript-inline">
-            {{ radio.tag }}
-            {{ radio.choice_label }}
-        </label>
-    {% endfor %}
-</div>
-
-{{ found_form.other_physical.errors }}
-<div class="field">
-    <label class="bold">Other physical features:</label><br/>
-    <fieldset class="checkbox-dropdown">
-        <label>Select applicable feature(s)<span class="caret"></span></label>
-        <div>
-            {% for checkbox in found_form.other_physical %}
-                <div>
-                    {{ checkbox.tag }}
-                    {{ checkbox.choice_label }}
-                </div>
-            {% endfor %}
-        </div>
-    </fieldset>
-</div>
-
-<table class="form">
-    <tr>
-        <th><label>Date found: <span class="required-asterisk">*</span></label></th>
-        <td>
-            {{ found_form.date.errors }}
-            {{ found_form.date }}
-            <button type="button" class="btn btn-primary">Today</button>
-        </td>
-    </tr>
-    <tr>
-        <th><label>Location:</label></th>
-        <td>
-            {{ found_form.location.errors }}
-            {{ found_form.location }}
-        </td>
-    </tr>
-    {% if is_shelter %}
+{% endblock table_fields_at_top %}
+{% block unique_section_A %}
+    <table class="form">
         <tr>
-            <th><label>ID (shelters):</label></th>
+            <th><label>Date found: <span class="required-asterisk">*</span></label></th>
             <td>
-                {{ found_form.internal_id.errors }}
-                {{ found_form.internal_id }}
+                {{ main_form.date.errors }}
+                {{ main_form.date }}
+                <button type="button" class="btn btn-primary">Today</button>
             </td>
         </tr>
-    {% endif %}
-</table>
-
-{{ found_form.has_collar.errors }}
-{{ found_form.has_spay_or_neuter_tattoo.errors }}
-<div class="inline-checkboxes">
-    <label class="bold">Which of the following apply to the cat?</label><br/>
-    <label class="checkbox-inline has-custom-checkbox" data-toggle="collapse" data-target="#collar-fieldset">
-        <div class="custom-checkbox">
-            {{ found_form.has_collar }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Has a collar
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ found_form.has_spay_or_neuter_tattoo }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Has a spay or neuter tattoo
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ found_form.no_microchip }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        No microchip detected during scan
-    </label>
-</div>
-{% if upload.found.has_collar %}
-<div class="nested-form collapse in">
-    <fieldset class="collapse in" id="collar-fieldset">
-{% else %}
-<div class="nested-form collapse">
-    <fieldset class="collapse" id="collar-fieldset">
-{% endif %}
-        <table class="form">
+        <tr>
+            <th><label>Location:</label></th>
+            <td>
+                {{ main_form.location.errors }}
+                {{ main_form.location }}
+            </td>
+        </tr>
+        {% if is_shelter %}
             <tr>
-               <th><label>Collar color:</label></td>
-               <td>
-                    {{ found_form.collar_color.errors }}
-                    {{ found_form.collar_color }}
-               </td>
+                <th><label>ID (shelters):</label></th>
+                <td>
+                    {{ main_form.internal_id.errors }}
+                    {{ main_form.internal_id }}
+                </td>
             </tr>
-        </table>
-        {{ found_form.collar_description.errors }}
-        <div class="field">
-            <label><span class="bold">Collar description</span> (style, materials):</label><br/>
-            {{ found_form.collar_description }}
-        </div>
-    </fieldset>
-</div>
-<table class="form">
-    <tr>
-       <th><label>Hair length:</label></td>
-       <td>
-            {{ found_form.hair_length.errors }}
-            {{ found_form.hair_length }}
-       </td>
-    </tr>
-</table>
-<div class="field">
-    <label><span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div></label><br/>
-    {{ found_form.other_special_markings.errors }}
-    {{ found_form.other_special_markings }}
-</div>
-{{ found_form.disabilities.errors }}
-<div class="form-unit">
-    <label class="bold">Disabilities and special needs:</label><br/>
-    <fieldset class="scrollable-checkboxes" data-size="3">
-        <button type="button" class="btn btn-primary">Clear</button>
-        {% for checkbox in found_form.disabilities %}
-            <div>
-                {{ checkbox.tag }}
-                {{ checkbox.choice_label }}
+        {% endif %}
+    </table>
+    {{ main_form.has_collar.errors }}
+    {{ main_form.has_spay_or_neuter_tattoo.errors }}
+    <div class="inline-checkboxes">
+        <label class="bold">Which of the following apply to the cat?</label><br/>
+        <label class="checkbox-inline has-custom-checkbox" data-toggle="collapse" data-target="#collar-fieldset">
+            <div class="custom-checkbox">
+                {{ main_form.has_collar }}
+                {% include "en/public/elements/custom_checkmark.html" %}
             </div>
-        {% endfor %}
-    </fieldset>
-</div>
-{{ found_form.weight.errors }}
-{{ found_form.weight_units.errors }}
-{{ found_form.precise_age.errors }}
-{{ found_form.age_units.errors }}
-<div id="statistical-fields">
-    <div>
-        <label class="bold">Weight:</label>
-        {{ found_form.weight }}
-        {{ found_form.weight_units }}
-    </div>
-    <div>
-        <label class="bold">Age:</label>
-        {{ found_form.precise_age }}
-        {{ found_form.age_units }}
-    </div>
-</div>
-{% if verify_description_form %}
-    {% comment %}
-    This is in an if-block because the "are you sure?" question only needs to be asked during the initial upload process, not during the editing form, and the if-block allows the template to be re-used.
-    {% endcomment %}
-    {{ verify_description_form.non_field_errors }}
-    {{ verify_description_form.errors }}
-    <div class="field">
-        <label>Is there any other information that could aid in the return of the pet?</label><br/>
-        {{ verify_description_form.description }}
-    </div>
-{% endif %}
-<div class="inline-checkboxes">
-<label><span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.</label><br/>
-    {% for checkbox in found_form.public_contact_information %}
-        <label class="checkbox-inline">
-            {{ checkbox.tag }}
-            {{ checkbox.choice_label }}
+            Has a collar
         </label>
-    {% endfor %}
-</div>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.has_spay_or_neuter_tattoo }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Has a spay or neuter tattoo
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.no_microchip }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            No microchip detected during scan
+        </label>
+    </div>
+    {% if upload.found.has_collar %}
+    <div class="nested-form collapse in">
+        <fieldset class="collapse in" id="collar-fieldset">
+    {% else %}
+    <div class="nested-form collapse">
+        <fieldset class="collapse" id="collar-fieldset">
+    {% endif %}
+            <table class="form">
+                <tr>
+                   <th><label>Collar color:</label></td>
+                   <td>
+                        {{ main_form.collar_color.errors }}
+                        {{ main_form.collar_color }}
+                   </td>
+                </tr>
+            </table>
+            {{ main_form.collar_description.errors }}
+            <div class="field">
+                <label><span class="bold">Collar description</span> (style, materials):</label><br/>
+                {{ main_form.collar_description }}
+            </div>
+        </fieldset>
+    </div>
+    <div class="field">
+        <label><span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div></label><br/>
+        {{ main_form.other_special_markings.errors }}
+        {{ main_form.other_special_markings }}
+    </div>
+{% endblock unique_section_A %}
+{% block unique_section_B %}
+    {% if verify_description_form %}
+        {% comment %}
+        This is in an if-block because the "are you sure?" question only needs to be asked during the initial upload process, not during the editing form, and the if-block allows the template to be re-used.
+        {% endcomment %}
+        {{ verify_description_form.non_field_errors }}
+        {{ verify_description_form.errors }}
+        <div class="field">
+            <label>Is there any other information that could aid in the return of the pet?</label><br/>
+            {{ verify_description_form.description }}
+        </div>
+    {% endif %}
+{% endblock unique_section_B %}

@@ -1,0 +1,203 @@
+{% load staticfiles %}
+{{ main_form.non_field_errors }}
+{% block required_message %}
+{% endblock %}
+{% block is_sighting %}
+{% endblock is_sighting %}
+<table class="form">
+    {% block table_fields_at_top %}
+    <tr>
+       <th><label>Sex:</label></td>
+       <td class="inline-radio-buttons">
+           {{ main_form.sex.errors }}
+            {% for radio in main_form.sex %}
+                <label for="{{ radio.id_for_label }}" class="radio-inline">
+                    {{ radio.tag }}
+                    {{ radio.choice_label }}
+                </label>
+            {% endfor %}
+       </td>
+    </tr>
+    <tr>
+        <th><label>Breed:</label></td>
+        <td>
+            {{ main_form.subtype1.errors }}
+            {{ main_form.subtype1 }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Hair length:</label></td>
+        <td>
+            {{ main_form.hair_length.errors }}
+            {{ main_form.hair_length }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Pattern:</label></th>
+        <td>
+            {{ main_form.pattern.errors }}
+            {{ main_form.pattern }}
+        </td>
+    </tr>
+    <tr class="calico-field">
+        <th><label>Calico?</label></th>
+        <td>
+            {{ main_form.is_calico.errors }}
+            {{ main_form.is_calico }}
+        </td>
+    </tr>
+    <tr class="tortie-tabby-field">
+        <th><label>Tabby?</label></th>
+        <td>
+            {{ main_form.has_tabby_stripes.errors }}
+            {{ main_form.has_tabby_stripes }}
+        </td>
+    </tr>
+    <tr class="dilute-field">
+        <th><label>Dilute?</label></th>
+       <td class="inline-radio-buttons">
+           {{ main_form.is_dilute.errors }}
+            {% for radio in main_form.is_dilute %}
+                <label for="{{ radio.id_for_label }}" class="radio-inline">
+                    {{ radio.tag }}
+                    {{ radio.choice_label }}
+                </label>
+            {% endfor %}
+       </td>
+    </tr>
+    <tr class="color1-field">
+        <th><label>Color 1:</label></th>
+        <td>
+            {{ main_form.color1.errors }}
+            {{ main_form.color1 }}
+        </td>
+    </tr>
+    <tr class="color2-field">
+        <th><label>Color 2:</label></th>
+        <td>
+            {{ main_form.color2.errors }}
+            {{ main_form.color2 }}
+        </td>
+    </tr>
+    {% endblock table_fields_at_top %}
+</table>
+{{ main_form.age_rating.errors }}
+<div class="form-unit text-center" id="age-rating-field">
+    <label>Rate the cat's age on a scale of 1-4.</label><br/>
+    <div class="rating-widget-btn newborn hidden-noscript">
+        {% if night_mode %}
+            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
+        {% else %}
+            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
+        {% endif %}
+        <br/>
+        Newborn
+    </div>
+    <div class="rating-widget-btn young hidden-noscript">
+        {% if night_mode %}
+            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
+        {% else %}
+            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
+        {% endif %}
+        <br/>
+        Young
+    </div>
+    <div class="rating-widget-btn adult hidden-noscript">
+        {% if night_mode %}
+            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
+        {% else %}
+            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
+        {% endif %}
+        <br/>
+        Adult
+    </div>
+    <div class="rating-widget-btn senior hidden-noscript">
+        {% if night_mode %}
+            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
+        {% else %}
+            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
+        {% endif %}
+        <br/>
+        Senior
+    </div>
+    {% for radio in main_form.age_rating %}
+        <label for="{{ radio.id_for_label }}" class="radio-inline visible-noscript-inline">
+            {{ radio.tag }}
+            {{ radio.choice_label }}
+        </label>
+    {% endfor %}
+</div>
+{{ main_form.other_physical.errors }}
+<div class="field">
+    <label class="bold">Other physical features:</label><br/>
+    <fieldset class="checkbox-dropdown">
+        <label>Select applicable feature(s)<span class="caret"></span></label>
+        <div>
+            {% for checkbox in main_form.other_physical %}
+                <div>
+                    {{ checkbox.tag }}
+                    {{ checkbox.choice_label }}
+                </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</div>
+{% block unique_section_A %}
+{% comment %}
+    This block contains nearly all of the yes/no checkbox questions, and a few other fields that are unique to each form.
+{% endcomment %}
+{% endblock unique_section_A %}
+{{ main_form.disabilities.errors }}
+<div class="form-unit">
+    <label class="bold">Disabilities and special needs:</label><br/>
+    <fieldset class="scrollable-checkboxes" data-size="3">
+        <button type="button" class="btn btn-primary">Clear</button>
+        {% for checkbox in main_form.disabilities %}
+            <div>
+                {{ checkbox.tag }}
+                {{ checkbox.choice_label }}
+            </div>
+        {% endfor %}
+    </fieldset>
+</div>
+{% block adoption_id_fields %}
+{% comment %}
+    This is where the Adoption "ID" and "bonded with" fields will go.
+{% endcomment %}
+{% endblock adoption_id_fields %}
+{{ main_form.weight.errors }}
+{{ main_form.weight_units.errors }}
+{{ main_form.precise_age.errors }}
+{{ main_form.age_units.errors }}
+<div id="statistical-fields">
+    <div>
+        <label class="bold">Weight: </label>
+        {{ main_form.weight }}
+        {{ main_form.weight_units }}
+    </div>
+    <div>
+        <label class="bold">Age:</label>
+        {{ main_form.precise_age }}
+        {{ main_form.age_units }}
+    </div>
+</div>
+{% block unique_section_B %}
+{% endblock unique_section_B %}
+{{ main_form.public_contact_information.errors }}
+<div class="inline-checkboxes">
+<label><span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.</label><br/>
+    {% for checkbox in main_form.public_contact_information %}
+        <label class="checkbox-inline">
+            {{ checkbox.tag }}
+            {{ checkbox.choice_label }}
+        </label>
+    {% endfor %}
+</div>

@@ -1,335 +1,151 @@
+{% extends "en/public/petinfo_upload_main.html" %}
 {% load staticfiles %}
-{{ adoption_form.non_field_errors }}
-<div class="form-unit">
-    <span class="required-asterisk">*</span> This is the only required field.
-</div>
-<table class="form">
-    
+{% block required_message %}
+    <div class="form-unit">
+        <span class="required-asterisk">*</span> This is the only required field.
+    </div>
+{% endblock required_message %}
+{% block table_fields_at_top %}
     <tr>
        <th><label>Pet name: <span class="required-asterisk">*</span></label></th>
        <td>
-           {{ adoption_form.pet_name.errors }}
-           {{ adoption_form.pet_name }}
+           {{ main_form.pet_name.errors }}
+           {{ main_form.pet_name }}
        </td> 
     </tr>
-    
-    <tr>
-       <th><label>Sex:</label></td>
-       <td class="inline-radio-buttons">
-           {{ adoption_form.sex.errors }}
-            {% for radio in adoption_form.sex %}
-                <label for="{{ radio.id_for_label }}" class="radio-inline">
-                    {{ radio.tag }}
-                    {{ radio.choice_label }}
-                </label>
-            {% endfor %}
-       </td>
-    </tr>
-    
-    <tr>
-        <th><label>Breed:</label></td>
-        <td>
-            {{ adoption_form.subtype1.errors }}
-            {{ adoption_form.subtype1 }}
-        </td>
-    </tr>
-    
-    <tr>
-        <th><label>Hair length:</label></td>
-        <td>
-            {{ adoption_form.hair_length.errors }}
-            {{ adoption_form.hair_length }}
-        </td>
-    </tr>
-    
-    <tr>
-        <th><label>Pattern:</label></th>
-        <td>
-            {{ adoption_form.pattern.errors }}
-            {{ adoption_form.pattern }}
-        </td>
-    </tr>
-    
-    <tr class="calico-field">
-        <th><label>Calico?</label></th>
-        <td>
-            {{ adoption_form.is_calico.errors }}
-            {{ adoption_form.is_calico }}
-        </td>
-    </tr>
-    
-    <tr class="tortie-tabby-field">
-        <th><label>Tabby?</label></th>
-        <td>
-            {{ adoption_form.has_tabby_stripes.errors }}
-            {{ adoption_form.has_tabby_stripes }}
-        </td>
-    </tr>
-    
-    <tr class="dilute-field">
-        <th><label>Dilute?</label></th>
-       <td class="inline-radio-buttons">
-           {{ adoption_form.is_dilute.errors }}
-            {% for radio in adoption_form.is_dilute %}
-                <label for="{{ radio.id_for_label }}" class="radio-inline">
-                    {{ radio.tag }}
-                    {{ radio.choice_label }}
-                </label>
-            {% endfor %}
-       </td>
-    </tr>
-    
-    <tr class="color1-field">
-        <th><label>Color 1:</label></th>
-        <td>
-            {{ adoption_form.color1.errors }}
-            {{ adoption_form.color1 }}
-        </td>
-    </tr>
-    
-    <tr class="color2-field">
-        <th><label>Color 2:</label></th>
-        <td>
-            {{ adoption_form.color2.errors }}
-            {{ adoption_form.color2 }}
-        </td>
-    </tr>
-</table>
-{{ adoption_form.age_rating.errors }}
-<div class="form-unit text-center" id="age-rating-field">
-    <label>Rate the cat's age on a scale of 1-4.</label><br/>
-    <div class="rating-widget-btn newborn hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
-        {% endif %}
-        <br/>
-        Newborn
-    </div>
-    <div class="rating-widget-btn young hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
-        {% endif %}
-        <br/>
-        Young
-    </div>
-    <div class="rating-widget-btn adult hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
-        {% endif %}
-        <br/>
-        Adult
-    </div>
-    <div class="rating-widget-btn senior hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
-        {% endif %}
-        <br/>
-        Senior
-    </div>
-    {% for radio in adoption_form.age_rating %}
-        <label for="{{ radio.id_for_label }}" class="radio-inline visible-noscript-inline">
-            {{ radio.tag }}
-            {{ radio.choice_label }}
-        </label>
-    {% endfor %}
-</div>
-{{ adoption_form.other_physical.errors }}
-<div class="field">
-    <label class="bold">Other physical features:</label><br/>
-    <fieldset class="checkbox-dropdown">
-        <label>Select applicable feature(s)<span class="caret"></span></label>
-        <div>
-            {% for checkbox in adoption_form.other_physical %}
-                <div>
-                    {{ checkbox.tag }}
-                    {{ checkbox.choice_label }}
-                </div>
-            {% endfor %}
-        </div>
-    </fieldset>
-</div>
-{{ adoption_form.likes_cats.errors }}
-{{ adoption_form.likes_dogs.errors }}
-{{ adoption_form.likes_kids.errors }}
-{{ adoption_form.likes_kids_age.errors }}
-<div class="inline-checkboxes">
-    <label>This cat gets along well with</label><br/>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.likes_cats }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Cats
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.likes_dogs }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Dogs
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.likes_kids }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Children, down to age {{ adoption_form.likes_kids_age }}
-    </label>
-</div>
-{{ adoption_form.spayed_or_neutered.errors }}
-{{ adoption_form.house_trained.errors }}
-{{ adoption_form.declawed.errors }}
-{{ adoption_form.vaccinated.errors }}
-{{ adoption_form.microchipped.errors }}
-{{ adoption_form.parasite_free.errors }}
-<div class="inline-checkboxes">
-    <label>This cat has been</label><br/>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.spayed_or_neutered }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Spayed or neutered
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.house_trained }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        House trained
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.declawed }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Declawed
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.vaccinated }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Vaccinated (up to date)
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.microchipped }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Microchipped
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ adoption_form.parasite_free }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span>
-        <div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>
-    </label>
-</div>
-<table class="form">
-    <tr>
-        <th><label>Energy level:</label></th>
-        <td>
-            {{ adoption_form.energy_level.errors }}
-            {{ adoption_form.energy_level }}
-        </td>
-    </tr>
-</table>
-{{ adoption_form.disabilities.errors }}
-<div class="form-unit">
-    <label class="bold">Disabilities and special needs:</label><br/>
-    <fieldset class="scrollable-checkboxes" data-size="3">
-        <button type="button" class="btn btn-primary">Clear</button>
-        {% for checkbox in adoption_form.disabilities %}
-            <div>
-                {{ checkbox.tag }}
-                {{ checkbox.choice_label }}
+    {{ block.super }}
+{% endblock table_fields_at_top %}
+{% block unique_section_A %}
+    {{ main_form.likes_cats.errors }}
+    {{ main_form.likes_dogs.errors }}
+    {{ main_form.likes_kids.errors }}
+    {{ main_form.likes_kids_age.errors }}
+    <div class="inline-checkboxes">
+        <label>This cat gets along well with</label><br/>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.likes_cats }}
+                {% include "en/public/elements/custom_checkmark.html" %}
             </div>
-        {% endfor %}
-    </fieldset>
-</div>
-<table class="form">
-    <tr>
-        <th><label>Pet ID:</label></th>
-        <td>
-            {{ bonded_with_form.non_field_errors }}
-            {{ bonded_with_form.internal_id.errors }}
-            {{ bonded_with_form.internal_id }}
-        </td>
-    </tr>
-    <tr>
-        <th><label>Bonded with:</label></th>
-        <td>
-            {{ bonded_with_form.bonded_with_IDs.errors }}
-            {{ bonded_with_form.bonded_with_IDs }}
-        </td>
-    </tr>
-</table>
-<div class="form-unit">
-    For the "bonded with" field, copy and paste the ID listed on a pet's adoption page. To specify multiple pets, separate their IDs with commas. If you are filling out the "bonded with" field, you will need to provide an ID for the pet.
-</div>
-{{ adoption_form.weight.errors }}
-{{ adoption_form.weight_units.errors }}
-{{ adoption_form.precise_age.errors }}
-{{ adoption_form.age_units.errors }}
-<div id="statistical-fields">
-    <div>
-        <label class="bold">Weight: </label>
-        {{ adoption_form.weight }}
-        {{ adoption_form.weight_units }}
-    </div>
-    <div>
-        <label class="bold">Age:</label>
-        {{ adoption_form.precise_age }}
-        {{ adoption_form.age_units }}
-    </div>
-</div>
-
-<table class="form" id="adoption-fee-field">
-    <tr>
-        <th><label>Adoption fee:</label></th>
-        <td>
-            {{ adoption_form.adoption_fee.errors }}
-            $ {{ adoption_form.adoption_fee }} USD
-        </td>
-    </tr>
-</table>
-{{ adoption_form.euthenasia_soon.errors }}
-<div class="checkbox has-custom-checkbox text-center">
-    <label>
-    <div class="custom-checkbox">
-        {{ adoption_form.euthenasia_soon }}
-        {% include "en/public/elements/custom_checkmark.html" %}
-    </div>
-    This animal could be euthanized if it is not adopted <em>soon</em>.
-    </label>
-</div>
-<!--This section is for fostering regular users only. -->
-{{ adoption_form.public_contact_information.errors }}
-<div class="inline-checkboxes">
-<label><span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.</label><br/>
-    {% for checkbox in adoption_form.public_contact_information %}
-        <label class="checkbox-inline">
-            {{ checkbox.tag }}
-            {{ checkbox.choice_label }}
+            Cats
         </label>
-    {% endfor %}
-</div>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.likes_dogs }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Dogs
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.likes_kids }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Children, down to age {{ main_form.likes_kids_age }}
+        </label>
+    </div>
+    {{ main_form.spayed_or_neutered.errors }}
+    {{ main_form.house_trained.errors }}
+    {{ main_form.declawed.errors }}
+    {{ main_form.vaccinated.errors }}
+    {{ main_form.microchipped.errors }}
+    {{ main_form.parasite_free.errors }}
+    <div class="inline-checkboxes">
+        <label>This cat has been</label><br/>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.spayed_or_neutered }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Spayed or neutered
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.house_trained }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            House trained
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.declawed }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Declawed
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.vaccinated }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Vaccinated (up to date)
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.microchipped }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Microchipped
+        </label>
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.parasite_free }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span>
+            <div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>
+        </label>
+    </div>
+    <table class="form">
+        <tr>
+            <th><label>Energy level:</label></th>
+            <td>
+                {{ main_form.energy_level.errors }}
+                {{ main_form.energy_level }}
+            </td>
+        </tr>
+    </table>
+{% endblock unique_section_A %}
+{% block adoption_id_fields %}
+    <table class="form">
+        <tr>
+            <th><label>Pet ID:</label></th>
+            <td>
+                {{ bonded_with_form.non_field_errors }}
+                {{ bonded_with_form.internal_id.errors }}
+                {{ bonded_with_form.internal_id }}
+            </td>
+        </tr>
+        <tr>
+            <th><label>Bonded with:</label></th>
+            <td>
+                {{ bonded_with_form.bonded_with_IDs.errors }}
+                {{ bonded_with_form.bonded_with_IDs }}
+            </td>
+        </tr>
+    </table>
+    <div class="form-unit">
+        For the "bonded with" field, copy and paste the ID listed on a pet's adoption page. To specify multiple pets, separate their IDs with commas. If you are filling out the "bonded with" field, you will need to provide an ID for the pet.
+    </div>
+{% endblock adoption_id_fields %}
+{% block unique_section_B %}
+    <table class="form" id="adoption-fee-field">
+        <tr>
+            <th><label>Adoption fee:</label></th>
+            <td>
+                {{ main_form.adoption_fee.errors }}
+                $ {{ main_form.adoption_fee }} USD
+            </td>
+        </tr>
+    </table>
+    {{ main_form.euthenasia_soon.errors }}
+    <div class="checkbox has-custom-checkbox text-center">
+        <label>
+        <div class="custom-checkbox">
+            {{ main_form.euthenasia_soon }}
+            {% include "en/public/elements/custom_checkmark.html" %}
+        </div>
+        This animal could be euthanized if it is not adopted <em>soon</em>.
+        </label>
+    </div>
+{% endblock unique_section_B %}

@@ -19,17 +19,17 @@ def page(request):
     # Define the heading that will be used in the form's header.
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
-    adoption_form = AdoptionForm(request.POST or None)
+    main_form = AdoptionForm(request.POST or None)
     bonded_with_form = BondedWithForm(request.POST or None)
-    if adoption_form.is_valid() and bonded_with_form.is_valid():
-        new_adoption_record = adoption_form.save(commit=False)
+    if main_form.is_valid() and bonded_with_form.is_valid():
+        new_adoption_record = main_form.save(commit=False)
         new_adoption_record.upload = upload
         new_adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
         new_adoption_record.save()
         save_bonded_with_information(new_adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
         return redirect('index')
     else:
-        return render(request, 'en/public/adoption_upload.html', {'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
+        return render(request, 'en/public/adoption_upload.html', {'main_form':main_form, 'bonded_with_form':bonded_with_form, 'heading':heading})
 
 # 1. If the "bonded_with_IDs" field was filled out, use its comma-separated list field to associate the new adoption record with a list of other adoption records.
 # Input: new_adoption_record, bonded_with_IDs string. Output: None.

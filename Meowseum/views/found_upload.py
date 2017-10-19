@@ -18,14 +18,14 @@ def page(request):
     # Define the heading that will be used in the form's header.
     heading = "Uploading "+ upload.metadata.original_file_name + upload.metadata.original_extension
     
-    found_form = FoundForm(request.POST or None)
+    main_form = FoundForm(request.POST or None)
     verify_description_form = VerifyDescriptionForm(request.POST or None, initial={'description':upload.description})
-    if found_form.is_valid() and verify_description_form.is_valid():
-        new_found_record = found_form.save(commit=False)
+    if main_form.is_valid() and verify_description_form.is_valid():
+        new_found_record = main_form.save(commit=False)
         new_found_record.upload = upload
         new_found_record.save()
         upload.description = verify_description_form.cleaned_data['description']
         upload.save()
         return redirect('index')
     else:
-        return render(request, 'en/public/found_upload.html', {'found_form':found_form, 'verify_description_form':verify_description_form, 'is_shelter':request.user.user_profile.is_shelter(), 'heading':heading})
+        return render(request, 'en/public/found_upload.html', {'main_form':main_form, 'verify_description_form':verify_description_form, 'is_shelter':request.user.user_profile.is_shelter(), 'heading':heading})
