@@ -1,10 +1,5 @@
-{% extends "en/public/petinfo_upload_main.html" %}
+{% extends "en/public/lostfoundinfo_upload_main.html" %}
 {% load staticfiles %}
-{% block required_message %}
-    <div class="form-unit text-right">
-        <span class="required-asterisk">*</span> Required.
-    </div>
-{% endblock %}
 {% block is_sighting %}
     {{ main_form.is_sighting.errors }}
     {% for radio in main_form.is_sighting %}
@@ -25,130 +20,31 @@
        </td> 
     </tr>
     {{ block.super }}
-    <tr>
-        <th><label>Eye color:</label></th>
-        <td class="inline-radio-buttons">
-            {{ main_form.eye_color.errors }}
-            {{ main_form.eye_color_other.errors }}
-            {% for radio in main_form.eye_color %}
-                <label for="{{ radio.id_for_label }}" class="radio-inline">
-                    {{ radio.tag }}
-                    {{ radio.choice_label }}
-                </label>
-            {% endfor %}
-            {{ main_form.eye_color_other }}
-        </td>
-    </tr>
-    <tr>
-        <th><label>Nose color:</label></th>
-        <td>
-            {{ main_form.nose_color.errors }}
-            <fieldset class="checkbox-dropdown">
-                <label>Select applicable color(s)<span class="caret"></span></label>
-                <div>
-                    {% for checkbox in main_form.nose_color %}
-                        <div>
-                            {{ checkbox.tag }}
-                            {{ checkbox.choice_label }}
-                        </div>
-                    {% endfor %}
-                </div>
-            </fieldset>
-        </td>
-    </tr>
 {% endblock table_fields_at_top %}
-{% block unique_section_A %}
-    <table class="form">
+{% block date_label %}Date found{% endblock date_label %}
+{% block lostfound_table %}
+    {{ block.super }}
+    {% if is_shelter %}
         <tr>
-            <th><label>Date found: <span class="required-asterisk">*</span></label></th>
+            <th><label>ID (shelters):</label></th>
             <td>
-                {{ main_form.date.errors }}
-                {{ main_form.date }}
-                <button type="button" class="btn btn-primary">Today</button>
+                {{ main_form.internal_id.errors }}
+                {{ main_form.internal_id }}
             </td>
         </tr>
-        <tr>
-            <th><label>Location:</label></th>
-            <td>
-                {{ main_form.location.errors }}
-                {{ main_form.location }}
-            </td>
-        </tr>
-        {% if is_shelter %}
-            <tr>
-                <th><label>ID (shelters):</label></th>
-                <td>
-                    {{ main_form.internal_id.errors }}
-                    {{ main_form.internal_id }}
-                </td>
-            </tr>
-        {% endif %}
-    </table>
-    {{ main_form.has_collar.errors }}
-    {{ main_form.has_spay_or_neuter_tattoo.errors }}
-    <div class="inline-checkboxes">
-        <label class="bold">Which of the following apply to the cat?</label><br/>
-        <label class="checkbox-inline has-custom-checkbox" data-toggle="collapse" data-target="#collar-fieldset">
-            <div class="custom-checkbox">
-                {{ main_form.has_collar }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Has a collar
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.has_spay_or_neuter_tattoo }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Has a spay or neuter tattoo
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.no_microchip }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            No microchip detected during scan
-        </label>
-    </div>
-    {% if upload.found.has_collar %}
-    <div class="nested-form collapse in">
-        <fieldset class="collapse in" id="collar-fieldset">
-    {% else %}
-    <div class="nested-form collapse">
-        <fieldset class="collapse" id="collar-fieldset">
     {% endif %}
-            <table class="form">
-                <tr>
-                   <th><label>Collar color:</label></td>
-                   <td>
-                        {{ main_form.collar_color.errors }}
-                        {{ main_form.collar_color }}
-                   </td>
-                </tr>
-            </table>
-            {{ main_form.collar_description.errors }}
-            <div class="field">
-                <label><span class="bold">Collar description</span> (style, materials):</label><br/>
-                {{ main_form.collar_description }}
-            </div>
-        </fieldset>
-    </div>
-    <div class="field">
-        <label><span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div></label><br/>
-        {{ main_form.other_special_markings.errors }}
-        {{ main_form.other_special_markings }}
-    </div>
-{% endblock unique_section_A %}
-{% block unique_section_B %}
-    {% if verify_description_form %}
-        {% comment %}
-        This is in an if-block because the "are you sure?" question only needs to be asked during the initial upload process, not during the editing form, and the if-block allows the template to be re-used.
-        {% endcomment %}
-        {{ verify_description_form.non_field_errors }}
-        {{ verify_description_form.errors }}
-        <div class="field">
-            <label>Is there any other information that could aid in the return of the pet?</label><br/>
-            {{ verify_description_form.description }}
+{% endblock lostfound_table %}
+{% block lostfound_inline_checkbox_errors %}
+    {{ block.super }}
+    {{ main_form.no_microchip.errors }}
+{% endblock lostfound_inline_checkbox_errors %}
+{% block lostfound_inline_checkbox_section_B %}
+    {{ block.super }}
+    <label class="checkbox-inline has-custom-checkbox">
+        <div class="custom-checkbox">
+            {{ main_form.no_microchip }}
+            {% include "en/public/elements/custom_checkmark.html" %}
         </div>
-    {% endif %}
-{% endblock unique_section_B %}
+        No microchip detected during scan
+    </label>
+{% endblock lostfound_inline_checkbox_section_B %}

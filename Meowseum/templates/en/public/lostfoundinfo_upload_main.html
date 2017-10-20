@@ -1,0 +1,133 @@
+{% extends "en/public/petinfo_upload_main.html" %}
+{% load staticfiles %}
+{% block required_message %}
+    <div class="form-unit text-right">
+        <span class="required-asterisk">*</span> Required.
+    </div>
+{% endblock %}
+{% block table_fields_at_top %}
+    {{ block.super }}
+    <tr>
+        <th><label>Eye color:</label></th>
+        <td class="inline-radio-buttons">
+            {{ main_form.eye_color.errors }}
+            {{ main_form.eye_color_other.errors }}
+            {% for radio in main_form.eye_color %}
+                <label for="{{ radio.id_for_label }}" class="radio-inline">
+                    {{ radio.tag }}
+                    {{ radio.choice_label }}
+                </label>
+            {% endfor %}
+            {{ main_form.eye_color_other }}
+        </td>
+    </tr>
+    <tr>
+        <th><label>Nose color:</label></th>
+        <td>
+            {{ main_form.nose_color.errors }}
+            <fieldset class="checkbox-dropdown">
+                <label>Select applicable color(s)<span class="caret"></span></label>
+                <div>
+                    {% for checkbox in main_form.nose_color %}
+                        <div>
+                            {{ checkbox.tag }}
+                            {{ checkbox.choice_label }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </td>
+    </tr>
+{% endblock table_fields_at_top %}
+{% block unique_section_A %}
+    <table class="form">
+        {% block lostfound_table %}
+        <tr>
+            <th><label>{% block date_label %}{% endblock date_label %}: <span class="required-asterisk">*</span></label></th>
+            <td>
+                {{ main_form.date.errors }}
+                {{ main_form.date }}
+                <button type="button" class="btn btn-primary">Today</button>
+            </td>
+        </tr>
+        <tr>
+            <th><label>Location:</label></th>
+            <td>
+                {{ main_form.location.errors }}
+                {{ main_form.location }}
+            </td>
+        </tr>
+        {% endblock lostfound_table %}
+    </table>
+    {% block lostfound_inline_checkbox_errors %}
+    {{ main_form.has_collar.errors }}
+    {{ main_form.has_spay_or_neuter_tattoo.errors }}
+    {% endblock lostfound_inline_checkbox_errors %}    
+    <div class="inline-checkboxes">
+        <label class="bold">Which of the following apply to the cat?</label><br/>
+        {% block lostfound_inline_checkbox_section_A %}
+        <label class="checkbox-inline has-custom-checkbox" data-toggle="collapse" data-target="#collar-fieldset">
+            <div class="custom-checkbox">
+                {{ main_form.has_collar }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Has a collar
+        </label>
+        {% endblock lostfound_inline_checkbox_section_A %}
+        {% block lostfound_inline_checkbox_section_B %}
+        <label class="checkbox-inline has-custom-checkbox">
+            <div class="custom-checkbox">
+                {{ main_form.has_spay_or_neuter_tattoo }}
+                {% include "en/public/elements/custom_checkmark.html" %}
+            </div>
+            Has a spay or neuter tattoo
+        </label>
+        {% endblock lostfound_inline_checkbox_section_B %}
+    </div>
+    {% if upload.lost.has_collar or upload.found.has_collar or upload.lost.microchipped or upload.lost.has_serial_number_tattoo %}
+    <div class="nested-form collapse in">
+    {% else %}
+    <div class="nested-form collapse">
+    {% endif %}
+        {% block nested_form %}
+    {% if upload.lost.has_collar or upload.found.has_collar %}
+        <fieldset class="collapse in" id="collar-fieldset">
+    {% else %}
+        <fieldset class="collapse" id="collar-fieldset">
+    {% endif %}
+            <table class="form">
+                <tr>
+                   <th><label>Collar color:</label></td>
+                   <td>
+                        {{ main_form.collar_color.errors }}
+                        {{ main_form.collar_color }}
+                   </td>
+                </tr>
+            </table>
+            {{ main_form.collar_description.errors }}
+            <div class="field">
+                <label><span class="bold">Collar description</span> (style, materials):</label><br/>
+                {{ main_form.collar_description }}
+            </div>
+        </fieldset>
+        {% endblock nested_form %}
+    </div>
+    <div class="field">
+        <label><span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div></label><br/>
+        {{ main_form.other_special_markings.errors }}
+        {{ main_form.other_special_markings }}
+    </div>
+{% endblock unique_section_A %}
+{% block unique_section_B %}
+    {% if verify_description_form %}
+        {% comment %}
+        This is in an if-block because the "are you sure?" question only needs to be asked during the initial upload process, not during the editing form, and the if-block allows the template to be re-used.
+        {% endcomment %}
+        {{ verify_description_form.non_field_errors }}
+        {{ verify_description_form.errors }}
+        <div class="field">
+            <label>Is there any other information that could aid in the return of the pet?</label><br/>
+            {{ verify_description_form.description }}
+        </div>
+    {% endif %}
+{% endblock unique_section_B %}
