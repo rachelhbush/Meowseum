@@ -350,12 +350,18 @@ def one_letter_time_unit(string, keep_suffix = False):
 @register.filter(name='humanize_list')
 # Display a Python list of nouns as they would appear in a sentence. Display ['A', 'B'] as 'A and B'. Display ['A', 'B', 'C'] as 'A, B, and C'.
 # The conjunction can be overriden with "or". It can turned off by passing an empty string, as in {{ value | text_list:"" }}, for the format 'A, B'.
-# Django saves values from multiselects in a form as a list converted to a string, as in "['A', 'B', 'C']". This filter is also able to handle this data type directly.
-# Input: First, a list or a list wrapped in string delimiters. A tuple will also work. Second, an optional string. This can be "and", "or", or "". It defaults to "and".
+# Django saves values from multiselects in a form as a list converted to a string, as in "['A', 'B', 'C']". This filter is also able to handle Django multiselects' values directly.
+# Input: value, a list/tuple or a list/tuple wrapped in string delimiters. conjunction, an optional string which can be "and", "or", or "". It defaults to "and".
 # Output: A string containing all the elements in the list. If the list has no elements, the filter returns an empty string.
 def humanize_list(value, conjunction="and"):
     if str(type(value)) == "<class 'str'>":
-        value = eval(value)
+        if value == '':
+            # An empty string value will occur, instead of '[]', when a new multiselect field has been added to the Django database after the creation of the record being examined.
+            # If the record is edited such that an option is checked and unchecked, then it becomes '[]' afterward. The empty string has to have its own else suite because
+            # the result of eval('') is the exception SyntaxError: unexpected EOF while parsing.
+            return ''
+        else:
+            value = eval(value)
     if conjunction == "":
         return ', '.join(value)
     else:
