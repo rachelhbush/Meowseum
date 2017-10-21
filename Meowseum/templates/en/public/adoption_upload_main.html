@@ -16,85 +16,31 @@
     {{ block.super }}
 {% endblock table_fields_at_top %}
 {% block unique_section_A %}
-    {{ main_form.likes_cats.errors }}
-    {{ main_form.likes_dogs.errors }}
-    {{ main_form.likes_kids.errors }}
-    {{ main_form.likes_kids_age.errors }}
+    {{ main_form.prefers_a_home_without.errors }}
     <div class="inline-checkboxes">
-        <label>This cat gets along well with</label><br/>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.likes_cats }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Cats
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.likes_dogs }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Dogs
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.likes_kids }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Children, down to age {{ main_form.likes_kids_age }}
-        </label>
+        <label for="{{ main_form.prefers_a_home_without.id_for_label }}">{{ main_form.prefers_a_home_without.label }}</label><br/>
+        {% for checkbox in main_form.prefers_a_home_without %}
+            <label class="checkbox-inline has-custom-checkbox">
+                <div class="custom-checkbox">
+                    {{ checkbox.tag }}
+                    {% include "en/public/elements/custom_checkmark.html" %}
+                </div>
+                {{ checkbox.choice_label }}
+            </label>
+        {% endfor %}
     </div>
-    {{ main_form.spayed_or_neutered.errors }}
-    {{ main_form.house_trained.errors }}
-    {{ main_form.declawed.errors }}
-    {{ main_form.vaccinated.errors }}
-    {{ main_form.microchipped.errors }}
-    {{ main_form.parasite_free.errors }}
+    {{ main_form.has_been.errors }}
     <div class="inline-checkboxes">
-        <label>This cat has been</label><br/>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.spayed_or_neutered }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Spayed or neutered
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.house_trained }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            House trained
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.declawed }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Declawed
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.vaccinated }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Vaccinated (up to date)
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.microchipped }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Microchipped
-        </label>
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.parasite_free }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span>
-            <div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>
-        </label>
+        <label for="{{ main_form.has_been.id_for_label }}">{{ main_form.has_been.label }}</label><br/>
+        {% for checkbox in main_form.has_been %}
+            <label class="checkbox-inline has-custom-checkbox">
+                <div class="custom-checkbox">
+                    {{ checkbox.tag }}
+                    {% include "en/public/elements/custom_checkmark.html" %}
+                </div>
+                {{ checkbox.choice_label }}
+            </label>
+        {% endfor %}
     </div>
     <table class="form">
         <tr>

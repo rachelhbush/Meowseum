@@ -197,6 +197,7 @@ def format_adoption_record_for_display(upload):
                            'Breed',
                            'Coat description',
                            'Disabilities',
+                           'Prefers a home without',
                            'Age',
                            'Weight',
                            'Energy level',
@@ -209,6 +210,7 @@ def format_adoption_record_for_display(upload):
                            get_merged_breed_field(upload.adoption),
                            get_coat_description_field(upload.adoption),
                            capfirst(humanize_list(upload.adoption.disabilities, "")),
+                           capfirst(humanize_list(upload.adoption.prefers_a_home_without, "")),
                            get_merged_age_field(upload.adoption),
                            get_merged_weight_field(upload.adoption),
                            capfirst(upload.adoption.energy_level),
@@ -296,7 +298,7 @@ def format_found_record_for_display(upload):
 # Input: An Adoption record. Output: The string for the merged field.
 def get_adoption_merged_sex_field(record):
     sex = capfirst(record.sex)
-    if record.spayed_or_neutered:
+    if 'spayed or neutered' in record.has_been:
         if sex == 'male':
             sex = sex + ', neutered'
         else:
@@ -461,44 +463,23 @@ def format_bonded_with_field(queryset):
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
 def get_adoption_boolean_answers(record, sex):
     boolean_answers = tuple()
-    if sex == '' and record.spayed_or_neutered:
+    if sex == '' and 'spayed or neutered' in record.has_been:
         boolean_answers = boolean_answers + ('Spayed or neutered',)
-    if record.house_trained:
+    if 'house trained' in record.has_been:
         boolean_answers = boolean_answers + ('House trained',)
-    if record.declawed:
+    if 'declawed' in record.has_been:
         boolean_answers = boolean_answers + ('Declawed',)
-    if record.vaccinated:
+    if 'vaccinated' in record.has_been:
         boolean_answers = boolean_answers + ('Vaccinations up to date',)
-    if record.microchipped:
+    if 'microchipped' in record.has_been:
         boolean_answers = boolean_answers + ('Microchipped',)
-    if record.parasite_free:
+    if 'tested and treated for worms, ticks, and fleas' in record.has_been:
         boolean_answers = boolean_answers + ('Tested and treated for worms, ticks, and fleas',)
-    likes = get_likes_string(record)
-    if likes != None:
-        boolean_answers = boolean_answers + (likes,)
 
     if boolean_answers == tuple():
         # If the tuple is still empty, then store "None" instead so that the condition for showing the field will be clearer.
         boolean_answers = None
     return boolean_answers
-
-# 6.1.7.1 Merge the Boolean "Gets along well with" fields so that the "Gets along well with" part won't be repeated several times.
-# Input: An Adoption record. Output: The string for the merged fields. If the cat is not on record as getting along well with anything, then return None.
-def get_likes_string(record):
-    if record.likes_cats or record.likes_dogs or record.likes_kids:
-        likes_list = []
-        if record.likes_cats:
-            likes_list = likes_list + ['other cats']
-        if record.likes_dogs:
-            likes_list = likes_list + ['dogs']
-        if record.likes_kids:
-            if record.likes_kids_age == None:
-                likes_list = likes_list + ['children']
-            else:
-                likes_list = likes_list + ['children down to age ' + str(record.likes_kids_age)]
-        return 'Gets along well with ' + humanize_list(likes_list)
-    else:
-        return None
 
 # 6.2.1 For the Lost record, the Sex label will use merged strings for the sex field, the spay/neuter field, and the spay/neuter tattoo field.
 # Input: A Lost record. Output: The string for the merged field.

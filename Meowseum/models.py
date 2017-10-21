@@ -581,18 +581,18 @@ class Adoption(PetInfo):
     ('average', 'Average'),
     ('active', 'Active'),
     ('very active', 'Very Active'))
+    PREFERS_A_HOME_WITHOUT_CHOICES = (('cats', 'Cats'),
+    ('dogs', 'Dogs'),
+    ('small children', 'Small children'))
+    HAS_BEEN_CHOICES = (('spayed or neutered', 'Spayed or neutered'),
+    ('house trained', 'House trained'),
+    ('declawed', 'Declawed'),
+    ('vaccinated', 'Vaccinated (up to date)'),
+    ('microchipped', 'Microchipped'),
+    ('tested and treated for worms, ticks, and fleas', mark_safe('Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span><div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>')))
 
-    # The first five fields only make sense for cats, dogs, and maybe ferrets.
-    likes_cats = models.BooleanField(verbose_name="likes cats", default=False, blank=True)
-    likes_dogs = models.BooleanField(verbose_name="likes dogs", default=False, blank=True)
-    likes_kids = models.BooleanField(verbose_name="likes kids", default=False, blank=True)
-    likes_kids_age = models.IntegerField(verbose_name="likes kids down to age", null=True, blank=True)
-    spayed_or_neutered = models.BooleanField(verbose_name="spayed or neutered", default=False, blank=True)
-    house_trained = models.BooleanField(verbose_name="house trained", default=False, blank=True)
-    declawed = models.BooleanField(verbose_name="declawed", default=False, blank=True)
-    vaccinated = models.BooleanField(verbose_name="vaccinated", default=False, blank=True)
-    microchipped = models.BooleanField(verbose_name="microchipped", default=False, blank=True)
-    parasite_free = models.BooleanField(verbose_name="parasite free", default=False, blank=True)
+    prefers_a_home_without = models.CharField(max_length=1000, verbose_name="prefers a home without", default="", blank=True)
+    has_been = models.CharField(max_length=1000, verbose_name="has been", default="", blank=True)
     energy_level = models.CharField(max_length=255, verbose_name="energy level", choices=(('', 'Select an energy level'),) + ENERGY_LEVEL_CHOICES, default="", blank=True)
     # To fill out the "Bonded with" field, the user will enter the ID used internally by the organization or the relative URL.
     internal_id = models.CharField(max_length=255, verbose_name="pet ID", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],

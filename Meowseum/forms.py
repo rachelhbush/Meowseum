@@ -206,7 +206,7 @@ class PetInfoForm(forms.ModelForm):
     disabilities = forms.MultipleChoiceField(required=False, label='Disabilities and special needs', choices=PetInfo.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
     public_contact_information = forms.MultipleChoiceField(required=False,
                                                            label=mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.'),
-                                                           choices=Adoption.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
+                                                           choices=PetInfo.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
     class Meta:
         model = PetInfo
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
@@ -214,12 +214,12 @@ class PetInfoForm(forms.ModelForm):
 
 class AdoptionForm(PetInfoForm):
     pet_name = forms.CharField(label='Pet name')
-    likes_kids_age = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0"}) )
+    prefers_a_home_without = forms.MultipleChoiceField(required=False, label='This cat would prefer a home without', choices=Adoption.PREFERS_A_HOME_WITHOUT_CHOICES, widget=forms.CheckboxSelectMultiple())
+    has_been = forms.MultipleChoiceField(required=False, label='This cat has been', choices=Adoption.HAS_BEEN_CHOICES, widget=forms.CheckboxSelectMultiple())
     adoption_fee = forms.FloatField(required=False, label='Adoption fee', widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Adoption
-        fields = PetInfoForm.Meta.fields + ('likes_cats', 'likes_dogs', 'likes_kids', 'likes_kids_age', 'spayed_or_neutered', 'house_trained',
-                                            'declawed', 'vaccinated', 'microchipped', 'parasite_free', 'energy_level', 'adoption_fee', 'euthenasia_soon')
+        fields = PetInfoForm.Meta.fields + ('prefers_a_home_without', 'has_been', 'energy_level', 'adoption_fee', 'euthenasia_soon')
 
 class BondedWithForm(forms.Form):
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
