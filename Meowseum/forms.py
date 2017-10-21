@@ -244,6 +244,9 @@ class BondedWithForm(forms.Form):
                     except Adoption.DoesNotExist:
                         raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
         return self.cleaned_data
+    def clean_internal_id(self):
+        # This function is required for an optional unique field.
+        return self.cleaned_data['internal_id'] or None
 
 class LostFoundInfo(PetInfoForm):
     eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
