@@ -59,30 +59,18 @@
         </tr>
         {% endblock lostfound_table %}
     </table>
-    {% block lostfound_inline_checkbox_errors %}
-    {{ main_form.has_collar.errors }}
-    {{ main_form.has_spay_or_neuter_tattoo.errors }}
-    {% endblock lostfound_inline_checkbox_errors %}    
+    {{ main_form.yes_or_no_questions.errors }} 
     <div class="inline-checkboxes">
-        <label class="bold">Which of the following apply to the cat?</label><br/>
-        {% block lostfound_inline_checkbox_section_A %}
-        <label class="checkbox-inline has-custom-checkbox" data-toggle="collapse" data-target="#collar-fieldset">
-            <div class="custom-checkbox">
-                {{ main_form.has_collar }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Has a collar
-        </label>
-        {% endblock lostfound_inline_checkbox_section_A %}
-        {% block lostfound_inline_checkbox_section_B %}
-        <label class="checkbox-inline has-custom-checkbox">
-            <div class="custom-checkbox">
-                {{ main_form.has_spay_or_neuter_tattoo }}
-                {% include "en/public/elements/custom_checkmark.html" %}
-            </div>
-            Has a spay or neuter tattoo
-        </label>
-        {% endblock lostfound_inline_checkbox_section_B %}
+        <label for="{{ main_form.yes_or_no_questions.id_for_label }}">{{ main_form.yes_or_no_questions.label }}</label><br/>
+        {% for checkbox in main_form.yes_or_no_questions %}
+            <label class="checkbox-inline has-custom-checkbox">
+                <div class="custom-checkbox">
+                    {{ checkbox.tag }}
+                    {% include "en/public/elements/custom_checkmark.html" %}
+                </div>
+                {{ checkbox.choice_label }}
+            </label>
+        {% endfor %}
     </div>
     {% if upload.lost.has_collar or upload.found.has_collar or upload.lost.microchipped or upload.lost.has_serial_number_tattoo %}
     <div class="nested-form collapse in">

@@ -11,49 +11,16 @@
     {{ block.super }}
 {% endblock table_fields_at_top %}
 {% block date_label %}Date lost{% endblock date_label %}
-{% block lostfound_inline_checkbox_errors %}
-    {{ block.super }}
-    {{ main_form.microchipped.errors }}
-    {{ main_form.has_serial_number_tattoo.errors }}
-    {{ main_form.spayed_or_neutered.errors }}
-{% endblock %}
-{% block lostfound_inline_checkbox_section_A %}
-    {{ block.super }}
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ main_form.microchipped }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Microchipped
-    </label>
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ main_form.has_serial_number_tattoo }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Has a tattoo of a serial number
-    </label>
-{% endblock lostfound_inline_checkbox_section_A %}
-{% block lostfound_inline_checkbox_section_B %}
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ main_form.spayed_or_neutered }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        Spayed or neutered
-    </label>
-    {{ block.super }}
-{% endblock lostfound_inline_checkbox_section_B %}
 {% block nested_form %}
     {{ block.super }}
-    {{ main_form.id_number_description.errors }}
+    {{ main_form.microchip_or_tattoo_ID.errors }}
     {% if upload.lost.microchipped or upload.lost.has_serial_number_tattoo %}
     <div class="field collapse in" id="id-number-description-field">
     {% else %}
     <div class="field collapse" id="id-number-description-field">
     {% endif %}
         <label class="bold">Microchip or tattoo ID:</label><br/>
-        {{ main_form.id_number_description }}
+        {{ main_form.microchip_or_tattoo_ID }}
     </div>
 {% endblock nested_form %}
 {% block unique_section_B %}

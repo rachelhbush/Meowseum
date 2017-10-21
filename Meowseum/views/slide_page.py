@@ -485,15 +485,15 @@ def get_adoption_boolean_answers(record, sex):
 # Input: A Lost record. Output: The string for the merged field.
 def get_lost_merged_sex_field(record):
     sex = capfirst(record.sex)
-    if record.spayed_or_neutered:
+    if 'spayed or neutered' in record.yes_or_no_questions:
         if sex == 'male':
             sex = sex + ', neutered'
-            if record.has_spay_or_neuter_tattoo:
+            if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
                 sex = sex + '. Has a neuter tattoo.'
         else:
             if sex == 'female':
                 sex = sex + ', spayed'
-                if record.has_spay_or_neuter_tattoo:
+                if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
                     sex = sex + '. Has a spay tattoo.'
     return sex
 
@@ -501,7 +501,7 @@ def get_lost_merged_sex_field(record):
 # Input: A Lost or Found record. Output: The string for the merged field.
 def get_collar_merged_field(record):
     collar = ''
-    if record.has_collar:
+    if 'has a collar' in record.yes_or_no_questions:
         if record.collar_description != '':
             if record.collar_color != '':
                 # If the user has filled out both the "Collar color" and "Collar description" fields, then append the collar color to the description.
@@ -522,7 +522,7 @@ def get_microchip_or_tattoo_ID(record):
     microchip_ID = ''
     tattoo_ID = ''
     if record.microchip_or_tattoo_ID != '':
-        if record.microchipped:
+        if 'microchipped' in record.yes_or_no_questions:
             microchip_ID = record.microchip_or_tattoo_ID
         else:
             tattoo_ID = record.microchip_or_tattoo_ID
@@ -557,16 +557,15 @@ def get_merged_other_special_characteristics_field(record):
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
 def get_lost_boolean_answers(record, collar, sex):
     boolean_answers = tuple()
-    if collar == '' and record.has_collar:
+    if collar == '' and 'has a collar' in record.yes_or_no_questions:
         boolean_answers = boolean_answers + ('Has a collar',)
     if record.microchip_or_tattoo_ID == '':
-        if record.microchipped:
+        if 'microchipped' in record.yes_or_no_questions:
             boolean_answers = boolean_answers + ('Microchipped',)
-        else:
-            if record.has_serial_number_tattoo:
-                boolean_answers = boolean_answers + ('Has a serial number tattoo',)
-    if sex == '' and record.spayed_or_neutered:
-        if record.has_spay_or_neuter_tattoo:
+        if 'has a tattoo of a serial number' in record.yes_or_no_questions:
+            boolean_answers = boolean_answers + ('Has a tattoo of a serial number',)
+    if sex == '' and 'spayed or neutered' in record.yes_or_no_questions:
+        if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
             boolean_answers = boolean_answers + ('Spayed or neutered, with a spay or neuter tattoo',)
         else:
             boolean_answers = boolean_answers + ('Spayed or neutered',)
@@ -580,7 +579,7 @@ def get_lost_boolean_answers(record, collar, sex):
 # Input: A Found record. Output: The string for the merged field.
 def get_found_merged_sex_field(record):
     sex = capfirst(record.sex)
-    if record.has_spay_or_neuter_tattoo:
+    if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
         if sex == 'male':
             sex = sex + ', neutered'
         else:
@@ -592,12 +591,12 @@ def get_found_merged_sex_field(record):
 # Output: A tuple of strings related to Boolean fields for which the user didn't answer a follow-up question. If there are no entries, the function returns None.
 def get_found_boolean_answers(record, collar, sex):
     boolean_answers = tuple()
-    if collar == '' and record.has_collar:
+    if collar == '' and 'has a collar' in record.yes_or_no_questions:
         boolean_answers = boolean_answers + ('Has a collar',)
-    if sex == '' and record.spayed_or_neutered:
-        if record.has_spay_or_neuter_tattoo:
+    if sex == '' and 'spayed or neutered' in record.yes_or_no_questions:
+        if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
             boolean_answers = boolean_answers + ('Spayed or neutered',)
-    if record.no_microchip:
+    if 'no microchip detected during scan' in record.yes_or_no_questions:
         boolean_answers = boolean_answers + ('No microchip detected during scan',)
     if record.is_sighting:
         boolean_answers = booplan_answers + ("This is a sighting report. The uploader doesn't have the cat right now.",)

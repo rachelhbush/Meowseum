@@ -246,22 +246,21 @@ class BondedWithForm(forms.Form):
         return self.cleaned_data
 
 class LostFoundInfo(PetInfoForm):
-    eye_color = forms.ChoiceField(required=False, choices=Found.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
+    eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
     eye_color_other = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"other"}) )
-    nose_color = forms.MultipleChoiceField(required=False, choices=Found.NOSE_COLOR_CHOICES, widget=forms.CheckboxSelectMultiple())
+    nose_color = forms.MultipleChoiceField(required=False, choices=LostFoundInfo.NOSE_COLOR_CHOICES, widget=forms.CheckboxSelectMultiple())
     date = HTML5DateField()
     class Meta:
-        model = Lost
-        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings',
-                                            'has_collar', 'has_spay_or_neuter_tattoo', 'collar_color', 'collar_description', )
+        model = LostFoundInfo
+        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings', 'yes_or_no_questions', 'collar_color', 'collar_description')
 
 class LostForm(LostFoundInfo):
     pet_name = forms.CharField()
-    has_spay_or_neuter_tattoo = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"data-dependent-on":"spayed_or_neutered"}) )
+    yes_or_no_questions = forms.MultipleChoiceField(required=False, label='Which of the following apply to the cat?', choices=Lost.YES_OR_NO_QUESTIONS_CHOICES, widget=forms.CheckboxSelectMultiple())
     reward = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Lost
-        fields = LostFoundInfo.Meta.fields +  ('spayed_or_neutered', 'microchipped', 'has_serial_number_tattoo', 'microchip_or_tattoo_ID', 'reward')
+        fields = LostFoundInfo.Meta.fields + ('microchip_or_tattoo_ID', 'reward')
 
 class VerifyDescriptionForm(forms.ModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
@@ -271,9 +270,10 @@ class VerifyDescriptionForm(forms.ModelForm):
  
 class FoundForm(LostFoundInfo):
     is_sighting = forms.ChoiceField(initial=False, choices=Found.IS_SIGHTING_CHOICES, widget=forms.RadioSelect())
+    yes_or_no_questions = forms.MultipleChoiceField(required=False, label='Which of the following apply to the cat?', choices=Found.YES_OR_NO_QUESTIONS_CHOICES, widget=forms.CheckboxSelectMultiple())
     class Meta:
         model = Found
-        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'internal_id', 'no_microchip')
+        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'internal_id')
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None

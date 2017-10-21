@@ -35,29 +35,46 @@ $(document).ready(function() {
         });
     };
     
-    // 2. When either the microchip checkbox or the serial number tattoo is checked, show the field for the ID of a microchip or tattoo.
-    var prepareMicrochipTattooIDCheckboxes = function() {
-        $('input[type="checkbox"][name="microchipped"]').change(function() {
-            if ($(this).prop("checked") && !$('input[type="checkbox"][name="has_serial_number_tattoo"]').prop("checked")) {
-                $("#id-number-description-field").collapse('show');
-                $("#id-number-description-field").addClass("in");
+    // 2. When the "has a collar" checkbox is checked, show the fields that are only relevant when the cat has a collar.
+    var prepareHasACollarCheckbox = function() {
+        var $has_a_collar_checkbox = $('input[type="checkbox"][value="has a collar"]');
+        $has_a_collar_checkbox.change(function() {
+            if ($(this).prop("checked")) {
+                $("#collar-fieldset").collapse('show');
+                $("#collar-fieldset").addClass('in');
             }
             else {
-                if (!$(this).prop("checked") && !$('input[type="checkbox"][name="has_serial_number_tattoo"]').prop("checked")) {
+                $("#collar-fieldset").collapse('hide');
+                $("#collar-fieldset").removeClass('in');
+            }
+        });
+    };
+    
+    // 3. When either the microchip checkbox or the serial number tattoo is checked, show the field for the ID of a microchip or tattoo.
+    var prepareMicrochipTattooIDCheckboxes = function() {
+        var $microchipped_checkbox = $('input[type="checkbox"][value="microchipped"]');
+        var $has_a_tattoo_of_a_serial_number_checkbox = $('input[type="checkbox"][value="has a tattoo of a serial number"]');
+        $microchipped_checkbox.change(function() {
+            if ($(this).prop("checked") && !$has_a_tattoo_of_a_serial_number_checkbox.prop("checked")) {
+                $("#id-number-description-field").collapse('show');
+                $("#id-number-description-field").addClass('in');
+            }
+            else {
+                if (!$(this).prop("checked") && !$has_a_tattoo_of_a_serial_number_checkbox.prop("checked")) {
                     $("#id-number-description-field").collapse('hide');
-                    $("#id-number-description-field").removeClass("in");
+                    $("#id-number-description-field").removeClass('in');
                 }
             }
         });
-        $('input[type="checkbox"][name="has_serial_number_tattoo"]').change(function() {
-            if ($(this).prop("checked") && !$('input[type="checkbox"][name="microchipped"]').prop("checked")) {
+        $has_a_tattoo_of_a_serial_number_checkbox.change(function() {
+            if ($(this).prop("checked") && !$microchipped_checkbox.prop("checked")) {
                 $("#id-number-description-field").collapse('show');
-                $("#id-number-description-field").addClass("in");
+                $("#id-number-description-field").addClass('in');
             }
             else {
-                if (!$(this).prop("checked") && !$('input[type="checkbox"][name="microchipped"]').prop("checked")) {
+                if (!$(this).prop("checked") && !$microchipped_checkbox.prop("checked")) {
                     $("#id-number-description-field").collapse('hide');
-                    $("#id-number-description-field").removeClass("in");
+                    $("#id-number-description-field").removeClass('in');
                 }
             }
         });
@@ -66,6 +83,7 @@ $(document).ready(function() {
     // 0. Main function
     var main = function() {
         prepareTricolorFields();
+        prepareHasACollarCheckbox();
         prepareMicrochipTattooIDCheckboxes();
     };
     main();

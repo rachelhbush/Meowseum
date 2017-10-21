@@ -618,6 +618,7 @@ class LostFoundInfo(PetInfo):
     ('pink', 'Pink'),
     ('tan', 'Tan or buff'),
     ('white', 'White'))
+    # The Lost and Found forms have the yes_or_no_questions field name in common, but not any of the choices.
     COLLAR_COLOR_CHOICES = (('black', 'Black'),
     ('blue', 'Blue'),
     ('brown', 'Brown'),
@@ -638,17 +639,19 @@ class LostFoundInfo(PetInfo):
     date = models.DateField(verbose_name="date", null=True, blank=True)
     location = models.TextField(max_length=10000, verbose_name="location", default="", blank=True)
     other_special_markings = models.TextField(max_length=10000, verbose_name="other special markings", default="", blank=True)
-    has_collar = models.BooleanField(verbose_name="has a collar", default=False, blank=True)
+    yes_or_no_questions = models.CharField(max_length=1000, verbose_name="miscellaneous yes or no questions", default="", blank=True)
     collar_color = models.CharField(max_length=255, verbose_name="collar color", choices=(('', 'Pick a color'),) + COLLAR_COLOR_CHOICES, default="", blank=True)
-    has_spay_or_neuter_tattoo = models.BooleanField(verbose_name="has a spay or neuter tattoo", default=False, blank=True)
     collar_description = models.CharField(max_length=10000, verbose_name="collar description", default="", blank=True)
     class Meta:
         abstract = True
 
 class Lost(LostFoundInfo):
-    spayed_or_neutered = models.BooleanField(verbose_name="spayed or neutered", default=False, blank=True)
-    microchipped = models.BooleanField(verbose_name="microchipped", default=False, blank=True)
-    has_serial_number_tattoo = models.BooleanField(verbose_name="has a tattoo of a serial number", default=False, blank=True)
+    YES_OR_NO_QUESTIONS_CHOICES = (('has a collar', 'Has a collar'),
+    ('microchipped', 'Microchipped'),
+    ('has a tattoo of a serial number', 'Has a tattoo of a serial number'),
+    ('spayed or neutered', 'Spayed or neutered'),
+    ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'))
+
     microchip_or_tattoo_ID = models.CharField(max_length=10000, verbose_name="microchip or tattoo ID", default="", blank=True)
     reward = models.FloatField(verbose_name="reward", null=True, blank=True)
     def __str__(self):
@@ -659,8 +662,11 @@ class Lost(LostFoundInfo):
 class Found(LostFoundInfo):
     IS_SIGHTING_CHOICES = ((True, "I am reporting that I've seen a lost cat."),
                            (False, "I have the cat in a safe place."))
+    YES_OR_NO_QUESTIONS_CHOICES = (('has a collar', 'Has a collar'),
+    ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'),
+    ('no microchip detected during scan', 'No microchip detected during scan'))
+    
     is_sighting = models.BooleanField(verbose_name="is a sighting", default=False, blank=True)
-    no_microchip = models.BooleanField(verbose_name="no microchip", default=False, blank=True)
     # This field is for shelters that post pets to the Found section for a few weeks before moving them to the Adoption section
     # and use IDs for those pets, like the pets they have available for adoption.
     internal_id = models.CharField(max_length=255, verbose_name="ID (shelters)", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],

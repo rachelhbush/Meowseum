@@ -34,17 +34,3 @@
         </tr>
     {% endif %}
 {% endblock lostfound_table %}
-{% block lostfound_inline_checkbox_errors %}
-    {{ block.super }}
-    {{ main_form.no_microchip.errors }}
-{% endblock lostfound_inline_checkbox_errors %}
-{% block lostfound_inline_checkbox_section_B %}
-    {{ block.super }}
-    <label class="checkbox-inline has-custom-checkbox">
-        <div class="custom-checkbox">
-            {{ main_form.no_microchip }}
-            {% include "en/public/elements/custom_checkmark.html" %}
-        </div>
-        No microchip detected during scan
-    </label>
-{% endblock lostfound_inline_checkbox_section_B %}
