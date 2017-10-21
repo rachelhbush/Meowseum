@@ -299,10 +299,10 @@ def format_found_record_for_display(upload):
 def get_adoption_merged_sex_field(record):
     sex = capfirst(record.sex)
     if 'spayed or neutered' in record.has_been:
-        if sex == 'male':
+        if sex == 'Male':
             sex = sex + ', neutered'
         else:
-            if sex == 'female':
+            if sex == 'Female':
                 sex = sex + ', spayed'
     return sex
 
@@ -486,12 +486,12 @@ def get_adoption_boolean_answers(record, sex):
 def get_lost_merged_sex_field(record):
     sex = capfirst(record.sex)
     if 'spayed or neutered' in record.yes_or_no_questions:
-        if sex == 'male':
+        if sex == 'Male':
             sex = sex + ', neutered'
             if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
                 sex = sex + '. Has a neuter tattoo.'
         else:
-            if sex == 'female':
+            if sex == 'Female':
                 sex = sex + ', spayed'
                 if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
                     sex = sex + '. Has a spay tattoo.'
@@ -580,10 +580,10 @@ def get_lost_boolean_answers(record, collar, sex):
 def get_found_merged_sex_field(record):
     sex = capfirst(record.sex)
     if 'has a spay or neuter tattoo' in record.yes_or_no_questions:
-        if sex == 'male':
+        if sex == 'Male':
             sex = sex + ', neutered'
         else:
-            if sex == 'female':
+            if sex == 'Female':
                 sex = sex + ', spayed'
     return sex
 
