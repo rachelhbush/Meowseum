@@ -199,21 +199,23 @@ class ShelterForm(forms.ModelForm):
                   'parasite_treatment_included')
 
 class PetInfoForm(forms.ModelForm):
-    sex = forms.ChoiceField(required=False, choices=SEX_CHOICES, widget=forms.RadioSelect())
-    is_dilute = forms.ChoiceField(required=False, choices=PetInfo.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
-    other_physical = forms.MultipleChoiceField(required=False, choices=PetInfo.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
-    age_rating = forms.ChoiceField(required=False, choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
-    disabilities = forms.MultipleChoiceField(required=False, choices=PetInfo.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
-    public_contact_information = forms.MultipleChoiceField(required=False, choices=Adoption.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
+    sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
+    is_dilute = forms.ChoiceField(required=False, label='Dilute?', choices=PetInfo.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
+    other_physical = forms.MultipleChoiceField(required=False, label='Other physical features', choices=PetInfo.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
+    age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
+    disabilities = forms.MultipleChoiceField(required=False, label='Disabilities and special needs', choices=PetInfo.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
+    public_contact_information = forms.MultipleChoiceField(required=False,
+                                                           label=mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.'),
+                                                           choices=Adoption.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
     class Meta:
         model = PetInfo
-        fields = ('pet_name', 'sex', 'subtype1', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'other_physical', 'color1', 'color2',
-                  'hair_length', 'disabilities', 'age_rating', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information')
+        fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
+                  'age_rating', 'other_physical', 'disabilities', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information')
 
 class AdoptionForm(PetInfoForm):
-    pet_name = forms.CharField()
+    pet_name = forms.CharField(label='Pet name')
     likes_kids_age = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0"}) )
-    adoption_fee = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
+    adoption_fee = forms.FloatField(required=False, label='Adoption fee', widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Adoption
         fields = PetInfoForm.Meta.fields + ('likes_cats', 'likes_dogs', 'likes_kids', 'likes_kids_age', 'spayed_or_neutered', 'house_trained',
@@ -251,7 +253,7 @@ class LostFoundInfo(PetInfoForm):
     class Meta:
         model = Lost
         fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings',
-                                            'has_collar', 'collar_color', 'collar_description', 'has_spay_or_neuter_tattoo')
+                                            'has_collar', 'has_spay_or_neuter_tattoo', 'collar_color', 'collar_description', )
 
 class LostForm(LostFoundInfo):
     pet_name = forms.CharField()
@@ -259,7 +261,7 @@ class LostForm(LostFoundInfo):
     reward = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Lost
-        fields = LostFoundInfo.Meta.fields +  ('spayed_or_neutered', 'microchipped', 'has_serial_number_tattoo', 'id_number_description', 'reward')
+        fields = LostFoundInfo.Meta.fields +  ('spayed_or_neutered', 'microchipped', 'has_serial_number_tattoo', 'microchip_or_tattoo_ID', 'reward')
 
 class VerifyDescriptionForm(forms.ModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.

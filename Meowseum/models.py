@@ -13,6 +13,7 @@ from Meowseum.file_handling.CustomStorage import CustomStorage
 from django.db.models import Count
 from django.conf import settings
 from django.core.validators import RegexValidator
+from django.utils.safestring import mark_safe
 
 YES_OR_NO_CHOICES = ((True, 'Yes'), (False, 'No'))
 SEX_CHOICES = (('male', 'Male'), ('female', 'Female'))
@@ -515,21 +516,19 @@ class PetInfo(models.Model):
     expired = models.BooleanField(verbose_name="expired", default=False, blank=True)
     pet_name = models.CharField(max_length=255, verbose_name="name", default="", blank=True)
     sex = models.CharField(max_length=6, verbose_name="sex", default="", blank=True)
-    subtype1 = models.CharField(max_length=255, verbose_name="subtype 1", choices=(('', 'Select a breed'),) + CAT_BREED_CHOICES, default="", blank=True)
-    
+    subtype1 = models.CharField(max_length=255, verbose_name="breed", choices=(('', 'Select a breed'),) + CAT_BREED_CHOICES, default="", blank=True)
+    hair_length = models.CharField(max_length=255, verbose_name="hair length", choices=(('', 'Select a hair length'),) + COAT_LENGTH_CHOICES, default="", blank=True)
     pattern = models.CharField(max_length=255, verbose_name="pattern", choices=(('', 'Select a pattern'),) + CAT_PATTERN_CHOICES, default="", blank=True)
-    # These three fields are only for tortoiseshell (multicolor) cats.
+    # The next three fields are displayed instead of color1 and color2 for tortoiseshell (multicolor) cats.
     is_calico = models.NullBooleanField(verbose_name="is calico", choices=((None, ''),) + IS_CALICO_CHOICES, null=True, blank=True)
     has_tabby_stripes = models.NullBooleanField(verbose_name="has tabby stripes", choices=((None, ''),) + HAS_TABBY_STRIPES_CHOICES, null=True, blank=True)
     is_dilute = models.NullBooleanField(verbose_name="is dilute", null=True, blank=True)
-    
-    other_physical = models.CharField(max_length=255, verbose_name="other physical features", default="", blank=True)
     color1 = models.CharField(max_length=255, verbose_name="color 1", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
     # The first color is the one that covers most of the animal's body, and the second color is the one covering a minority of it.
     color2 = models.CharField(max_length=255, verbose_name="color 2", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
-    hair_length = models.CharField(max_length=255, verbose_name="hair length", choices=(('', 'Select a hair length'),) + COAT_LENGTH_CHOICES, default="", blank=True)
-    disabilities = models.CharField(max_length=1000, verbose_name="disabilities", default="", blank=True)
     age_rating = models.CharField(max_length=255, verbose_name="approximate age", default="", blank=True)
+    other_physical = models.CharField(max_length=255, verbose_name="other physical features", default="", blank=True)
+    disabilities = models.CharField(max_length=1000, verbose_name="disabilities and special needs", default="", blank=True)
     # These fields are included even for lost pets because the Nashville Humane Asssociation's lost/found form has these fields,
     # and Lost notices on animal control sites commonly use a weight range. These fields are targeted toward interacting with shelters.
     weight = models.FloatField(verbose_name="weight", null=True, blank=True)
@@ -595,12 +594,12 @@ class Adoption(PetInfo):
     microchipped = models.BooleanField(verbose_name="microchipped", default=False, blank=True)
     parasite_free = models.BooleanField(verbose_name="parasite free", default=False, blank=True)
     energy_level = models.CharField(max_length=255, verbose_name="energy level", choices=(('', 'Select an energy level'),) + ENERGY_LEVEL_CHOICES, default="", blank=True)
-    adoption_fee = models.FloatField(verbose_name="adoption fee", null=True, blank=True)
-    euthenasia_soon = models.BooleanField(verbose_name="euthenasia soon", default=False, blank=True)
     # To fill out the "Bonded with" field, the user will enter the ID used internally by the organization or the relative URL.
     internal_id = models.CharField(max_length=255, verbose_name="pet ID", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
                                    unique=True, null=True, blank=True)
     bonded_with = models.ManyToManyField("self", blank=True)
+    adoption_fee = models.FloatField(verbose_name="adoption fee", null=True, blank=True)
+    euthenasia_soon = models.BooleanField(verbose_name="euthenasia soon", default=False, blank=True)
     def __str__(self):
         return self.pet_name
     class Meta:
@@ -641,16 +640,16 @@ class LostFoundInfo(PetInfo):
     other_special_markings = models.TextField(max_length=10000, verbose_name="other special markings", default="", blank=True)
     has_collar = models.BooleanField(verbose_name="has a collar", default=False, blank=True)
     collar_color = models.CharField(max_length=255, verbose_name="collar color", choices=(('', 'Pick a color'),) + COLLAR_COLOR_CHOICES, default="", blank=True)
-    collar_description = models.CharField(max_length=10000, verbose_name="collar description", default="", blank=True)
     has_spay_or_neuter_tattoo = models.BooleanField(verbose_name="has a spay or neuter tattoo", default=False, blank=True)
+    collar_description = models.CharField(max_length=10000, verbose_name="collar description", default="", blank=True)
     class Meta:
         abstract = True
 
 class Lost(LostFoundInfo):
     spayed_or_neutered = models.BooleanField(verbose_name="spayed or neutered", default=False, blank=True)
     microchipped = models.BooleanField(verbose_name="microchipped", default=False, blank=True)
-    has_serial_number_tattoo = models.BooleanField(verbose_name="has a serial number tattoo", default=False, blank=True)
-    id_number_description = models.CharField(max_length=10000, verbose_name="tattoo/microchip ID", default="", blank=True)
+    has_serial_number_tattoo = models.BooleanField(verbose_name="has a tattoo of a serial number", default=False, blank=True)
+    microchip_or_tattoo_ID = models.CharField(max_length=10000, verbose_name="microchip or tattoo ID", default="", blank=True)
     reward = models.FloatField(verbose_name="reward", null=True, blank=True)
     def __str__(self):
         return self.pet_name

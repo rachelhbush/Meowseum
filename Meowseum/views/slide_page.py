@@ -540,11 +540,11 @@ def get_collar_merged_field(record):
 def get_microchip_or_tattoo_ID(record):
     microchip_ID = ''
     tattoo_ID = ''
-    if record.id_number_description != '':
+    if record.microchip_or_tattoo_ID != '':
         if record.microchipped:
-            microchip_ID = record.id_number_description
+            microchip_ID = record.microchip_or_tattoo_ID
         else:
-            tattoo_ID = record.id_number_description
+            tattoo_ID = record.microchip_or_tattoo_ID
     return microchip_ID, tattoo_ID
 
 # 6.2.4 The Eye color label will use the merged fields "eye color", "eye color - other", and the heterochromia option under "other physical features".
@@ -578,7 +578,7 @@ def get_lost_boolean_answers(record, collar, sex):
     boolean_answers = tuple()
     if collar == '' and record.has_collar:
         boolean_answers = boolean_answers + ('Has a collar',)
-    if record.id_number_description == '':
+    if record.microchip_or_tattoo_ID == '':
         if record.microchipped:
             boolean_answers = boolean_answers + ('Microchipped',)
         else:
