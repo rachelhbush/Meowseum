@@ -30,11 +30,11 @@ def page(request, relative_url):
 
 # 1. Render a form for editing an upload in the Adoption category.
 def render_adoption_editing_view(request, upload, heading):
-    adoption_form = AdoptionForm(request.POST or None, instance=upload.adoption)
+    main_form = AdoptionForm(request.POST or None, instance=upload.adoption)
     bonded_with_form = BondedWithForm(request.POST or None, initial=initialize_bonded_with_form(upload))
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    if adoption_form.is_valid() and bonded_with_form.is_valid() and edit_upload_form.is_valid():
-        adoption_record = adoption_form.save(commit=False)
+    if main_form.is_valid() and bonded_with_form.is_valid() and edit_upload_form.is_valid():
+        adoption_record = main_form.save(commit=False)
         adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
         adoption_record.save()
         edit_bonded_with_information(adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
@@ -42,32 +42,32 @@ def render_adoption_editing_view(request, upload, heading):
         return redirect('index')
     else:
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'adoption', 'adoption_form':adoption_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
+                      {'upload_category': 'adoption', 'main_form':main_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 2. Render a form for editing an upload in the Lost category.
 def render_lost_editing_view(request, upload, heading):
-    lost_form = LostForm(request.POST or None, instance=upload.lost)
+    main_form = LostForm(request.POST or None, instance=upload.lost)
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    if lost_form.is_valid() and edit_upload_form.is_valid():
-        lost_form.save()
+    if main_form.is_valid() and edit_upload_form.is_valid():
+        main_form.save()
         edit_upload_form.save()
         return redirect('index')
     else:
         # The upload record is being passed as context in order to use it to know whether to show or hide the nested form for describing any collar or microchip the pet may have.
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'lost', 'lost_form':lost_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
+                      {'upload_category': 'lost', 'main_form':main_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
         
 # 3. Render a form for editing an upload in the Found category.
 def render_found_editing_view(request, upload, heading):
-    found_form = FoundForm(request.POST or None, instance=upload.found)
+    main_form = FoundForm(request.POST or None, instance=upload.found)
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    if found_form.is_valid() and edit_upload_form.is_valid():
-        found_form.save()
+    if main_form.is_valid() and edit_upload_form.is_valid():
+        main_form.save()
         edit_upload_form.save()
         return redirect('index')
     else:
         return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'found', 'found_form':found_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
+                      {'upload_category': 'found', 'main_form':main_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 4. Render a form for editing an upload in the Pets category.
 def render_pet_editing_view(request, upload, heading):
