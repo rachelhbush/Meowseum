@@ -21,7 +21,9 @@ def page(request):
     
     main_form = AdoptionForm(request.POST or None)
     bonded_with_form = BondedWithForm(request.POST or None)
-    if main_form.is_valid() and bonded_with_form.is_valid():
+    main_form_valid = main_form.is_valid()
+    bonded_with_form_valid = bonded_with_form.is_valid()
+    if main_form_valid and bonded_with_form_valid:
         new_adoption_record = main_form.save(commit=False)
         new_adoption_record.upload = upload
         new_adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
