@@ -19,9 +19,7 @@ def page(request):
     
     main_form = LostForm(request.POST or None)
     verify_description_form = VerifyDescriptionForm(request.POST or None, initial={'description':upload.description})
-    main_form_valid = main_form.is_valid()
-    verify_description_form_valid = verify_description_form.is_valid()
-    if main_form_valid and verify_description_form_valid:
+    if all([main_form.is_valid(), verify_description_form.is_valid()]):
         new_lost_record = main_form.save(commit=False)
         new_lost_record.upload = upload
         new_lost_record.save()

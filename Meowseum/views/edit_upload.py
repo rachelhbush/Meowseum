@@ -33,10 +33,7 @@ def render_adoption_editing_view(request, upload, heading):
     main_form = AdoptionForm(request.POST or None, instance=upload.adoption)
     bonded_with_form = BondedWithForm(request.POST or None, initial=initialize_bonded_with_form(upload))
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    main_form_valid = main_form.is_valid()
-    bonded_with_form_valid = bonded_with_form.is_valid()
-    edit_upload_form_valid = edit_upload_form.is_valid()
-    if main_form_valid and bonded_with_form_valid and edit_upload_form_valid:
+    if all([main_form.is_valid(), bonded_with_form.is_valid(), edit_upload_form.is_valid()]):
         adoption_record = main_form.save(commit=False)
         adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
         adoption_record.save()
@@ -51,9 +48,7 @@ def render_adoption_editing_view(request, upload, heading):
 def render_lost_editing_view(request, upload, heading):
     main_form = LostForm(request.POST or None, instance=upload.lost)
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    main_form_valid = main_form.is_valid()
-    edit_upload_form_valid = edit_upload_form.is_valid()
-    if main_form_valid and edit_upload_form_valid:
+    if all([main_form.is_valid(), edit_upload_form.is_valid()]):
         main_form.save()
         edit_upload_form.save()
         return redirect('index')
@@ -66,9 +61,7 @@ def render_lost_editing_view(request, upload, heading):
 def render_found_editing_view(request, upload, heading):
     main_form = FoundForm(request.POST or None, instance=upload.found)
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    main_form_valid = main_form.is_valid()
-    edit_upload_form_valid = edit_upload_form.is_valid()
-    if main_form_valid and edit_upload_form_valid:
+    if all([main_form.is_valid(), edit_upload_form.is_valid()]):
         main_form.save()
         edit_upload_form.save()
         return redirect('index')

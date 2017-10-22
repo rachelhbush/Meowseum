@@ -14,9 +14,7 @@ def page(request):
         form1 = UserContactForm1(request.POST or None)
     form2 = UserContactForm2(request.POST or None, instance=request.user)
 
-    form1_valid = form1.is_valid()
-    form2_valid = form2.is_valid()
-    if form1_valid and form2_valid:
+    if all([form1.is_valid(), form2.is_valid()]):
         contact = form1.save(commit=False)
         contact.account = request.user
         contact.save()
