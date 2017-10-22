@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
-from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag
+from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag, validate_bonded_with_IDs
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 
@@ -226,24 +226,11 @@ class BondedWithForm(forms.Form):
     internal_id = forms.CharField(required=False, max_length=255, label="Pet ID",
                                   validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.'),
                                               UniquenessValidator(model=Adoption, field_name='internal_id', error_message="An adoption record with this pet ID already exists.")])
-    bonded_with_IDs = forms.CharField(required=False)
+    bonded_with_IDs = forms.CharField(required=False, validators=[validate_bonded_with_IDs])
     def clean(self):
         cleaned_data = super(BondedWithForm, self).clean()
-        if self.cleaned_data['bonded_with_IDs'] != '' and self.cleaned_data.get('internal_id') == '':
+        if self.cleaned_data.get('bonded_with_IDs') != '' and self.cleaned_data.get('internal_id') == '':
             raise forms.ValidationError('This field is required in order to fill out the "bonded with" field.')
-        if self.cleaned_data['bonded_with_IDs'] != '':
-            list_of_IDs = self.cleaned_data['bonded_with_IDs'].split(',')
-            # For each internal ID, check whether the ID is valid. The only rule is that an ID can't be an empty string. Then, check whether the cat is in the database.
-            for x in range(len(list_of_IDs)):
-                list_of_IDs[x] = list_of_IDs[x].lstrip(' ')
-                if list_of_IDs[x] == '':
-                    raise forms.ValidationError("One of the IDs you provided was an empty string.")
-                else:
-                    try:
-                        animal = Adoption.objects.get(internal_id=list_of_IDs[x])
-                    except Adoption.DoesNotExist:
-                        raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
-        return self.cleaned_data
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None

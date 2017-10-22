@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import capfirst
+from Meowseum.models import Adoption
 
 # 1. General. This section of the file is for validators which are very general or useful for all models.
 
@@ -68,3 +69,18 @@ def validate_tag(string):
     string = string.lstrip("#")
     # Validate.
     pattern.__call__(string)
+
+# Validate the comma-separated list of IDs for pets with which a pet is bonded.
+def validate_bonded_with_IDs(string):
+    if string != '':
+        list_of_IDs = string.split(',')
+        # For each internal ID, check whether the ID is valid. The only rule is that an ID can't be an empty string. Then, check whether the cat is in the database.
+        for x in range(len(list_of_IDs)):
+            list_of_IDs[x] = list_of_IDs[x].lstrip(' ')
+            if list_of_IDs[x] == '':
+                raise ValidationError("One of the IDs you provided was an empty string.")
+            else:
+                try:
+                    animal = Adoption.objects.get(internal_id=list_of_IDs[x])
+                except Adoption.DoesNotExist:
+                    raise ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
