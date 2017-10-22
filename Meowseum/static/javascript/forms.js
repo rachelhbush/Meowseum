@@ -327,35 +327,8 @@ $(document).ready(function() {
         // Despite the default checkbox being hidden, it becomes checked when the user clicks its location. When this happens, check or uncheck the custom checkbox.
         $('.custom-checkbox input[type="checkbox"]').change(forms.adjustCustomCheckbox);
     };
-
-    // 7. Make sure each checkbox with the attribute [data-dependent-on="NAME"] can only be checked when "NAME" is checked.
-    //    When the dependent checkbox is checked, check the independent checkbox. When the independent checkbox is unchecked, uncheck the dependent checkbox.
-    forms.dependentCheckboxes = function() {
-        $("[data-dependent-on]").each(function() {
-            var target = $(this).data("dependent-on");
-            var $target = $('[name="' + target +'"]');
-            var $dependent = $(this);
-            // The script assumes that the dependent checkbox and the target checkbox were both unchecked or checked when the page loaded.
-            $dependent.change(function () {
-                var targetIsChecked = $target.prop("checked");
-                var dependentIsChecked = $dependent.prop("checked");
-                if (!targetIsChecked && dependentIsChecked) {
-                    // Check the target checkbox, which makes its status the same as the dependent checkbox's status.
-                    $target.check();
-                }
-            });
-            $target.change(function () {
-                var targetIsChecked = $target.prop("checked");
-                var dependentIsChecked = $dependent.prop("checked");
-                if (!targetIsChecked && dependentIsChecked) {
-                    // Uncheck the dependent checkbox, which makes its status the same as the target checkbox's status.
-                    $dependent.check();
-                }
-            });
-        });
-    };
     
-    // 8. If a checkbox with the value "Any" is checked, check all checkboxes with the same name attribute. Keep the "Any" checkbox checked as long as all the other checkboxes stay checked.
+    // 7. If a checkbox with the value "Any" is checked, check all checkboxes with the same name attribute. Keep the "Any" checkbox checked as long as all the other checkboxes stay checked.
     //    This function requires that there isn't any duplication of form controls, like a second copy with the same name, or else the script will only be applied to the last one.
     forms.anyCheckbox = function() {
         $('input[type="checkbox"][value="any"],input[type="checkbox"][value="Any"]').each(function() {
@@ -379,7 +352,7 @@ $(document).ready(function() {
         });
     };
     
-    // 9. This function changes the behavior of placeholder text so that it clears when the text field gains focus, instead of when the user begins typing in it.
+    // 8. This function changes the behavior of placeholder text so that it clears when the text field gains focus, instead of when the user begins typing in it.
     forms.clearPlaceholderTextOnFocus = function() {
         $("[placeholder]").each(function() {
             var placeholderText = $(this).attr("placeholder");
@@ -392,7 +365,7 @@ $(document).ready(function() {
         });
     }
     
-    // 10.2 If the user presses enter while typing in the most recently created text field, add a new text field below it.
+    // 9.2 If the user presses enter while typing in the most recently created text field, add a new text field below it.
     //     Pressing enter in any of the earlier text fields will have no effect. This is a recursive function.
     var addNewTextFieldOnEnter = function() {
         $("table.form tr:has(span.add-field) input:last-child").keydown(function(e) {
@@ -413,7 +386,7 @@ $(document).ready(function() {
         });
     };
     
-    // 10.1.1 Input: The <span class="add-field"> for the table row. The form table cell containing the first field. Using these as arguments will allow an event handler containing
+    // 9.1.1 Input: The <span class="add-field"> for the table row. The form table cell containing the first field. Using these as arguments will allow an event handler containing
     //    this function to first obtain the elements using "this" and a convenient path through the DOM. 
     //    Processing: Add a new text field to the form table cell.
     forms.addNewTextField = function($plusSign, $fieldCell) {
@@ -450,7 +423,7 @@ $(document).ready(function() {
         $plusSign.css("top", "+=31px");
     };
     
-    // 10.1 Upon clicking the plus sign in <th>, add a new text field to its adjcent table cell allowing multiple fields.
+    // 9.1 Upon clicking the plus sign in <th>, add a new text field to its adjcent table cell allowing multiple fields.
     var addNewTextFieldOnClick = function() {
         $("table.form th > span.add-field").click(function() {
             $plusSign = $(this);
@@ -465,7 +438,7 @@ $(document).ready(function() {
         });
     };
     
-    // 10. In situations appropriate for one or more text field for one label, like social media URLs, allow the user to click a plus sign by a label to add another field.
+    // 9. In situations appropriate for one or more text field for one label, like social media URLs, allow the user to click a plus sign by a label to add another field.
     //    This function supports all HTML5 form controls which render as text fields when unsupported. In this HTML, use this function by placing <span class="add-field">+</span>
     //    before the table.form label.
     //    Requirements: 1. The field name must not contain any digits except at the end. The digits at the end of the field name must signify its order from the top, starting with 1.
@@ -481,7 +454,7 @@ $(document).ready(function() {
         addNewTextFieldOnEnter();
     };
 
-   // 11.1, 11.4.1, 11.6.1  This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 10.1, 10.4.1, 10.6.1  This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    // Input: selector, a string for the class used by the button the user interacts with, like ".radio-btn". Make sure "this" refers to the clicked element using .call(this,selector).
    forms.checkCorrespondingRadioButton = function(selector) {
        $parent = $(this).parent();
@@ -499,7 +472,7 @@ $(document).ready(function() {
         }
    };
 
-   // 11.5, 11.3.1 This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 10.5, 10.3.1 This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    //        Input: selector, a string for the class used by the button the user interacts with, like ".check-btn". Make sure "this" refers to the clicked element using .call(this,selector).
    forms.checkCorrespondingCheckbox = function(selector){
         $parent = $(this).parent();
@@ -517,7 +490,7 @@ $(document).ready(function() {
         }
    };
     
-    // 11.3 This is a higher-order function which sets up the variables for image button behavior based on the file paths in the data- attributes. If the image button differs between day/night mode, it
+    // 10.3 This is a higher-order function which sets up the variables for image button behavior based on the file paths in the data- attributes. If the image button differs between day/night mode, it
     //     detaches events and re-attaches them with new values for the variables when the user toggles day/night mode. So, adding another widget to forms.buttonRadioAndCheckgroups() only requires writing
     //     another callback function which attaches all of its event handlers.
     //     Input:  callback, the function which attaches all the event handlers to the button.
@@ -599,7 +572,7 @@ $(document).ready(function() {
         callback($parent,widgetHasBeenClicked,activeIcon,inactiveIcon);
     };
     
-    // 11.4 Attach the event handlers for the image radio button.
+    // 10.4 Attach the event handlers for the image radio button.
     forms.attachImageRadioButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // If widget hasn't been clicked yet and it supports alternate file paths, then use a hover effect.
         $("div.radio-btn",$parent).mouseenter(function() {
@@ -631,7 +604,7 @@ $(document).ready(function() {
         });
     };
     
-    // 11.5 Attach the event handlers for the image check button.
+    // 10.5 Attach the event handlers for the image check button.
     forms.attachImageCheckButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // Have a hover effect only if there are alternate file paths, and only while the image check button is inactive.
         // The hover effect toggles the inactive/active file path without toggling the active class.
@@ -662,7 +635,7 @@ $(document).ready(function() {
         });
     };
     
-    // 11.6 Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
+    // 10.6 Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
     //     For example, mousing over the third star in a five-star ratings widget fills the first, second, and third star while leaving the fourth and fifth empty.
     //     When the user stops mousing over any of the icons, they all appear inactive again. The file paths should be the same for each rating widget button in the group.
     //     So that the mouseover effect is continuous, the borders of each rating widget button should all be touching.
@@ -702,7 +675,7 @@ $(document).ready(function() {
         });
     };
     
-   // 11. "Bootstrap check buttons", "Bootstrap radio buttons", "image check buttons", "image radio buttons", and "image buttons" are the terms I use to refer to the widgets this function scripts.
+   // 10. "Bootstrap check buttons", "Bootstrap radio buttons", "image check buttons", "image radio buttons", and "image buttons" are the terms I use to refer to the widgets this function scripts.
    //     This function is for Bootstrap buttons or images which, when clicked or touched ("pressed"), check hidden form controls. Bootstrap has this built-in, but it only works for button groups. When an image
    //     button is clicked, it can change the styling around the image (like a border for highlighting) or switch between file paths. Note that this function doesn't toggle an image representing a check on/off;
    //     this style is covered by other functions. If the form control is for client-side effects only, then you can choose to omit the default form controls from the HTML source code. Other scripts will know
@@ -763,7 +736,7 @@ $(document).ready(function() {
         });
     };
     
-    // 12. This function is necessary for the custom file browse button to work in IE11, but not IE9 or IE10. See scrapbin.css for the documentation.
+    // 11. This function is necessary for the custom file browse button to work in IE11, but not IE9 or IE10. See scrapbin.css for the documentation.
     forms.customFileBrowseButton = function() {
         IEVersion = browserInvestigator.detectIEVersion();
         // Target IE11 only, or else other browsers will open the file picker a second time after closing it.
@@ -774,7 +747,7 @@ $(document).ready(function() {
         };
     };
     
-    // 13.1 For each "same as" checkbox, toggle whether its target fields are readonly. The readonly fields will have the text hidden so that the user can more easily concentrate on the other fields.
+    // 12.1 For each "same as" checkbox, toggle whether its target fields are readonly. The readonly fields will have the text hidden so that the user can more easily concentrate on the other fields.
     // In the style sheet, the readonly fields must be styled as greyed out, or else the fields will mistakenly appear blank.
     forms.toggleReadonlyTargetFields = function() {
         targetNames = $(this).data("target-fields").split(", ");
@@ -791,7 +764,7 @@ $(document).ready(function() {
         }
     };
     
-    // 13.2 For each "same as" checkbox, copy the values from its source fields to its target fields. Then, submit the form.
+    // 12.2 For each "same as" checkbox, copy the values from its source fields to its target fields. Then, submit the form.
     forms.copySameAsValuesAndSubmit = function(e) {
         e.preventDefault();
         $("[data-source-fields]", $(this)).each(function() {
@@ -810,7 +783,7 @@ $(document).ready(function() {
         this.submit();
     };
     
-    // 13. This function scripts a checkbox which, when checked, will copy values from a set of fields into another set of fields.
+    // 12. This function scripts a checkbox which, when checked, will copy values from a set of fields into another set of fields.
     // HTML: <input type="checkbox" data-source-fields="" data-target-fields=""/> Use a comma-separated list of the names of the fields.
     // This function only works for text fields, HTML5 fields which render as text fields in old browsers, and <select>s.
     forms.sameAsCheckbox = function() {
@@ -818,7 +791,7 @@ $(document).ready(function() {
         $('form:has([data-source-fields])').on("submit", forms.copySameAsValuesAndSubmit);
     };
     
-    // 14. In this scenario, a yes/no question with radio buttons has another question, within the same <div class="field">, that is hidden.
+    // 13. In this scenario, a yes/no question with radio buttons has another question, within the same <div class="field">, that is hidden.
     //     Display the hidden question, contained in an element with the class "follow-up", if "yes" is checked.
     forms.prepareYesNoFollowUps = function() {
         $(".follow-up").hide();
@@ -834,7 +807,7 @@ $(document).ready(function() {
         });
     };
     
-    // 15. This function is for a container of form fields that are hidden until certain options are selected in other form controls above it. See the CSS file for example HTML.
+    // 14. This function is for a container of form fields that are hidden until certain options are selected in other form controls above it. See the CSS file for example HTML.
     forms.nestedForms = function() {
         $(".nested-form").each(function() {
             $(".collapse", $(this)).on("show.bs.collapse", function() {
@@ -850,7 +823,7 @@ $(document).ready(function() {
         });
     };
     
-    // 16. This function styles a "Today" button to the right of a date form control and a "Now" button to the right of a time form control.
+    // 15. This function styles a "Today" button to the right of a date form control and a "Now" button to the right of a time form control.
     forms.todayAndNowButtons = function() {
         $('input[type="date"]+button').click(function() {
             // If the browser has a date picker, then setting the value of the field will require the standard format, which will be rendered as MM/DD/YYYY regardless.
@@ -884,16 +857,15 @@ $(document).ready(function() {
         forms.checkboxDropdowns(); // 4
         forms.scrollableCheckboxes(); // 5
         forms.customCheckboxes(); // 6
-        forms.dependentCheckboxes(); // 7
-        forms.anyCheckbox(); // 8
-        forms.clearPlaceholderTextOnFocus(); // 9
-        forms.oneOrMoreFields(); // 10
-        forms.buttonRadioAndCheckgroups(); // 11
-        forms.customFileBrowseButton(); // 12
-        forms.sameAsCheckbox(); // 13
-        forms.prepareYesNoFollowUps(); // 14
-        forms.nestedForms(); // 15
-        forms.todayAndNowButtons(); // 16
+        forms.anyCheckbox(); // 7
+        forms.clearPlaceholderTextOnFocus(); // 8
+        forms.oneOrMoreFields(); // 9
+        forms.buttonRadioAndCheckgroups(); // 10
+        forms.customFileBrowseButton(); // 11
+        forms.sameAsCheckbox(); // 12
+        forms.prepareYesNoFollowUps(); // 13
+        forms.nestedForms(); // 14
+        forms.todayAndNowButtons(); // 15
     };
     main();
 });
