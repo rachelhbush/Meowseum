@@ -55,10 +55,12 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'Meowseum_Project.urls'
 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'Meowseum/templates')], # Let Django know where to look for templates.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,9 +118,6 @@ warnings.filterwarnings(
 # Character encoding
 DEFAULT_CHARSET='utf-8'
 
-# Let Django know where to look for templates.
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'Meowseum/templates'),)
 # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
   
 # Static files (CSS, JavaScript, Images)
