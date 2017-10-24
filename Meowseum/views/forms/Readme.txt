@@ -1,1 +1,0 @@
-This folder is for views that are used for processing a form, but not for showing a navigable page.
