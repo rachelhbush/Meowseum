@@ -19,9 +19,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.db.models import Count
 from django.utils import timezone
-# These two lines are related to import_directory().
-from os import listdir
-from os.path import dirname, basename, isfile, splitext, join
 
 # Section 1. Utility functions.
 
@@ -137,23 +134,6 @@ def paginate_records(request, records, records_per_page=25):
     except EmptyPage:
         paginated_records = paginator.page(paginator.num_pages)
     return paginated_records
-
-# Return a list of files for a "from directory import *" statement to import. In a Django app, this function will used by views/__init__.py so the app's urls.py
-# can import the views as callables. In the directory, create a __init__.py file with the text
-# from Meowseum.common_view_functions import import_directory
-# __all__ = import_directory(__file__)
-# Input: init_file, a path string. limit_to_exts, an optional list of extensions. Most commonly, this will be ['.py'] when specified.
-# Output: list of file names
-def import_directory(init_file, limit_to_exts=None):
-    directory = dirname(init_file)
-    # Get a list of directories and file names with extensions in this file's directory.
-    modules = listdir(directory)
-    # For each item, filter down to only files, aside from this file, and remove the extension.
-    if limit_to_exts != None:
-        all_value = [ splitext(f)[0] for f in modules if isfile(join(directory, f)) and not f.endswith('__init__.py') and splitext(f)[1] in limit_to_exts]
-    else:
-        all_value = [ splitext(f)[0] for f in modules if isfile(join(directory, f)) and not f.endswith('__init__.py')]
-    return all_value
 
 # Section 2. Site functions. The sorting functions are used by gallery pages which specifically use the sorting order, and they're included here because in the
 # future they'll be an option in the advanced search menu.
