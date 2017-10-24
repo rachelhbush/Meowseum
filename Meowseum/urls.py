@@ -1,13 +1,11 @@
-from django.conf.urls import url, include
-from django.contrib import admin
-from .views import *
+from django.conf.urls import url
+from Meowseum.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 # These lines pre-emptively import the built-in classes and functions for CBVs.
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
-admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', gallery.front_page, name="index"),
