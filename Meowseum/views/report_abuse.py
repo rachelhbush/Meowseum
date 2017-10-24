@@ -16,7 +16,7 @@ def page(request):
                                  abuse_type=form.cleaned_data['abuse_type'],
                                  abuse_description=form.cleaned_data['abuse_description'],
                                  url=form.cleaned_data['url'])
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             new_record.filer = request.user
         new_record.save()
         return redirect('index')

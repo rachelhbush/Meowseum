@@ -14,7 +14,7 @@ def page(request, username):
     # when JavaScript is disabled, then this page redirects back. When redirecting occurs, redirect to the user page when the previous URL is unknown.
     previous_URL = request.GET.get('next', reverse('gallery', args=[username]))
     # Check whether the user is a logged in moderator.
-    if request.user.is_authenticated() and request.user.has_perm('Meowseum.change_user'):
+    if request.user.is_authenticated and request.user.has_perm('Meowseum.change_user'):
         uploader_user = get_object_or_404(User, username=username)
         
         response_data = [{}]

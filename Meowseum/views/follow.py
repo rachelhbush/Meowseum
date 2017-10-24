@@ -14,7 +14,7 @@ def page(request, username):
     # When JavaScript is disabled, the various pages redirect to this page, and this page redirects back.
     # Redirect to the user uploads gallery page when the previous URL is unknown.
     previous_URL = request.GET.get('next', reverse('gallery', args=[username]))
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         uploader_user = get_object_or_404(User, username=username)
         follow_or_unfollow(request.user, uploader_user)
 

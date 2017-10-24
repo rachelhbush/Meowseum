@@ -142,7 +142,7 @@ def paginate_records(request, records, records_per_page=25):
 # Input: logged_in_user (request.user). Output: upload_queryset.
 def get_public_unmuted_uploads(logged_in_user):
     upload_queryset = Upload.objects.filter(is_publicly_listed=True)
-    if logged_in_user.is_authenticated():
+    if logged_in_user.is_authenticated:
         upload_queryset = upload_queryset.exclude(uploader__user_profile__in=logged_in_user.user_profile.muting.all())
     return upload_queryset
 

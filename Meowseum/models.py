@@ -262,7 +262,7 @@ class Comment(models.Model):
 class UserProfile(models.Model):
     # 1. This section is for authentication information.
     # In views, remember to test for whether the user is logged in before referencing user_profile, or else an exception will occur,
-    # as in "if request.user.is_authenticated() and request.user.user_profile".
+    # as in "if request.user.is_authenticated and request.user.user_profile".
     user_auth = models.OneToOneField(User, related_name="user_profile", primary_key=True)
     registered_with_ip_address = models.CharField(max_length=45, verbose_name="IP address at the time of registration", default="", blank=True)
     # Linked from User, required: username, password, email. Optional: is_active, date_joined, last_login, is_staff, first_name, last_name, get_full_name()

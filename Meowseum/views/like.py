@@ -9,7 +9,7 @@ from django.http import HttpResponse
 
 # 0. Main function.
 def page(request, relative_url):    
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         upload = get_object_or_404(Upload, relative_url=relative_url)
         like_or_unlike(upload, request.user)
         if request.is_ajax():

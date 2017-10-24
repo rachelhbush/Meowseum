@@ -15,7 +15,7 @@ def page(request, relative_url):
     upload = get_object_or_404(Upload, relative_url=relative_url)
     
     if request.is_ajax():
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             comment_form = CommentForm(request.POST or None)
             if comment_form.is_valid():
                 comment = save_comment_form(upload, comment_form, request.user)
@@ -27,7 +27,7 @@ def page(request, relative_url):
             # Redirect the user back to the previous page after the user logs in.
             return ajaxWholePageRedirect(request, 'login', query = 'next=' + reverse('slide_page', args=[relative_url]))
     else:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             comment_form = CommentForm(request.POST or None)
             if comment_form.is_valid():
                 save_comment_form(upload, comment_form, request.user)

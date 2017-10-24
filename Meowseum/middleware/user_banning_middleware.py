@@ -7,5 +7,5 @@ from django.contrib.auth import logout
 class LogoutBannedUserMiddleware(object):
     # When a user's account is disabled, Django will force the user to log out as soon as the user visits another page.
     def process_request(self, request):
-        if request.user.is_authenticated() and not request.user.is_active:
+        if request.user.is_authenticated and not request.user.is_active:
            logout(request)

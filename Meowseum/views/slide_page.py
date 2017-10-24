@@ -20,7 +20,7 @@ def page(request, relative_url):
     poster_directory = hosting_limits_for_Upload['poster_directory']
     upload_directory = Upload.UPLOAD_TO
     uploader = upload.uploader.user_profile
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         viewer = request.user.user_profile
     else:
         viewer = None
@@ -113,7 +113,7 @@ def get_unique_views(request, relative_url):
 
 # 3. Retrieve the set of comments for the upload while excluding comments from muted users.
 def get_comments_from_unmuted_users(request, upload):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # Because muting is stored on UserProfile and the commenter uses the User object, retrieve an array of User objects.
         muted_users = []
         for profile in request.user.user_profile.muting.all():
@@ -129,7 +129,7 @@ def get_comments_from_unmuted_users(request, upload):
 # Output: user_has_liked_this_upload, True or False.
 def check_whether_user_has_liked_this_upload(request, upload):
     user_has_liked_this_upload = False
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             like_record = Like.objects.get(upload=upload, liker=request.user)
             user_has_liked_this_upload = True

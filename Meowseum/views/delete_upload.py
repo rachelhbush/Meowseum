@@ -10,7 +10,7 @@ from django.core.exceptions import PermissionDenied
 import json
 
 def page(request, relative_url):    
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         upload = get_object_or_404(Upload, relative_url=relative_url)
         uploader = upload.uploader.user_profile
         viewer = request.user.user_profile

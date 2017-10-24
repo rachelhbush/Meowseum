@@ -17,7 +17,7 @@ from Meowseum.views.search import get_search_queryset
 # If the user is logged in, then this is the same as the followed user page.
 def front_page(request):
     increment_hit_count(request, "index")
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if 'saved_search' in request.session:
             return process_saved_search(request)
         else:
@@ -72,7 +72,7 @@ def tag_gallery(request, tag_name):
         upload_queryset = get_public_unmuted_uploads(request.user)
         upload_queryset = upload_queryset.filter(tags=tag)
         upload_queryset = list(sort_by_trending(upload_queryset))
-        if request.user.is_authenticated() and tag in request.user.user_profile.subscribed_tags.all():
+        if request.user.is_authenticated and tag in request.user.user_profile.subscribed_tags.all():
             subscribed = True
         else:
             subscribed = False
@@ -104,7 +104,7 @@ def uploads(request, username):
 
     # Check whether the user is following the owner of the profile.
     # The first part of this predicate prevents an exception from occurring when the user is logged out and has no user_profile.
-    if request.user.is_authenticated() and user.user_profile in request.user.user_profile.following.all():
+    if request.user.is_authenticated and user.user_profile in request.user.user_profile.following.all():
         following = True
     else:
         following = False
@@ -143,7 +143,7 @@ def likes(request, username):
 
     # Check whether the user is following the owner of the profile.
     # The first part of this predicate prevents an exception from occurring when the user is logged out and has no user_profile.
-    if request.user.is_authenticated() and user.user_profile in request.user.user_profile.following.all():
+    if request.user.is_authenticated and user.user_profile in request.user.user_profile.following.all():
         following = True
     else:
         following = False

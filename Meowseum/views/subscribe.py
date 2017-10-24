@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 import json
 
 def page(request, tag_name):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         tag = get_object_or_404(Tag, name=tag_name.lower())
         
         if tag in request.user.user_profile.subscribed_tags.all():

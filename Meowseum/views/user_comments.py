@@ -30,7 +30,7 @@ def page(request, username):
 
     # Check whether the user is following the owner of the profile.
     # The first part of this predicate prevents an exception from occurring when the user is logged out and has no user_profile.
-    if request.user.is_authenticated() and user.user_profile in request.user.user_profile.following.all():
+    if request.user.is_authenticated and user.user_profile in request.user.user_profile.following.all():
         following = True
     else:
         following = False

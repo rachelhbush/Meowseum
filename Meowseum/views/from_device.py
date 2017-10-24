@@ -16,7 +16,7 @@ from Meowseum.file_handling.file_utility_functions import move_file, make_unique
 # 0. Main function
 def page(request):
     # This is the outermost if-statement because a user shouldn't be accessing this page via AJAX unless the user is logged in.
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         form = FromDeviceForm(request.POST or None, request.FILES or None)
         # If the user has submitted a form, begin validation.
         metadata, form = get_validated_metadata('file', form, request.FILES, validation_specifications_for_Upload)
@@ -107,7 +107,7 @@ def get_user_information(new_upload, request):
     if ip_address is not None:
         new_upload.uploader_ip = get_real_ip(request)
     # If the user is logged in, store the account information.
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         new_upload.uploader = request.user
     return new_upload
 

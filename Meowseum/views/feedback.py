@@ -12,7 +12,7 @@ def page(request):
     metadata, form = get_validated_metadata('screenshot', form, request.FILES, validation_specifications_for_Feedback)
     if form.is_valid():
         new_feedback = form.save(commit=False)
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             new_feedback.author = request.user
         new_feedback.save()
         if new_feedback.screenshot != None:
