@@ -204,12 +204,12 @@ JHEAD_PATH = r'C:\Program Files (x86)\Python35-32\Lib\site-packages_editable\jhe
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'database.db'),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Meowseum',
+        'USER': 'postgres',
+        'PASSWORD': '0verflow',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
