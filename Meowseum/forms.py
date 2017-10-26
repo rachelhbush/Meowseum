@@ -200,7 +200,7 @@ class ShelterForm(forms.ModelForm):
 
 class PetInfoForm(forms.ModelForm):
     sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
-    is_dilute = forms.ChoiceField(required=False, label='Dilute?', choices=PetInfo.IS_DILUTE_CHOICES, widget=forms.RadioSelect())
+    is_dilute = forms.NullBooleanField(required=False, label='Dilute?', widget=forms.RadioSelect(choices=PetInfo.IS_DILUTE_CHOICES))
     other_physical = forms.MultipleChoiceField(required=False, label='Other physical features', choices=PetInfo.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
     age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
     disabilities = forms.MultipleChoiceField(required=False, label='Disabilities and special needs', choices=PetInfo.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
