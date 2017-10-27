@@ -34,9 +34,8 @@ class UniquenessValidator(CustomValidator):
         self.model = model
         self.field_name = field_name
         if error_message == 'default':
-            # Supply Django's default "not unique" error message. The .title() is needed in order for the first letter to be capitalized, but I'm not sure whether Django's
-            # default uses titlecase or just capitalizes the first letter. 
-            self.error_message = str(model._meta.verbose_name.title()) + " with this " + capfirst(model._meta.get_field(field_name).verbose_name) + " already exists."
+            # Supply Django's default "not unique" error message.
+            self.error_message = capfirst(model._meta.verbose_name) + " with this " + capfirst(model._meta.get_field(field_name).verbose_name) + " already exists."
         else:
             self.error_message = error_message
     def __call__(self, value):

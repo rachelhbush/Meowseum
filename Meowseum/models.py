@@ -128,6 +128,9 @@ class ExceptionRecord(models.Model):
     traceback = models.TextField(max_length=100000, verbose_name="traceback")
     def __str__(self):
         return "Exception at " + self.path
+    class Meta:
+        verbose_name = "exception record"
+        verbose_name_plural = "exception records"
 
 validation_specifications_for_Upload = {
     'file_type': ('image', 'video'),
@@ -233,7 +236,8 @@ class Metadata(models.Model):
         else:
             return "Metadata #" + str(self.id)
     class Meta:
-        verbose_name_plural = "Metadata"
+        verbose_name = "metadata record"
+        verbose_name_plural = "metadata records"
 
 class Tag(models.Model):
     # Tags have their own model in order to be able to sort tags by the number of uploads that are associated with them.
@@ -313,6 +317,9 @@ class UserProfile(models.Model):
                 return False
     def __str__(self):
         return self.user_auth.username
+    class Meta:
+        verbose_name = "user profile"
+        verbose_name_plural = "user profiles"
 
 class AbuseReport(models.Model):
     ABUSE_TYPE_CHOICES = (('spam, malware, or phishing', 'Spam, malware, phishing'),
@@ -335,6 +342,9 @@ class AbuseReport(models.Model):
             return self.abuse_description
         else:
             return self.abuse_type.capitalize() + " report #" + str(self.id)
+    class Meta:
+        verbose_name = "abuse report"
+        verbose_name_plural = "abuse reports"
 
 validation_specifications_for_Feedback = {
     'file_type': ('image',),
@@ -356,7 +366,8 @@ class Feedback(models.Model):
     def __str__(self):
         return self.subject
     class Meta:
-        verbose_name_plural = "Feedback records"
+        verbose_name = "feedback record"
+        verbose_name_plural = "feedback records"
 
 # The models above this comment are relevant to any social media site. The models below this comment are relevant only to an adoption, lost, or found pet site.
 
@@ -375,7 +386,8 @@ class UserContact(models.Model):
     def __str__(self):
         return self.account.username
     class Meta:
-        verbose_name_plural = "Contact information records"
+        verbose_name = "contact information record"
+        verbose_name_plural = "contact information records"
 
 class Shelter(models.Model):
     # Users can apply to create a profile for a shelter or rescue group that is linked to the information they log in with.
@@ -625,7 +637,8 @@ class Adoption(PetInfo):
     def __str__(self):
         return self.pet_name
     class Meta:
-        verbose_name_plural = "'Adoption' uploads"
+        verbose_name = "adoption upload"
+        verbose_name_plural = "adoption uploads"
 
 class LostFoundInfo(PetInfo):
     # These fields are common to the Lost and Found categories.
@@ -679,7 +692,8 @@ class Lost(LostFoundInfo):
     def __str__(self):
         return self.pet_name
     class Meta:
-        verbose_name_plural = "'Lost' uploads"
+        verbose_name = "lost pet upload"
+        verbose_name_plural = "lost pet uploads"
 
 class Found(LostFoundInfo):
     IS_SIGHTING_CHOICES = ((True, "I am reporting that I've seen a lost cat."),
@@ -697,4 +711,5 @@ class Found(LostFoundInfo):
     def __str__(self):
         return "Found pet #" + self.id
     class Meta:
-        verbose_name_plural = "'Found' uploads"
+        verbose_name = "found pet upload"
+        verbose_name_plural = "found pet uploads"
