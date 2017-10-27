@@ -81,7 +81,7 @@ class UploadPage1(forms.Form):
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
     upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
     tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
-    popular_tags = forms.MultipleChoiceField(required=False, label='Browse popular tags', choices=popular_tags, widget=forms.CheckboxSelectMultiple() )
+    popular_tags = MultipleChoiceField(required=False, label='Browse popular tags', choices=popular_tags)
     is_publicly_listed = forms.BooleanField(required=False, label=mark_safe('<span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.'))
     uploader_has_disabled_comments = forms.BooleanField(required=False, label='Disable comments')
     def __init__(self, *args, **kwargs):
@@ -193,12 +193,7 @@ class ShelterForm(forms.ModelForm):
 class PetInfoForm(forms.ModelForm):
     sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
     is_dilute = forms.NullBooleanField(required=False, label='Dilute?', widget=forms.RadioSelect(choices=PetInfo.IS_DILUTE_CHOICES))
-    other_physical = forms.MultipleChoiceField(required=False, label='Other physical features', choices=PetInfo.CAT_OTHER_PHYSICAL_CHOICES, widget=forms.CheckboxSelectMultiple())
     age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
-    disabilities = forms.MultipleChoiceField(required=False, label='Disabilities and special needs', choices=PetInfo.CAT_DISABILITY_CHOICES, widget=forms.CheckboxSelectMultiple())
-    public_contact_information = forms.MultipleChoiceField(required=False,
-                                                           label=mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.'),
-                                                           choices=PetInfo.PUBLIC_CONTACT_INFORMATION_CHOICES, widget=forms.CheckboxSelectMultiple())
     class Meta:
         model = PetInfo
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
@@ -206,7 +201,6 @@ class PetInfoForm(forms.ModelForm):
 
 class AdoptionForm(PetInfoForm):
     pet_name = forms.CharField(label='Pet name')
-    has_been = forms.MultipleChoiceField(required=False, label='This cat has been', choices=Adoption.HAS_BEEN_CHOICES, widget=forms.CheckboxSelectMultiple())
     adoption_fee = forms.FloatField(required=False, label='Adoption fee', widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Adoption
@@ -229,19 +223,17 @@ class BondedWithForm(forms.Form):
 class LostFoundInfo(PetInfoForm):
     eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
     eye_color_other = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"other"}) )
-    nose_color = forms.MultipleChoiceField(required=False, choices=LostFoundInfo.NOSE_COLOR_CHOICES, widget=forms.CheckboxSelectMultiple())
     date = HTML5DateField()
     class Meta:
         model = LostFoundInfo
-        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings', 'yes_or_no_questions', 'collar_color', 'collar_description')
+        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings', 'collar_color', 'collar_description')
 
 class LostForm(LostFoundInfo):
     pet_name = forms.CharField()
-    yes_or_no_questions = forms.MultipleChoiceField(required=False, label='Which of the following apply to the cat?', choices=Lost.YES_OR_NO_QUESTIONS_CHOICES, widget=forms.CheckboxSelectMultiple())
     reward = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Lost
-        fields = LostFoundInfo.Meta.fields + ('microchip_or_tattoo_ID', 'reward')
+        fields = LostFoundInfo.Meta.fields + ('yes_or_no_questions', 'microchip_or_tattoo_ID', 'reward')
 
 class VerifyDescriptionForm(forms.ModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
@@ -251,10 +243,9 @@ class VerifyDescriptionForm(forms.ModelForm):
  
 class FoundForm(LostFoundInfo):
     is_sighting = forms.ChoiceField(initial=False, choices=Found.IS_SIGHTING_CHOICES, widget=forms.RadioSelect())
-    yes_or_no_questions = forms.MultipleChoiceField(required=False, label='Which of the following apply to the cat?', choices=Found.YES_OR_NO_QUESTIONS_CHOICES, widget=forms.CheckboxSelectMultiple())
     class Meta:
         model = Found
-        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'internal_id')
+        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'yes_or_no_questions', 'internal_id')
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None

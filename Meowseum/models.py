@@ -547,15 +547,17 @@ class PetInfo(models.Model):
     # The first color is the one that covers most of the animal's body, and the second color is the one covering a minority of it.
     color2 = models.CharField(max_length=255, verbose_name="color 2", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
     age_rating = models.CharField(max_length=255, verbose_name="approximate age", default="", blank=True)
-    other_physical = models.CharField(max_length=255, verbose_name="other physical features", default="", blank=True)
-    disabilities = models.CharField(max_length=1000, verbose_name="disabilities and special needs", default="", blank=True)
+    other_physical = ChoiceArrayField(models.CharField(max_length=100, choices=CAT_OTHER_PHYSICAL_CHOICES), verbose_name="other physical features", blank=True)
+    disabilities = ChoiceArrayField(models.CharField(max_length=100, choices=CAT_DISABILITY_CHOICES), verbose_name="disabilities and special needs", blank=True)
     # These fields are included even for lost pets because the Nashville Humane Asssociation's lost/found form has these fields,
     # and Lost notices on animal control sites commonly use a weight range. These fields are targeted toward interacting with shelters.
     weight = models.FloatField(verbose_name="weight", null=True, blank=True)
     weight_units = models.CharField(max_length=255, verbose_name="weight units", choices=(('', ''),) + WEIGHT_UNIT_CHOICES, default="lbs", blank=True)
     precise_age = models.FloatField(verbose_name="age", null=True, blank=True)
     age_units = models.CharField(max_length=255, verbose_name="age units", choices=(('', ''),) + AGE_UNIT_CHOICES, default="months", blank=True)
-    public_contact_information = models.CharField(max_length=1000, verbose_name="public contact information", default="", blank=True)
+    public_contact_information = ChoiceArrayField(models.CharField(max_length=100, choices=PUBLIC_CONTACT_INFORMATION_CHOICES),
+                                                  verbose_name=mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.'),
+                                                  blank=True)
     # The only required field for Adoption and Lost is the name. The only required field for Found is whether it is a sighting.
     # These are methods for making it easier to talk about the animal in a sentence.
     def subjective_pronoun(self):
@@ -611,8 +613,8 @@ class Adoption(PetInfo):
     ('microchipped', 'Microchipped'),
     ('tested and treated for worms, ticks, and fleas', mark_safe('Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span><div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>')))
 
-    prefers_a_home_without = ChoiceArrayField(models.CharField(max_length=100, choices=PREFERS_A_HOME_WITHOUT_CHOICES), verbose_name="This cat prefers a home without", blank=True)
-    has_been = models.CharField(max_length=1000, verbose_name="has been", default="", blank=True)
+    prefers_a_home_without = ChoiceArrayField(models.CharField(max_length=100, choices=PREFERS_A_HOME_WITHOUT_CHOICES), verbose_name="this cat prefers a home without", blank=True)
+    has_been = ChoiceArrayField(models.CharField(max_length=100, choices=HAS_BEEN_CHOICES), verbose_name="this cat has been", blank=True)
     energy_level = models.CharField(max_length=255, verbose_name="energy level", choices=(('', 'Select an energy level'),) + ENERGY_LEVEL_CHOICES, default="", blank=True)
     # To fill out the "Bonded with" field, the user will enter the ID used internally by the organization or the relative URL.
     internal_id = models.CharField(max_length=255, verbose_name="pet ID", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
@@ -655,11 +657,10 @@ class LostFoundInfo(PetInfo):
 
     eye_color = models.CharField(max_length=255, verbose_name="eye color", default="", blank=True)
     eye_color_other = models.CharField(max_length=255, verbose_name="eye color - Other", default="", blank=True)
-    nose_color = models.CharField(max_length=255, verbose_name="nose color", default="", blank=True)
+    nose_color = ChoiceArrayField(models.CharField(max_length=100, choices=NOSE_COLOR_CHOICES), verbose_name="nose color", blank=True)
     date = models.DateField(verbose_name="date", null=True, blank=True)
     location = models.TextField(max_length=10000, verbose_name="location", default="", blank=True)
     other_special_markings = models.TextField(max_length=10000, verbose_name="other special markings", default="", blank=True)
-    yes_or_no_questions = models.CharField(max_length=1000, verbose_name="miscellaneous yes or no questions", default="", blank=True)
     collar_color = models.CharField(max_length=255, verbose_name="collar color", choices=(('', 'Pick a color'),) + COLLAR_COLOR_CHOICES, default="", blank=True)
     collar_description = models.CharField(max_length=10000, verbose_name="collar description", default="", blank=True)
     class Meta:
@@ -672,6 +673,7 @@ class Lost(LostFoundInfo):
     ('spayed or neutered', 'Spayed or neutered'),
     ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'))
 
+    yes_or_no_questions = ChoiceArrayField(models.CharField(max_length=100, choices=YES_OR_NO_QUESTIONS_CHOICES), verbose_name="Which of the following apply to the cat?", blank=True)
     microchip_or_tattoo_ID = models.CharField(max_length=10000, verbose_name="microchip or tattoo ID", default="", blank=True)
     reward = models.FloatField(verbose_name="reward", null=True, blank=True)
     def __str__(self):
@@ -685,8 +687,9 @@ class Found(LostFoundInfo):
     YES_OR_NO_QUESTIONS_CHOICES = (('has a collar', 'Has a collar'),
     ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'),
     ('no microchip detected during scan', 'No microchip detected during scan'))
-    
+
     is_sighting = models.BooleanField(verbose_name="is a sighting", default=False, blank=True)
+    yes_or_no_questions = ChoiceArrayField(models.CharField(max_length=100, choices=YES_OR_NO_QUESTIONS_CHOICES), verbose_name="Which of the following apply to the cat?", blank=True)
     # This field is for shelters that post pets to the Found section for a few weeks before moving them to the Adoption section
     # and use IDs for those pets, like the pets they have available for adoption.
     internal_id = models.CharField(max_length=255, verbose_name="ID (shelters)", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
