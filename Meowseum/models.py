@@ -6,7 +6,10 @@
 #                                          Adoption, Lost, Found
 
 from django.db import models
+from Meowseum.custom_form_fields_and_widgets import MultipleChoiceField
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
+from django import forms
 from hitcount.models import HitCountMixin
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
 from Meowseum.file_handling.CustomStorage import CustomStorage
@@ -86,6 +89,23 @@ STATE_OR_PROVINCE_CHOICES = (('Alberta', 'Alberta'),
                              ('Wisconsin', 'Wisconsin'),
                              ('Wyoming', 'Wyoming'),
                              ('Yukon Territory', 'Yukon Territory'))
+
+# Custom model fields.
+class ChoiceArrayField(ArrayField):
+    """
+    A field that allows us to store an array of choices. Uses Django 1.11's postgres ArrayField
+    and a MultipleChoiceField for its formfield, with a checkbox group as the default widget.
+    """
+ 
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': MultipleChoiceField,
+            'choices': self.base_field.choices,
+        }
+        defaults.update(kwargs)
+        # Skip our parent's formfield implementation completely as we don't care for it.
+        # pylint:disable=bad-super-call
+        return super(ArrayField, self).formfield(**defaults)
 
 class Page(models.Model):
     # This model is used with django-hitcount to keep track of page views across the site. The first field is the DRY name of the page in urls.py.
@@ -591,7 +611,7 @@ class Adoption(PetInfo):
     ('microchipped', 'Microchipped'),
     ('tested and treated for worms, ticks, and fleas', mark_safe('Tested and treated for worms, ticks, and fleas<span id="accredation-asterisk">*</span><div class="small" id="accredation-footnote">by a <a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited veterinary service</div>')))
 
-    prefers_a_home_without = models.CharField(max_length=1000, verbose_name="prefers a home without", default="", blank=True)
+    prefers_a_home_without = ChoiceArrayField(models.CharField(max_length=100, choices=PREFERS_A_HOME_WITHOUT_CHOICES), verbose_name="This cat prefers a home without", blank=True)
     has_been = models.CharField(max_length=1000, verbose_name="has been", default="", blank=True)
     energy_level = models.CharField(max_length=255, verbose_name="energy level", choices=(('', 'Select an energy level'),) + ENERGY_LEVEL_CHOICES, default="", blank=True)
     # To fill out the "Bonded with" field, the user will enter the ID used internally by the organization or the relative URL.

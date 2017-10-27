@@ -3,6 +3,7 @@
 # The completed form is then sent to a separate view for processing.
 
 from django import forms
+from Meowseum.custom_form_fields_and_widgets import HTML5DateInput, HTML5DateField, MultipleChoiceField
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
@@ -10,15 +11,6 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag, validate_bonded_with_IDs
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
-
-# Custom widgets
-class HTML5DateInput(forms.DateInput):
-    input_type='date'
-
-# Custom fields
-class HTML5DateField(forms.DateField):
-    input_formats = ['%m/%d/%Y', '%m-%d-%Y', '%Y-%m-%d', '%m/%d/%y']
-    widget = HTML5DateInput(format='%m/%d/%Y', attrs={'placeholder':'mm/dd/yyyy'} )
 
 # Variables used by multiple forms
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
@@ -214,7 +206,6 @@ class PetInfoForm(forms.ModelForm):
 
 class AdoptionForm(PetInfoForm):
     pet_name = forms.CharField(label='Pet name')
-    prefers_a_home_without = forms.MultipleChoiceField(required=False, label='This cat would prefer a home without', choices=Adoption.PREFERS_A_HOME_WITHOUT_CHOICES, widget=forms.CheckboxSelectMultiple())
     has_been = forms.MultipleChoiceField(required=False, label='This cat has been', choices=Adoption.HAS_BEEN_CHOICES, widget=forms.CheckboxSelectMultiple())
     adoption_fee = forms.FloatField(required=False, label='Adoption fee', widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
