@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import capfirst
+from django.conf import settings
 from Meowseum.models import Adoption
 
 # 1. General. This section of the file is for validators which are very general or useful for all models.
@@ -27,16 +28,16 @@ class CustomValidator(object):
 # Check if a record already exists with the value the user entered, for a given model and a given field. Use this class when a model field has unique=True and it
 # has a corresponding field in a Form class, or, in a ModelForm, the field will be overriden, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception.
 # Input (as keyword arguments): model, a class. field_name, a string. error_message, a string (optional). If the last argument is not provided, the function provides
-# a default "not unique" error message, '[Model verbose name, with the first letter capitalized] with this "[field's verbose name, with the first letter capitalized]"
-# value already exists.'
+# a default "not unique" error message under settings, which is '[Model verbose name, with the first letter capitalized] with this "[field's verbose name, with the
+# first letter capitalized]" value already exists.'
 # Output: None.
 class UniquenessValidator(CustomValidator):
     def __init__(self, model, field_name, error_message='default'):
         self.model = model
         self.field_name = field_name
         if error_message == 'default':
-            # Supply a default "not unique" error message.
-            self.error_message = capfirst(model._meta.verbose_name) + ' with this "' + capfirst(model._meta.get_field(field_name).verbose_name) + '" value already exists.'
+            # Supply the default "not unique" error message specified under settings. If the string doesn't contain these variables, it doesn't have any negative effects.
+            self.error_message = settings.DEFAULT_UNIQUE_ERROR_MESSAGE % {'model_name': capfirst(model._meta.verbose_name), 'field_label': capfirst(model._meta.get_field(field_name).verbose_name)}
         else:
             self.error_message = error_message
     def __call__(self, value):
