@@ -26,16 +26,17 @@ class CustomValidator(object):
 @deconstructible
 # Check if a record already exists with the value the user entered, for a given model and a given field. Use this class when a model field has unique=True and it
 # has a corresponding field in a Form class, or, in a ModelForm, the field will be overriden, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception.
-# Input (as keyword arguments): model, a class. field_name, a string. error_message, a string (optional). If the last argument is not provided, the function uses
-# Django's default "not unique" error message, "[Model name] with this [field's verbose name, with the first letter capitalized] already exists."
+# Input (as keyword arguments): model, a class. field_name, a string. error_message, a string (optional). If the last argument is not provided, the function provides
+# a default "not unique" error message, '[Model verbose name, with the first letter capitalized] with this "[field's verbose name, with the first letter capitalized]"
+# value already exists.'
 # Output: None.
 class UniquenessValidator(CustomValidator):
     def __init__(self, model, field_name, error_message='default'):
         self.model = model
         self.field_name = field_name
         if error_message == 'default':
-            # Supply Django's default "not unique" error message.
-            self.error_message = capfirst(model._meta.verbose_name) + " with this " + capfirst(model._meta.get_field(field_name).verbose_name) + " already exists."
+            # Supply a default "not unique" error message.
+            self.error_message = capfirst(model._meta.verbose_name) + ' with this "' + capfirst(model._meta.get_field(field_name).verbose_name) + '" value already exists.'
         else:
             self.error_message = error_message
     def __call__(self, value):
