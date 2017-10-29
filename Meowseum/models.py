@@ -184,8 +184,9 @@ class Upload(models.Model):
     relative_url = models.CharField(max_length=255, verbose_name="relative URL", default="", blank=True)
     description = models.TextField(max_length=10000, verbose_name="description", default="", blank=True)
     source = models.URLField(max_length=250, blank=True, default="")
-    is_publicly_listed = models.BooleanField(verbose_name="is publicly listed", default=False, blank=True)
-    uploader_has_disabled_comments = models.BooleanField(verbose_name="uploader has disabled comments", default=False, blank=True)
+    is_publicly_listed = models.BooleanField(verbose_name=mark_safe('<span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.'),
+                                             default=False, blank=True)
+    uploader_has_disabled_comments = models.BooleanField(verbose_name="disable comments", default=False, blank=True)
     # Related, relationship-setting models: Comment via upload, Tag via uploads, UserProfile via likes
     def get_category(self):
         try:

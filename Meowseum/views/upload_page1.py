@@ -22,9 +22,10 @@ def page(request):
         # If the user hasn't submitted a file yet, then the user shouldn't be here.
         raise PermissionDenied
     
-    form = UploadPage1(request.POST or None, request=request)
+    form = UploadPage1(request.POST or None, request=request, instance=upload)
     if form.is_valid():
-        update_and_save_upload_record(form, upload)
+        upload = form.save()
+        update_tag_data(form, upload)
         rename_upload_file(upload, hosting_limits_for_Upload['poster_directory'])
         # Users will automatically Like their own uploads. Use get_or_create because there is nothing stopping a user from
         # going back to this page again after the upload has been submitted and using it to edit the user's most recent upload, even though when
@@ -42,16 +43,7 @@ def page(request):
                    'CONTACT_INFO_ERROR': CONTACT_INFO_ERROR}
         return render(request, 'en/public/upload_page1.html', context)
 
-# 2. Update the upload record with the title, description, tags, and whether or not the upload is publicly listed, then save.
-def update_and_save_upload_record(form, upload):
-    upload.title = form.cleaned_data['title']
-    upload.description = form.cleaned_data['description']
-    upload.is_publicly_listed = form.cleaned_data['is_publicly_listed']
-    upload.uploader_has_disabled_comments = form.cleaned_data['uploader_has_disabled_comments']
-    upload.save()
-    update_tag_data(form, upload)
-
-# 2.1. Use the tag part of the form to update the database.
+# 1. Use the tag part of the form to update the database.
 def update_tag_data(form, upload):
     tags_from_title_and_description = get_tags_from_title_and_description(form.cleaned_data['title'], form.cleaned_data['description'])
     tags_from_tag_form = get_tags_from_tag_form(form.cleaned_data['tags'])
@@ -70,7 +62,7 @@ def update_tag_data(form, upload):
             new_tag.save()
             new_tag.uploads.add(upload)
 
-# 2.1.1. Input: title and description strings.
+# 1.1. Input: title and description strings.
 #        Output: tag_list, a list of tags using the format ["blep", "catloaf"]. All tags are stored in lowercase form.
 def get_tags_from_title_and_description(title, description):
     word_list = title.split() + description.split()
@@ -80,7 +72,7 @@ def get_tags_from_title_and_description(title, description):
             tag_list = tag_list + [word_list[x].lstrip("#").lower()]
     return tag_list
 
-# 2.1.1.1. Return True or False depending on whether the string follows the standard hashtag conventions. It should start with a #, then the next letter should be a letter or underscore,
+# 1.1.1. Return True or False depending on whether the string follows the standard hashtag conventions. It should start with a #, then the next letter should be a letter or underscore,
 # and the rest of the characters should be alphanumeric.
 def is_hashtag(string):
     if string[0] == "#" and (string[1].isalpha() or string[1] == '_') and string[2:].isalnum():
@@ -88,7 +80,7 @@ def is_hashtag(string):
     else:
         return False
 
-# 2.1.2. Input: A valid comma-delimited string of tags for an upload, such as "#blep, #catloaf".
+# 1.2. Input: A valid comma-delimited string of tags for an upload, such as "#blep, #catloaf".
 # Tags are case insensitive and stored as all lowercase in the database. Output: A list of tags using the format ["blep", "catloaf"].
 def get_tags_from_tag_form(string):
     tag_list = string.split(",")
@@ -99,7 +91,7 @@ def get_tags_from_tag_form(string):
             del tag_list[x]
     return tag_list
 
-# 3. Rename the upload's file using up to 182 of the first characters of its title. If the file name already exists, then add an underscore and 7-character random ID
+# 2. Rename the upload's file using up to 182 of the first characters of its title. If the file name already exists, then add an underscore and 7-character random ID
 # to the end, replacing characters of the title if it is needed to stay within the limit. This function also accounts for the underscore-using, file name-based URL needing to be unique.
 def rename_upload_file(upload, poster_directory):
     # Obtain all the strings that will be used for renaming.
@@ -145,7 +137,7 @@ def rename_upload_file(upload, poster_directory):
     upload.metadata.file_name = new_file_name
     upload.metadata.save()
 
-# 3.1 Return the new name for the file.
+# 2.1 Return the new name for the file.
 def get_new_file_name(upload):
     hypothetical_file_name = upload.title
     # Remove characters that are unsupported in a common operating system or may lead to security vulnerabilities.
@@ -157,7 +149,7 @@ def get_new_file_name(upload):
         hypothetical_file_name = ''
     return make_unique_with_random_id_suffix_within_character_limit(hypothetical_file_name, 178, file_name_and_url_will_be_unique, upload)
 
-# 4. After successfully processing the form, redirect to the homepage or the next page of the form if there is one.
+# 3. After successfully processing the form, redirect to the homepage or the next page of the form if there is one.
 # Input: upload_type, a string for the category. relative_url, a string which will be used when the upload is in the Pets category.
 # In this case, the user doesn't need to fill out a second form, so the user will be redirected to the slide page for the new upload.
 def redirect_to_next_page(upload_type, relative_url):

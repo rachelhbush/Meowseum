@@ -11,9 +11,23 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag, validate_bonded_with_IDs
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
+from django.template.defaultfilters import capfirst
 
 # Variables used by multiple forms
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
+
+class CustomModelForm(forms.ModelForm):
+    # This ModelForm allows for using HTML in verbose_name.
+    def __init__(self, *args, **kwargs):
+        super(CustomModelForm, self).__init__(*args, **kwargs)
+        model = type(self.instance)
+        list_of_field_names = [field.name for field in model._meta.fields]
+        for field_name in list_of_field_names:
+            try:
+                self.fields[field_name].label = mark_safe(capfirst(model._meta.get_field(field_name).verbose_name))
+            except KeyError:
+                # Exempt fields without a verbose_name specified.
+                pass
 
 # Forms
 class SignupForm(forms.ModelForm):
@@ -86,24 +100,24 @@ class FromDeviceForm(forms.ModelForm):
 CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
 information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
 related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
-class UploadPage1(forms.Form):
-    title = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"Title (optional)"}) )
-    description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
+class UploadPage1(CustomModelForm):
     upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
     tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
     popular_tags = MultipleChoiceField(required=False, label='Browse popular tags', choices=popular_tags)
-    is_publicly_listed = forms.BooleanField(required=False, label=mark_safe('<span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.'))
-    uploader_has_disabled_comments = forms.BooleanField(required=False, label='Disable comments')
+    class Meta:
+        model = Upload
+        fields = ('title', 'description', 'upload_type', 'tags', 'popular_tags', 'is_publicly_listed', 'uploader_has_disabled_comments')
+        widgets = {'title': forms.TextInput(attrs={"placeholder":"Title (optional)"}),
+                   'description': forms.Textarea(attrs={"placeholder":"Description (optional)"})}
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(UploadPage1, self).__init__(*args, **kwargs)
     def clean(self):
         cleaned_data = super(UploadPage1, self).clean()
-        user = self.cleaned_data.get('user')
         upload_type = self.cleaned_data.get('upload_type')
         if upload_type != 'pets' and not self.request.user.user_profile.has_contact_information():
             raise forms.ValidationError(CONTACT_INFO_ERROR)
-        return self.cleaned_data   
+        return self.cleaned_data
 
 class EditUploadForm(forms.ModelForm):
     # This is a form for modifying the fields of UploadPage1, except for the upload category and tags.
@@ -200,7 +214,7 @@ class ShelterForm(forms.ModelForm):
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'spaying_or_neutering_included', 'vaccination_included', 'microchipping_included',
                   'parasite_treatment_included')
 
-class PetInfoForm(forms.ModelForm):
+class PetInfoForm(CustomModelForm):
     sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
     is_dilute = forms.NullBooleanField(required=False, label='Dilute?', widget=forms.RadioSelect(choices=PetInfo.IS_DILUTE_CHOICES))
     age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
