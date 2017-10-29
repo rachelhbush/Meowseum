@@ -16,17 +16,21 @@ from django.utils.safestring import mark_safe
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
 
 # Forms
-class SignupForm(forms.Form):
-    # The allowed username characters are the same as in the validator for the model field built into Django 1.9, except with '@' disallowed so the login page can have an "email or username" field.
-    username = forms.CharField(max_length=30,
-                               label="",
-                               validators=[RegexValidator(r'^[\w.+-]+$', 'Enter a valid username. This value may contain only letters, numbers ' 'and ./+/-/_ characters.'),
-                                           UniquenessValidator(model=User, field_name='username', error_message="This username has already been taken.")],
-                               widget=forms.TextInput(attrs={"placeholder":"Username"}))
-    email = forms.EmailField(label="", validators=[UniquenessValidator(model=User, field_name='email', error_message="This email address has already been used to create an account.")],
-                             widget=forms.EmailInput(attrs={"placeholder":"Email"}))
-    password = forms.CharField(max_length=30, label="", widget=forms.PasswordInput(attrs={"placeholder":"Password"}))
-    password_confirmation = forms.CharField(max_length=30, label="", widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
+class SignupForm(forms.ModelForm):
+    password_confirmation = forms.CharField(max_length=128, label='', widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password', 'password_confirmation')
+        labels = {'username': '', 'email': '', 'password': ''}
+        widgets = {'username': forms.TextInput(attrs={"placeholder":"Username"}),
+                   'email': forms.TextInput(attrs={"placeholder":"Email"}),
+                   'password': forms.PasswordInput(attrs={"placeholder":"Password"})}
+        # Django includes help_text which explains the maximum username length and allowed characters. However, the user doesn't need to see the length because
+        # of the maxlength HTML attribute, and the set of allowed characters is close enough to the standard that the user can probably correctly guess the rules.
+        # Hide the Django help_text in order to reduce visual clutter and give the user less information to read.
+        help_texts = {'username': ''}
+        error_messages = {'username': {'unique': 'This username has already been taken.'},
+                          'email': {'unique': 'This email address has already been used to create an account.'}}
     def clean(self):
         cleaned_data = super(SignupForm,self).clean()
         # Check whether the first password is identical to the confirmation password.
@@ -36,9 +40,13 @@ class SignupForm(forms.Form):
             raise forms.ValidationError("Passwords are not identical.")
         return self.cleaned_data
 
-class LoginForm(forms.Form):
-    email_or_username = forms.CharField(label="", widget=forms.TextInput(attrs={"placeholder":"Email or username"}))
-    password = forms.CharField(max_length=30, label="", widget=forms.PasswordInput(attrs={"placeholder":"Password"}))
+class LoginForm(forms.ModelForm):
+    email_or_username = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder":"Email or username"}))
+    class Meta:
+        model = User
+        fields = ('email_or_username', 'password')
+        labels = {'password':''}
+        widgets = {'password': forms.PasswordInput(attrs={"placeholder":"Password"})}
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
         email_or_username = self.cleaned_data.get('email_or_username')
@@ -49,19 +57,21 @@ class LoginForm(forms.Form):
             try:
                 user = User.objects.get(email=email_or_username)
                 username = user.username
+                if not authenticate(username=username, password=password):
+                    raise forms.ValidationError("Wrong email or password.")
             except User.DoesNotExist:
-                raise forms.ValidationError("No username with this email exists.")
+                raise forms.ValidationError("No account with this email exists.")
         else:
             try:
                 user = User.objects.get(username=email_or_username)
                 username = email_or_username
+                if not authenticate(username=username, password=password):
+                    raise forms.ValidationError("Wrong username or password.")
             except User.DoesNotExist:
                 raise forms.ValidationError("No account with this username exists.")
 
         if not user.is_active:
             raise forms.ValidationError("Your account has been disabled.")
-        if not authenticate(username=username, password=password):
-            raise forms.ValidationError("Wrong email or password")
         return self.cleaned_data
 
 class FromDeviceForm(forms.ModelForm):
