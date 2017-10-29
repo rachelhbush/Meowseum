@@ -16,19 +16,6 @@ from django.template.defaultfilters import capfirst
 # Variables used by multiple forms
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
 
-class CustomModelForm(forms.ModelForm):
-    # This ModelForm allows for using HTML in verbose_name.
-    def __init__(self, *args, **kwargs):
-        super(CustomModelForm, self).__init__(*args, **kwargs)
-        model = type(self.instance)
-        list_of_field_names = [field.name for field in model._meta.fields]
-        for field_name in list_of_field_names:
-            try:
-                self.fields[field_name].label = mark_safe(capfirst(model._meta.get_field(field_name).verbose_name))
-            except KeyError:
-                # Exempt fields without a verbose_name specified.
-                pass
-
 # Forms
 class SignupForm(forms.ModelForm):
     password_confirmation = forms.CharField(max_length=128, label='', widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
@@ -100,13 +87,15 @@ class FromDeviceForm(forms.ModelForm):
 CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
 information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
 related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
-class UploadPage1(CustomModelForm):
+class UploadPage1(forms.ModelForm):
     upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
     tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
     popular_tags = MultipleChoiceField(required=False, label='Browse popular tags', choices=popular_tags)
     class Meta:
         model = Upload
         fields = ('title', 'description', 'upload_type', 'tags', 'popular_tags', 'is_publicly_listed', 'uploader_has_disabled_comments')
+        labels = {'title': '', 'description': '',
+                  'is_publicly_listed': mark_safe('<span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.')}
         widgets = {'title': forms.TextInput(attrs={"placeholder":"Title (optional)"}),
                    'description': forms.Textarea(attrs={"placeholder":"Description (optional)"})}
     def __init__(self, *args, **kwargs):
@@ -214,7 +203,7 @@ class ShelterForm(forms.ModelForm):
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'spaying_or_neutering_included', 'vaccination_included', 'microchipping_included',
                   'parasite_treatment_included')
 
-class PetInfoForm(CustomModelForm):
+class PetInfoForm(forms.ModelForm):
     sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
     is_dilute = forms.NullBooleanField(required=False, label='Dilute?', widget=forms.RadioSelect(choices=PetInfo.IS_DILUTE_CHOICES))
     age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
@@ -222,6 +211,7 @@ class PetInfoForm(CustomModelForm):
         model = PetInfo
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
                   'age_rating', 'other_physical', 'disabilities', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information')
+        labels = {'public_contact_information': mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.')}
 
 class AdoptionForm(PetInfoForm):
     pet_name = forms.CharField(label='Pet name')
