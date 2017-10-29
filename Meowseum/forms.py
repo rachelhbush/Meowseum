@@ -83,20 +83,25 @@ class FromDeviceForm(forms.ModelForm):
         model = TemporaryUpload
         fields = ('file',)
 
-CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
-information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
-related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
-class UploadPage1(forms.ModelForm):
-    upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
-    tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
-    popular_tags = MultipleChoiceField(required=False, label='Browse popular tags', choices=popular_tags)
+class EditUploadForm(forms.ModelForm):
+    # This is a form for editing the fields of UploadPage1, except for the upload category and tags.
     class Meta:
         model = Upload
-        fields = ('title', 'description', 'upload_type', 'tags', 'popular_tags', 'is_publicly_listed', 'uploader_has_disabled_comments')
+        fields = ('title', 'description', 'is_publicly_listed', 'uploader_has_disabled_comments')
         labels = {'title': '', 'description': '',
                   'is_publicly_listed': mark_safe('<span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.')}
         widgets = {'title': forms.TextInput(attrs={"placeholder":"Title (optional)"}),
                    'description': forms.Textarea(attrs={"placeholder":"Description (optional)"})}
+
+CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
+information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
+related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
+class UploadPage1(EditUploadForm):
+    upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
+    tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
+    popular_tags = MultipleChoiceField(required=False, label='Browse popular tags', choices=popular_tags)
+    class Meta(EditUploadForm.Meta):
+        fields = ('title', 'description', 'upload_type', 'tags', 'popular_tags', 'is_publicly_listed', 'uploader_has_disabled_comments')
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(UploadPage1, self).__init__(*args, **kwargs)
@@ -106,14 +111,6 @@ class UploadPage1(forms.ModelForm):
         if upload_type != 'pets' and not self.request.user.user_profile.has_contact_information():
             raise forms.ValidationError(CONTACT_INFO_ERROR)
         return self.cleaned_data
-
-class EditUploadForm(forms.ModelForm):
-    # This is a form for modifying the fields of UploadPage1, except for the upload category and tags.
-    title = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"Title (optional)"}) )
-    description = forms.CharField(required=False, widget=forms.Textarea(attrs={"placeholder":"Description (optional)"}) )
-    class Meta:
-        model = Upload
-        fields = ('title', 'description', 'is_publicly_listed', 'uploader_has_disabled_comments')
 
 class CommentForm(forms.ModelForm):
     text = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={"placeholder":"Write something here..."}) )
