@@ -2,12 +2,9 @@
 # only one argument, the field data itself, and callable classes are used when the validator will accept other arguments. Validation functions are compatible
 # with testing in the Python shell.
 
-from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
-from django.core.exceptions import ObjectDoesNotExist
-from django.template.defaultfilters import capfirst
-from django.conf import settings
+from django.core.validators import RegexValidator
 from Meowseum.models import Adoption
 
 # 1. General. This section of the file is for validators which are very general or useful for all models.
@@ -23,30 +20,6 @@ class CustomValidator(object):
             if eval("self."+attribute) != eval("other."+attribute):
                 return False
         return True
-
-@deconstructible
-# Check if a record already exists with the value the user entered, for a given model and a given field. Use this class when a model field has unique=True and it
-# has a corresponding field in a Form class, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception. However, the field can't be used in a form
-# which edits a model instance, because this validator has no way to exempt the record being edited from the unique rule when saving.
-# Input (as keyword arguments): model, a class. field_name, a string. error_message, a string (optional). If the last argument is not provided, the function provides
-# a default "not unique" error message under settings, which is '[Model verbose name, with the first letter capitalized] with this "[field's verbose name, with the
-# first letter capitalized]" value already exists.'
-# Output: None.
-class UniquenessValidator(CustomValidator):
-    def __init__(self, model, field_name, error_message='default'):
-        self.model = model
-        self.field_name = field_name
-        if error_message == 'default':
-            # Supply the default "not unique" error message specified under settings. If the string doesn't contain these variables, it doesn't have any negative effects.
-            self.error_message = settings.DEFAULT_UNIQUE_ERROR_MESSAGE % {'model_name': capfirst(model._meta.verbose_name), 'field_label': capfirst(model._meta.get_field(field_name).verbose_name)}
-        else:
-            self.error_message = error_message
-    def __call__(self, value):
-        try:
-            record = self.model.objects.get(**{self.field_name:value})
-            raise ValidationError(self.error_message)
-        except ObjectDoesNotExist:
-            pass
 
 # 2. Model-specific. This section is used to make forms.py shorter.
 

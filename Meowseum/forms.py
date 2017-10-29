@@ -8,10 +8,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
-from Meowseum.validators import UniquenessValidator, validate_tags, validate_tag, validate_bonded_with_IDs
+from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
-from django.template.defaultfilters import capfirst
 
 # Variables used by multiple forms
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
