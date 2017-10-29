@@ -202,23 +202,18 @@ class PetInfoForm(forms.ModelForm):
 class AdoptionForm(PetInfoForm):
     pet_name = forms.CharField(label='Pet name')
     adoption_fee = forms.FloatField(required=False, label='Adoption fee', widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
+    # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
+    bonded_with_IDs = forms.CharField(required=False, validators=[validate_bonded_with_IDs])
     class Meta:
         model = Adoption
-        fields = PetInfoForm.Meta.fields + ('prefers_a_home_without', 'has_been', 'energy_level', 'adoption_fee', 'euthenasia_soon')
-
-class BondedWithForm(forms.Form):
-    # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
-    internal_id = forms.CharField(required=False, max_length=255, label="Pet ID",
-                                  validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.'),
-                                              UniquenessValidator(model=Adoption, field_name='internal_id')])
-    bonded_with_IDs = forms.CharField(required=False, validators=[validate_bonded_with_IDs])
-    def clean(self):
-        cleaned_data = super(BondedWithForm, self).clean()
-        if self.cleaned_data.get('bonded_with_IDs') != '' and self.cleaned_data.get('internal_id') == '':
-            raise forms.ValidationError('This field is required in order to fill out the "bonded with" field.')
+        fields = PetInfoForm.Meta.fields + ('prefers_a_home_without', 'has_been', 'energy_level', 'adoption_fee', 'internal_id', 'bonded_with_IDs', 'euthenasia_soon')
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
+    def clean(self):
+        cleaned_data = super(AdoptionForm, self).clean()
+        if self.cleaned_data.get('bonded_with_IDs') != '' and self.cleaned_data.get('internal_id') == '':
+            raise forms.ValidationError('This "pet ID" field is required in order to fill out the "bonded with" field.')
 
 class LostFoundInfo(PetInfoForm):
     eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())

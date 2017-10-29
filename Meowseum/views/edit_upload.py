@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from Meowseum.common_view_functions import redirect
 from django.core.exceptions import PermissionDenied
 from Meowseum.models import Upload, Adoption, Lost, Found
-from Meowseum.forms import EditUploadForm, AdoptionForm, BondedWithForm, LostForm, FoundForm
+from Meowseum.forms import EditUploadForm, AdoptionForm, LostForm, FoundForm
 
 @login_required
 # 0. Main function.
@@ -30,19 +30,15 @@ def page(request, relative_url):
 
 # 1. Render a form for editing an upload in the Adoption category.
 def render_adoption_editing_view(request, upload, heading):
-    main_form = AdoptionForm(request.POST or None, instance=upload.adoption)
-    bonded_with_form = BondedWithForm(request.POST or None, initial=initialize_bonded_with_form(upload))
+    main_form = AdoptionForm(request.POST or None, instance=upload.adoption, initial=initialize_bonded_with_field(upload))
     edit_upload_form = EditUploadForm(request.POST or None, instance=upload)
-    if all([main_form.is_valid(), bonded_with_form.is_valid(), edit_upload_form.is_valid()]):
-        adoption_record = main_form.save(commit=False)
-        adoption_record.internal_id = bonded_with_form.cleaned_data["internal_id"]
-        adoption_record.save()
-        edit_bonded_with_information(adoption_record, bonded_with_form.cleaned_data["bonded_with_IDs"])
+    if all([main_form.is_valid(), edit_upload_form.is_valid()]):
+        adoption_record = main_form.save()
+        edit_bonded_with_information(adoption_record, main_form.cleaned_data["bonded_with_IDs"])
         edit_upload_form.save()
         return redirect('index')
     else:
-        return render(request, 'en/public/edit_upload.html', \
-                      {'upload_category': 'adoption', 'main_form':main_form, 'bonded_with_form':bonded_with_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
+        return render(request, 'en/public/edit_upload.html', {'upload_category': 'adoption', 'main_form':main_form, 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 2. Render a form for editing an upload in the Lost category.
 def render_lost_editing_view(request, upload, heading):
@@ -79,13 +75,13 @@ def render_pet_editing_view(request, upload, heading):
         return render(request, 'en/public/edit_upload.html', {'upload_category': 'pets', 'edit_upload_form':edit_upload_form, 'heading':heading, 'upload': upload})
 
 # 1.1. Input: upload, an Upload record.
-# Output: A dictionary containing the values with which the BondedWithForm should be initialized.
-def initialize_bonded_with_form(upload):
+# Output: A dictionary containing the value with which the "bonded with" field should be initialized.
+def initialize_bonded_with_field(upload):
     list_of_IDs = []
     for record in upload.adoption.bonded_with.all():
         list_of_IDs = list_of_IDs + [record.internal_id]
     bonded_with_IDs = ', '.join(list_of_IDs)
-    return {'bonded_with_IDs': bonded_with_IDs, 'internal_id': upload.adoption.internal_id}
+    return {'bonded_with_IDs': bonded_with_IDs}
 
 # 1.2. Update the association between the Adoption record and other Adoption records, using a comma-separated list of IDs.
 # Input: adoption_record, bonded_with_IDs string. Output: None.

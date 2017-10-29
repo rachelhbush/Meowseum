@@ -57,16 +57,15 @@
         <tr>
             <th><label>Pet ID:</label></th>
             <td>
-                {{ bonded_with_form.non_field_errors }}
-                {{ bonded_with_form.internal_id.errors }}
-                {{ bonded_with_form.internal_id }}
+                {{ main_form.internal_id.errors }}
+                {{ main_form.internal_id }}
             </td>
         </tr>
         <tr>
             <th><label>Bonded with:</label></th>
             <td>
-                {{ bonded_with_form.bonded_with_IDs.errors }}
-                {{ bonded_with_form.bonded_with_IDs }}
+                {{ main_form.bonded_with_IDs.errors }}
+                {{ main_form.bonded_with_IDs }}
             </td>
         </tr>
     </table>

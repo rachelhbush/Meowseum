@@ -26,7 +26,8 @@ class CustomValidator(object):
 
 @deconstructible
 # Check if a record already exists with the value the user entered, for a given model and a given field. Use this class when a model field has unique=True and it
-# has a corresponding field in a Form class, or, in a ModelForm, the field will be overriden, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception.
+# has a corresponding field in a Form class, in order to avoid a "IntegrityError: UNIQUE constraint failed" exception. However, the field can't be used in a form
+# which edits a model instance, because this validator has no way to exempt the record being edited from the unique rule when saving.
 # Input (as keyword arguments): model, a class. field_name, a string. error_message, a string (optional). If the last argument is not provided, the function provides
 # a default "not unique" error message under settings, which is '[Model verbose name, with the first letter capitalized] with this "[field's verbose name, with the
 # first letter capitalized]" value already exists.'
