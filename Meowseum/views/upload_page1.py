@@ -6,7 +6,7 @@ from Meowseum.common_view_functions import redirect
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from Meowseum.models import Upload, hosting_limits_for_Upload, Tag, Like, Shelter, UserContact
-from Meowseum.forms import UploadPage1, CONTACT_INFO_ERROR
+from Meowseum.forms import UploadPage1
 import os
 from django.conf import settings
 from Meowseum.file_handling.CustomStorage import get_valid_file_name
@@ -39,8 +39,7 @@ def page(request):
                    'heading': 'Uploading ' + upload.metadata.original_file_name + upload.metadata.original_extension,
                    'upload_directory': Upload.UPLOAD_TO,
                    'poster_directory': hosting_limits_for_Upload['poster_directory'],
-                   'has_contact_information': request.user.user_profile.has_contact_information(),
-                   'CONTACT_INFO_ERROR': CONTACT_INFO_ERROR}
+                   'has_contact_information': request.user.user_profile.has_contact_information()}
         return render(request, 'en/public/upload_page1.html', context)
 
 # 1. Use the tag part of the form to update the database.

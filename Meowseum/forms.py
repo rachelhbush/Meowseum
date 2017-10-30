@@ -11,6 +11,7 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
+from django.shortcuts import render
 
 # Variables used by multiple forms
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
@@ -93,9 +94,6 @@ class EditUploadForm(forms.ModelForm):
         widgets = {'title': forms.TextInput(attrs={"placeholder":"Title (optional)"}),
                    'description': forms.Textarea(attrs={"placeholder":"Description (optional)"})}
 
-CONTACT_INFO_ERROR = mark_safe("""<div class="form-unit" id="contact-record-warning">To be able to make a listing, first we need your <a href='/user_contact_information' class="emphasized" target="_blank">contact \
-information</a>. This information will allow other users to search for listings by geographic location. Shelters and rescue groups will contact you if they have helpful information \
-related to your post (found a lost pet, etc). If you are a shelter, <a href='/shelter_contact_information' class="emphasized" target="_blank">register here</a>.</div>""")
 class UploadPage1(EditUploadForm):
     upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
     tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
@@ -104,12 +102,14 @@ class UploadPage1(EditUploadForm):
         fields = ('title', 'description', 'upload_type', 'tags', 'popular_tags', 'is_publicly_listed', 'uploader_has_disabled_comments')
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        if self.request != None:
+            self.CONTACT_INFO_ERROR = mark_safe(render(self.request, 'en/public/missing_contact_information_error_message.html').content.decode('utf-8'))
         super(UploadPage1, self).__init__(*args, **kwargs)
     def clean(self):
         cleaned_data = super(UploadPage1, self).clean()
         upload_type = self.cleaned_data.get('upload_type')
         if upload_type != 'pets' and not self.request.user.user_profile.has_contact_information():
-            raise forms.ValidationError(CONTACT_INFO_ERROR)
+            raise forms.ValidationError(self.CONTACT_INFO_ERROR)
         return self.cleaned_data
 
 class CommentForm(forms.ModelForm):

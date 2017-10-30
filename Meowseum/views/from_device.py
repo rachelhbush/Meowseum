@@ -2,7 +2,6 @@
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from Meowseum.common_view_functions import ajaxWholePageRedirect
 from Meowseum.models import TemporaryUpload, Upload, validation_specifications_for_Upload, hosting_limits_for_Upload, Metadata
 from Meowseum.file_handling.file_validation import get_validated_metadata

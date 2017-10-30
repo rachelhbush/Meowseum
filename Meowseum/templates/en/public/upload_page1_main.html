@@ -25,7 +25,7 @@
     {% endfor %}
 </div>
 {% if not has_contact_information %}
-    {{ CONTACT_INFO_ERROR }}
+    {% include "en/public/missing_contact_information_error_message.html" %}
 {% endif %}
 {% if form.popular_tags|length > 0 %}
     {{ form.popular_tags.errors }}
