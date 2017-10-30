@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
-from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs
+from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs, validate_offending_user
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 from django.shortcuts import render
@@ -125,23 +125,11 @@ class TagForm(forms.ModelForm):
         fields = ('name',)
 
 class AbuseReportForm(forms.Form):
-    offending_username = forms.CharField(max_length=30)
+    offending_username = forms.CharField(max_length=30, validators=[validate_offending_user])
     abuse_type = forms.ChoiceField(choices=(('', 'Select a category'),) + AbuseReport.ABUSE_TYPE_CHOICES, widget=forms.Select())
     abuse_description = forms.CharField(required=False, max_length=100000, widget=forms.Textarea() )
     # This field can be improved by adding validation for whether or not the URL is within the site and whether it returns a 404, if this becomes a problem.
     url = forms.CharField(max_length=255, widget=forms.URLInput() )
-    def clean(self):
-        # Validate the offending username by checking whether it exists in the database.
-        cleaned_data = super(AbuseReportForm, self).clean()
-        offending_username = self.cleaned_data.get('offending_username')
-        try:
-            offending_user = User.objects.get(username=offending_username)
-        except User.DoesNotExist:
-            # If the user doesn't exist, then first check if the user left the field blank.
-            # In that case, the error message would be redundant with the "This field is required." message, so it shouldn't be added.
-            if offending_username != None:
-                raise forms.ValidationError("No user with this username exists.")
-        return self.cleaned_data
 
 class FeedbackForm(forms.ModelForm):
     screenshot = MetadataRestrictedFileField()

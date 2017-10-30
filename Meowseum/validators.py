@@ -5,7 +5,9 @@
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 from Meowseum.models import Adoption
+
 
 # 1. General. This section of the file is for validators which are very general or useful for all models.
 
@@ -59,3 +61,12 @@ def validate_bonded_with_IDs(string):
                     animal = Adoption.objects.get(internal_id=list_of_IDs[x])
                 except Adoption.DoesNotExist:
                     raise ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
+
+def validate_offending_user(offending_username):
+    try:
+        offending_user = User.objects.get(username=offending_username)
+    except User.DoesNotExist:
+        # If the user doesn't exist, then first check if the user left the field blank.
+        # In that case, the error message would be redundant with the "This field is required." message, so it shouldn't be added.
+        if offending_username != None:
+            raise ValidationError("No user with this username exists.")
