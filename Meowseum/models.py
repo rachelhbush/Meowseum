@@ -15,7 +15,7 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.file_handling.CustomStorage import CustomStorage
 from django.db.models import Count
 from django.conf import settings
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 from django.utils.safestring import mark_safe
 
 YES_OR_NO_CHOICES = ((True, 'Yes'), (False, 'No'))
@@ -409,7 +409,7 @@ class Shelter(models.Model):
     profile_fax_number = models.CharField(max_length=20, verbose_name="profile fax number", default="", blank=True)
     profile_email = models.EmailField(max_length=60, verbose_name="profile email", default="", blank=True)
     website = models.URLField(max_length=255, verbose_name="profile website", default="", blank=True)
-    is_nonprofit = models.BooleanField(verbose_name="nonprofit status", default=False, blank=True)
+    is_nonprofit = models.BooleanField(verbose_name="nonprofit status", choices=YES_OR_NO_CHOICES, default=False, blank=True)
     contact_us_page = models.URLField(max_length=255, verbose_name='"Contact us" page', default="", blank=True)
     donation_page = models.URLField(max_length=255, verbose_name='donation page', default="", blank=True)
     # The "other pages" field is more complicated, so I am putting it in later.
@@ -427,8 +427,9 @@ class Shelter(models.Model):
     site_contact_email = models.EmailField(max_length=60, verbose_name="site contact email", default="")
     # These fields allow users, while searching, to filter out shelter results that are inapplicable to them.
     distance_prohibition = models.IntegerField(verbose_name="adopters must be within", null=True, blank=True)
-    age_prohibition = models.IntegerField(verbose_name="adopters must be over age", null=True, blank=True)
-    is_lost_found_meeting_place = models.BooleanField(verbose_name="nonprofit status", default=False, blank=True)
+    # This field allows specifying a minimum age for adoption, because some shelters set it at 19-21. Because 18 is already implied, 19 is the minimum.
+    age_prohibition = models.IntegerField(verbose_name="adopters must be over age", validators=[MinValueValidator(19)], null=True, blank=True)
+    is_lost_found_meeting_place = models.BooleanField(verbose_name="nonprofit status", choices=YES_OR_NO_CHOICES, default=False, blank=True)
     # These fields allow skipping parts of the adoption form by automatically filling out the fields that will always be the same.
     base_adoption_fee_cat = models.FloatField(verbose_name="base adoption fee for cats", null=True, blank=True)
     base_adoption_fee_kitten = models.FloatField(verbose_name="base adoption fee for kittens", null=True, blank=True)

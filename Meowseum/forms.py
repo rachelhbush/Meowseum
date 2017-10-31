@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
 from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs, validate_offending_username
-from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 from django.shortcuts import render
 
@@ -173,11 +172,6 @@ class UserContactForm2(forms.ModelForm):
         fields = ('first_name', 'last_name', 'email')
 
 class ShelterForm(forms.ModelForm):
-    is_nonprofit = forms.ChoiceField(choices=YES_OR_NO_CHOICES, widget=forms.RadioSelect())
-    age_prohibition = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={"min":"19"}) )
-    is_lost_found_meeting_place = forms.ChoiceField(required=False, initial=False, choices=YES_OR_NO_CHOICES, widget=forms.RadioSelect())
-    base_adoption_fee_cat = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
-    base_adoption_fee_kitten = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     class Meta:
         model = Shelter
         fields = ('organization_name', 'contact_first_name', 'contact_last_name', 'contact_title', 'include_contact_in_profile',
@@ -188,6 +182,11 @@ class ShelterForm(forms.ModelForm):
                   'site_contact_phone_number', 'site_contact_email', 'distance_prohibition', 'age_prohibition', 'is_lost_found_meeting_place',
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'spaying_or_neutering_included', 'vaccination_included', 'microchipping_included',
                   'parasite_treatment_included')
+        widgets = {'is_nonprofit': forms.RadioSelect(),
+                   'age_prohibition': forms.NumberInput(attrs={"min":"19"}),
+                   'is_lost_found_meeting_place': forms.RadioSelect(),
+                   'base_adoption_fee_cat': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}),
+                   'base_adoption_fee_kitten': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
 
 class PetInfoForm(forms.ModelForm):
     sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
