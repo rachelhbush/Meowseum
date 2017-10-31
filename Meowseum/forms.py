@@ -131,7 +131,7 @@ class AbuseReportForm(forms.ModelForm):
     class Meta:
         model = AbuseReport
         fields = ('abuse_type', 'offending_username', 'abuse_description', 'url')
-        widgets = {'url': forms.URLInput()}
+        widgets = {'url': forms.URLInput}
 
 class FeedbackForm(forms.ModelForm):
     screenshot = MetadataRestrictedFileField()
@@ -183,16 +183,16 @@ class ShelterForm(forms.ModelForm):
                   'site_contact_phone_number', 'site_contact_email', 'distance_prohibition', 'age_prohibition', 'is_lost_found_meeting_place',
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'spaying_or_neutering_included', 'vaccination_included', 'microchipping_included',
                   'parasite_treatment_included')
-        widgets = {'is_nonprofit': forms.RadioSelect(),
+        widgets = {'is_nonprofit': forms.RadioSelect,
                    'age_prohibition': forms.NumberInput(attrs={"min":"19"}),
-                   'is_lost_found_meeting_place': forms.RadioSelect(),
+                   'is_lost_found_meeting_place': forms.RadioSelect,
                    'base_adoption_fee_cat': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}),
                    'base_adoption_fee_kitten': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
 
 class PetInfoForm(forms.ModelForm):
-    sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect())
+    sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect)
     is_dilute = forms.NullBooleanField(required=False, label='Dilute?', widget=forms.RadioSelect(choices=PetInfo.IS_DILUTE_CHOICES))
-    age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect())
+    age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect)
     class Meta:
         model = PetInfo
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
@@ -218,7 +218,7 @@ class AdoptionForm(PetInfoForm):
             raise forms.ValidationError('This "pet ID" field is required in order to fill out the "bonded with" field.')
 
 class LostFoundInfo(PetInfoForm):
-    eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
+    eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect)
     date = HTML5DateField()
     class Meta(PetInfoForm.Meta):
         model = LostFoundInfo
@@ -238,7 +238,7 @@ class FoundForm(LostFoundInfo):
     class Meta(LostFoundInfo.Meta):
         model = Found
         fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'yes_or_no_questions', 'internal_id')
-        widgets = merge_two_dicts(LostFoundInfo.Meta.widgets, {'is_sighting':forms.RadioSelect()})
+        widgets = merge_two_dicts(LostFoundInfo.Meta.widgets, {'is_sighting':forms.RadioSelect})
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
