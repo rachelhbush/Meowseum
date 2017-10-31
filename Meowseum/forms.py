@@ -18,7 +18,7 @@ popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the
 
 # Forms
 class SignupForm(forms.ModelForm):
-    password_confirmation = forms.CharField(max_length=128, label='', widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
+    password_confirmation = forms.CharField(max_length=User._meta.get_field('password').max_length, label='', widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'password_confirmation')
@@ -125,7 +125,7 @@ class TagForm(forms.ModelForm):
         fields = ('name',)
 
 class AbuseReportForm(forms.Form):
-    offending_username = forms.CharField(max_length=30, validators=[validate_offending_user])
+    offending_username = forms.CharField(max_length=User._meta.get_field('username').max_length, validators=[validate_offending_user])
     abuse_type = forms.ChoiceField(choices=(('', 'Select a category'),) + AbuseReport.ABUSE_TYPE_CHOICES, widget=forms.Select())
     abuse_description = forms.CharField(required=False, max_length=100000, widget=forms.Textarea() )
     # This field can be improved by adding validation for whether or not the URL is within the site and whether it returns a 404, if this becomes a problem.
@@ -155,7 +155,7 @@ class AdvancedSearchForm(forms.Form):
     any_words = forms.CharField(required=False, max_length = 1000) # OR
     exclude_words = forms.CharField(required=False, max_length = 1000) # AND NOT
     # This field enables users to search within another user's posts.
-    from_user = forms.CharField(required=False, max_length = 30, widget=forms.TextInput(attrs={"placeholder":"@"}))
+    from_user = forms.CharField(required=False, max_length = User._meta.get_field('username').max_length, widget=forms.TextInput(attrs={"placeholder":"@"}))
     save_search_to_front_page = forms.BooleanField(required=False)
 
 # Forms below this line are used for Meowseum specifically, rather than a general social media site.
