@@ -11,11 +11,8 @@ from Meowseum.context_processors import constant_variables
 def page(request):
     form = AbuseReportForm(request.POST or None, initial=get_initial_data_from_querystring(request))   
     if form.is_valid():
-        offending_user = User.objects.get(username=form.cleaned_data['offending_username'])
-        new_record = AbuseReport(offending_user=offending_user,
-                                 abuse_type=form.cleaned_data['abuse_type'],
-                                 abuse_description=form.cleaned_data['abuse_description'],
-                                 url=form.cleaned_data['url'])
+        new_record = form.save(commit=False)
+        new_record.offending_user = User.objects.get(username=form.cleaned_data['offending_username'])
         if request.user.is_authenticated:
             new_record.filer = request.user
         new_record.save()

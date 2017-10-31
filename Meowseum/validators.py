@@ -62,7 +62,7 @@ def validate_bonded_with_IDs(string):
                 except Adoption.DoesNotExist:
                     raise ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
 
-def validate_offending_user(offending_username):
+def validate_offending_username(offending_username):
     try:
         offending_user = User.objects.get(username=offending_username)
     except User.DoesNotExist:
