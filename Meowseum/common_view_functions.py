@@ -20,7 +20,15 @@ import datetime
 from django.db.models import Count
 from django.utils import timezone
 
-# Section 1. Utility functions.
+# Section 1. Utility functions for general Python programming.
+
+# This app uses this function for ModelForm inheritance of class Meta arguments.
+def merge_two_dicts(dict1, dict2):
+    new_dict = dict1.copy()
+    new_dict.update(dict2)
+    return new_dict
+
+# Section 2. Utility functions specific to Django or web development.
 
 class OrderedQueryDict(QueryDict, OrderedDict):
     pass
@@ -135,7 +143,7 @@ def paginate_records(request, records, records_per_page=25):
         paginated_records = paginator.page(paginator.num_pages)
     return paginated_records
 
-# Section 2. Site functions. The sorting functions are used by gallery pages which specifically use the sorting order, and they're included here because in the
+# Section 3. Site functions. The sorting functions are used by gallery pages which specifically use the sorting order, and they're included here because in the
 # future they'll be an option in the advanced search menu.
 
 # This function filters out private uploads and uploads from muted users. This function is used by any view which displays a gallery, including the search page.

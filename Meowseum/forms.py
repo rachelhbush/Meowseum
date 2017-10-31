@@ -11,6 +11,7 @@ from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestricte
 from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs, validate_offending_username
 from django.utils.safestring import mark_safe
 from django.shortcuts import render
+from Meowseum.common_view_functions import merge_two_dicts
 
 # Variables used by multiple forms
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
@@ -199,13 +200,15 @@ class PetInfoForm(forms.ModelForm):
         labels = {'public_contact_information': mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.')}
 
 class AdoptionForm(PetInfoForm):
-    pet_name = forms.CharField(label='Pet name')
-    adoption_fee = forms.FloatField(required=False, label='Adoption fee', widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
     bonded_with_IDs = forms.CharField(required=False, validators=[validate_bonded_with_IDs])
-    class Meta:
+    def __init__(self, *args, **kwargs):
+        super(AdoptionForm,self).__init__(*args, **kwargs)
+        self.fields['pet_name'].required = True
+    class Meta(PetInfoForm.Meta):
         model = Adoption
         fields = PetInfoForm.Meta.fields + ('prefers_a_home_without', 'has_been', 'energy_level', 'adoption_fee', 'internal_id', 'bonded_with_IDs', 'euthenasia_soon')
+        widgets = {'adoption_fee': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
@@ -216,30 +219,32 @@ class AdoptionForm(PetInfoForm):
 
 class LostFoundInfo(PetInfoForm):
     eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect())
-    eye_color_other = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"other"}) )
     date = HTML5DateField()
-    class Meta:
+    class Meta(PetInfoForm.Meta):
         model = LostFoundInfo
         fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings', 'collar_color', 'collar_description')
+        widgets = {'eye_color_other': forms.TextInput(attrs={"placeholder":"other"})}
 
 class LostForm(LostFoundInfo):
-    pet_name = forms.CharField()
-    reward = forms.FloatField(required=False, widget=forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}) )
-    class Meta:
+    def __init__(self, *args, **kwargs):
+        super(LostForm,self).__init__(*args, **kwargs)
+        self.fields['pet_name'].required = True
+    class Meta(LostFoundInfo.Meta):
         model = Lost
         fields = LostFoundInfo.Meta.fields + ('yes_or_no_questions', 'microchip_or_tattoo_ID', 'reward')
+        widgets = merge_two_dicts(LostFoundInfo.Meta.widgets, {'reward': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})})
+ 
+class FoundForm(LostFoundInfo):
+    class Meta(LostFoundInfo.Meta):
+        model = Found
+        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'yes_or_no_questions', 'internal_id')
+        widgets = merge_two_dicts(LostFoundInfo.Meta.widgets, {'is_sighting':forms.RadioSelect()})
+    def clean_internal_id(self):
+        # This function is required for an optional unique field.
+        return self.cleaned_data['internal_id'] or None
 
 class VerifyDescriptionForm(forms.ModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
     class Meta:
         model = Upload
         fields = ('description',)
- 
-class FoundForm(LostFoundInfo):
-    is_sighting = forms.ChoiceField(initial=False, choices=Found.IS_SIGHTING_CHOICES, widget=forms.RadioSelect())
-    class Meta:
-        model = Found
-        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'yes_or_no_questions', 'internal_id')
-    def clean_internal_id(self):
-        # This function is required for an optional unique field.
-        return self.cleaned_data['internal_id'] or None

@@ -548,18 +548,18 @@ class PetInfo(models.Model):
     # The cat has been adopted, returned to its owner, or the owner has contacted the site about taking down the Found post.
     expired = models.BooleanField(verbose_name="expired", default=False, blank=True)
     pet_name = models.CharField(max_length=255, verbose_name="name", default="", blank=True)
-    sex = models.CharField(max_length=6, verbose_name="sex", default="", blank=True)
+    sex = models.CharField(max_length=6, verbose_name="sex", choices=SEX_CHOICES, default="", blank=True)
     subtype1 = models.CharField(max_length=255, verbose_name="breed", choices=(('', 'Select a breed'),) + CAT_BREED_CHOICES, default="", blank=True)
     hair_length = models.CharField(max_length=255, verbose_name="hair length", choices=(('', 'Select a hair length'),) + COAT_LENGTH_CHOICES, default="", blank=True)
     pattern = models.CharField(max_length=255, verbose_name="pattern", choices=(('', 'Select a pattern'),) + CAT_PATTERN_CHOICES, default="", blank=True)
     # The next three fields are displayed instead of color1 and color2 for tortoiseshell (multicolor) cats.
     is_calico = models.NullBooleanField(verbose_name="is calico", choices=((None, ''),) + IS_CALICO_CHOICES, null=True, blank=True)
     has_tabby_stripes = models.NullBooleanField(verbose_name="has tabby stripes", choices=((None, ''),) + HAS_TABBY_STRIPES_CHOICES, null=True, blank=True)
-    is_dilute = models.NullBooleanField(verbose_name="is dilute", null=True, blank=True)
+    is_dilute = models.NullBooleanField(verbose_name="is dilute", choices=IS_DILUTE_CHOICES, null=True, blank=True)
     color1 = models.CharField(max_length=255, verbose_name="color 1", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
     # The first color is the one that covers most of the animal's body, and the second color is the one covering a minority of it.
     color2 = models.CharField(max_length=255, verbose_name="color 2", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
-    age_rating = models.CharField(max_length=255, verbose_name="approximate age", default="", blank=True)
+    age_rating = models.CharField(max_length=255, verbose_name="approximate age", choices=AGE_RATING_CHOICES, default="", blank=True)
     other_physical = ChoiceArrayField(models.CharField(max_length=100, choices=CAT_OTHER_PHYSICAL_CHOICES), verbose_name="other physical features", blank=True)
     disabilities = ChoiceArrayField(models.CharField(max_length=100, choices=CAT_DISABILITY_CHOICES), verbose_name="disabilities and special needs", blank=True)
     # These fields are included even for lost pets because the Nashville Humane Asssociation's lost/found form has these fields,
@@ -667,7 +667,7 @@ class LostFoundInfo(PetInfo):
     ('yellow', 'Yellow'),
     ('white', 'White'))
 
-    eye_color = models.CharField(max_length=255, verbose_name="eye color", default="", blank=True)
+    eye_color = models.CharField(max_length=255, verbose_name="eye color", choices=CAT_EYE_COLOR_CHOICES, default="", blank=True)
     eye_color_other = models.CharField(max_length=255, verbose_name="eye color - Other", default="", blank=True)
     nose_color = ChoiceArrayField(models.CharField(max_length=100, choices=NOSE_COLOR_CHOICES), verbose_name="nose color", blank=True)
     date = models.DateField(verbose_name="date", null=True, blank=True)
@@ -701,7 +701,7 @@ class Found(LostFoundInfo):
     ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'),
     ('no microchip detected during scan', 'No microchip detected during scan'))
 
-    is_sighting = models.BooleanField(verbose_name="is a sighting", default=False, blank=True)
+    is_sighting = models.BooleanField(verbose_name="is a sighting", choices=IS_SIGHTING_CHOICES, default=False, blank=True)
     yes_or_no_questions = ChoiceArrayField(models.CharField(max_length=100, choices=YES_OR_NO_QUESTIONS_CHOICES), verbose_name="Which of the following apply to the cat?", blank=True)
     # This field is for shelters that post pets to the Found section for a few weeks before moving them to the Adoption section
     # and use IDs for those pets, like the pets they have available for adoption.
