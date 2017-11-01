@@ -7,7 +7,7 @@
 <table class="form">
     {% block table_fields_at_top %}
     <tr>
-       <th><label>Sex:</label></td>
+       <th>{{ main_form.sex.label_tag }}</td>
        <td class="inline-radio-buttons">
            {{ main_form.sex.errors }}
             {% for radio in main_form.sex %}
@@ -19,42 +19,42 @@
        </td>
     </tr>
     <tr>
-        <th><label>Breed:</label></td>
+        <th>{{ main_form.subtype1.label_tag }}</td>
         <td>
             {{ main_form.subtype1.errors }}
             {{ main_form.subtype1 }}
         </td>
     </tr>
     <tr>
-        <th><label>Hair length:</label></td>
+        <th>{{ main_form.hair_length.label_tag }}</td>
         <td>
             {{ main_form.hair_length.errors }}
             {{ main_form.hair_length }}
         </td>
     </tr>
     <tr>
-        <th><label>Pattern:</label></th>
+        <th>{{ main_form.pattern.label_tag }}</th>
         <td>
             {{ main_form.pattern.errors }}
             {{ main_form.pattern }}
         </td>
     </tr>
     <tr class="calico-field">
-        <th><label>Calico?</label></th>
+        <th>{{ main_form.is_calico.label_tag }}</th>
         <td>
             {{ main_form.is_calico.errors }}
             {{ main_form.is_calico }}
         </td>
     </tr>
     <tr class="tortie-tabby-field">
-        <th><label>Tabby?</label></th>
+        <th>{{ main_form.has_tabby_stripes.label_tag }}</th>
         <td>
             {{ main_form.has_tabby_stripes.errors }}
             {{ main_form.has_tabby_stripes }}
         </td>
     </tr>
     <tr class="dilute-field">
-        <th><label>Dilute?</label></th>
+        <th>{{ main_form.is_dilute.label_tag }}</th>
        <td class="inline-radio-buttons">
            {{ main_form.is_dilute.errors }}
             {% for radio in main_form.is_dilute %}
@@ -66,14 +66,14 @@
        </td>
     </tr>
     <tr class="color1-field">
-        <th><label>Color 1:</label></th>
+        <th>{{ main_form.color1.label_tag }}</th>
         <td>
             {{ main_form.color1.errors }}
             {{ main_form.color1 }}
         </td>
     </tr>
     <tr class="color2-field">
-        <th><label>Color 2:</label></th>
+        <th>{{ main_form.color2.label_tag }}</th>
         <td>
             {{ main_form.color2.errors }}
             {{ main_form.color2 }}
@@ -83,7 +83,7 @@
 </table>
 {{ main_form.age_rating.errors }}
 <div class="form-unit text-center" id="age-rating-field">
-    <label>Rate the cat's age on a scale of 1-4.</label><br/>
+    {{ main_form.age_rating.label_tag }}<br/>
     <div class="rating-widget-btn newborn hidden-noscript">
         {% if night_mode %}
             <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
@@ -137,7 +137,7 @@
 </div>
 {{ main_form.other_physical.errors }}
 <div class="field">
-    <label class="bold">Other physical features:</label><br/>
+    <label for="{{ main_form.other_physical.id_for_label }}" class="bold">{{ main_form.other_physical.label }}:</label><br/>
     <fieldset class="checkbox-dropdown">
         <label>Select applicable feature(s)<span class="caret"></span></label>
         <div>
@@ -157,7 +157,7 @@
 {% endblock unique_section_A %}
 {{ main_form.disabilities.errors }}
 <div class="form-unit">
-    <label class="bold">Disabilities and special needs:</label><br/>
+    <label for="{{ main_form.disabilities.id_for_label }}" class="bold">{{ main_form.disabilities.label }}:</label><br/>
     <fieldset class="scrollable-checkboxes" data-size="3">
         <button type="button" class="btn btn-primary">Clear</button>
         {% for checkbox in main_form.disabilities %}
@@ -179,12 +179,12 @@
 {{ main_form.age_units.errors }}
 <div id="statistical-fields">
     <div>
-        <label class="bold">Weight: </label>
+        <label for="{{ main_form.weight.id_for_label }}" class="bold">{{ main_form.weight.label }}:</label>
         {{ main_form.weight }}
         {{ main_form.weight_units }}
     </div>
     <div>
-        <label class="bold">Age:</label>
+        <label for="{{ main_form.precise_age.id_for_label }}" class="bold">{{ main_form.precise_age.label }}:</label>
         {{ main_form.precise_age }}
         {{ main_form.age_units }}
     </div>
@@ -193,7 +193,7 @@
 {% endblock unique_section_B %}
 {{ main_form.public_contact_information.errors }}
 <div class="inline-checkboxes">
-<label><span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.</label><br/>
+    {{ main_form.public_contact_information.label_tag }}<br/>
     {% for checkbox in main_form.public_contact_information %}
         <label class="checkbox-inline">
             {{ checkbox.tag }}

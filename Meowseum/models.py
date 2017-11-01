@@ -553,19 +553,19 @@ class PetInfo(models.Model):
     upload = models.OneToOneField(Upload, verbose_name="upload", null=True)
     # The cat has been adopted, returned to its owner, or the owner has contacted the site about taking down the Found post.
     expired = models.BooleanField(verbose_name="expired", default=False, blank=True)
-    pet_name = models.CharField(max_length=255, verbose_name="name", default="", blank=True)
+    pet_name = models.CharField(max_length=255, verbose_name="pet name", default="", blank=True)
     sex = models.CharField(max_length=6, verbose_name="sex", choices=SEX_CHOICES, default="", blank=True)
     subtype1 = models.CharField(max_length=255, verbose_name="breed", choices=(('', 'Select a breed'),) + CAT_BREED_CHOICES, default="", blank=True)
     hair_length = models.CharField(max_length=255, verbose_name="hair length", choices=(('', 'Select a hair length'),) + COAT_LENGTH_CHOICES, default="", blank=True)
     pattern = models.CharField(max_length=255, verbose_name="pattern", choices=(('', 'Select a pattern'),) + CAT_PATTERN_CHOICES, default="", blank=True)
     # The next three fields are displayed instead of color1 and color2 for tortoiseshell (multicolor) cats.
-    is_calico = models.NullBooleanField(verbose_name="is calico", choices=((None, ''),) + IS_CALICO_CHOICES, null=True, blank=True)
-    has_tabby_stripes = models.NullBooleanField(verbose_name="has tabby stripes", choices=((None, ''),) + HAS_TABBY_STRIPES_CHOICES, null=True, blank=True)
-    is_dilute = models.NullBooleanField(verbose_name="is dilute", choices=IS_DILUTE_CHOICES, null=True, blank=True)
+    is_calico = models.NullBooleanField(verbose_name="calico?", choices=((None, ''),) + IS_CALICO_CHOICES, null=True, blank=True)
+    has_tabby_stripes = models.NullBooleanField(verbose_name="tabby?", choices=((None, ''),) + HAS_TABBY_STRIPES_CHOICES, null=True, blank=True)
+    is_dilute = models.NullBooleanField(verbose_name="dilute?", choices=IS_DILUTE_CHOICES, null=True, blank=True)
     color1 = models.CharField(max_length=255, verbose_name="color 1", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
     # The first color is the one that covers most of the animal's body, and the second color is the one covering a minority of it.
     color2 = models.CharField(max_length=255, verbose_name="color 2", choices=(('', 'Pick a color'),) + CAT_COLOR_CHOICES, default="", blank=True)
-    age_rating = models.CharField(max_length=255, verbose_name="approximate age", choices=AGE_RATING_CHOICES, default="", blank=True)
+    age_rating = models.CharField(max_length=255, verbose_name="Rate the cat's age on a scale of 1-4.", choices=AGE_RATING_CHOICES, default="", blank=True)
     other_physical = ChoiceArrayField(models.CharField(max_length=100, choices=CAT_OTHER_PHYSICAL_CHOICES), verbose_name="other physical features", blank=True)
     disabilities = ChoiceArrayField(models.CharField(max_length=100, choices=CAT_DISABILITY_CHOICES), verbose_name="disabilities and special needs", blank=True)
     # These fields are included even for lost pets because the Nashville Humane Asssociation's lost/found form has these fields,
@@ -636,9 +636,9 @@ class Adoption(PetInfo):
     # To fill out the "Bonded with" field, the user will enter the ID used internally by the organization or the relative URL.
     internal_id = models.CharField(max_length=255, verbose_name="pet ID", validators=[RegexValidator(r'^[^,]+$', 'Enter a valid pet ID. This value may not contain commas.')],
                                    unique=True, null=True, blank=True)
-    bonded_with = models.ManyToManyField("self", blank=True)
+    bonded_with = models.ManyToManyField("self", verbose_name="bonded with", blank=True)
     adoption_fee = models.FloatField(verbose_name="adoption fee", null=True, blank=True)
-    euthenasia_soon = models.BooleanField(verbose_name="euthenasia soon", default=False, blank=True)
+    euthenasia_soon = models.BooleanField(verbose_name="This animal could be euthanized if it is not adopted soon.", default=False, blank=True)
     def __str__(self):
         return self.pet_name
     class Meta:
@@ -676,7 +676,6 @@ class LostFoundInfo(PetInfo):
     eye_color = models.CharField(max_length=255, verbose_name="eye color", choices=CAT_EYE_COLOR_CHOICES, default="", blank=True)
     eye_color_other = models.CharField(max_length=255, verbose_name="eye color - Other", default="", blank=True)
     nose_color = ChoiceArrayField(models.CharField(max_length=100, choices=NOSE_COLOR_CHOICES), verbose_name="nose color", blank=True)
-    date = models.DateField(verbose_name="date", null=True, blank=True)
     location = models.TextField(max_length=10000, verbose_name="location", default="", blank=True)
     other_special_markings = models.TextField(max_length=10000, verbose_name="other special markings", default="", blank=True)
     collar_color = models.CharField(max_length=255, verbose_name="collar color", choices=(('', 'Pick a color'),) + COLLAR_COLOR_CHOICES, default="", blank=True)
@@ -691,6 +690,7 @@ class Lost(LostFoundInfo):
     ('spayed or neutered', 'Spayed or neutered'),
     ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'))
 
+    date = models.DateField(verbose_name="date lost", null=True, blank=True)
     yes_or_no_questions = ChoiceArrayField(models.CharField(max_length=100, choices=YES_OR_NO_QUESTIONS_CHOICES), verbose_name="Which of the following apply to the cat?", blank=True)
     microchip_or_tattoo_ID = models.CharField(max_length=10000, verbose_name="microchip or tattoo ID", default="", blank=True)
     reward = models.FloatField(verbose_name="reward", null=True, blank=True)
@@ -707,6 +707,7 @@ class Found(LostFoundInfo):
     ('has a spay or neuter tattoo', 'Has a spay or neuter tattoo'),
     ('no microchip detected during scan', 'No microchip detected during scan'))
 
+    date = models.DateField(verbose_name="date found", null=True, blank=True)
     is_sighting = models.BooleanField(verbose_name="is a sighting", choices=IS_SIGHTING_CHOICES, default=False, blank=True)
     yes_or_no_questions = ChoiceArrayField(models.CharField(max_length=100, choices=YES_OR_NO_QUESTIONS_CHOICES), verbose_name="Which of the following apply to the cat?", blank=True)
     # This field is for shelters that post pets to the Found section for a few weeks before moving them to the Adoption section

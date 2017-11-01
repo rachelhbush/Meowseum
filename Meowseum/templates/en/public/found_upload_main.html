@@ -13,7 +13,7 @@
 {% endblock is_sighting %}
 {% block table_fields_at_top %}
     <tr>
-       <th><label>Pet name:</label></th>
+       <th>{{ main_form.pet_name.label_tag }}</th>
        <td>
            {{ main_form.pet_name.errors }}
            {{ main_form.pet_name }}
@@ -21,12 +21,11 @@
     </tr>
     {{ block.super }}
 {% endblock table_fields_at_top %}
-{% block date_label %}Date found{% endblock date_label %}
 {% block lostfound_table %}
     {{ block.super }}
     {% if is_shelter %}
         <tr>
-            <th><label>ID (shelters):</label></th>
+            <th>{{ main_form.internal_id.label_tag }}</th>
             <td>
                 {{ main_form.internal_id.errors }}
                 {{ main_form.internal_id }}

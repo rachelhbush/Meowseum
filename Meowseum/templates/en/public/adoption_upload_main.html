@@ -7,7 +7,7 @@
 {% endblock required_message %}
 {% block table_fields_at_top %}
     <tr>
-       <th><label>Pet name: <span class="required-asterisk">*</span></label></th>
+       <th><label for="{{ main_form.pet_name.id_for_label }}">{{ main_form.pet_name.label }}: <span class="required-asterisk">*</span></label></th>
        <td>
            {{ main_form.pet_name.errors }}
            {{ main_form.pet_name }}
@@ -44,7 +44,7 @@
     </div>
     <table class="form">
         <tr>
-            <th><label>Energy level:</label></th>
+            <th>{{ main_form.energy_level.label_tag }}</th>
             <td>
                 {{ main_form.energy_level.errors }}
                 {{ main_form.energy_level }}
@@ -55,14 +55,14 @@
 {% block adoption_id_fields %}
     <table class="form">
         <tr>
-            <th><label>Pet ID:</label></th>
+            <th>{{ main_form.internal_id.label_tag }}</th>
             <td>
                 {{ main_form.internal_id.errors }}
                 {{ main_form.internal_id }}
             </td>
         </tr>
         <tr>
-            <th><label>Bonded with:</label></th>
+            <th>{{ main_form.bonded_with_IDs.label_tag }}</th>
             <td>
                 {{ main_form.bonded_with_IDs.errors }}
                 {{ main_form.bonded_with_IDs }}
@@ -76,7 +76,7 @@
 {% block unique_section_B %}
     <table class="form" id="adoption-fee-field">
         <tr>
-            <th><label>Adoption fee:</label></th>
+            <th>{{ main_form.adoption_fee.label_tag }}</th>
             <td>
                 {{ main_form.adoption_fee.errors }}
                 $ {{ main_form.adoption_fee }} USD
@@ -90,7 +90,7 @@
             {{ main_form.euthenasia_soon }}
             {% include "en/public/elements/custom_checkmark.html" %}
         </div>
-        This animal could be euthanized if it is not adopted <em>soon</em>.
+        {{ main_form.euthenasia_soon.label }}
         </label>
     </div>
 {% endblock unique_section_B %}

@@ -255,13 +255,14 @@ def validate_bonded_with_IDs(string):
 
 class AdoptionForm(PetInfoForm):
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
-    bonded_with_IDs = forms.CharField(required=False, validators=[validate_bonded_with_IDs])
+    bonded_with_IDs = forms.CharField(required=False, label='Bonded with', validators=[validate_bonded_with_IDs])
     def __init__(self, *args, **kwargs):
         super(AdoptionForm,self).__init__(*args, **kwargs)
         self.fields['pet_name'].required = True
     class Meta(PetInfoForm.Meta):
         model = Adoption
         fields = PetInfoForm.Meta.fields + ('prefers_a_home_without', 'has_been', 'energy_level', 'adoption_fee', 'internal_id', 'bonded_with_IDs', 'euthenasia_soon')
+        labels = merge_two_dicts(PetInfoForm.Meta.labels, {'euthenasia_soon': mark_safe('This animal could be euthanized if it is not adopted <em>soon</em>.')})
         widgets = {'adoption_fee': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
     def clean_internal_id(self):
         # This function is required for an optional unique field.
@@ -273,25 +274,29 @@ class AdoptionForm(PetInfoForm):
 
 class LostFoundInfo(PetInfoForm):
     eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect)
-    date = HTML5DateField()
     class Meta(PetInfoForm.Meta):
         model = LostFoundInfo
-        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'date', 'location', 'other_special_markings', 'collar_color', 'collar_description')
+        fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'location', 'other_special_markings', 'collar_color', 'collar_description')
+        labels = merge_two_dicts(PetInfoForm.Meta.labels,
+                                 {'other_special_markings': mark_safe('<span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div>'),
+                                  'collar_description': mark_safe('<span class="bold">Collar description</span> (style, materials)')})
         widgets = {'eye_color_other': forms.TextInput(attrs={"placeholder":"other"})}
 
 class LostForm(LostFoundInfo):
+    date = HTML5DateField(label='Date lost')
     def __init__(self, *args, **kwargs):
         super(LostForm,self).__init__(*args, **kwargs)
         self.fields['pet_name'].required = True
     class Meta(LostFoundInfo.Meta):
         model = Lost
-        fields = LostFoundInfo.Meta.fields + ('yes_or_no_questions', 'microchip_or_tattoo_ID', 'reward')
+        fields = LostFoundInfo.Meta.fields + ('date', 'yes_or_no_questions', 'microchip_or_tattoo_ID', 'reward')
         widgets = merge_two_dicts(LostFoundInfo.Meta.widgets, {'reward': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})})
  
 class FoundForm(LostFoundInfo):
+    date = HTML5DateField(label='Date found')
     class Meta(LostFoundInfo.Meta):
         model = Found
-        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'yes_or_no_questions', 'internal_id')
+        fields = LostFoundInfo.Meta.fields +  ('is_sighting', 'date', 'yes_or_no_questions', 'internal_id')
         widgets = merge_two_dicts(LostFoundInfo.Meta.widgets, {'is_sighting':forms.RadioSelect})
     def clean_internal_id(self):
         # This function is required for an optional unique field.
@@ -302,3 +307,4 @@ class VerifyDescriptionForm(forms.ModelForm):
     class Meta:
         model = Upload
         fields = ('description',)
+        labels = {'description': 'Is there any other information that could aid in the return of the pet?'}

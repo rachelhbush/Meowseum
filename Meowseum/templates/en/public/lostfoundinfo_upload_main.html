@@ -8,7 +8,7 @@
 {% block table_fields_at_top %}
     {{ block.super }}
     <tr>
-        <th><label>Eye color:</label></th>
+        <th>{{ main_form.eye_color.label_tag }}</th>
         <td class="inline-radio-buttons">
             {{ main_form.eye_color.errors }}
             {{ main_form.eye_color_other.errors }}
@@ -22,7 +22,7 @@
         </td>
     </tr>
     <tr>
-        <th><label>Nose color:</label></th>
+        <th>{{ main_form.nose_color.label_tag }}</th>
         <td>
             {{ main_form.nose_color.errors }}
             <fieldset class="checkbox-dropdown">
@@ -43,7 +43,7 @@
     <table class="form">
         {% block lostfound_table %}
         <tr>
-            <th><label>{% block date_label %}{% endblock date_label %}: <span class="required-asterisk">*</span></label></th>
+            <th><label for="{{ main_form.date.id_for_label }}">{{ main_form.date.label }}: <span class="required-asterisk">*</span></label></th>
             <td>
                 {{ main_form.date.errors }}
                 {{ main_form.date }}
@@ -85,7 +85,7 @@
     {% endif %}
             <table class="form">
                 <tr>
-                   <th><label>Collar color:</label></td>
+                   <th>{{ main_form.collar_color.label_tag }}</td>
                    <td>
                         {{ main_form.collar_color.errors }}
                         {{ main_form.collar_color }}
@@ -94,14 +94,14 @@
             </table>
             {{ main_form.collar_description.errors }}
             <div class="field">
-                <label><span class="bold">Collar description</span> (style, materials):</label><br/>
+                {{ main_form.collar_description.label_tag }}<br/>
                 {{ main_form.collar_description }}
             </div>
         </fieldset>
         {% endblock nested_form %}
     </div>
     <div class="field">
-        <label><span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div></label><br/>
+        {{ main_form.other_special_markings.label_tag }}<br/>
         {{ main_form.other_special_markings.errors }}
         {{ main_form.other_special_markings }}
     </div>
@@ -114,7 +114,7 @@
         {{ verify_description_form.non_field_errors }}
         {{ verify_description_form.errors }}
         <div class="field">
-            <label>Is there any other information that could aid in the return of the pet?</label><br/>
+            {{ verify_description_form.description.label_tag }}<br/>
             {{ verify_description_form.description }}
         </div>
     {% endif %}

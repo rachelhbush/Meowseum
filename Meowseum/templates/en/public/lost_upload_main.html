@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block table_fields_at_top %}
     <tr>
-       <th><label>Pet name: <span class="required-asterisk">*</span></label></th>
+       <th><label for="{{ main_form.pet_name.id_for_label }}">{{ main_form.pet_name.label }}: <span class="required-asterisk">*</span></label></th>
        <td>
            {{ main_form.pet_name.errors }}
            {{ main_form.pet_name }}
@@ -10,7 +10,6 @@
     </tr>
     {{ block.super }}
 {% endblock table_fields_at_top %}
-{% block date_label %}Date lost{% endblock date_label %}
 {% block nested_form %}
     {{ block.super }}
     {{ main_form.microchip_or_tattoo_ID.errors }}
@@ -19,7 +18,7 @@
     {% else %}
     <div class="field collapse" id="id-number-description-field">
     {% endif %}
-        <label class="bold">Microchip or tattoo ID:</label><br/>
+        <label for="{{ main_form.microchip_or_tattoo_ID.id_for_label }}" class="bold">{{ main_form.microchip_or_tattoo_ID.label }}:</label><br/>
         {{ main_form.microchip_or_tattoo_ID }}
     </div>
 {% endblock nested_form %}
@@ -27,7 +26,7 @@
     {{ block.super }}
     <table class="form">
         <tr>
-            <th><label>Reward:</label></th>
+            <th>{{ main_form.reward.label_tag }}</th>
             <td>
                 {{ main_form.reward.errors }}
                 $ {{ main_form.reward }} USD
