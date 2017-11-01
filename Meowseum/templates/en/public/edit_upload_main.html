@@ -21,7 +21,7 @@
         {{ edit_upload_form.is_publicly_listed }}
         {% include "en/public/elements/custom_checkmark.html" %}
     </div>
-    <span class="bold">Public?</span> Allow the upload to appear in search results. Uploads that are not publicly listed will still be able to be accessed by other users via the URL.
+    {{ edit_upload_form.is_publicly_listed.label }}
     </label>
 </div>
 {{ edit_upload_form.uploader_has_disabled_comments.errors }}
