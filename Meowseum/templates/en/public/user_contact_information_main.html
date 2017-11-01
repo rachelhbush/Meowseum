@@ -5,70 +5,70 @@ Filling out this form will allow you to upload to the Lost, Found, and Adoption 
 {{ form2.non_field_errors }}
 <table class="form">
     <tr>
-        <th><label>First name:</label></th>
+        <th>{{ form2.first_name.label_tag }}</th>
         <td>
             {{ form2.first_name.errors }}
             {{ form2.first_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Last name:</label></th>
+        <th>{{ form2.last_name.label_tag }}</th>
         <td>
             {{ form2.last_name.errors }}
             {{ form2.last_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Phone number:</label></th>
+        <th>{{ form1.phone_number.label_tag }}</th>
         <td>
             {{ form1.phone_number.errors }}
             {{ form1.phone_number }}
         </td>
     </tr>
     <tr>
-        <th><label>Email:</label></th>
+        <th>{{ form2.email.label_tag }}</th>
         <td>
             {{ form2.email.errors }}
             {{ form2.email }}
         </td>
     </tr>
     <tr>
-        <th><label>Address line 1:</label></th>
+        <th>{{ form1.address_line_1.label_tag }}</th>
         <td>
             {{ form1.address_line_1.errors }}
             {{ form1.address_line_1 }}
         </td>
     </tr>
     <tr>
-        <th><label>Address line 2:</label></th>
+        <th>{{ form1.address_line_2.label_tag }}</th>
         <td>
             {{ form1.address_line_2.errors }}
             {{ form1.address_line_2 }}
         </td>
     </tr>
     <tr>
-        <th><label>City:</label></th>
+        <th>{{ form1.city.label_tag }}</th>
         <td>
             {{ form1.city.errors }}
             {{ form1.city }}
         </td>
     </tr>
     <tr>
-        <th><label>State/Province:</label></th>
+        <th>{{ form1.state_or_province.label_tag }}</th>
         <td>
             {{ form1.state_or_province.errors }}
             {{ form1.state_or_province }}
         </td>
     </tr>
     <tr>
-        <th><label>Country:</label></th>
+        <th>{{ form1.country.label_tag }}</th>
         <td>
             {{ form1.country.errors }}
             {{ form1.country }}
         </td>
     </tr>
     <tr>
-        <th><label>ZIP/Postal Code:</label></th>
+        <th>{{ form1.zip_code.label_tag }}</th>
         <td>
             {{ form1.zip_code.errors }}
             {{ form1.zip_code }}
@@ -76,7 +76,7 @@ Filling out this form will allow you to upload to the Lost, Found, and Adoption 
     </tr>
 </table>
 <div class="field">
-    <label class="bold">Birthday <span class="italics">(optional except for volunteers)</span>:</label>
+    <label for="{{ form1.date_of_birth.id_for_label }}" class="bold">{{ form1.date_of_birth.label }} <span class="italics">(optional except for volunteers)</span>:</label>
     <div>
         {{ form1.date_of_birth.errors }}
         {{ form1.date_of_birth }}
@@ -94,6 +94,6 @@ Filling out this form will allow you to upload to the Lost, Found, and Adoption 
         {{ form1.has_volunteering_interest }}
         {% include "en/public/elements/custom_checkmark.html" %}
     </div>
-    I am interested in volunteering with an animal shelter or rescue group.
+    {{ form1.has_volunteering_interest.label }}
     </label>
 </div>
