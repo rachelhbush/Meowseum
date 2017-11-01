@@ -159,12 +159,12 @@ def validate_offending_username(offending_username):
             raise forms.ValidationError("No user with this username exists.")
 
 class AbuseReportForm(forms.ModelForm):
-    offending_username = forms.CharField(max_length=User._meta.get_field('username').max_length, validators=[validate_offending_username])
+    offending_username = forms.CharField(max_length=User._meta.get_field('username').max_length, label='Offending username', validators=[validate_offending_username])
     def __init__(self, *args, **kwargs):
         super(AbuseReportForm, self).__init__(*args, **kwargs)
     class Meta:
         model = AbuseReport
-        fields = ('abuse_type', 'offending_username', 'abuse_description', 'url')
+        fields = ('type_of_abuse', 'offending_username', 'description', 'url')
         widgets = {'url': forms.URLInput}
 
 class FeedbackForm(forms.ModelForm):

@@ -330,18 +330,18 @@ class AbuseReport(models.Model):
                           ('other', 'Other'))
     
     filer = models.ForeignKey(User, verbose_name="filer", related_name="abuse_report", null=True, blank=True)
-    abuse_type = models.CharField(max_length=255, verbose_name="abuse type", choices=(('', 'Select a category'),) + ABUSE_TYPE_CHOICES)
-    offending_user = models.ForeignKey(User, related_name="abuse_allegedly_committed", null=True, blank=True)
-    abuse_description = models.TextField(max_length=100000, verbose_name="abuse description", default="", blank=True)
+    type_of_abuse = models.CharField(max_length=255, verbose_name="type of abuse", choices=(('', 'Select a category'),) + ABUSE_TYPE_CHOICES)
+    offending_user = models.ForeignKey(User, verbose_name="offending user", related_name="abuse_allegedly_committed", null=True, blank=True)
+    description = models.TextField(max_length=100000, verbose_name="description", default="", blank=True)
     url = models.URLField(max_length=255, verbose_name="URL", default="", blank=True)
     # A moderator will change this to True when the abuse report has been read and either action has been taken or action has been declined.
-    has_been_processed = models.BooleanField(verbose_name="has been processed", default=False, blank=True)
+    has_been_processed = models.BooleanField(verbose_name="has been processed?", default=False, blank=True)
     def __str__(self):
         # This format will allow abuse reports to be monitored from the admin module.
-        if self.abuse_description != '':
-            return self.abuse_description
+        if self.description != '':
+            return self.description
         else:
-            return self.abuse_type.capitalize() + " report #" + str(self.id)
+            return self.type_of_abuse.capitalize() + " report #" + str(self.id)
     class Meta:
         verbose_name = "abuse report"
         verbose_name_plural = "abuse reports"

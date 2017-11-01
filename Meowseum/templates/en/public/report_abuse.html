@@ -16,24 +16,24 @@
             We take allegations of site abuse very seriously. Illegal content will be reported
             to the appropriate authorities. Do not submit false reports.
             {{ form.non_field_errors }}
-            {{ form.abuse_type.errors }}
+            {{ form.type_of_abuse.errors }}
             <div class="field">
-                <label class="bold">Type of abuse</label><br/>
-                {{ form.abuse_type }}
+                <label for="{{ form.type_of_abuse.id_for_label }}" class="bold">{{ form.type_of_abuse.label }}</label><br/>
+                {{ form.type_of_abuse }}
             </div>
             {{ form.offending_username.errors }}
             <div class="field get-parameter">
-                <label class="bold">Offending username</label><br/>
+                <label for="{{ form.offending_username.id_for_label }}" class="bold">{{ form.offending_username.label }}</label><br/>
                 {{ form.offending_username }}
             </div>
-            {{ form.abuse_description.errors }}
+            {{ form.description.errors }}
             <div class="field">
-                <label class="bold">Description <span class="italic">(optional)</span></label><br/>
-                {{ form.abuse_description }}
+                <label for="{{ form.description.id_for_label }}" class="bold">{{ form.description.label }} <span class="italic">(optional)</span></label><br/>
+                {{ form.description }}
             </div>
             {{ form.url.errors }}
             <div class="field get-parameter">
-                <label class="bold">URL</label><br/>
+                <label for="{{ form.url.id_for_label }}" class="bold">{{ form.url.label }}</label><br/>
                 {{ form.url }}
             </div>
             <div class="form-buttons">
