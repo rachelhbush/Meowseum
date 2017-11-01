@@ -8,9 +8,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
-from Meowseum.validators import validate_tags, validate_tag, validate_bonded_with_IDs, validate_offending_username
 from django.utils.safestring import mark_safe
 from django.shortcuts import render
+from django.core.validators import RegexValidator
 from Meowseum.common_view_functions import merge_two_dicts
 
 # Variables used by multiple forms
@@ -94,6 +94,20 @@ class EditUploadForm(forms.ModelForm):
         widgets = {'title': forms.TextInput(attrs={"placeholder":"Title (optional)"}),
                    'description': forms.Textarea(attrs={"placeholder":"Description (optional)"})}
 
+# This function validates a string of tags for a new upload. Acceptable formats include "blep, catloaf" and "#blep, #catloaf".
+def validate_tags(string):
+    # If the string is an empty string or contains only characters that will be stripped, then allow the string.
+    if string == "" or string=="#" or string==" " or string=="# ":
+        return
+    # Tags use the same rules as Python variables. If the tag is invalid, the custom error message will be delivered to the template.
+    pattern = RegexValidator(r'^[a-zA-z_]+[a-zA-z0-9_]*$', "Make sure all of your tags contain only letters, digits, and underscores. The first character of a tag cannot be a digit.")
+    tag_list = string.split(",")
+    # Obtain the list without separation by spaces or hashtags.
+    for x in range(len(tag_list)):
+        tag_list[x] = tag_list[x].lstrip(" ").lstrip("#")
+        # Validate the tag. In the console, the error message appears as "django.core.exceptions.ValidationError: ['message']".
+        pattern.__call__(tag_list[x])
+
 class UploadPage1(EditUploadForm):
     upload_type = forms.ChoiceField(required=False, choices=(('adoption', 'Up for adoption'), ('lost', 'Lost'), ('found','Found'), ('pets','Pets')), initial='pets', widget=forms.RadioSelect() )
     tags = forms.CharField(required=False, label='Tag list', validators=[validate_tags], initial='#')
@@ -113,16 +127,36 @@ class UploadPage1(EditUploadForm):
         return self.cleaned_data
 
 class CommentForm(forms.ModelForm):
-    text = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={"placeholder":"Write something here..."}) )
     class Meta:
         model = Comment
         fields = ('text',)
+        widgets = {'text': forms.Textarea(attrs={"placeholder":"Write something here..."})}
+
+# This function validates a new tag for an existing upload. # is allowed for the form because it will be stripped during form processing.
+def validate_tag(string):
+    # Set up the pattern for validating the part of the tag after the #.
+    pattern = RegexValidator(r'^[a-zA-z_]+[a-zA-z0-9_]*$', "Make sure the tag contains only letters, digits, and underscores. The first character of a tag cannot be a digit.")
+    string = string.lstrip("#")
+    # Validate.
+    pattern.__call__(string)
 
 class TagForm(forms.ModelForm):
-    name = forms.CharField(max_length=255, validators=[validate_tag], widget=forms.TextInput(attrs={"value":"#"}) )
+    def __init__(self, *args, **kwargs):
+        super(TagForm,self).__init__(*args, **kwargs)
+        self.fields['name'].validators = [validate_tag]
     class Meta:
         model = Tag
         fields = ('name',)
+        widgets = {'name': forms.TextInput(attrs={"value":"#"})}
+
+def validate_offending_username(offending_username):
+    try:
+        offending_user = User.objects.get(username=offending_username)
+    except User.DoesNotExist:
+        # If the user doesn't exist, then first check if the user left the field blank.
+        # In that case, the error message would be redundant with the "This field is required." message, so it shouldn't be added.
+        if offending_username != None:
+            raise forms.ValidationError("No user with this username exists.")
 
 class AbuseReportForm(forms.ModelForm):
     offending_username = forms.CharField(max_length=User._meta.get_field('username').max_length, validators=[validate_offending_username])
@@ -198,6 +232,21 @@ class PetInfoForm(forms.ModelForm):
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
                   'age_rating', 'other_physical', 'disabilities', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information')
         labels = {'public_contact_information': mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.')}
+
+# Validate the comma-separated list of IDs for pets with which a pet is bonded.
+def validate_bonded_with_IDs(string):
+    if string != '':
+        list_of_IDs = string.split(',')
+        # For each internal ID, check whether the ID is valid. The only rule is that an ID can't be an empty string. Then, check whether the cat is in the database.
+        for x in range(len(list_of_IDs)):
+            list_of_IDs[x] = list_of_IDs[x].lstrip(' ')
+            if list_of_IDs[x] == '':
+                raise forms.ValidationError("One of the IDs you provided was an empty string.")
+            else:
+                try:
+                    animal = Adoption.objects.get(internal_id=list_of_IDs[x])
+                except Adoption.DoesNotExist:
+                    raise forms.ValidationError("There is no cat in the database with the following ID: " + list_of_IDs[x])
 
 class AdoptionForm(PetInfoForm):
     # This field uses a comma-separated list in which the user may choose to have spaces following each comma.
