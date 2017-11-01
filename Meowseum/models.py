@@ -390,6 +390,11 @@ class UserContact(models.Model):
         verbose_name_plural = "contact information records"
 
 class Shelter(models.Model):
+    SERVICES_INCLUDED_WITH_ADOPTION_FEE_CHOICES = (('spayed or neutered', 'Spaying/neutering'),
+    ('vaccinated', 'Vaccinations (up to date)'),
+    ('microchipped', 'Microchipping'),
+    ('tested and treated for worms, ticks, and fleas', mark_safe('Testing and treatment for worms, ticks, and fleas (<a class="emphasized" href="https://www.aphis.usda.gov/aphis/ourfocus/animalhealth/nvap">USDA</a>-accredited)')))
+    
     # Users can apply to create a profile for a shelter or rescue group that is linked to the information they log in with.
     account = models.OneToOneField(User)
     is_verified = models.BooleanField(verbose_name="verified", default=False, blank=True)
@@ -397,7 +402,7 @@ class Shelter(models.Model):
     contact_first_name = models.CharField(max_length=30, verbose_name="contact first name", default="")
     contact_last_name = models.CharField(max_length=30, verbose_name="contact last name", default="")
     contact_title = models.CharField(max_length=30, verbose_name="contact title", default="", blank=True)
-    include_contact_in_profile = models.BooleanField(verbose_name="include contact in profile", default=False, blank=True)
+    include_contact_in_profile = models.BooleanField(verbose_name="include contact name in profile", default=False, blank=True)
     # Profile and search engine address
     profile_address_line_1 = models.CharField(max_length=255, verbose_name="profile address line 1", default="", blank=True)
     profile_address_line_2 = models.CharField(max_length=255, verbose_name="profile address line 2", default="", blank=True)
@@ -409,9 +414,12 @@ class Shelter(models.Model):
     profile_fax_number = models.CharField(max_length=20, verbose_name="profile fax number", default="", blank=True)
     profile_email = models.EmailField(max_length=60, verbose_name="profile email", default="", blank=True)
     website = models.URLField(max_length=255, verbose_name="profile website", default="", blank=True)
-    is_nonprofit = models.BooleanField(verbose_name="nonprofit status", choices=YES_OR_NO_CHOICES, default=False, blank=True)
-    contact_us_page = models.URLField(max_length=255, verbose_name='"Contact us" page', default="", blank=True)
-    donation_page = models.URLField(max_length=255, verbose_name='donation page', default="", blank=True)
+    is_nonprofit = models.BooleanField(verbose_name="status",
+                                       help_text="Is your organization governmentally / municipally owned, a 501(c)(3) non-profit, a non-profit exempt from state taxes, \
+or a nonprofit with charitable status granted by the Canada Customs and Revenue Agency?",
+                                       choices=YES_OR_NO_CHOICES, default=False, blank=True)
+    contact_us_page = models.URLField(max_length=255, verbose_name='"Contact Us" page', default="", blank=True)
+    donation_page = models.URLField(max_length=255, verbose_name="donation webpage or PayPal link", default="", blank=True)
     # The "other pages" field is more complicated, so I am putting it in later.
     mailing_address_line_1 = models.CharField(max_length=255, verbose_name="mailing address line 1", default="")
     mailing_address_line_2 = models.CharField(max_length=255, verbose_name="mailing address line 2", default="")
@@ -426,17 +434,15 @@ class Shelter(models.Model):
     site_contact_phone_number = models.CharField(max_length=20, verbose_name="site contact phone number", default="")
     site_contact_email = models.EmailField(max_length=60, verbose_name="site contact email", default="")
     # These fields allow users, while searching, to filter out shelter results that are inapplicable to them.
-    distance_prohibition = models.IntegerField(verbose_name="adopters must be within", null=True, blank=True)
+    distance_prohibition = models.IntegerField(verbose_name="Do you prohibit adoption for people living over a certain distance away?", null=True, blank=True)
     # This field allows specifying a minimum age for adoption, because some shelters set it at 19-21. Because 18 is already implied, 19 is the minimum.
     age_prohibition = models.IntegerField(verbose_name="adopters must be over age", validators=[MinValueValidator(19)], null=True, blank=True)
-    is_lost_found_meeting_place = models.BooleanField(verbose_name="nonprofit status", choices=YES_OR_NO_CHOICES, default=False, blank=True)
+    is_lost_found_meeting_place = models.BooleanField(verbose_name="Would you like your location to be used as a meeting place when someone has lost a pet and another person has potentially found it?",
+                                                      choices=YES_OR_NO_CHOICES, default=False, blank=True)
     # These fields allow skipping parts of the adoption form by automatically filling out the fields that will always be the same.
-    base_adoption_fee_cat = models.FloatField(verbose_name="base adoption fee for cats", null=True, blank=True)
-    base_adoption_fee_kitten = models.FloatField(verbose_name="base adoption fee for kittens", null=True, blank=True)
-    spaying_or_neutering_included = models.BooleanField(verbose_name="spaying or neutering included", default=False, blank=True)
-    vaccination_included = models.BooleanField(verbose_name="vaccination included", default=False, blank=True)
-    microchipping_included = models.BooleanField(verbose_name="microchipping included", default=False, blank=True)
-    parasite_treatment_included =  models.BooleanField(verbose_name="parasite treatment included", default=False, blank=True)
+    base_adoption_fee_cat = models.FloatField(verbose_name="What is your base adoption fee for a cat, age one year or older?", null=True, blank=True)
+    base_adoption_fee_kitten = models.FloatField(verbose_name="What is your base adoption fee for a kitten?", null=True, blank=True)
+    services_included_with_adoption_fee = ChoiceArrayField(models.CharField(max_length=100, choices=SERVICES_INCLUDED_WITH_ADOPTION_FEE_CHOICES), verbose_name="What services are included with the base adoption fee?", null=True, blank=True)
     def __str__(self):
         return self.organization_name
 
