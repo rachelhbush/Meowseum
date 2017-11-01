@@ -4,28 +4,28 @@
 {{ form.non_field_errors }}
 <table class="form">
     <tr>
-        <th><label>Organization name:</label></th>
+        <th>{{ form.organization_name.label_tag }}</th>
         <td>
             {{ form.organization_name.errors }}
             {{ form.organization_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Contact first name:</label></th>
+        <th>{{ form.contact_first_name.label_tag }}</th>
         <td>
             {{ form.contact_first_name.errors }}
             {{ form.contact_first_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Contact last name:</label></th>
+        <th>{{ form.contact_last_name.label_tag }}</th>
         <td>
              {{ form.contact_last_name.errors }}
              {{ form.contact_last_name }}
         </td>
     </tr>
     <tr>
-        <th><label class="debold">Contact title:</label></th>
+        <th><label for="{{ form.contact_title.id_for_label }}" class="debold">{{ form.contact_title.label }}:</label></th>
         <td>
             {{ form.contact_title.errors }}
             {{ form.contact_title }}
@@ -36,7 +36,7 @@
 <div class="checkbox text-center">
     <label>
         {{ form.include_contact_in_profile }}
-        Include contact name in profile
+        {{ form.include_contact_in_profile.label }}
     </label>
 </div>
 <h2>Profile and search engine address</h2>
@@ -105,7 +105,7 @@
         </td>
     </tr>
     <tr>
-        <th><label class="debold">Website:</label></th>
+        <th><label for="{{ form.website.id_for_label }}" class="debold">{{ form.website.label }}:</label></th>
         <td>
             {{ form.website.errors }}
             {{ form.website }}
@@ -116,8 +116,7 @@
     <tr>
         <th>{{ form.is_nonprofit.label_tag }}</th>
         <td>
-            Is your organization governmentally / municipally owned, a 501(c)(3) non-profit, a non-profit exempt from state taxes, or a nonprofit with charitable status 
-            granted by the Canada Customs and Revenue Agency?<br/>
+            {{ form.is_nonprofit.help_text }}<br/>
             <div class="text-center">
                 {% for radio in form.is_nonprofit %}
                     <label for="{{ radio.id_for_label }}" class="radio-inline">
@@ -131,7 +130,7 @@
 </table>
 <table class="form">
     <tr>
-        <th><label class="debold">"Contact Us" page:</label></th>
+        <th><label for="{{ form.contact_us_page.id_for_label }}" class="debold">{{ form.contact_us_page.label }}:</label></th>
         <td>
             {{ form.contact_us_page.errors }}
             {{ form.contact_us_page }}
@@ -140,7 +139,7 @@
 </table>
 {{ form.donation_page.errors }}
 <div class="field">
-    <label>Donation webpage or PayPal link:</label><br/>
+    {{ form.donation_page.label_tag }}<br/>
     {{ form.donation_page }}
 </div>
 {% if user_has_shelter_record_on_file %}
@@ -205,14 +204,14 @@
 </div>
 <table class="form">
     <tr>
-        <th><label>Name:</label></th>
+        <th>{{ form.veterinarian_name.label_tag }}</th>
         <td>
             {{ form.veterinarian_name.errors }}
             {{ form.veterinarian_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Phone number:</label></th>
+        <th>{{ form.veterinarian_phone_number.label_tag }}</th>
         <td>
             {{ form.veterinarian_phone_number.errors }}
             {{ form.veterinarian_phone_number }}
@@ -232,28 +231,28 @@
 </div>
 <table class="form">
     <tr>
-        <th><label>First name:</label></th>
+        <th>{{ form.site_contact_first_name.label_tag }}</th>
         <td>
             {{ form.site_contact_first_name.errors }}
             {{ form.site_contact_first_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Last name:</label></th>
+        <th>{{ form.site_contact_last_name.label_tag }}</th>
         <td>
             {{ form.site_contact_last_name.errors }}
             {{ form.site_contact_last_name }}
         </td>
     </tr>
     <tr>
-        <th><label>Phone number:</label></th>
+        <th>{{ form.site_contact_phone_number.label_tag }}</th>
         <td>
             {{ form.site_contact_phone_number.errors }}
             {{ form.site_contact_phone_number }}
         </td>
     </tr>
     <tr>
-        <th><label>Email:</label></th>
+        <th>{{ form.site_contact_email.label_tag }}</th>
         <td>
             {{ form.site_contact_email.errors }}
             {{ form.site_contact_email }}
@@ -296,11 +295,11 @@
             <input type="radio" name="adoption-age-restriction" value="no" checked>
             No
         </label>
-        <span class="follow-up"><label class="bold">Age</label> {{ form.age_prohibition }}</span>
+        <span class="follow-up"><label class="bold">Age:</label> {{ form.age_prohibition }}</span>
     </div>
 </div>
 <div class="form-unit">
-    <label>Would you like your location to be used as a meeting place when someone has lost a pet and another person has potentially found it?</label><br/>
+    {{ form.is_lost_found_meeting_place.label_tag }}<br/>
     <div class="text-center">
         {% for radio in form.is_lost_found_meeting_place %}
             <label for="{{ radio.id_for_label }}" class="radio-inline">
@@ -312,14 +311,14 @@
 </div>
 {{ form.base_adoption_fee_cat.errors }}
 <div class="field">
-    <label class="bold">What is your base adoption fee for a cat, age one year or older?</label>
+    <label for="{{ form.base_adoption_fee_cat.id_for_label }}" class="bold">{{ form.base_adoption_fee_cat.label }}</label>
     <div>
         $ {{ form.base_adoption_fee_cat }} USD
     </div>
 </div>
 {{ form.base_adoption_fee_kitten.errors }}
 <div class="field">
-    <label class="bold">What is your base adoption fee for a kitten?</label>
+    <label for="{{ form.base_adoption_fee_kitten.id_for_label }}" class="bold">{{ form.base_adoption_fee_kitten.label }}</label>
     <div>
         $ {{ form.base_adoption_fee_kitten }} USD
     </div>

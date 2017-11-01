@@ -216,6 +216,12 @@ class ShelterForm(forms.ModelForm):
                   'mailing_zip_code', 'veterinarian_name', 'veterinarian_phone_number', 'site_contact_first_name', 'site_contact_last_name',
                   'site_contact_phone_number', 'site_contact_email', 'distance_prohibition', 'age_prohibition', 'is_lost_found_meeting_place',
                   'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'services_included_with_adoption_fee')
+        labels = {'veterinarian_name': 'Name',
+                  'veterinarian_phone_number': 'Phone number',
+                  'site_contact_first_name': 'First name',
+                  'site_contact_last_name': 'Last name',
+                  'site_contact_phone_number': 'Phone number',
+                  'site_contact_email': 'Email'}
         widgets = {'is_nonprofit': forms.RadioSelect,
                    'age_prohibition': forms.NumberInput(attrs={"min":"19"}),
                    'is_lost_found_meeting_place': forms.RadioSelect,

@@ -413,7 +413,7 @@ class Shelter(models.Model):
     profile_phone_number = models.CharField(max_length=20, verbose_name="profile phone number", default="", blank=True)
     profile_fax_number = models.CharField(max_length=20, verbose_name="profile fax number", default="", blank=True)
     profile_email = models.EmailField(max_length=60, verbose_name="profile email", default="", blank=True)
-    website = models.URLField(max_length=255, verbose_name="profile website", default="", blank=True)
+    website = models.URLField(max_length=255, verbose_name="website", default="", blank=True)
     is_nonprofit = models.BooleanField(verbose_name="status",
                                        help_text="Is your organization governmentally / municipally owned, a 501(c)(3) non-profit, a non-profit exempt from state taxes, \
 or a nonprofit with charitable status granted by the Canada Customs and Revenue Agency?",
@@ -434,7 +434,7 @@ or a nonprofit with charitable status granted by the Canada Customs and Revenue 
     site_contact_phone_number = models.CharField(max_length=20, verbose_name="site contact phone number", default="")
     site_contact_email = models.EmailField(max_length=60, verbose_name="site contact email", default="")
     # These fields allow users, while searching, to filter out shelter results that are inapplicable to them.
-    distance_prohibition = models.IntegerField(verbose_name="Do you prohibit adoption for people living over a certain distance away?", null=True, blank=True)
+    distance_prohibition = models.IntegerField(verbose_name="adopters must be within this distance in miles", null=True, blank=True)
     # This field allows specifying a minimum age for adoption, because some shelters set it at 19-21. Because 18 is already implied, 19 is the minimum.
     age_prohibition = models.IntegerField(verbose_name="adopters must be over age", validators=[MinValueValidator(19)], null=True, blank=True)
     is_lost_found_meeting_place = models.BooleanField(verbose_name="Would you like your location to be used as a meeting place when someone has lost a pet and another person has potentially found it?",
