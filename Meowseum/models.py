@@ -357,7 +357,7 @@ hosting_limits_for_Feedback = {
 class Feedback(models.Model):
     UPLOAD_TO = "feedback_screenshots"
     
-    author = models.ForeignKey(User, related_name="feedback", null=True, blank=True)
+    author = models.ForeignKey(User, verbose_name= "author", related_name="feedback", null=True, blank=True)
     subject = models.CharField(max_length=255, verbose_name="subject")
     comments = models.TextField(max_length=100000, verbose_name="comments")
     email = models.EmailField(max_length=60, verbose_name="email", default="", blank=True)

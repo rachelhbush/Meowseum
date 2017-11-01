@@ -19,22 +19,22 @@
             {{ form.non_field_errors }}
             {{ form.subject.errors }}
             <div class="field">
-                <label class="bold">Subject</label><br/>
+                <label for="{{ form.subject.id_for_label }}" class="bold">{{ form.subject.label }}</label><br/>
                 {{ form.subject }}
             </div>
             {{ form.comments.errors }}
             <div class="field">
-                <label class="bold">Comments</label><br/>
+                <label for="{{ form.comments.id_for_label }}" class="bold">{{ form.comments.label }}</label><br/>
                 {{ form.comments }}
             </div>
             <div class="field">
-                <label class="bold">Email <span class="italic">(optional)</span></label><br/>
+                <label for="{{ form.email.id_for_label }}" class="bold">{{ form.email.label }} <span class="italic">(optional)</span></label><br/>
                 {{ form.email }}
             </div>
             <div class="visible-lg visible-xl">
                 {{ form.screenshot.errors }}
                 <div class="form-unit">
-                    <label class="bold">Screenshot <span class="italic">(optional)</span></label><br/>
+                    <label for="{{ form.screenshot.id_for_label }}" class="bold">{{ form.screenshot.label }} <span class="italic">(optional)</span></label><br/>
                     {{ form.screenshot }}
                 </div>
             </div>
