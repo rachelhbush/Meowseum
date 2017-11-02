@@ -6,6 +6,7 @@
 #                                          Adoption, Lost, Found
 
 from django.db import models
+from django import forms
 from Meowseum.custom_form_fields_and_widgets import MultipleChoiceField
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
@@ -106,7 +107,7 @@ class ChoiceArrayField(ArrayField):
         # Skip our parent's formfield implementation completely as we don't care for it.
         # pylint:disable=bad-super-call
         return super(ArrayField, self).formfield(**defaults)
-
+    
 class Page(models.Model):
     # This model is used with django-hitcount to keep track of page views across the site. The first field is the DRY name of the page in urls.py.
     name = models.CharField(max_length=255, verbose_name="name")

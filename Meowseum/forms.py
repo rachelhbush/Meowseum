@@ -3,10 +3,10 @@
 # The completed form is then sent to a separate view for processing.
 
 from django import forms
-from Meowseum.custom_form_fields_and_widgets import HTML5DateInput, HTML5DateField, MultipleChoiceField
+from Meowseum.custom_form_fields_and_widgets import HTML5DateInput, HTML5DateField, MultipleChoiceField, RadioModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found, SEX_CHOICES, YES_OR_NO_CHOICES
+from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
 from django.utils.safestring import mark_safe
 from django.shortcuts import render
@@ -14,10 +14,11 @@ from django.core.validators import RegexValidator
 from Meowseum.common_view_functions import merge_two_dicts
 
 # Variables used by multiple forms
+
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
 
 # Forms
-class SignupForm(forms.ModelForm):
+class SignupForm(RadioModelForm):
     password_confirmation = forms.CharField(max_length=User._meta.get_field('password').max_length, label='', widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
     class Meta:
         model = User
@@ -41,7 +42,7 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError("Passwords are not identical.")
         return self.cleaned_data
 
-class LoginForm(forms.ModelForm):
+class LoginForm(RadioModelForm):
     email_or_username = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder":"Email or username"}))
     class Meta:
         model = User
@@ -75,7 +76,7 @@ class LoginForm(forms.ModelForm):
             raise forms.ValidationError("Your account has been disabled.")
         return self.cleaned_data
 
-class FromDeviceForm(forms.ModelForm):
+class FromDeviceForm(RadioModelForm):
     file = MetadataRestrictedFileField()
     def __init__(self, *args, **kwargs):
         super(FromDeviceForm,self).__init__(*args, **kwargs)
@@ -84,7 +85,7 @@ class FromDeviceForm(forms.ModelForm):
         model = TemporaryUpload
         fields = ('file',)
 
-class EditUploadForm(forms.ModelForm):
+class EditUploadForm(RadioModelForm):
     # This is a form for editing the fields of UploadPage1, except for the upload category and tags.
     class Meta:
         model = Upload
@@ -126,7 +127,7 @@ class UploadPage1(EditUploadForm):
             raise forms.ValidationError(self.CONTACT_INFO_ERROR)
         return self.cleaned_data
 
-class CommentForm(forms.ModelForm):
+class CommentForm(RadioModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
@@ -140,7 +141,7 @@ def validate_tag(string):
     # Validate.
     pattern.__call__(string)
 
-class TagForm(forms.ModelForm):
+class TagForm(RadioModelForm):
     def __init__(self, *args, **kwargs):
         super(TagForm,self).__init__(*args, **kwargs)
         self.fields['name'].validators = [validate_tag]
@@ -158,7 +159,7 @@ def validate_offending_username(offending_username):
         if offending_username != None:
             raise forms.ValidationError("No user with this username exists.")
 
-class AbuseReportForm(forms.ModelForm):
+class AbuseReportForm(RadioModelForm):
     offending_username = forms.CharField(max_length=User._meta.get_field('username').max_length, label='Offending username', validators=[validate_offending_username])
     def __init__(self, *args, **kwargs):
         super(AbuseReportForm, self).__init__(*args, **kwargs)
@@ -167,14 +168,14 @@ class AbuseReportForm(forms.ModelForm):
         fields = ('type_of_abuse', 'offending_username', 'description', 'url')
         widgets = {'url': forms.URLInput}
 
-class FeedbackForm(forms.ModelForm):
+class FeedbackForm(RadioModelForm):
     screenshot = MetadataRestrictedFileField()
     class Meta:
         model = Feedback
         fields = ('subject', 'comments', 'email', 'screenshot')
 
 class AdvancedSearchForm(forms.Form):
-    # This form doesn't include a forms.ModelForm because the metadata-related form controls will mostly be different from the Metadata model field. For
+    # This form doesn't include a RadioModelForm because the metadata-related form controls will mostly be different from the Metadata model field. For
     # example, minimum and maximum duration instead of a duration field. I considered including searching for minimum dimensions, but I expect most
     # uploads to be 1080p, so users won't be needing it. Right now, the search engine will only be able to match each word exactly, not account for
     # things like plurals, common misspellings, and common synonyms. Searches will also threaten to overwhelm the server if there are too many. I have
@@ -196,17 +197,17 @@ class AdvancedSearchForm(forms.Form):
 
 # Forms below this line are used for Meowseum specifically, rather than a general social media site.
 
-class UserContactForm1(forms.ModelForm):
+class UserContactForm1(RadioModelForm):
     date_of_birth = HTML5DateField(required=False)
     class Meta:
         model = UserContact
         fields = ('phone_number', 'address_line_1', 'address_line_2', 'city', 'state_or_province', 'country', 'zip_code', 'date_of_birth', 'has_volunteering_interest')
-class UserContactForm2(forms.ModelForm):
+class UserContactForm2(RadioModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email')
 
-class ShelterForm(forms.ModelForm):
+class ShelterForm(RadioModelForm):
     class Meta:
         model = Shelter
         fields = ('organization_name', 'contact_first_name', 'contact_last_name', 'contact_title', 'include_contact_in_profile',
@@ -228,15 +229,13 @@ class ShelterForm(forms.ModelForm):
                    'base_adoption_fee_cat': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}),
                    'base_adoption_fee_kitten': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
 
-class PetInfoForm(forms.ModelForm):
-    sex = forms.ChoiceField(required=False, label='Sex', choices=SEX_CHOICES, widget=forms.RadioSelect)
-    is_dilute = forms.NullBooleanField(required=False, label='Dilute?', widget=forms.RadioSelect(choices=PetInfo.IS_DILUTE_CHOICES))
-    age_rating = forms.ChoiceField(required=False, label="Rate the cat's age on a scale of 1-4.", choices=PetInfo.AGE_RATING_CHOICES, widget=forms.RadioSelect)
+class PetInfoForm(RadioModelForm):
     class Meta:
         model = PetInfo
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
                   'age_rating', 'other_physical', 'disabilities', 'weight', 'weight_units', 'precise_age', 'age_units', 'public_contact_information')
         labels = {'public_contact_information': mark_safe('<span class="bold">Public contact information:</span> Check any contact information that you would like to share with the public.')}
+        widgets = {'sex': forms.RadioSelect, 'is_dilute': forms.RadioSelect, 'age_rating': forms.RadioSelect}
 
 # Validate the comma-separated list of IDs for pets with which a pet is bonded.
 def validate_bonded_with_IDs(string):
@@ -263,7 +262,7 @@ class AdoptionForm(PetInfoForm):
         model = Adoption
         fields = PetInfoForm.Meta.fields + ('prefers_a_home_without', 'has_been', 'energy_level', 'adoption_fee', 'internal_id', 'bonded_with_IDs', 'euthenasia_soon')
         labels = merge_two_dicts(PetInfoForm.Meta.labels, {'euthenasia_soon': mark_safe('This animal could be euthanized if it is not adopted <em>soon</em>.')})
-        widgets = {'adoption_fee': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
+        widgets = merge_two_dicts(PetInfoForm.Meta.widgets, {'adoption_fee': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})})
     def clean_internal_id(self):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
@@ -273,14 +272,14 @@ class AdoptionForm(PetInfoForm):
             raise forms.ValidationError('This "pet ID" field is required in order to fill out the "bonded with" field.')
 
 class LostFoundInfo(PetInfoForm):
-    eye_color = forms.ChoiceField(required=False, choices=LostFoundInfo.CAT_EYE_COLOR_CHOICES, widget=forms.RadioSelect)
     class Meta(PetInfoForm.Meta):
         model = LostFoundInfo
         fields = PetInfoForm.Meta.fields + ('eye_color', 'eye_color_other', 'nose_color', 'location', 'other_special_markings', 'collar_color', 'collar_description')
         labels = merge_two_dicts(PetInfoForm.Meta.labels,
                                  {'other_special_markings': mark_safe('<span class="bold">Other special markings or characteristics?</span> <div>(e.g. tail length, coat pattern)</div>'),
                                   'collar_description': mark_safe('<span class="bold">Collar description</span> (style, materials)')})
-        widgets = {'eye_color_other': forms.TextInput(attrs={"placeholder":"other"})}
+        widgets = merge_two_dicts(PetInfoForm.Meta.widgets, {'eye_color': forms.RadioSelect,
+                                                             'eye_color_other': forms.TextInput(attrs={"placeholder":"other"})})
 
 class LostForm(LostFoundInfo):
     date = HTML5DateField(label='Date lost')
@@ -302,7 +301,7 @@ class FoundForm(LostFoundInfo):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
 
-class VerifyDescriptionForm(forms.ModelForm):
+class VerifyDescriptionForm(RadioModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
     class Meta:
         model = Upload
