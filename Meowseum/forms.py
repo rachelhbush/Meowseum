@@ -6,7 +6,7 @@ from django import forms
 from Meowseum.custom_form_fields_and_widgets import HTML5DateInput, HTML5DateField, MultipleChoiceField, RadioModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found
+from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, Address, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found
 from Meowseum.file_handling.MetadataRestrictedFileField import MetadataRestrictedFileField
 from django.utils.safestring import mark_safe
 from django.shortcuts import render
@@ -197,11 +197,16 @@ class AdvancedSearchForm(forms.Form):
 
 # Forms below this line are used for Meowseum specifically, rather than a general social media site.
 
+class AddressForm(RadioModelForm):
+    class Meta:
+        model = Address
+        fields = ('address_line_1', 'address_line_2', 'city', 'state_or_province', 'country', 'zip_code')
+
 class UserContactForm1(RadioModelForm):
     date_of_birth = HTML5DateField(required=False)
     class Meta:
         model = UserContact
-        fields = ('phone_number', 'address_line_1', 'address_line_2', 'city', 'state_or_province', 'country', 'zip_code', 'date_of_birth', 'has_volunteering_interest')
+        fields = ('phone_number', 'date_of_birth', 'has_volunteering_interest')
 class UserContactForm2(RadioModelForm):
     class Meta:
         model = User

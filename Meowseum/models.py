@@ -372,15 +372,23 @@ class Feedback(models.Model):
 
 # The models above this comment are relevant to any social media site. The models below this comment are relevant only to an adoption, lost, or found pet site.
 
-class UserContact(models.Model):
-    # This model is for fields modified by the contact information form, for regular users only.
-    account = models.OneToOneField(User, related_name="user_contact", null=True)
+class Address(models.Model):
+    # The set of fields in this model are those which are used by several Django address add-ons, including django-address, django-postal, and django-SHOP.
+    # This model acts as a placeholder for implementing an add-on or replacement model which will be compatible with GIS.
     address_line_1 = models.CharField(max_length=255, verbose_name="address line 1", default="", blank=True)
     address_line_2 = models.CharField(max_length=255, verbose_name="address line 2", default="", blank=True)
     city = models.CharField(max_length=60, verbose_name="city", default="", blank=True)
     state_or_province = models.CharField(max_length=60, verbose_name="State/Province", choices=(('', 'Select a state'),) + STATE_OR_PROVINCE_CHOICES, default="", blank=True)
     country = models.CharField(max_length=60, verbose_name="country", choices=(('', 'Select a country'),) + COUNTRY_CHOICES, default="", blank=True)
     zip_code = models.CharField(max_length=20, verbose_name="ZIP/Postal Code", default="", blank=True)
+    class Meta:
+        verbose_name_plural = "addresses"
+    # Related, relationship-setting models: UserContact via address
+
+class UserContact(models.Model):
+    # This model is for fields modified by the contact information form, for regular users only.
+    account = models.OneToOneField(User, related_name="user_contact", null=True)
+    address = models.OneToOneField(Address, related_name="user_contact", null=True)
     phone_number = models.CharField(max_length=20, verbose_name="phone number", default="", blank=True)
     date_of_birth = models.DateField(verbose_name="date of birth", null=True, blank=True)
     has_volunteering_interest = models.BooleanField(verbose_name="I am interested in volunteering with an animal shelter or rescue group.", default=False, blank=True)

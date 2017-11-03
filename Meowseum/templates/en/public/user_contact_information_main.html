@@ -1,85 +1,86 @@
 <div class="form-unit text-center">
 Filling out this form will allow you to upload to the Lost, Found, and Adoption sections.
 </div>
-{{ form1.non_field_errors }}
-{{ form2.non_field_errors }}
+{{ user_form.non_field_errors }}
+{{ main_form.non_field_errors }}
+{{ address_form.non_field_errors }}
 <table class="form">
     <tr>
-        <th>{{ form2.first_name.label_tag }}</th>
+        <th>{{ user_form.first_name.label_tag }}</th>
         <td>
-            {{ form2.first_name.errors }}
-            {{ form2.first_name }}
+            {{ user_form.first_name.errors }}
+            {{ user_form.first_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form2.last_name.label_tag }}</th>
+        <th>{{ user_form.last_name.label_tag }}</th>
         <td>
-            {{ form2.last_name.errors }}
-            {{ form2.last_name }}
+            {{ user_form.last_name.errors }}
+            {{ user_form.last_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.phone_number.label_tag }}</th>
+        <th>{{ main_form.phone_number.label_tag }}</th>
         <td>
-            {{ form1.phone_number.errors }}
-            {{ form1.phone_number }}
+            {{ main_form.phone_number.errors }}
+            {{ main_form.phone_number }}
         </td>
     </tr>
     <tr>
-        <th>{{ form2.email.label_tag }}</th>
+        <th>{{ user_form.email.label_tag }}</th>
         <td>
-            {{ form2.email.errors }}
-            {{ form2.email }}
+            {{ user_form.email.errors }}
+            {{ user_form.email }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.address_line_1.label_tag }}</th>
+        <th>{{ address_form.address_line_1.label_tag }}</th>
         <td>
-            {{ form1.address_line_1.errors }}
-            {{ form1.address_line_1 }}
+            {{ address_form.address_line_1.errors }}
+            {{ address_form.address_line_1 }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.address_line_2.label_tag }}</th>
+        <th>{{ address_form.address_line_2.label_tag }}</th>
         <td>
-            {{ form1.address_line_2.errors }}
-            {{ form1.address_line_2 }}
+            {{ address_form.address_line_2.errors }}
+            {{ address_form.address_line_2 }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.city.label_tag }}</th>
+        <th>{{ address_form.city.label_tag }}</th>
         <td>
-            {{ form1.city.errors }}
-            {{ form1.city }}
+            {{ address_form.city.errors }}
+            {{ address_form.city }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.state_or_province.label_tag }}</th>
+        <th>{{ address_form.state_or_province.label_tag }}</th>
         <td>
-            {{ form1.state_or_province.errors }}
-            {{ form1.state_or_province }}
+            {{ address_form.state_or_province.errors }}
+            {{ address_form.state_or_province }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.country.label_tag }}</th>
+        <th>{{ address_form.country.label_tag }}</th>
         <td>
-            {{ form1.country.errors }}
-            {{ form1.country }}
+            {{ address_form.country.errors }}
+            {{ address_form.country }}
         </td>
     </tr>
     <tr>
-        <th>{{ form1.zip_code.label_tag }}</th>
+        <th>{{ address_form.zip_code.label_tag }}</th>
         <td>
-            {{ form1.zip_code.errors }}
-            {{ form1.zip_code }}
+            {{ address_form.zip_code.errors }}
+            {{ address_form.zip_code }}
         </td>
     </tr>
 </table>
 <div class="field">
-    <label for="{{ form1.date_of_birth.id_for_label }}" class="bold">{{ form1.date_of_birth.label }} <span class="italics">(optional except for volunteers)</span>:</label>
+    <label for="{{ main_form.date_of_birth.id_for_label }}" class="bold">{{ main_form.date_of_birth.label }} <span class="italics">(optional except for volunteers)</span>:</label>
     <div>
-        {{ form1.date_of_birth.errors }}
-        {{ form1.date_of_birth }}
+        {{ main_form.date_of_birth.errors }}
+        {{ main_form.date_of_birth }}
         <a data-toggle="instant-collapse" data-target="#birthday-info-request-explanation"> Why?<span class="minus">-</span></a>
     </div>
 </div>
@@ -87,13 +88,13 @@ Filling out this form will allow you to upload to the Lost, Found, and Adoption 
     If you are 13-18 years old and want to volunteer, organizations which accept volunteers in that age range will be able to filter users according to their preference.
     If you are over 18, your birthday will be used to filter out shelters/rescue centers with an age restriction on adoption during searches.
 </div>
-{{ form1.has_volunteering_interest.errors }}
+{{ main_form.has_volunteering_interest.errors }}
 <div class="checkbox has-custom-checkbox">
     <label>
     <div class="custom-checkbox">
-        {{ form1.has_volunteering_interest }}
+        {{ main_form.has_volunteering_interest }}
         {% include "en/public/elements/custom_checkmark.html" %}
     </div>
-    {{ form1.has_volunteering_interest.label }}
+    {{ main_form.has_volunteering_interest.label }}
     </label>
 </div>

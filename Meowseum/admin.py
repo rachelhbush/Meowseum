@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Meowseum.models import Page, ExceptionRecord, TemporaryUpload, Upload, Metadata, Tag, Like, Comment, UserProfile, AbuseReport, Feedback, UserContact, Shelter, Adoption, Lost, Found
+from Meowseum.models import Page, ExceptionRecord, TemporaryUpload, Upload, Metadata, Tag, Like, Comment, UserProfile, AbuseReport, Feedback, Address, UserContact, Shelter, Adoption, Lost, Found
 
 # Register your models here.
 admin.site.register(Page)
@@ -13,6 +13,7 @@ admin.site.register(Comment)
 admin.site.register(UserProfile)
 admin.site.register(AbuseReport)
 admin.site.register(Feedback)
+admin.site.register(Address)
 admin.site.register(UserContact)
 admin.site.register(Shelter)
 admin.site.register(Adoption)

@@ -3,22 +3,26 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from Meowseum.models import UserContact
-from Meowseum.forms import UserContactForm1, UserContactForm2
+from Meowseum.forms import AddressForm, UserContactForm1, UserContactForm2
 
 @login_required
 def page(request):
+    # If contact information has already been filled out, get the record. Otherwise, create the record.
     try:
         contact = UserContact.objects.get(account = request.user)
-        form1 = UserContactForm1(request.POST or None, instance=contact)
+        main_form = UserContactForm1(request.POST or None, instance=contact)
+        address_form = AddressForm(request.POST or None, instance=contact.address)
     except UserContact.DoesNotExist:
-        form1 = UserContactForm1(request.POST or None)
-    form2 = UserContactForm2(request.POST or None, instance=request.user)
+        main_form = UserContactForm1(request.POST or None)
+        address_form = AddressForm(request.POST or None)
+    user_form = UserContactForm2(request.POST or None, instance=request.user)
 
-    if all([form1.is_valid(), form2.is_valid()]):
-        contact = form1.save(commit=False)
+    if all([main_form.is_valid(), address_form.is_valid(), user_form.is_valid()]):
+        contact = main_form.save(commit=False)
         contact.account = request.user
+        contact.address = address_form.save()
         contact.save()
-        form2.save()
+        user_form.save()
         return redirect('index')
     else:
-        return render(request, 'en/public/user_contact_information.html', {'form1':form1, 'form2':form2})
+        return render(request, 'en/public/user_contact_information.html', {'main_form':main_form, 'address_form':address_form, 'user_form':user_form})
