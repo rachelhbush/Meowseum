@@ -389,7 +389,7 @@ class UserContact(models.Model):
     # This model is for fields modified by the contact information form, for regular users only.
     account = models.OneToOneField(User, related_name="user_contact", null=True)
     address = models.OneToOneField(Address, related_name="user_contact", null=True)
-    phone_number = models.CharField(max_length=20, verbose_name="phone number", default="", blank=True)
+    phone_number = models.CharField(max_length=20, verbose_name="phone number", default="")
     date_of_birth = models.DateField(verbose_name="date of birth", null=True, blank=True)
     has_volunteering_interest = models.BooleanField(verbose_name="I am interested in volunteering with an animal shelter or rescue group.", default=False, blank=True)
     def __str__(self):

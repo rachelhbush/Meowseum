@@ -8,14 +8,15 @@ from Meowseum.forms import AddressForm, UserContactForm1, UserContactForm2
 @login_required
 def page(request):
     # If contact information has already been filled out, get the record. Otherwise, create the record.
+    main_form = UserContactForm1(request.POST or None)
+    address_form = AddressForm(request.POST or None, required='__all__')
     try:
         contact = UserContact.objects.get(account = request.user)
-        main_form = UserContactForm1(request.POST or None, instance=contact)
-        address_form = AddressForm(request.POST or None, instance=contact.address)
+        main_form.instance = contact
+        address_form.instance = contact.address
     except UserContact.DoesNotExist:
-        main_form = UserContactForm1(request.POST or None)
-        address_form = AddressForm(request.POST or None)
-    user_form = UserContactForm2(request.POST or None, instance=request.user)
+        pass
+    user_form = UserContactForm2(request.POST or None, instance=request.user, required='__all__')
 
     if all([main_form.is_valid(), address_form.is_valid(), user_form.is_valid()]):
         contact = main_form.save(commit=False)
