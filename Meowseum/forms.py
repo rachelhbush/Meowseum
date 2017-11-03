@@ -216,12 +216,10 @@ class ShelterForm(RadioModelForm):
     class Meta:
         model = Shelter
         fields = ('organization_name', 'contact_first_name', 'contact_last_name', 'contact_title', 'include_contact_in_profile',
-                  'profile_address_line_1', 'profile_address_line_2', 'profile_city', 'profile_state_or_province', 'profile_country',
-                  'profile_zip_code', 'profile_phone_number', 'profile_fax_number', 'profile_email', 'website', 'is_nonprofit', 'contact_us_page', 'donation_page',
-                  'mailing_address_line_1', 'mailing_address_line_2', 'mailing_city', 'mailing_state_or_province', 'mailing_country',
-                  'mailing_zip_code', 'veterinarian_name', 'veterinarian_phone_number', 'site_contact_first_name', 'site_contact_last_name',
-                  'site_contact_phone_number', 'site_contact_email', 'distance_prohibition', 'age_prohibition', 'is_lost_found_meeting_place',
-                  'base_adoption_fee_cat', 'base_adoption_fee_kitten', 'services_included_with_adoption_fee')
+                  'profile_phone_number', 'profile_fax_number', 'profile_email', 'website', 'is_nonprofit', 'contact_us_page', 'donation_page',
+                  'veterinarian_name', 'veterinarian_phone_number', 'site_contact_first_name', 'site_contact_last_name', 'site_contact_phone_number',
+                  'site_contact_email', 'distance_prohibition', 'age_prohibition', 'is_lost_found_meeting_place', 'base_adoption_fee_cat',
+                  'base_adoption_fee_kitten', 'services_included_with_adoption_fee')
         labels = {'veterinarian_name': 'Name',
                   'veterinarian_phone_number': 'Phone number',
                   'site_contact_first_name': 'First name',

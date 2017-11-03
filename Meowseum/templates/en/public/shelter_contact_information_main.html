@@ -1,124 +1,125 @@
 <div class="form-unit">
     Required fields are shown in <span class="bold">bold</span>.
 </div>
-{{ form.non_field_errors }}
+{{ main_form.non_field_errors }}
 <table class="form">
     <tr>
-        <th>{{ form.organization_name.label_tag }}</th>
+        <th>{{ main_form.organization_name.label_tag }}</th>
         <td>
-            {{ form.organization_name.errors }}
-            {{ form.organization_name }}
+            {{ main_form.organization_name.errors }}
+            {{ main_form.organization_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form.contact_first_name.label_tag }}</th>
+        <th>{{ main_form.contact_first_name.label_tag }}</th>
         <td>
-            {{ form.contact_first_name.errors }}
-            {{ form.contact_first_name }}
+            {{ main_form.contact_first_name.errors }}
+            {{ main_form.contact_first_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form.contact_last_name.label_tag }}</th>
+        <th>{{ main_form.contact_last_name.label_tag }}</th>
         <td>
-             {{ form.contact_last_name.errors }}
-             {{ form.contact_last_name }}
+             {{ main_form.contact_last_name.errors }}
+             {{ main_form.contact_last_name }}
         </td>
     </tr>
     <tr>
-        <th><label for="{{ form.contact_title.id_for_label }}" class="debold">{{ form.contact_title.label }}:</label></th>
+        <th><label for="{{ main_form.contact_title.id_for_label }}" class="debold">{{ main_form.contact_title.label }}:</label></th>
         <td>
-            {{ form.contact_title.errors }}
-            {{ form.contact_title }}
+            {{ main_form.contact_title.errors }}
+            {{ main_form.contact_title }}
         </td>
     </tr>
 </table>
-{{ form.include_contact_in_profile.errors }}
+{{ main_form.include_contact_in_profile.errors }}
 <div class="checkbox text-center">
     <label>
-        {{ form.include_contact_in_profile }}
-        {{ form.include_contact_in_profile.label }}
+        {{ main_form.include_contact_in_profile }}
+        {{ main_form.include_contact_in_profile.label }}
     </label>
 </div>
 <h2>Profile and search engine address</h2>
+{{ profile_address_form.non_field_errors }}
 <table class="form">
     <tr>
         <th><label class="debold">Address line 1:</label></th>
         <td>
-            {{ form.profile_address_line_1.errors }}
-            {{ form.profile_address_line_1 }}
+            {{ profile_address_form.address_line_1.errors }}
+            {{ profile_address_form.address_line_1 }}
         </td>
     </tr>
     <tr>
         <th><label class="debold">Address line 2:</label></th>
         <td>
-            {{ form.profile_address_line_2.errors }}
-            {{ form.profile_address_line_2 }}
+            {{ profile_address_form.address_line_2.errors }}
+            {{ profile_address_form.address_line_2 }}
         </td>
     </tr>
     <tr>
         <th><label>City:</label></th>
         <td>
-            {{ form.profile_city.errors }}
-            {{ form.profile_city }}
+            {{ profile_address_form.city.errors }}
+            {{ profile_address_form.city }}
         </td>
     </tr>
     <tr>
         <th><label>State/Province:</label></th>
         <td>
-            {{ form.profile_state_or_province.errors }}
-            {{ form.profile_state_or_province }}
+            {{ profile_address_form.state_or_province.errors }}
+            {{ profile_address_form.state_or_province }}
         </td>
     </tr>
     <tr>
         <th><label>Country:</label></th>
         <td>
-            {{ form.profile_country.errors }}
-            {{ form.profile_country }}
+            {{ profile_address_form.country.errors }}
+            {{ profile_address_form.country }}
         </td>
     </tr>
     <tr>
         <th><label>ZIP/Postal Code:</label></th>
         <td>
-            {{ form.profile_zip_code.errors }}
-            {{ form.profile_zip_code }}
+            {{ profile_address_form.zip_code.errors }}
+            {{ profile_address_form.zip_code }}
         </td>
     </tr>
     <tr>
         <th><label class="debold">Phone number:</label></th>
         <td>
-            {{ form.profile_phone_number.errors }}
-            {{ form.profile_phone_number }}
+            {{ main_form.profile_phone_number.errors }}
+            {{ main_form.profile_phone_number }}
         </td>
     </tr>
     <tr>
         <th><label class="debold">Fax number:</label></th>
         <td>
-            {{ form.profile_fax_number.errors }}
-            {{ form.profile_fax_number }}
+            {{ main_form.profile_fax_number.errors }}
+            {{ main_form.profile_fax_number }}
         </td>
     </tr>
     <tr>
         <th><label class="debold">Email:</label></th>
         <td>
-            {{ form.profile_email.errors }}
-            {{ form.profile_email }}
+            {{ main_form.profile_email.errors }}
+            {{ main_form.profile_email }}
         </td>
     </tr>
     <tr>
-        <th><label for="{{ form.website.id_for_label }}" class="debold">{{ form.website.label }}:</label></th>
+        <th><label for="{{ main_form.website.id_for_label }}" class="debold">{{ main_form.website.label }}:</label></th>
         <td>
-            {{ form.website.errors }}
-            {{ form.website }}
+            {{ main_form.website.errors }}
+            {{ main_form.website }}
         </td>
     </tr>
 </table>
 <table class="form">
     <tr>
-        <th>{{ form.is_nonprofit.label_tag }}</th>
+        <th>{{ main_form.is_nonprofit.label_tag }}</th>
         <td>
-            {{ form.is_nonprofit.help_text }}<br/>
+            {{ main_form.is_nonprofit.help_text }}<br/>
             <div class="text-center">
-                {% for radio in form.is_nonprofit %}
+                {% for radio in main_form.is_nonprofit %}
                     <label for="{{ radio.id_for_label }}" class="radio-inline">
                         {{ radio.tag }}
                         {{ radio.choice_label }}
@@ -130,20 +131,20 @@
 </table>
 <table class="form">
     <tr>
-        <th><label for="{{ form.contact_us_page.id_for_label }}" class="debold">{{ form.contact_us_page.label }}:</label></th>
+        <th><label for="{{ main_form.contact_us_page.id_for_label }}" class="debold">{{ main_form.contact_us_page.label }}:</label></th>
         <td>
-            {{ form.contact_us_page.errors }}
-            {{ form.contact_us_page }}
+            {{ main_form.contact_us_page.errors }}
+            {{ main_form.contact_us_page }}
         </td>
     </tr>
 </table>
-{{ form.donation_page.errors }}
+{{ main_form.donation_page.errors }}
 <div class="field">
-    {{ form.donation_page.label_tag }}<br/>
-    {{ form.donation_page }}
+    {{ main_form.donation_page.label_tag }}<br/>
+    {{ main_form.donation_page }}
 </div>
 {% if user_has_shelter_record_on_file %}
-    <div class="form-buttons">
+    <div class="main_form-buttons">
         <input type="submit" class="btn btn-primary" value="Save changes"/>
     </div>
 {% endif %}
@@ -152,47 +153,48 @@
     <input type="checkbox" data-source-fields="profile_address_line_1, profile_address_line_2, profile_city, profile_state_or_province, profile_country, profile_zip_code" data-target-fields="mailing_address_line_1, mailing_address_line_2, mailing_city, mailing_state_or_province, mailing_country, mailing_zip_code">
     Same as above
 </label>
+{{ mailing_address_form.non_field_errors }}
 <table class="form">
     <tr>
         <th><label>Address line 1:</label></th>
         <td>
-            {{ form.mailing_address_line_1.errors }}
-            {{ form.mailing_address_line_1 }}
+            {{ mailing_address_form.address_line_1.errors }}
+            {{ mailing_address_form.address_line_1 }}
         </td>
     </tr>
     <tr>
         <th><label>Address line 2:</label></th>
         <td>
-            {{ form.mailing_address_line_2.errors }}
-            {{ form.mailing_address_line_2 }}
+            {{ mailing_address_form.address_line_2.errors }}
+            {{ mailing_address_form.address_line_2 }}
         </td>
     </tr>
     <tr>
         <th><label>City:</label></th>
         <td>
-            {{ form.mailing_city.errors }}
-            {{ form.mailing_city }}
+            {{ mailing_address_form.city.errors }}
+            {{ mailing_address_form.city }}
         </td>
     </tr>
     <tr>
         <th><label>State/Province:</label></th>
         <td>
-            {{ form.mailing_state_or_province.errors }}
-            {{ form.mailing_state_or_province }}
+            {{ mailing_address_form.state_or_province.errors }}
+            {{ mailing_address_form.state_or_province }}
         </td>
     </tr>
     <tr>
         <th><label>Country:</label></th>
         <td>
-            {{ form.mailing_country.errors }}
-            {{ form.mailing_country }}
+            {{ mailing_address_form.country.errors }}
+            {{ mailing_address_form.country }}
         </td>
     </tr>
     <tr>
         <th><label>ZIP/Postal Code:</label></th>
         <td>
-            {{ form.mailing_zip_code.errors }}
-            {{ form.mailing_zip_code }}
+            {{ mailing_address_form.zip_code.errors }}
+            {{ mailing_address_form.zip_code }}
         </td>
     </tr>
 </table>
@@ -204,17 +206,17 @@
 </div>
 <table class="form">
     <tr>
-        <th>{{ form.veterinarian_name.label_tag }}</th>
+        <th>{{ main_form.veterinarian_name.label_tag }}</th>
         <td>
-            {{ form.veterinarian_name.errors }}
-            {{ form.veterinarian_name }}
+            {{ main_form.veterinarian_name.errors }}
+            {{ main_form.veterinarian_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form.veterinarian_phone_number.label_tag }}</th>
+        <th>{{ main_form.veterinarian_phone_number.label_tag }}</th>
         <td>
-            {{ form.veterinarian_phone_number.errors }}
-            {{ form.veterinarian_phone_number }}
+            {{ main_form.veterinarian_phone_number.errors }}
+            {{ main_form.veterinarian_phone_number }}
         </td>
     </tr>
 </table>
@@ -231,36 +233,36 @@
 </div>
 <table class="form">
     <tr>
-        <th>{{ form.site_contact_first_name.label_tag }}</th>
+        <th>{{ main_form.site_contact_first_name.label_tag }}</th>
         <td>
-            {{ form.site_contact_first_name.errors }}
-            {{ form.site_contact_first_name }}
+            {{ main_form.site_contact_first_name.errors }}
+            {{ main_form.site_contact_first_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form.site_contact_last_name.label_tag }}</th>
+        <th>{{ main_form.site_contact_last_name.label_tag }}</th>
         <td>
-            {{ form.site_contact_last_name.errors }}
-            {{ form.site_contact_last_name }}
+            {{ main_form.site_contact_last_name.errors }}
+            {{ main_form.site_contact_last_name }}
         </td>
     </tr>
     <tr>
-        <th>{{ form.site_contact_phone_number.label_tag }}</th>
+        <th>{{ main_form.site_contact_phone_number.label_tag }}</th>
         <td>
-            {{ form.site_contact_phone_number.errors }}
-            {{ form.site_contact_phone_number }}
+            {{ main_form.site_contact_phone_number.errors }}
+            {{ main_form.site_contact_phone_number }}
         </td>
     </tr>
     <tr>
-        <th>{{ form.site_contact_email.label_tag }}</th>
+        <th>{{ main_form.site_contact_email.label_tag }}</th>
         <td>
-            {{ form.site_contact_email.errors }}
-            {{ form.site_contact_email }}
+            {{ main_form.site_contact_email.errors }}
+            {{ main_form.site_contact_email }}
         </td>
     </tr>
 </table>
 {% if user_has_shelter_record_on_file %}
-    <div class="form-buttons">
+    <div class="main_form-buttons">
         <input type="submit" class="btn btn-primary" value="Save changes"/>
     </div>
 {% endif %}
@@ -268,7 +270,7 @@
 <div class="form-unit">
     This optional section will be used when users are searching for shelters. It will also allow you to skip parts of the adoption form that will always be the same for your organization.
 </div>
-{{ form.distance_prohibition.errors }}
+{{ main_form.distance_prohibition.errors }}
 <div class="field">
     <label class="bold">Do you prohibit adoption for people living over a certain distance away?</label>
     <div>
@@ -280,10 +282,10 @@
             <input type="radio" name="adoption-distance-restriction" value="no" checked>
             No
         </label>
-        <span class="follow-up"><label class="bold">Distance:</label> {{ form.distance_prohibition }} miles</span>
+        <span class="follow-up"><label class="bold">Distance:</label> {{ main_form.distance_prohibition }} miles</span>
     </div>
 </div>
-{{ form.age_prohibition.errors }}
+{{ main_form.age_prohibition.errors }}
 <div class="field">
     <label class="bold">Do you prohibit adoption until a certain age over 18?</label>
     <div>
@@ -295,13 +297,13 @@
             <input type="radio" name="adoption-age-restriction" value="no" checked>
             No
         </label>
-        <span class="follow-up"><label class="bold">Age:</label> {{ form.age_prohibition }}</span>
+        <span class="follow-up"><label class="bold">Age:</label> {{ main_form.age_prohibition }}</span>
     </div>
 </div>
 <div class="form-unit">
-    {{ form.is_lost_found_meeting_place.label_tag }}<br/>
+    {{ main_form.is_lost_found_meeting_place.label_tag }}<br/>
     <div class="text-center">
-        {% for radio in form.is_lost_found_meeting_place %}
+        {% for radio in main_form.is_lost_found_meeting_place %}
             <label for="{{ radio.id_for_label }}" class="radio-inline">
                 {{ radio.tag }}
                 {{ radio.choice_label }}
@@ -309,24 +311,24 @@
         {% endfor %}
     </div>
 </div>
-{{ form.base_adoption_fee_cat.errors }}
+{{ main_form.base_adoption_fee_cat.errors }}
 <div class="field">
-    <label for="{{ form.base_adoption_fee_cat.id_for_label }}" class="bold">{{ form.base_adoption_fee_cat.label }}</label>
+    <label for="{{ main_form.base_adoption_fee_cat.id_for_label }}" class="bold">{{ main_form.base_adoption_fee_cat.label }}</label>
     <div>
-        $ {{ form.base_adoption_fee_cat }} USD
+        $ {{ main_form.base_adoption_fee_cat }} USD
     </div>
 </div>
-{{ form.base_adoption_fee_kitten.errors }}
+{{ main_form.base_adoption_fee_kitten.errors }}
 <div class="field">
-    <label for="{{ form.base_adoption_fee_kitten.id_for_label }}" class="bold">{{ form.base_adoption_fee_kitten.label }}</label>
+    <label for="{{ main_form.base_adoption_fee_kitten.id_for_label }}" class="bold">{{ main_form.base_adoption_fee_kitten.label }}</label>
     <div>
-        $ {{ form.base_adoption_fee_kitten }} USD
+        $ {{ main_form.base_adoption_fee_kitten }} USD
     </div>
 </div>
-{{ form.services_included_with_adoption_fee.errors }} 
+{{ main_form.services_included_with_adoption_fee.errors }} 
 <div class="inline-checkboxes">
-    <label for="{{ main_form.yes_or_no_questions.id_for_label }}" class="bold">{{ form.services_included_with_adoption_fee.label }}</label><br/>
-    {% for checkbox in form.services_included_with_adoption_fee %}
+    <label for="{{ main_main_form.yes_or_no_questions.id_for_label }}" class="bold">{{ main_form.services_included_with_adoption_fee.label }}</label><br/>
+    {% for checkbox in main_form.services_included_with_adoption_fee %}
         <label class="checkbox-inline has-custom-checkbox">
             <div class="custom-checkbox">
                 {{ checkbox.tag }}
