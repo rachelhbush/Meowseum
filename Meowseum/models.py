@@ -374,9 +374,10 @@ class Feedback(models.Model):
 
 class Address(models.Model):
     # The set of fields in this model are those which are used by several Django address add-ons, including django-address, django-postal, and django-SHOP.
-    # This model acts as a placeholder for implementing an add-on or replacement model which will be compatible with GIS.
+    # This model acts as a placeholder for implementing an add-on or replacement model which will be compatible with GIS. I will switch to an add-on when I
+    # implement search capabilities, because searching will be an important part of selecting an add-on.
     address_line_1 = models.CharField(max_length=255, verbose_name="address line 1", default="", blank=True)
-    address_line_2 = models.CharField(max_length=255, verbose_name="address line 2", default="", blank=True)
+    address_line_2 = models.CharField(max_length=255, verbose_name="address line 2", default="", blank=True) # This field should always be optional.
     city = models.CharField(max_length=60, verbose_name="city", default="", blank=True)
     state_or_province = models.CharField(max_length=60, verbose_name="State/Province", choices=(('', 'Select a state'),) + STATE_OR_PROVINCE_CHOICES, default="", blank=True)
     country = models.CharField(max_length=60, verbose_name="country", choices=(('', 'Select a country'),) + COUNTRY_CHOICES, default="", blank=True)

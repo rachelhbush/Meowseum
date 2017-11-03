@@ -163,7 +163,7 @@
         </td>
     </tr>
     <tr>
-        <th>{{ mailing_address_form.address_line_2.label_tag }}</th>
+        <th><label for="{{ mailing_address_form.address_line_2.id_for_label }}" class="debold">{{ mailing_address_form.address_line_2.label }}:</label></th>
         <td>
             {{ mailing_address_form.address_line_2.errors }}
             {{ mailing_address_form.address_line_2 }}

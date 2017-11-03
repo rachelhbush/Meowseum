@@ -9,7 +9,7 @@ from Meowseum.forms import AddressForm, UserContactForm1, UserContactForm2
 def page(request):
     # If contact information has already been filled out, get the record. Otherwise, create the record.
     main_form = UserContactForm1(request.POST or None)
-    address_form = AddressForm(request.POST or None, required='__all__')
+    address_form = AddressForm(request.POST or None, required=('address_line_1', 'city', 'state_or_province', 'country', 'zip_code'))
     try:
         contact = UserContact.objects.get(account = request.user)
         main_form.instance = contact
