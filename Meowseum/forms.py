@@ -3,7 +3,7 @@
 # The completed form is then sent to a separate view for processing.
 
 from django import forms
-from Meowseum.custom_form_fields_and_widgets import HTML5DateInput, HTML5DateField, MultipleChoiceField, RadioModelForm
+from Meowseum.custom_form_fields_and_widgets import HTML5DateInput, HTML5DateField, MultipleChoiceField, CustomModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from Meowseum.models import TemporaryUpload, Upload, Tag, Comment, AbuseReport, Feedback, Address, UserContact, Shelter, PetInfo, Adoption, LostFoundInfo, Lost, Found
@@ -18,7 +18,7 @@ from Meowseum.common_view_functions import merge_two_dicts
 popular_tags = Tag.get_popular_tag_names() # When no tags have been added to the site yet, the multiselect will appear blank.
 
 # Forms
-class SignupForm(RadioModelForm):
+class SignupForm(CustomModelForm):
     password_confirmation = forms.CharField(max_length=User._meta.get_field('password').max_length, label='', widget=forms.PasswordInput(attrs={"placeholder":"Confirm password"}))
     class Meta:
         model = User
@@ -42,7 +42,7 @@ class SignupForm(RadioModelForm):
             raise forms.ValidationError("Passwords are not identical.")
         return self.cleaned_data
 
-class LoginForm(RadioModelForm):
+class LoginForm(CustomModelForm):
     email_or_username = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder":"Email or username"}))
     class Meta:
         model = User
@@ -76,7 +76,7 @@ class LoginForm(RadioModelForm):
             raise forms.ValidationError("Your account has been disabled.")
         return self.cleaned_data
 
-class FromDeviceForm(RadioModelForm):
+class FromDeviceForm(CustomModelForm):
     file = MetadataRestrictedFileField()
     def __init__(self, *args, **kwargs):
         super(FromDeviceForm,self).__init__(*args, **kwargs)
@@ -85,7 +85,7 @@ class FromDeviceForm(RadioModelForm):
         model = TemporaryUpload
         fields = ('file',)
 
-class EditUploadForm(RadioModelForm):
+class EditUploadForm(CustomModelForm):
     # This is a form for editing the fields of UploadPage1, except for the upload category and tags.
     class Meta:
         model = Upload
@@ -127,7 +127,7 @@ class UploadPage1(EditUploadForm):
             raise forms.ValidationError(self.CONTACT_INFO_ERROR)
         return self.cleaned_data
 
-class CommentForm(RadioModelForm):
+class CommentForm(CustomModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
@@ -141,7 +141,7 @@ def validate_tag(string):
     # Validate.
     pattern.__call__(string)
 
-class TagForm(RadioModelForm):
+class TagForm(CustomModelForm):
     def __init__(self, *args, **kwargs):
         super(TagForm,self).__init__(*args, **kwargs)
         self.fields['name'].validators = [validate_tag]
@@ -159,7 +159,7 @@ def validate_offending_username(offending_username):
         if offending_username != None:
             raise forms.ValidationError("No user with this username exists.")
 
-class AbuseReportForm(RadioModelForm):
+class AbuseReportForm(CustomModelForm):
     offending_username = forms.CharField(max_length=User._meta.get_field('username').max_length, label='Offending username', validators=[validate_offending_username])
     def __init__(self, *args, **kwargs):
         super(AbuseReportForm, self).__init__(*args, **kwargs)
@@ -168,14 +168,14 @@ class AbuseReportForm(RadioModelForm):
         fields = ('type_of_abuse', 'offending_username', 'description', 'url')
         widgets = {'url': forms.URLInput}
 
-class FeedbackForm(RadioModelForm):
+class FeedbackForm(CustomModelForm):
     screenshot = MetadataRestrictedFileField()
     class Meta:
         model = Feedback
         fields = ('subject', 'comments', 'email', 'screenshot')
 
 class AdvancedSearchForm(forms.Form):
-    # This form doesn't include a RadioModelForm because the metadata-related form controls will mostly be different from the Metadata model field. For
+    # This form doesn't include a CustomModelForm because the metadata-related form controls will mostly be different from the Metadata model field. For
     # example, minimum and maximum duration instead of a duration field. I considered including searching for minimum dimensions, but I expect most
     # uploads to be 1080p, so users won't be needing it. Right now, the search engine will only be able to match each word exactly, not account for
     # things like plurals, common misspellings, and common synonyms. Searches will also threaten to overwhelm the server if there are too many. I have
@@ -197,22 +197,22 @@ class AdvancedSearchForm(forms.Form):
 
 # Forms below this line are used for Meowseum specifically, rather than a general social media site.
 
-class AddressForm(RadioModelForm):
+class AddressForm(CustomModelForm):
     class Meta:
         model = Address
         fields = ('address_line_1', 'address_line_2', 'city', 'state_or_province', 'country', 'zip_code')
 
-class UserContactForm1(RadioModelForm):
+class UserContactForm1(CustomModelForm):
     date_of_birth = HTML5DateField(required=False)
     class Meta:
         model = UserContact
         fields = ('phone_number', 'date_of_birth', 'has_volunteering_interest')
-class UserContactForm2(RadioModelForm):
+class UserContactForm2(CustomModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name')
 
-class ShelterForm(RadioModelForm):
+class ShelterForm(CustomModelForm):
     class Meta:
         model = Shelter
         fields = ('organization_name', 'contact_first_name', 'contact_last_name', 'contact_title', 'include_contact_in_profile',
@@ -232,7 +232,7 @@ class ShelterForm(RadioModelForm):
                    'base_adoption_fee_cat': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"}),
                    'base_adoption_fee_kitten': forms.NumberInput(attrs={"placeholder":"0", "class":"currency"})}
 
-class PetInfoForm(RadioModelForm):
+class PetInfoForm(CustomModelForm):
     class Meta:
         model = PetInfo
         fields = ('pet_name', 'sex', 'subtype1', 'hair_length', 'pattern', 'is_calico', 'has_tabby_stripes', 'is_dilute', 'color1', 'color2',
@@ -304,7 +304,7 @@ class FoundForm(LostFoundInfo):
         # This function is required for an optional unique field.
         return self.cleaned_data['internal_id'] or None
 
-class VerifyDescriptionForm(RadioModelForm):
+class VerifyDescriptionForm(CustomModelForm):
     # On a lost or found upload form, allow the upload description to be viewed again, this time using an 'Is there anything else?' label.
     class Meta:
         model = Upload

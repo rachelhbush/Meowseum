@@ -17,14 +17,28 @@ class MultipleChoiceField(forms.MultipleChoiceField):
 
 # Custom Forms and ModelForms
 
-# Summary: This ModelForm subclass supports specifying a RadioSelect (radio button) widget by only specifying the widgets= section of class Meta.
-# Description: In the default ModelForm, if the field is optional, it adds a "----" option to the beginning of a series of radio buttons unless the
-# field is a BooleanField. This is usually undesired because the user can choose this value by leaving the field blank, but it is there because the
-# widget's ChoiceField is shared with the <select> dropdown. The only drawback is a rare atypical behavior that if the ModelForm has an overriding
-# field and a widget for this field in class Meta simultaneously, then the overriding field's choices will be ignored.
-class RadioModelForm(forms.ModelForm):
+class CustomModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        self.required = kwargs.pop('required', None)
         super(forms.ModelForm,self).__init__(*args, **kwargs)
+        self.setup_required_constructor_argument()
+        self.setup_radio_buttons()
+    def setup_required_constructor_argument(self):
+        # Allow specifying required fields in the ModelForm constructor, allowing a ModelForm which only varies in this way to be used multiple times without subclassing it.
+        # Input: tuple or list of required fields, or '__all__' to indicate all fields in the form should be required.
+        if self.required != None:
+            if self.required == '__all__':
+                for field in self.fields:
+                    self.fields[field].required = True
+            else:
+                for field in self.required:
+                    self.fields[field].required = True
+    def setup_radio_buttons(self):
+        # Support specifying a RadioSelect (radio button) widget by only specifying the widgets= section of class Meta.
+        # In the default ModelForm, if the field is optional, it adds a "----" option to the beginning of a series of radio buttons unless the
+        # field is a BooleanField. This is usually undesired because the user can choose this value by leaving the field blank, but it is there because the
+        # widget's ChoiceField is shared with the <select> dropdown. The only drawback is a rare atypical behavior that if the ModelForm has an overriding
+        # field and a widget for this field in class Meta simultaneously, then the overriding field's choices will be ignored.
         if self._meta.widgets != None:
             for field, widget in self._meta.widgets.items():
                 try:
