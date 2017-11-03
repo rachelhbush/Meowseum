@@ -43,63 +43,63 @@
 {{ profile_address_form.non_field_errors }}
 <table class="form">
     <tr>
-        <th><label class="debold">Address line 1:</label></th>
+        <th><label for="{{ profile_address_form.address_line_1.id_for_label }}" class="debold">{{ profile_address_form.address_line_1.label }}:</label></th>
         <td>
             {{ profile_address_form.address_line_1.errors }}
             {{ profile_address_form.address_line_1 }}
         </td>
     </tr>
     <tr>
-        <th><label class="debold">Address line 2:</label></th>
+        <th><label for="{{ profile_address_form.address_line_2.id_for_label }}" class="debold">{{ profile_address_form.address_line_2.label }}:</label></th>
         <td>
             {{ profile_address_form.address_line_2.errors }}
             {{ profile_address_form.address_line_2 }}
         </td>
     </tr>
     <tr>
-        <th><label>City:</label></th>
+        <th>{{ profile_address_form.city.label_tag }}</th>
         <td>
             {{ profile_address_form.city.errors }}
             {{ profile_address_form.city }}
         </td>
     </tr>
     <tr>
-        <th><label>State/Province:</label></th>
+        <th>{{ profile_address_form.state_or_province.label_tag }}</th>
         <td>
             {{ profile_address_form.state_or_province.errors }}
             {{ profile_address_form.state_or_province }}
         </td>
     </tr>
     <tr>
-        <th><label>Country:</label></th>
+        <th>{{ profile_address_form.country.label_tag }}</th>
         <td>
             {{ profile_address_form.country.errors }}
             {{ profile_address_form.country }}
         </td>
     </tr>
     <tr>
-        <th><label>ZIP/Postal Code:</label></th>
+        <th>{{ profile_address_form.zip_code.label_tag }}</th>
         <td>
             {{ profile_address_form.zip_code.errors }}
             {{ profile_address_form.zip_code }}
         </td>
     </tr>
     <tr>
-        <th><label class="debold">Phone number:</label></th>
+        <th><label for="{{ main_form.profile_phone_number.id_for_label }}" class="debold">{{ main_form.profile_phone_number.label }}:</label></th>
         <td>
             {{ main_form.profile_phone_number.errors }}
             {{ main_form.profile_phone_number }}
         </td>
     </tr>
     <tr>
-        <th><label class="debold">Fax number:</label></th>
+        <th><label for="{{ main_form.profile_fax_number.id_for_label }}" class="debold">{{ main_form.profile_fax_number.label }}:</label></th>
         <td>
             {{ main_form.profile_fax_number.errors }}
             {{ main_form.profile_fax_number }}
         </td>
     </tr>
     <tr>
-        <th><label class="debold">Email:</label></th>
+        <th><label for="{{ main_form.profile_email.id_for_label }}" class="debold">{{ main_form.profile_email.label }}:</label></th>
         <td>
             {{ main_form.profile_email.errors }}
             {{ main_form.profile_email }}
@@ -156,42 +156,42 @@
 {{ mailing_address_form.non_field_errors }}
 <table class="form">
     <tr>
-        <th><label>Address line 1:</label></th>
+        <th>{{ mailing_address_form.address_line_1.label_tag }}</th>
         <td>
             {{ mailing_address_form.address_line_1.errors }}
             {{ mailing_address_form.address_line_1 }}
         </td>
     </tr>
     <tr>
-        <th><label>Address line 2:</label></th>
+        <th>{{ mailing_address_form.address_line_2.label_tag }}</th>
         <td>
             {{ mailing_address_form.address_line_2.errors }}
             {{ mailing_address_form.address_line_2 }}
         </td>
     </tr>
     <tr>
-        <th><label>City:</label></th>
+        <th>{{ mailing_address_form.city.label_tag }}</th>
         <td>
             {{ mailing_address_form.city.errors }}
             {{ mailing_address_form.city }}
         </td>
     </tr>
     <tr>
-        <th><label>State/Province:</label></th>
+        <th>{{ mailing_address_form.state_or_province.label_tag }}</th>
         <td>
             {{ mailing_address_form.state_or_province.errors }}
             {{ mailing_address_form.state_or_province }}
         </td>
     </tr>
     <tr>
-        <th><label>Country:</label></th>
+        <th>{{ mailing_address_form.country.label_tag }}</th>
         <td>
             {{ mailing_address_form.country.errors }}
             {{ mailing_address_form.country }}
         </td>
     </tr>
     <tr>
-        <th><label>ZIP/Postal Code:</label></th>
+        <th>{{ mailing_address_form.zip_code.label_tag }}</th>
         <td>
             {{ mailing_address_form.zip_code.errors }}
             {{ mailing_address_form.zip_code }}

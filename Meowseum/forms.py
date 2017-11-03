@@ -220,7 +220,10 @@ class ShelterForm(CustomModelForm):
                   'veterinarian_name', 'veterinarian_phone_number', 'site_contact_first_name', 'site_contact_last_name', 'site_contact_phone_number',
                   'site_contact_email', 'distance_prohibition', 'age_prohibition', 'is_lost_found_meeting_place', 'base_adoption_fee_cat',
                   'base_adoption_fee_kitten', 'services_included_with_adoption_fee')
-        labels = {'veterinarian_name': 'Name',
+        labels = {'profile_phone_number': 'Phone number',
+                  'profile_fax_number': 'Fax number',
+                  'profile_email': 'Email',
+                  'veterinarian_name': 'Name',
                   'veterinarian_phone_number': 'Phone number',
                   'site_contact_first_name': 'First name',
                   'site_contact_last_name': 'Last name',
