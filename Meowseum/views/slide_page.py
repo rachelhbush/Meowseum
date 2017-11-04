@@ -217,81 +217,8 @@ def format_adoption_record_for_display(upload):
                            format_bonded_with_field(upload.adoption.bonded_with.all()),
                            upload.adoption.internal_id,
                            format_currency(upload.adoption.adoption_fee, exact=False))
-    boolean_answers = get_adoption_boolean_answers(upload.adoption, merged_field_values[1])
-    return merged_field_labels, merged_field_values, boolean_answers
-
-# 6.2. For an Upload record in the Lost category, merge all the related fields and omit the fields without any relevant information.
-# Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
-def format_lost_record_for_display(upload):
-    microchip_ID, tattoo_ID = get_microchip_or_tattoo_ID(upload.lost)
     
-    merged_field_labels = ('Name',
-                           'Sex',
-                           'City',
-                           'Location description',
-                           'Collar',
-                           'Microchip ID',
-                           'Tattoo ID',
-                           'Breed',
-                           'Coat description',
-                           'Eye color',
-                           'Nose color',
-                           'Other special characteristics',
-                           'Disabilities',
-                           'Age',
-                           'Weight',
-                           'Reward')
-    merged_field_values = (upload.lost.pet_name,
-                           get_lost_merged_sex_field(upload.lost),
-                           get_city_merged_field(upload),
-                           upload.lost.location,
-                           get_collar_merged_field(upload.lost),
-                           microchip_ID,
-                           tattoo_ID,
-                           get_merged_breed_field(upload.lost),
-                           get_coat_description_field(upload.lost),
-                           get_merged_eye_color_field(upload.lost),
-                           capfirst(humanize_list(upload.lost.nose_color)),
-                           get_merged_other_special_characteristics_field(upload.lost),
-                           capfirst(humanize_list(upload.lost.disabilities, "")),
-                           get_merged_age_field(upload.lost),
-                           get_merged_weight_field(upload.lost),
-                           format_currency(upload.lost.reward, exact=False))
-    boolean_answers = get_lost_boolean_answers(upload.lost, merged_field_values[4], merged_field_values[1])
-    return merged_field_labels, merged_field_values, boolean_answers
-
-# 6.3. For an Upload record in the Found category, merge all the related fields and omit the fields without any relevant information.
-# Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
-def format_found_record_for_display(upload):
-    merged_field_labels = ('Name',
-                           'Sex',
-                           'City',
-                           'Location description',
-                           'Collar',
-                           'Breed',
-                           'Coat description',
-                           'Eye color',
-                           'Nose color',
-                           'Other special characteristics',
-                           'Disabilities',
-                           'Age',
-                           'Weight',
-                           'ID')
-    merged_field_values = (upload.found.pet_name,
-                           get_found_merged_sex_field(upload.found),
-                           get_city_merged_field(upload),
-                           upload.found.location,
-                           get_collar_merged_field(upload.found),
-                           get_merged_breed_field(upload.found),
-                           get_coat_description_field(upload.found),
-                           get_merged_eye_color_field(upload.found),
-                           capfirst(humanize_list(upload.found.nose_color)),
-                           get_merged_other_special_characteristics_field(upload.found),
-                           capfirst(humanize_list(upload.found.disabilities, "")),
-                           get_merged_age_field(upload.found),
-                           get_merged_weight_field(upload.found),
-                           upload.found.internal_id)
-    boolean_answers = get_found_boolean_answers(upload.found, merged_field_values[4], merged_field_values[1])
+    boolean_answers = get_adoption_boolean_answers(upload.adoption, merged_field_values[1])
     return merged_field_labels, merged_field_values, boolean_answers
 
 # 6.1.1 For the Adoption record, the Sex label will use merged strings for the sex field and the spay/neuter field.
@@ -481,6 +408,46 @@ def get_adoption_boolean_answers(record, sex):
         boolean_answers = None
     return boolean_answers
 
+# 6.2. For an Upload record in the Lost category, merge all the related fields and omit the fields without any relevant information.
+# Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
+def format_lost_record_for_display(upload):
+    microchip_ID, tattoo_ID = get_microchip_or_tattoo_ID(upload.lost)
+    
+    merged_field_labels = ('Name',
+                           'Sex',
+                           'City',
+                           'Location description',
+                           'Collar',
+                           'Microchip ID',
+                           'Tattoo ID',
+                           'Breed',
+                           'Coat description',
+                           'Eye color',
+                           'Nose color',
+                           'Other special characteristics',
+                           'Disabilities',
+                           'Age',
+                           'Weight',
+                           'Reward')
+    merged_field_values = (upload.lost.pet_name,
+                           get_lost_merged_sex_field(upload.lost),
+                           get_city_merged_field(upload),
+                           upload.lost.location,
+                           get_collar_merged_field(upload.lost),
+                           microchip_ID,
+                           tattoo_ID,
+                           get_merged_breed_field(upload.lost),
+                           get_coat_description_field(upload.lost),
+                           get_merged_eye_color_field(upload.lost),
+                           capfirst(humanize_list(upload.lost.nose_color)),
+                           get_merged_other_special_characteristics_field(upload.lost),
+                           capfirst(humanize_list(upload.lost.disabilities, "")),
+                           get_merged_age_field(upload.lost),
+                           get_merged_weight_field(upload.lost),
+                           format_currency(upload.lost.reward, exact=False))
+    boolean_answers = get_lost_boolean_answers(upload.lost, merged_field_values[4], merged_field_values[1])
+    return merged_field_labels, merged_field_values, boolean_answers
+
 # 6.2.1 For the Lost record, the Sex label will use merged strings for the sex field, the spay/neuter field, and the spay/neuter tattoo field.
 # Input: A Lost record. Output: The string for the merged field.
 def get_lost_merged_sex_field(record):
@@ -574,6 +541,40 @@ def get_lost_boolean_answers(record, collar, sex):
         boolean_answers = None
 
     return boolean_answers
+
+# 6.3. For an Upload record in the Found category, merge all the related fields and omit the fields without any relevant information.
+# Input: An Upload record. Output: merged_field_labels, merged_field_values, boolean_answers
+def format_found_record_for_display(upload):
+    merged_field_labels = ('Name',
+                           'Sex',
+                           'City',
+                           'Location description',
+                           'Collar',
+                           'Breed',
+                           'Coat description',
+                           'Eye color',
+                           'Nose color',
+                           'Other special characteristics',
+                           'Disabilities',
+                           'Age',
+                           'Weight',
+                           'ID')
+    merged_field_values = (upload.found.pet_name,
+                           get_found_merged_sex_field(upload.found),
+                           get_city_merged_field(upload),
+                           upload.found.location,
+                           get_collar_merged_field(upload.found),
+                           get_merged_breed_field(upload.found),
+                           get_coat_description_field(upload.found),
+                           get_merged_eye_color_field(upload.found),
+                           capfirst(humanize_list(upload.found.nose_color)),
+                           get_merged_other_special_characteristics_field(upload.found),
+                           capfirst(humanize_list(upload.found.disabilities, "")),
+                           get_merged_age_field(upload.found),
+                           get_merged_weight_field(upload.found),
+                           upload.found.internal_id)
+    boolean_answers = get_found_boolean_answers(upload.found, merged_field_values[4], merged_field_values[1])
+    return merged_field_labels, merged_field_values, boolean_answers
 
 # 6.3.1 For the Found record, the Sex label will use merged strings for the sex field and the spay/neuter tattoo field.
 # Input: A Found record. Output: The string for the merged field.
