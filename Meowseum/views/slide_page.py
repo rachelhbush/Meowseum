@@ -1,6 +1,6 @@
 # Description: This is a page for showing an upload, a file also referred to as a slide, and all the other database information about it.
 
-from Meowseum.models import Upload, Metadata, Comment, Tag, Like, Page, hosting_limits_for_Upload
+from Meowseum.models import Upload, Metadata, Comment, Tag, Like, Page, UserContact, hosting_limits_for_Upload
 from Meowseum.forms import CommentForm, TagForm
 from django.shortcuts import render, get_object_or_404
 from Meowseum.common_view_functions import redirect
@@ -236,7 +236,11 @@ def get_adoption_merged_sex_field(record):
 # 6.1.2 The City label will use merged strings for the city, state or province, and ZIP or postal code. These three fields are currently required.
 # Input: An Upload record. Output: The string for the merged field.
 def get_city_merged_field(upload):
-    return upload.uploader.user_contact.city + ", " + upload.uploader.user_contact.state_or_province + " (" + upload.uploader.user_contact.zip_code + ")"
+    try:
+        UserContact.objects.get(account=upload.uploader)
+        return upload.uploader.user_contact.city + ", " + upload.uploader.user_contact.state_or_province + " (" + upload.uploader.user_contact.zip_code + ")"
+    except UserContact.DoesNotExist:
+        return ''
 
 # 6.1.3 The Breed label will use merged strings for the breed field and the hair length field.
 # Input: An Adoption, Lost, or Found record. Output: The string for the merged field.
