@@ -55,7 +55,7 @@ $(document).ready(function() {
     // Create a namespace for the sitewide JavaScript form functions.
     window.forms = window.forms || {};
     
-    // 7.1. This function styles a "Today" button to the right of a date form control and a "Now" button to the right of a time form control.
+    // 6.1. This function styles a "Today" button to the right of a date form control and a "Now" button to the right of a time form control.
     forms.todayAndNowButtons = function() {
         $('input[type="date"]+button').click(function() {
             // If the browser has a date picker, then setting the value of the field will require the standard format, which will be rendered as MM/DD/YYYY regardless.
@@ -81,12 +81,12 @@ $(document).ready(function() {
         });
     };
     
-    // 7. Customize HTML5 fields, including anything related to date and time.
+    // 6. Customize HTML5 fields, including anything related to date and time.
     forms.customizeHTML5Fields = function() {
-        forms.todayAndNowButtons();
+        forms.todayAndNowButtons(); // 15
     };
     
-    // 6.1.2. If the user presses enter while typing in the most recently created text field, add a new text field below it.
+    // 5.2.2. If the user presses enter while typing in the most recently created text field, add a new text field below it.
     //     Pressing enter in any of the earlier text fields will have no effect. This is a recursive function.
     var addNewTextFieldOnEnter = function() {
         $("table.form tr:has(span.add-field) input:last-child").keydown(function(e) {
@@ -107,7 +107,7 @@ $(document).ready(function() {
         });
     };
     
-    // 6.1.1.1. Input: The <span class="add-field"> for the table row. The form table cell containing the first field. Using these as arguments will allow an event handler containing
+    // 5.2.1.1. Input: The <span class="add-field"> for the table row. The form table cell containing the first field. Using these as arguments will allow an event handler containing
     //    this function to first obtain the elements using "this" and a convenient path through the DOM. 
     //    Processing: Add a new text field to the form table cell.
     forms.addNewTextField = function($plusSign, $fieldCell) {
@@ -144,7 +144,7 @@ $(document).ready(function() {
         $plusSign.css("top", "+=31px");
     };
     
-    // 6.1.1. Upon clicking the plus sign in <th>, add a new text field to its adjcent table cell allowing multiple fields.
+    // 5.2.1. Upon clicking the plus sign in <th>, add a new text field to its adjcent table cell allowing multiple fields.
     var addNewTextFieldOnClick = function() {
         $("table.form th > span.add-field").click(function() {
             $plusSign = $(this);
@@ -159,7 +159,7 @@ $(document).ready(function() {
         });
     };
     
-    // 6.1. In situations appropriate for one or more text field for one label, like social media URLs, allow the user to click a plus sign by a label to add another field.
+    // 5.2. In situations appropriate for one or more text field for one label, like social media URLs, allow the user to click a plus sign by a label to add another field.
     //    This function supports all HTML5 form controls which render as text fields when unsupported. In this HTML, use this function by placing <span class="add-field">+</span>
     //    before the table.form label.
     //    Requirements: 1. The field name must not contain any digits except at the end. The digits at the end of the field name must signify its order from the top, starting with 1.
@@ -175,12 +175,26 @@ $(document).ready(function() {
         addNewTextFieldOnEnter();
     };
     
-    // 6. Prepare custom widgets which incorporate text fields.
-    forms.prepareTextFieldWidgets = function() {
+    // 5.1. This function changes the behavior of placeholder text so that it clears when the text field gains focus, instead of when the user begins typing in it.
+    forms.clearPlaceholderTextOnFocus = function() {
+        $("[placeholder]").each(function() {
+            var placeholderText = $(this).attr("placeholder");
+            $(this).focus(function() {
+                $(this).attr("placeholder","");
+            });
+            $(this).blur(function() {
+                $(this).attr("placeholder",placeholderText);
+            })
+        });
+    };
+    
+    // 5. Customize text field behavior.
+    forms.customizeTextFields = function() {
+        forms.clearPlaceholderTextOnFocus();
         forms.oneOrMoreFields();
     };
     
-    // 5.2.2. For each "same as" checkbox, copy the values from its source fields to its target fields. Then, submit the form.
+    // 4.2.2. For each "same as" checkbox, copy the values from its source fields to its target fields. Then, submit the form.
     forms.copySameAsValuesAndSubmit = function(e) {
         e.preventDefault();
         $("[data-source-fields]", $(this)).each(function() {
@@ -199,7 +213,7 @@ $(document).ready(function() {
         this.submit();
     };
     
-    // 5.2.1. For each "same as" checkbox, toggle whether its target fields are readonly. The readonly fields will have the text hidden so that the user can more easily concentrate on the other fields.
+    // 4.2.1. For each "same as" checkbox, toggle whether its target fields are readonly. The readonly fields will have the text hidden so that the user can more easily concentrate on the other fields.
     // In the style sheet, the readonly fields must be styled as greyed out, or else the fields will mistakenly appear blank.
     forms.toggleReadonlyTargetFields = function() {
         targetNames = $(this).data("target-fields").split(", ");
@@ -216,7 +230,7 @@ $(document).ready(function() {
         }
     };
     
-    // 5.2. This function scripts a checkbox which, when checked, will copy values from a set of fields into another set of fields.
+    // 4.2. This function scripts a checkbox which, when checked, will copy values from a set of fields into another set of fields.
     // HTML: <input type="checkbox" data-source-fields="" data-target-fields=""/> Use a comma-separated list of the names of the fields.
     // This function only works for text fields, HTML5 fields which render as text fields in old browsers, and <select>s.
     forms.sameAsCheckbox = function() {
@@ -224,7 +238,7 @@ $(document).ready(function() {
         $('form:has([data-source-fields])').on("submit", forms.copySameAsValuesAndSubmit);
     };
     
-    // 5.1. If a checkbox with the value "Any" is checked, check all checkboxes with the same name attribute. Keep the "Any" checkbox checked as long as all the other checkboxes stay checked.
+    // 4.1. If a checkbox with the value "Any" is checked, check all checkboxes with the same name attribute. Keep the "Any" checkbox checked as long as all the other checkboxes stay checked.
     //    This function requires that there isn't any duplication of form controls, like a second copy with the same name, or else the script will only be applied to the last one.
     forms.anyCheckbox = function() {
         $('input[type="checkbox"][value="any"],input[type="checkbox"][value="Any"]').each(function() {
@@ -248,13 +262,13 @@ $(document).ready(function() {
         });
     };
     
-    // 5. Prepare checkboxes which execute certain actions, such as checking all other checkboxes, or a "same as" checkbox.
+    // 4. Prepare checkboxes which execute certain actions, such as checking all other checkboxes, or a "same as" checkbox.
     forms.prepareCheckboxWidgets = function() {
         forms.anyCheckbox();
         forms.sameAsCheckbox();
     };
     
-    // 4.4.6. Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
+    // 3.4.6. Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
     //     For example, mousing over the third star in a five-star ratings widget fills the first, second, and third star while leaving the fourth and fifth empty.
     //     When the user stops mousing over any of the icons, they all appear inactive again. The file paths should be the same for each rating widget button in the group.
     //     So that the mouseover effect is continuous, the borders of each rating widget button should all be touching.
@@ -294,7 +308,7 @@ $(document).ready(function() {
         });
     };
     
-    // 4.4.5. Attach the event handlers for the image check button.
+    // 3.4.5. Attach the event handlers for the image check button.
     forms.attachImageCheckButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // Have a hover effect only if there are alternate file paths, and only while the image check button is inactive.
         // The hover effect toggles the inactive/active file path without toggling the active class.
@@ -325,7 +339,7 @@ $(document).ready(function() {
         });
     };
     
-    // 4.4.4. Attach the event handlers for the image radio button.
+    // 3.4.4. Attach the event handlers for the image radio button.
     forms.attachImageRadioButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // If widget hasn't been clicked yet and it supports alternate file paths, then use a hover effect.
         $("div.radio-btn",$parent).mouseenter(function() {
@@ -357,7 +371,7 @@ $(document).ready(function() {
         });
     };
    
-    // 4.4.3. This is a higher-order function which sets up the variables for image button behavior based on the file paths in the data- attributes. If the image button differs between day/night mode, it
+    // 3.4.3. This is a higher-order function which sets up the variables for image button behavior based on the file paths in the data- attributes. If the image button differs between day/night mode, it
     //     detaches events and re-attaches them with new values for the variables when the user toggles day/night mode. So, adding another widget to forms.buttonRadioAndCheckgroups() only requires writing
     //     another callback function which attaches all of its event handlers.
     //     Input:  callback, the function which attaches all the event handlers to the button.
@@ -439,7 +453,7 @@ $(document).ready(function() {
         callback($parent,widgetHasBeenClicked,activeIcon,inactiveIcon);
     };
    
-   // 4.4.2, 4.4.3.1. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 3.4.2, 3.4.3.1. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    //        Input: selector, a string for the class used by the button the user interacts with, like ".check-btn". Make sure "this" refers to the clicked element using .call(this,selector).
    forms.checkCorrespondingCheckbox = function(selector){
         $parent = $(this).parent();
@@ -457,7 +471,7 @@ $(document).ready(function() {
         }
    };
    
-   // 4.4.1, 4.4.4.1, 4.4.6.1. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 3.4.1, 3.4.4.1, 3.4.6.1. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    // Input: selector, a string for the class used by the button the user interacts with, like ".radio-btn". Make sure "this" refers to the clicked element using .call(this,selector).
    forms.checkCorrespondingRadioButton = function(selector) {
        $parent = $(this).parent();
@@ -475,7 +489,7 @@ $(document).ready(function() {
         }
    };
    
-   // 4.4. "Bootstrap check buttons", "Bootstrap radio buttons", "image check buttons", "image radio buttons", and "image buttons" are the terms I use to refer to the widgets this function scripts.
+   // 3.4. "Bootstrap check buttons", "Bootstrap radio buttons", "image check buttons", "image radio buttons", and "image buttons" are the terms I use to refer to the widgets this function scripts.
    //     This function is for Bootstrap buttons or images which, when clicked or touched ("pressed"), check hidden form controls. Bootstrap has this built-in, but it only works for button groups. When an image
    //     button is clicked, it can change the styling around the image (like a border for highlighting) or switch between file paths. Note that this function doesn't toggle an image representing a check on/off;
    //     this style is covered by other functions. If the form control is for client-side effects only, then you can choose to omit the default form controls from the HTML source code. Other scripts will know
@@ -536,7 +550,7 @@ $(document).ready(function() {
         });
     };
     
-    // 4.3.1. Make sure that the custom checkbox is checked if the hidden default checkbox is checked.
+    // 3.3.1. Make sure that the custom checkbox is checked if the hidden default checkbox is checked.
     //     "this" should refer to the default checkbox, either through an event handler or .call().
     forms.adjustCustomCheckbox = function() {
         var $parent = $(this).parent();
@@ -549,7 +563,7 @@ $(document).ready(function() {
         }
     };
     
-    // 4.3. This function makes custom-styled checkboxes behave the same way as the default checkboxes. The default checkbox itself cannot be styled, so I
+    // 3.3. This function makes custom-styled checkboxes behave the same way as the default checkboxes. The default checkbox itself cannot be styled, so I
     //    wrapped it in a <div> and styled that instead. This function requires Bootstrap, only because the event handler is being attached to Bootstrap classes
     //    for the container of a checkbox and its label. Even though the default checkbox is hidden, the user still interacts with it by clicking it, so the custom
     //    checkbox will still fire the "change" event without .trigger("change").
@@ -567,7 +581,7 @@ $(document).ready(function() {
         $('.custom-checkbox input[type="checkbox"]').change(forms.adjustCustomCheckbox);
     };
     
-    // 4.2. This function is necessary for the custom file browse button to work in IE11, but not IE9 or IE10. See scrapbin.css for the documentation.
+    // 3.2. This function is necessary for the custom file browse button to work in IE11, but not IE9 or IE10. See scrapbin.css for the documentation.
     forms.customFileBrowseButton = function() {
         IEVersion = browserInvestigator.detectIEVersion();
         // Target IE11 only, or else other browsers will open the file picker a second time after closing it.
@@ -578,23 +592,74 @@ $(document).ready(function() {
         };
     };
     
-    // 4.1. Bootstrap .glyphicon-search icons that are nested in a <form> will submit the <form> when clicked.
+    // 3.1. Bootstrap .glyphicon-search icons that are nested in a <form> will submit the <form> when clicked.
     forms.searchIconsSubmit = function() {
         $("form .glyphicon-search").click(function() {
             $(this).closest("form").submit();
         });
     };
     
-    // 4. Allow customizing the appearance of traditional widgets (radio buttons, checkboxes, file browse button, submit button) in various ways,
+    // 3. Allow customizing the appearance of traditional widgets (radio buttons, checkboxes, file browse button, submit button) in various ways,
     //    or enable other elements to behave like them.
-    forms.customizeBuiltInWidgetAppearance = function() {
+    forms.customizeTraditionalWidgetAppearance = function() {
         forms.searchIconsSubmit();
         forms.customFileBrowseButton();
         forms.customCheckboxes();
         forms.buttonRadioAndCheckgroups();
     };
     
-    // 3.2. scrollable-checkboxes render like a Bootstrap multiselect, but with checkboxes. I also refer to these as "scrollable checkbox areas".
+    // 2.3. For non-mobile devices, multiselects require pressing Ctrl in order to select multiple options. This function improves the behavior of a multiselect by making it so that
+    // clicking an option will select or unselect it. Many sites recommend more user-friendly alternatives to the multiselect, such as an overflow with checkboxes, but this
+    // function will make the form more intuitive until such an alternative is implemented. The function assumes the script is needed only if the screen is over 1200px wide.
+    // iOS and Android provide their own interface for the multiselect, styling it like a button which launches a modal.
+    //  Known issues:        Clicking an option at the top of the multiselect and then clicking an option at the bottom of the multiselect will scroll the multiselect back to the top.
+    //                       The issue is caused by preventDefault(), and I made it so that it at least does not arise when clicking while using the keyboard controls. 
+    // Attempted solutions: I do not think that this issue can be fixed. I tried using focus() and blur() after changing the property, and it had no effect. I tried
+    //                       preventing the default action for focus() on <option> and on <select>, and it had no effect. jQuery's scrollTop() was able to get the
+    //                       scroll position of the multiselect, but it had no effect when I tried to use this value to set the scroll position. Using a timer to
+    //                       wait for a fraction of a millisecond before invoking the method for an attempted fix had worked in other situations,
+    //                       but this time it had no effect.
+    //                       
+    //                       In the future, to override default form control behavior, it would probably be easier to hide the form control and create a separate <div> which manipulates
+    //                       the hidden form control's properties. For a multiselect, the <div> would be a <ul> containing a list of items in an overflow.
+    forms.keyboardlessMultiselects = function() {
+        var viewportWidth = screen.width;
+        if (viewportWidth > 1200) {
+            $multiselects = $("select[multiple]");
+            $multiselects.each(function() {
+                var numberOfOptions = $("option", this).length;
+                // Retrieve a jQuery set of all the <option>s in the multiselect.
+                var $options = $("option",this);
+                for (var i=0; i < numberOfOptions; i++) {
+                    $($options[i]).on('mousedown',(function(i) {
+                        // Use a closure so that each <option>'s event handler will remember a different i value.
+                        var eventHandler = function(e) {
+                            // If the user still prefers to multiselect with the keyboard, make no changes to the default behavior.
+                            if (!e.shiftKey && !e.ctrlKey) {
+                                e.preventDefault();
+                            }
+                            // Keep the browser from unselecting all other selected options on mousedown without pressing Ctrl.
+                            if (!e.ctrlKey) {
+                                var status = $(this).prop("selected");
+                                if (status == true) {
+                                    $(this).prop("selected", false);
+                                }
+                                else {
+                                    $(this).prop("selected", true);
+                                }
+                                // Modifying a property of an <option> removes focus from the <select>, resulting in <option>s being highlighted grey. Keep the focus on the <select> so
+                                // <option>s stay highlighted blue.
+                                $(this).parent().focus();
+                            }
+                        }
+                        return eventHandler;
+                    })(i));
+                }
+            });
+        }
+    };
+    
+    // 2.2. scrollable-checkboxes render like a Bootstrap multiselect, but with checkboxes. I also refer to these as "scrollable checkbox areas".
     forms.scrollableCheckboxes = function() {
         // Adjust the content area height based on the data-size attribute.
         var size = $(".scrollable-checkboxes").data("size");
@@ -623,7 +688,7 @@ $(document).ready(function() {
         });
     };
     
-    // 3.1.2. This jQuery plug-in method, belonging to .checkbox-dropdown, makes checkbox dropdowns open upward if it would allow more options to be displayed in the viewport at once.
+    // 2.1.2. This jQuery plug-in method, belonging to .checkbox-dropdown, makes checkbox dropdowns open upward if it would allow more options to be displayed in the viewport at once.
     //     It makes the dropdown open upward by adding the class .above if it is needed for the dropdown to fit within the viewport.
     //     It also determines what the maximum height of the dropdown option container should be. If there is plenty of room, it leaves the maximum height at enough for 20 options.
     //     If the dropdown is long enough to scroll regardless of which way the dropdown opens, then it adds .above if the dropdown is below the viewport's center.
@@ -662,7 +727,7 @@ $(document).ready(function() {
         }
     };
     
-    // 3.1.1. This jQuery plug-in method, belonging to .checkbox-dropdown, sets its label to be a string like "1 option selected" or "3 options selected".
+    // 2.1.1. This jQuery plug-in method, belonging to .checkbox-dropdown, sets its label to be a string like "1 option selected" or "3 options selected".
     // This will be visible in the rectangle above the options, and it will continue to be visible while the dropdown is closed.
     $.fn.setCheckboxDropdownLabel = function(zeroCheckedLabel) {
         // Count the number of options that are checked, excluding the "any" or "Any" checkbox if there is one.
@@ -685,7 +750,7 @@ $(document).ready(function() {
     //                  and involve keeping track of how the selected range changes using a follower variable.
     //               2. The feature which disables text selection could be better supported by browsers (IE9, Android 4.1 and older) if JavaScript were used to disable it instead of a CSS rule.
     
-    // 3.1. Checkbox dropdowns render like a <select> dropdown, but with checkboxes. The script requires that each checkbox dropdown uses a unique name for its set of checkboxes.
+    // 2.1. Checkbox dropdowns render like a <select> dropdown, but with checkboxes. The script requires that each checkbox dropdown uses a unique name for its set of checkboxes.
     forms.checkboxDropdowns = function() {
         $(".checkbox-dropdown").each(function() {
             // Store the checkbox dropdown into a variable, because it will be referenced by multiple event handlers for other elements.
@@ -742,80 +807,11 @@ $(document).ready(function() {
         });
     };
     
-    // 3. This function sets up widgets which were created to replace <select multiple>. They have a better UI and incorporate checkboxes to make it more obvious to the user
-    // when an item is selected.
-    forms.prepareMultiselectWidgets = function() {
+    // 2. This function sets up widgets which were created to replace <select multiple>. They have a better UI and incorporate checkboxes to make it more obvious to the user
+    // when an item is selected. This function also includes any improvement on the behavior of <select multiple> itself.
+    forms.prepareCustomizedMultiselects = function() {
         forms.checkboxDropdowns();
         forms.scrollableCheckboxes();
-    };
-    
-    // 2.2. For non-mobile devices, multiselects require pressing Ctrl in order to select multiple options. This function improves the behavior of a multiselect by making it so that
-    // clicking an option will select or unselect it. Many sites recommend more user-friendly alternatives to the multiselect, such as an overflow with checkboxes, but this
-    // function will make the form more intuitive until such an alternative is implemented. The function assumes the script is needed only if the screen is over 1200px wide.
-    // iOS and Android provide their own interface for the multiselect, styling it like a button which launches a modal.
-    //  Known issues:        Clicking an option at the top of the multiselect and then clicking an option at the bottom of the multiselect will scroll the multiselect back to the top.
-    //                       The issue is caused by preventDefault(), and I made it so that it at least does not arise when clicking while using the keyboard controls. 
-    // Attempted solutions: I do not think that this issue can be fixed. I tried using focus() and blur() after changing the property, and it had no effect. I tried
-    //                       preventing the default action for focus() on <option> and on <select>, and it had no effect. jQuery's scrollTop() was able to get the
-    //                       scroll position of the multiselect, but it had no effect when I tried to use this value to set the scroll position. Using a timer to
-    //                       wait for a fraction of a millisecond before invoking the method for an attempted fix had worked in other situations,
-    //                       but this time it had no effect.
-    //                       
-    //                       In the future, to override default form control behavior, it would probably be easier to hide the form control and create a separate <div> which manipulates
-    //                       the hidden form control's properties. For a multiselect, the <div> would be a <ul> containing a list of items in an overflow.
-    forms.keyboardlessMultiselects = function() {
-        var viewportWidth = screen.width;
-        if (viewportWidth > 1200) {
-            $multiselects = $("select[multiple]");
-            $multiselects.each(function() {
-                var numberOfOptions = $("option", this).length;
-                // Retrieve a jQuery set of all the <option>s in the multiselect.
-                var $options = $("option",this);
-                for (var i=0; i < numberOfOptions; i++) {
-                    $($options[i]).on('mousedown',(function(i) {
-                        // Use a closure so that each <option>'s event handler will remember a different i value.
-                        var eventHandler = function(e) {
-                            // If the user still prefers to multiselect with the keyboard, make no changes to the default behavior.
-                            if (!e.shiftKey && !e.ctrlKey) {
-                                e.preventDefault();
-                            }
-                            // Keep the browser from unselecting all other selected options on mousedown without pressing Ctrl.
-                            if (!e.ctrlKey) {
-                                var status = $(this).prop("selected");
-                                if (status == true) {
-                                    $(this).prop("selected", false);
-                                }
-                                else {
-                                    $(this).prop("selected", true);
-                                }
-                                // Modifying a property of an <option> removes focus from the <select>, resulting in <option>s being highlighted grey. Keep the focus on the <select> so
-                                // <option>s stay highlighted blue.
-                                $(this).parent().focus();
-                            }
-                        }
-                        return eventHandler;
-                    })(i));
-                }
-            });
-        }
-    };
-    
-    // 2.1. This function changes the behavior of placeholder text so that it clears when the text field gains focus, instead of when the user begins typing in it.
-    forms.clearPlaceholderTextOnFocus = function() {
-        $("[placeholder]").each(function() {
-            var placeholderText = $(this).attr("placeholder");
-            $(this).focus(function() {
-                $(this).attr("placeholder","");
-            });
-            $(this).blur(function() {
-                $(this).attr("placeholder",placeholderText);
-            })
-        });
-    };
-
-    // 2. Improve the behavior of form control widgets which are standard in HTML.
-    forms.improveBuiltInWidgets = function() {
-        forms.clearPlaceholderTextOnFocus();
         forms.keyboardlessMultiselects();
     };
     
@@ -894,11 +890,10 @@ $(document).ready(function() {
     // 0. Main function
     var main = function() {
         forms.prepareLayoutScripting();
-        forms.improveBuiltInWidgets();
-        forms.prepareMultiselectWidgets();
-        forms.customizeBuiltInWidgetAppearance();
+        forms.prepareCustomizedMultiselects();
+        forms.customizeTraditionalWidgetAppearance();
         forms.prepareCheckboxWidgets();
-        forms.prepareTextFieldWidgets();
+        forms.customizeTextFields();
         forms.customizeHTML5Fields();
     };
     main();
