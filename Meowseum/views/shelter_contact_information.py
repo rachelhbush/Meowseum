@@ -17,7 +17,7 @@ def page(request):
         return render(request, 'en/public/shelter_contact_information.html', {'main_form': main_form,
                                                                               'profile_address_form': profile_address_form,
                                                                               'mailing_address_form': mailing_address_form,
-                                                                              'user_has_shelter_record_on_file':user_has_shelter_record_on_file})
+                                                                              'user_has_shelter_record_on_file': user_has_shelter_record_on_file})
 
 # 1. Construct the forms, using previously provided information if available. Determine the user_has_shelter_record_on_file variable, whether or not
 # the shelter has a record on file yet will be passed to the template. The extra "Save changes" button in the middle of the form needs to be hidden,
@@ -29,13 +29,13 @@ def get_forms_and_shelter_status(request):
     try:
         shelter = Shelter.objects.get(account = request.user)
         main_form = ShelterForm(request.POST or None, instance=shelter)
-        profile_address_form = AddressForm(request.POST or None, required=locality_fields, instance=shelter.profile_address)
-        mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields, instance=shelter.mailing_address)
+        profile_address_form = AddressForm(request.POST or None, required=locality_fields, prefix='profile', instance=shelter.profile_address)
+        mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields, prefix='mailing', instance=shelter.mailing_address)
         user_has_shelter_record_on_file = True
     except Shelter.DoesNotExist:
         main_form = ShelterForm(request.POST or None)
-        profile_address_form = AddressForm(request.POST or None, required=locality_fields)
-        mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields)
+        profile_address_form = AddressForm(request.POST or None, required=locality_fields, prefix='profile')
+        mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields, prefix='mailing')
         user_has_shelter_record_on_file = False
     return main_form, profile_address_form, mailing_address_form, user_has_shelter_record_on_file
 
