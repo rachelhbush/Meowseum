@@ -237,8 +237,8 @@ def get_adoption_merged_sex_field(record):
 # Input: An Upload record. Output: The string for the merged field.
 def get_city_merged_field(upload):
     try:
-        UserContact.objects.get(account=upload.uploader)
-        return upload.uploader.user_contact.city + ", " + upload.uploader.user_contact.state_or_province + " (" + upload.uploader.user_contact.zip_code + ")"
+        uploader_address = UserContact.objects.get(account=upload.uploader).address
+        return uploader_address.city + ", " + uploader_address.state_or_province + " (" + uploader_address.zip_code + ")"
     except UserContact.DoesNotExist:
         return ''
 
