@@ -7,7 +7,7 @@
 <table class="form">
     {% block table_fields_at_top %}
     <tr>
-       <th>{{ main_form.sex.label_tag }}</td>
+       <th>{{ main_form.sex.label_tag }}</th>
        <td class="inline-radio-buttons">
            {{ main_form.sex.errors }}
             {% for radio in main_form.sex %}
@@ -19,14 +19,14 @@
        </td>
     </tr>
     <tr>
-        <th>{{ main_form.subtype1.label_tag }}</td>
+        <th>{{ main_form.subtype1.label_tag }}</th>
         <td>
             {{ main_form.subtype1.errors }}
             {{ main_form.subtype1 }}
         </td>
     </tr>
     <tr>
-        <th>{{ main_form.hair_length.label_tag }}</td>
+        <th>{{ main_form.hair_length.label_tag }}</th>
         <td>
             {{ main_form.hair_length.errors }}
             {{ main_form.hair_length }}
@@ -54,7 +54,7 @@
         </td>
     </tr>
     <tr class="dilute-field">
-        <th>{{ main_form.is_dilute.label_tag }}</th>
+       <th>{{ main_form.is_dilute.label_tag }}</th>
        <td class="inline-radio-buttons">
            {{ main_form.is_dilute.errors }}
             {% for radio in main_form.is_dilute %}
