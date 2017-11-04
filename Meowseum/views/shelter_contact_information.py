@@ -25,17 +25,17 @@ def page(request):
 # Input: request.
 # Output: main_form, profile_address_form, mailing_address_form, and user_has_shelter_record_on_file, a boolean value.
 def get_forms_and_shelter_status(request):
-    main_form = ShelterForm(request.POST or None)
     locality_fields = ('address_line_1', 'city', 'state_or_province', 'country', 'zip_code')
-    profile_address_form = AddressForm(request.POST or None, required=locality_fields )
-    mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields)
     try:
         shelter = Shelter.objects.get(account = request.user)
-        main_form.instance = shelter
-        profile_address_form.instance = shelter.profile_address
-        mailing_address_form.instance = shelter.mailing_address_form
+        main_form = ShelterForm(request.POST or None, instance=shelter)
+        profile_address_form = AddressForm(request.POST or None, required=locality_fields, instance=shelter.profile_address)
+        mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields, instance=shelter.mailing_address)
         user_has_shelter_record_on_file = True
-    except Shelter.DoesNotExist:        
+    except Shelter.DoesNotExist:
+        main_form = ShelterForm(request.POST or None)
+        profile_address_form = AddressForm(request.POST or None, required=locality_fields)
+        mailing_address_form = AddressForm(request.POST or None, required=('address_line_1',) + locality_fields)
         user_has_shelter_record_on_file = False
     return main_form, profile_address_form, mailing_address_form, user_has_shelter_record_on_file
 
