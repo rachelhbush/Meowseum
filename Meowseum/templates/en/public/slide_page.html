@@ -83,11 +83,11 @@
                 {% include "en/public/slide_page_author_box.html" %}
                 {% if upload.adoption or upload.lost or upload.found %}
                     <div id="pet-profile">
-                        {% for i in merged_field_values|length|times %}
-                            {% if merged_field_values|index:i != '' and merged_field_values|index:i != None %}
+                        {% for i in merged_fields|length|times %}
+                            {% if merged_fields|index:i|index:1 != '' and merged_fields|index:i|index:1 != None %}
                                 <div class="profile-unit">
-                                    <label>{{ merged_field_labels|index:i }}:</label>
-                                    <div>{{ merged_field_values|index:i }}</div>
+                                    <label>{{ merged_fields|index:i|index:0 }}:</label>
+                                    <div>{{ merged_fields|index:i|index:1 }}</div>
                                 </div>
                             {% endif %}
                         {% endfor %}
