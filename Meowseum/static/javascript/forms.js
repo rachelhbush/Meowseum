@@ -550,8 +550,9 @@ $(document).ready(function() {
         });
     };
     
-    // 3.3.1. Make sure that the custom checkbox is checked if the hidden default checkbox is checked.
-    //     "this" should refer to the default checkbox, either through an event handler or .call().
+    // 3.3.2. Make sure that the custom checkbox becomes checked when the hidden default checkbox is checked.
+    // This function assumes "this" refers to the default checkbox, so attach it as an event handler to a default
+    // checkbox or pass it to a function like .call().
     forms.adjustCustomCheckbox = function() {
         var $parent = $(this).parent();
         var isChecked = $(this).prop("checked");
@@ -563,20 +564,25 @@ $(document).ready(function() {
         }
     };
     
-    // 3.3. This function makes custom-styled checkboxes behave the same way as the default checkboxes. The default checkbox itself cannot be styled, so I
-    //    wrapped it in a <div> and styled that instead. This function requires Bootstrap, only because the event handler is being attached to Bootstrap classes
-    //    for the container of a checkbox and its label. Even though the default checkbox is hidden, the user still interacts with it by clicking it, so the custom
-    //    checkbox will still fire the "change" event without .trigger("change").
-    forms.customCheckboxes = function() {
-        // When the page loads, hide all checkmarks for custom checkboxes, with two exception cases. First, keep showing checkmarks for checkboxes that have the Boolean [checked] attribute.
-        // Second, when a form has been submitted, the user hits back, and the page reloads with the same data, checkboxes that the user checked before should still be checked. This is
-        // especially important for a search form.
+    // 3.3.1. When the page loads, hide all checkmarks for custom checkboxes, with two exception cases. First, keep showing checkmarks for checkboxes that have the Boolean [checked] attribute.
+    // Second, when a form has been submitted, the user hits back, and the page reloads with the same data, checkboxes that the user checked before should still be checked. This happens
+    // often when using a search form. Form controls on the reloaded page won't have attributes [checked], but their values are still in the DOM. If the first exception case were the only
+    // one, this could be handled by a CSS ruleset. The second exception case means this task requires JavaScript. This page load effect happens fast enough that a flash effect has never
+    // been observed.
+    forms.hideUncheckedCheckboxesCheckmarksOnPageLoad = function() {
         $(".custom-checkbox").each(function() {
             if (!$('input[type="checkbox"]', this).prop("checked")) {
                 $("span, img",this).hide();
             }
         });
-        
+    };
+    
+    // 3.3. This function makes custom-styled checkboxes behave the same way as the default checkboxes. The default checkbox itself cannot be styled, so I
+    //    wrapped it in a <div> and styled that instead. This function requires Bootstrap, only because the event handler is being attached to Bootstrap classes
+    //    for the container of a checkbox and its label. Even though the default checkbox is hidden, the user still interacts with it by clicking it, so the custom
+    //    checkbox will still fire the "change" event without .trigger("change").
+    forms.customCheckboxes = function() {
+        forms.hideUncheckedCheckboxesCheckmarksOnPageLoad();
         // Despite the default checkbox being hidden, it becomes checked when the user clicks its location. When this happens, check or uncheck the custom checkbox.
         $('.custom-checkbox input[type="checkbox"]').change(forms.adjustCustomCheckbox);
     };
