@@ -28,6 +28,20 @@ def merge_two_dicts(dict1, dict2):
     new_dict.update(dict2)
     return new_dict
 
+# This function is used during debugging. Display the value of a variable in the development console. The value will be converted to a string and
+# wrapped in '', in order to make whitespace visible. By default, the variable will be shown as a dictionary if it is an object with the __dict__
+# attribute, in order to inspect an object's attributes. If mode='str', then it will always use the object's string representation. If mode='dir',
+# then it will show all names available to the object, including attributes, methods, and operators.
+# Input: identifier, a string. mode, a string.
+# Output: None, except to the development console.
+def print_var(identifier, mode='dict'):
+    if mode == 'dict' and hasattr(eval(identifier), '__dict__'):
+        print(identifier + ": '" + str(vars(eval(identifier))) + "'")
+    elif mode == 'dir':
+        print(identifier + ": '" + str(dir(eval(identifier))) + "'")
+    else:
+        print(identifier + ": '" + str(eval(identifier)) + "'")
+
 # Section 2. Utility functions specific to Django or web development.
 
 class OrderedQueryDict(QueryDict, OrderedDict):
