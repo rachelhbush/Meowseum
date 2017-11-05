@@ -84,51 +84,18 @@
 {{ main_form.age_rating.errors }}
 <div class="form-unit text-center" id="age-rating-field">
     {{ main_form.age_rating.label_tag }}<br/>
-    <div class="rating-widget-btn newborn hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Newborn"/>
-        {% endif %}
-        <br/>
-        Newborn
-    </div>
-    <div class="rating-widget-btn young hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Young"/>
-        {% endif %}
-        <br/>
-        Young
-    </div>
-    <div class="rating-widget-btn adult hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Adult"/>
-        {% endif %}
-        <br/>
-        Adult
-    </div>
-    <div class="rating-widget-btn senior hidden-noscript">
-        {% if night_mode %}
-            <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
-        {% else %}
-            <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
-            data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="Senior"/>
-        {% endif %}
-        <br/>
-        Senior
-    </div>
     {% for radio in main_form.age_rating %}
+        <div class="rating-widget-btn {{ radio.data.value }} hidden-noscript">
+            {% if night_mode %}
+                <img src="{% static "images/Cat age rating symbol - night, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+                data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="{{ radio.choice_label }}"/>
+            {% else %}
+                <img src="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-inactive="{% static "images/Cat age rating symbol - day, empty.png" %}" data-day-active="{% static "images/Cat age rating symbol - day, full.png" %}"
+                data-night-inactive="{% static "images/Cat age rating symbol - night, empty.png" %}" data-night-active="{% static "images/Cat age rating symbol - night, full.png" %}"  alt="{{ radio.choice_label }}"/>
+            {% endif %}
+            <br/>
+            {{ radio.choice_label }}
+        </div>
         <label for="{{ radio.id_for_label }}" class="radio-inline visible-noscript-inline">
             {{ radio.tag }}
             {{ radio.choice_label }}

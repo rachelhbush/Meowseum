@@ -83,7 +83,7 @@ $(document).ready(function() {
     
     // 6. Customize HTML5 fields, including anything related to date and time.
     forms.customizeHTML5Fields = function() {
-        forms.todayAndNowButtons(); // 15
+        forms.todayAndNowButtons();
     };
     
     // 5.2.2. If the user presses enter while typing in the most recently created text field, add a new text field below it.
@@ -268,7 +268,7 @@ $(document).ready(function() {
         forms.sameAsCheckbox();
     };
     
-    // 3.4.6. Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
+    // 3.6.4. Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
     //     For example, mousing over the third star in a five-star ratings widget fills the first, second, and third star while leaving the fourth and fifth empty.
     //     When the user stops mousing over any of the icons, they all appear inactive again. The file paths should be the same for each rating widget button in the group.
     //     So that the mouseover effect is continuous, the borders of each rating widget button should all be touching.
@@ -308,7 +308,7 @@ $(document).ready(function() {
         });
     };
     
-    // 3.4.5. Attach the event handlers for the image check button.
+    // 3.6.3. Attach the event handlers for the image check button.
     forms.attachImageCheckButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // Have a hover effect only if there are alternate file paths, and only while the image check button is inactive.
         // The hover effect toggles the inactive/active file path without toggling the active class.
@@ -339,7 +339,7 @@ $(document).ready(function() {
         });
     };
     
-    // 3.4.4. Attach the event handlers for the image radio button.
+    // 3.6.2. Attach the event handlers for the image radio button.
     forms.attachImageRadioButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // If widget hasn't been clicked yet and it supports alternate file paths, then use a hover effect.
         $("div.radio-btn",$parent).mouseenter(function() {
@@ -371,9 +371,9 @@ $(document).ready(function() {
         });
     };
    
-    // 3.4.3. This is a higher-order function which sets up the variables for image button behavior based on the file paths in the data- attributes. If the image button differs between day/night mode, it
-    //     detaches events and re-attaches them with new values for the variables when the user toggles day/night mode. So, adding another widget to forms.buttonRadioAndCheckgroups() only requires writing
-    //     another callback function which attaches all of its event handlers.
+    // 3.6.1. Nearly all of this function is related to night/day behavior. This is a higher-order function which sets up the variables for image button behavior based on the file paths in the data- attributes.
+    //     If the image button differs between day/night mode, it detaches events and re-attaches them with new values for the variables when the user toggles day/night mode. So, adding another widget to
+    //     forms.buttonRadioAndCheckgroups() only requires writing another callback function which attaches all of its event handlers.
     //     Input:  callback, the function which attaches all the event handlers to the button.
     //             classSelector, a selector string for the class used by the widget, like ".rating-widget-btn". This is only needed for detaching events when the widget has night/day mode versions.
     //             When you invoke this function, make sure "this" refers to the element in the parent function's foreach loop by using .call(this,callback,classSelector).
@@ -453,48 +453,11 @@ $(document).ready(function() {
         callback($parent,widgetHasBeenClicked,activeIcon,inactiveIcon);
     };
    
-   // 3.4.2, 3.4.3.1. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
-   //        Input: selector, a string for the class used by the button the user interacts with, like ".check-btn". Make sure "this" refers to the clicked element using .call(this,selector).
-   forms.checkCorrespondingCheckbox = function(selector){
-        $parent = $(this).parent();
-        // If there are checkboxes within the parent <div> of the pressed button,
-        if ($('input[type="checkbox"]',$parent)) {
-            // Obtain an array of only the .check-btns within the parent <div>.
-            var allButtons = $parent.children(".check-btn").toArray();
-            // Obtain the index of the pressed button within the array.
-            var index = allButtons.lastIndexOf(this);
-            // Obtain an array of only input[type="checkbox"] form controls within the parent <div>.
-            var allCheckboxes = $('input[type="checkbox"]',$parent).toArray();
-            // Check the corresponding checkbox. If the third .check-btn is pressed, check the third input[type="checkbox"].
-            var correspondingValue = $(allCheckboxes[index]).val();
-            $('input[type="checkbox"][value="' + correspondingValue +'"]',$parent).check();
-        }
-   };
-   
-   // 3.4.1, 3.4.4.1, 3.4.6.1. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
-   // Input: selector, a string for the class used by the button the user interacts with, like ".radio-btn". Make sure "this" refers to the clicked element using .call(this,selector).
-   forms.checkCorrespondingRadioButton = function(selector) {
-       $parent = $(this).parent();
-        // If there are radio buttons within the parent <div> of the pressed button,
-        if ($('input[type="radio"]',$parent)) {
-            // Obtain an array of only the .radio-btns within the parent <div>.
-            var allButtons = $parent.children(selector).toArray();
-            // Obtain the index of the pressed button within the array.
-            var index = allButtons.lastIndexOf(this);
-            // Obtain an array of only input[type="radio"] form controls within the parent <div>.
-            var allRadio = $('input[type="radio"]',$parent).toArray();
-            // Check the corresponding radio button. If the third .radio-btn is pressed, check the third input[type="radio"].
-            var correspondingValue = $(allRadio[index]).val();
-            $('input[type="radio"]',$parent).val([correspondingValue]).trigger("change");
-        }
-   };
-   
-   // 3.4. "Bootstrap check buttons", "Bootstrap radio buttons", "image check buttons", "image radio buttons", and "image buttons" are the terms I use to refer to the widgets this function scripts.
-   //     This function is for Bootstrap buttons or images which, when clicked or touched ("pressed"), check hidden form controls. Bootstrap has this built-in, but it only works for button groups. When an image
-   //     button is clicked, it can change the styling around the image (like a border for highlighting) or switch between file paths. Note that this function doesn't toggle an image representing a check on/off;
-   //     this style is covered by other functions. If the form control is for client-side effects only, then you can choose to omit the default form controls from the HTML source code. Other scripts will know
-   //     which element is checked by looking for certain classes and attributes. 
-   
+   // 3.6. "Image check buttons", "image radio buttons", and "image buttons" are the terms I use to refer to the widgets this function scripts. This function is for images which,
+   //     when clicked or touched ("pressed"), check hidden form controls. When an image button is clicked, it can change the styling around the image (like a border for highlighting)
+   //     or switch between file paths. Note that this function doesn't toggle an image representing a check on/off; this style is covered by other functions. If the form control is
+   //     for client-side effects only, then you can choose to omit the default form controls from the HTML source code.
+   //
    //     When replacing a checkbox or some sort of multiselect, hidden checkboxes are listed in the HTML source code after the pressable elements. When replacing a set of radio buttons or a <select> dropdown,
    //     hidden radio buttons are listed in the HTML source code after the pressable elements.
    // 
@@ -517,25 +480,7 @@ $(document).ready(function() {
    //     </div>
       
    //     Currently, the JavaScript supports falling back to regular form controls if JavaScript is disabled, but I haven't supported it in the CSS.
-    forms.buttonRadioAndCheckgroups = function() {
-        // Set up each Bootstrap radio button group.
-        $("button.radio-btn").click(function() {
-            // If a pressed button (one with the .active class) is clicked again, nothing needs to happen.
-            if (!$(this).hasClass("active")) {
-                $parent = $(this).parent();
-                // Transfer the .active class to the button that was clicked.
-                $("button.radio-btn", $parent).removeClass("active");
-                $(this).addClass("active");
-                
-                forms.checkCorrespondingRadioButton.call(this,".radio-btn");
-           }
-        });
-        // Set up each Bootstrap check button group.
-        $("button.check-btn").click(function() {
-            $(this).toggleClass("active");
-            forms.checkCorrespondingCheckbox.call(this,".check-btn");
-        });
-        
+    forms.imageButtons = function() {
         // Set up each image button radio group.
         $('div.radio-btn:first-of-type').each(function() {
             forms.setUpImageButtonBehavior.call(this,forms.attachImageRadioButtonEventHandlers,".radio-btn");
@@ -547,6 +492,76 @@ $(document).ready(function() {
         // Set up each rating widget.
         $('.rating-widget-btn:first-of-type').each(function() {
             forms.setUpImageButtonBehavior.call(this,forms.attachRatingWidgetEventHandlers,".rating-widget-btn");
+        });
+    };
+   
+   // 3.5.1. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   //        Input: selector, a string for the class used by the button the user interacts with, like ".check-btn". Make sure "this" refers to the clicked element using .call(this,selector).
+   forms.checkCorrespondingCheckbox = function(selector){
+        $parent = $(this).parent();
+        // If there are checkboxes within the parent <div> of the pressed button,
+        if ($('input[type="checkbox"]',$parent)) {
+            // Obtain an array of only the .check-btns within the parent <div>.
+            var allButtons = $parent.children(".check-btn").toArray();
+            // Obtain the index of the pressed button within the array.
+            var index = allButtons.lastIndexOf(this);
+            // Obtain an array of only input[type="checkbox"] form controls within the parent <div>.
+            var allCheckboxes = $('input[type="checkbox"]',$parent).toArray();
+            // Check the corresponding checkbox. If the third .check-btn is pressed, check the third input[type="checkbox"].
+            var correspondingValue = $(allCheckboxes[index]).val();
+            $('input[type="checkbox"][value="' + correspondingValue +'"]',$parent).check();
+        }
+   };
+   
+   // 3.5. This function sets up .check-btn Bootstrap buttons, which once pressed will stay pressed (.active) until clicked or touched again.
+   //      They also will check a corresponding hidden checkbox form control. If you aren't sending any data to the server, then Bootstrap's
+   //      [data-toggle="button"] will do the same thing. This widget will work with each checkbox placed after each Bootstrap button or the
+   //      checkbox group placed after the Bootstrap button group. With a web framework, the former configuration is more convenient because
+   //      it allows iterating over each member of both groups at once.
+   //      HTML: <button type="button" class="btn btn-primary check-btn active hidden-noscript">Label</button><input type="checkbox">...
+   forms.bootstrapCheckButtons = function() {
+        $("button.check-btn").click(function() {
+            $(this).toggleClass("active");
+            forms.checkCorrespondingCheckbox.call(this,".check-btn");
+        });
+   };
+   
+   // 3.4.1. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // Input: selector, a string for the class used by the button the user interacts with, like ".radio-btn". Make sure "this" refers to the clicked element using .call(this,selector).
+   forms.checkCorrespondingRadioButton = function(selector) {
+       $parent = $(this).parent();
+        // If there are radio buttons within the parent <div> of the pressed button,
+        if ($('input[type="radio"]',$parent)) {
+            // Obtain an array of only the .radio-btns within the parent <div>.
+            var allButtons = $parent.children(selector).toArray();
+            // Obtain the index of the pressed button within the array.
+            var index = allButtons.lastIndexOf(this);
+            // Obtain an array of only input[type="radio"] form controls within the parent <div>.
+            var allRadio = $('input[type="radio"]',$parent).toArray();
+            // Check the corresponding radio button. If the third .radio-btn is pressed, check the third input[type="radio"].
+            var correspondingValue = $(allRadio[index]).val();
+            $('input[type="radio"]',$parent).val([correspondingValue]).trigger("change");
+        }
+   };
+    
+    // 3.4. This function sets up .radio-btn Bootstrap buttons which, when clicked, check a corresponding hidden form radio button.
+    // Like a physical radio button, the Bootstrap button will stay pressed (.active) and unpress all the other buttons in the set (parent <div>).
+    // If the user has JavaScript disabled, it falls back to normal radio buttons. This widget will work with each radio button placed after each
+    // Bootstrap button or the radio group placed after the Bootstrap button group. With a web framework, the former configuration is more convenient
+    // because it allows iterating over each member of both groups at once. If you are using this widget only for a client-side effect, then you can
+    // omit the default form controls from the HTML source code.
+    // HTML: <button type="button" class="btn btn-primary radio-btn active hidden-noscript">Label</button><input type="radio">...
+    forms.bootstrapRadioButtons = function() {
+        $("button.radio-btn").click(function() {
+            // If a pressed button (one with the .active class) is clicked again, nothing needs to happen.
+            if (!$(this).hasClass("active")) {
+                $parent = $(this).parent();
+                // Transfer the .active class to the button that was clicked.
+                $("button.radio-btn", $parent).removeClass("active");
+                $(this).addClass("active");
+                
+                forms.checkCorrespondingRadioButton.call(this,".radio-btn");
+           }
         });
     };
     
@@ -611,7 +626,9 @@ $(document).ready(function() {
         forms.searchIconsSubmit();
         forms.customFileBrowseButton();
         forms.customCheckboxes();
-        forms.buttonRadioAndCheckgroups();
+        forms.bootstrapRadioButtons();
+        forms.bootstrapCheckButtons();
+        forms.imageButtons();
     };
     
     // 2.3. For non-mobile devices, multiselects require pressing Ctrl in order to select multiple options. This function improves the behavior of a multiselect by making it so that
