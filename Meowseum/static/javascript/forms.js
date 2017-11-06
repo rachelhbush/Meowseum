@@ -275,7 +275,7 @@ $(document).ready(function() {
     //     data to the server.
     //
     //     The HTML structure is the same as for image buttons, and the images use the same data- attributes. The script checks hidden radio buttons listed after the image buttons.
-    //     <div class="rating-widget">
+    //     <div class="rating-widget-btn">
     //        <img>
     //        Label
     //     </div>
@@ -404,7 +404,7 @@ $(document).ready(function() {
                 var activeIcon = $("img[data-day-active]",this).data("day-active");
                 var inactiveIcon = $("img[data-day-active]",this).data("day-inactive");
                 // Day mode icons should be used when the page loads.
-                $("img[data-day-active]",$parent).attr("src",inactiveIcon);
+                $("img[data-day-active]",$parent).attr("src", inactiveIcon);
             }
             // Update the variables and paths if the user toggles night/day mode.
             $(window).on("toggleNightDay",function() {
@@ -534,10 +534,12 @@ $(document).ready(function() {
         });
    };
    
-   // 3.4.1. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 3.4.3. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    // Input: selector, a string for the class used by the button the user interacts with, like ".radio-btn". Make sure "this" refers to the clicked element using .call(this,selector).
+   // The reason that the selector is a parameter is that this function isn't just used by .radio-btn, but other widgets like .rating-
    forms.checkCorrespondingRadioButton = function(selector) {
-       $parent = $(this).parent();
+       // Get the parent <div> of the pressed button.
+       var $parent = $(this).parent();
         // If there are radio buttons within the parent <div> of the pressed button,
         if ($('input[type="radio"]',$parent)) {
             // Obtain an array of only the .radio-btns within the parent <div>.
@@ -552,6 +554,38 @@ $(document).ready(function() {
         }
    };
     
+    // 3.4.2. Given a .radio-btn, apply .active to it and remove .active from all its siblings.
+    // Input: buttonToPress, the .radio-btn. Output: None.
+    forms.pressRadioButton = function(buttonToPress) {
+        $parent = $(buttonToPress).parent();
+        // Transfer the .active class to the button that was clicked.
+        $('.radio-btn', $parent).removeClass("active");
+        $(buttonToPress).addClass("active");
+    };
+    
+    // 3.4.1. When the page loads, if a radio button has the [checked] attribute for initial data, or the user hit the back button
+    // after submitting the form, set up the widget with the relevant data.
+    forms.loadRadioButtonData = function() {
+        // Get the parent <div> of the custom radio button widget.
+        var $parent = $(this).parent();
+        // If there are radio buttons within the parent <div> of the pressed button,
+        if ($('input[type="radio"]', $parent)) {
+            // Get the value of the checked radio button, if there is one.
+            var radioValue = $('input[type="radio"]:checked', $parent).val();
+            if (radioValue != undefined) {
+                // Obtain an array of only input[type="radio"] form controls within the parent <div>.
+                var allRadio = $('input[type="radio"]',$parent).toArray();
+                // Obtain the index of the checked radio button within the array, if there is one.
+                var index = allRadio.lastIndexOf($('input[type="radio"]:checked',$parent)[0]);
+                // Obtain an array of only the .radio-btns within the parent <div>.
+                var allButtons = $parent.children('.radio-btn').toArray();
+                // Obtain the .radio-btn with the corresponding index.
+                var buttonToPress = allButtons[index];
+                forms.pressRadioButton(buttonToPress);
+            }
+        }
+    };
+    
     // 3.4. This function sets up .radio-btn Bootstrap buttons which, when clicked, check a corresponding hidden form radio button.
     // Like a physical radio button, the Bootstrap button will stay pressed (.active) and unpress all the other buttons in the set (parent <div>).
     // If the user has JavaScript disabled, it falls back to normal radio buttons. This widget will work with each radio button placed after each
@@ -560,15 +594,12 @@ $(document).ready(function() {
     // omit the default form controls from the HTML source code.
     // HTML: <button type="button" class="btn btn-primary radio-btn active hidden-noscript">Label</button><input type="radio">...
     forms.bootstrapRadioButtons = function() {
+        $("button.radio-btn:first-of-type").each(forms.loadRadioButtonData);
         $("button.radio-btn").click(function() {
             // If a pressed button (one with the .active class) is clicked again, nothing needs to happen.
             if (!$(this).hasClass("active")) {
-                $parent = $(this).parent();
-                // Transfer the .active class to the button that was clicked.
-                $("button.radio-btn", $parent).removeClass("active");
-                $(this).addClass("active");
-                
-                forms.checkCorrespondingRadioButton.call(this,".radio-btn");
+                forms.pressRadioButton(this);
+                forms.checkCorrespondingRadioButton.call(this, ".radio-btn");
            }
         });
     };
