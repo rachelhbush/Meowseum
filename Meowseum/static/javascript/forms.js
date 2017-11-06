@@ -271,15 +271,17 @@ $(document).ready(function() {
     // 3.6.4. Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
     //     For example, mousing over the third star in a five-star ratings widget fills the first, second, and third star while leaving the fourth and fifth empty.
     //     When the user stops mousing over any of the icons, they all appear inactive again. The file paths should be the same for each rating widget button in the group.
-    //     So that the mouseover effect is continuous, the borders of each rating widget button should all be touching.
-    
+    //     So that the mouseover effect is continuous, the borders of each rating widget button should all be touching. The rating widget is mostly used for submitting new
+    //     data to the server.
+    //
     //     The HTML structure is the same as for image buttons, and the images use the same data- attributes. The script checks hidden radio buttons listed after the image buttons.
     //     <div class="rating-widget">
     //        <img>
     //        Label
     //     </div>
-    //
-    //     The rating widget is mostly used for submitting new data to the server. When looking up data in the search engine, use image check buttons with the same file paths.
+    // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
+    //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
+    // Output: None. 
     forms.attachRatingWidgetEventHandlers = function($parent,widgetHasBeenClicked,activeIcon,inactiveIcon) {
         $(".rating-widget-btn",$parent).mouseover(function() {
             if (!widgetHasBeenClicked) {
@@ -309,6 +311,9 @@ $(document).ready(function() {
     };
     
     // 3.6.3. Attach the event handlers for the image check button.
+    // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
+    //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
+    // Output: None.
     forms.attachImageCheckButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // Have a hover effect only if there are alternate file paths, and only while the image check button is inactive.
         // The hover effect toggles the inactive/active file path without toggling the active class.
@@ -340,6 +345,9 @@ $(document).ready(function() {
     };
     
     // 3.6.2. Attach the event handlers for the image radio button.
+    // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
+    //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
+    // Output: None.
     forms.attachImageRadioButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
         // If widget hasn't been clicked yet and it supports alternate file paths, then use a hover effect.
         $("div.radio-btn",$parent).mouseenter(function() {
