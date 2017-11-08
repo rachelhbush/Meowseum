@@ -503,7 +503,7 @@ $(document).ready(function() {
         });
     };
    
-   // 3.5.1. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 3.5.2. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    //        Input: selector, a string for the class used by the button the user interacts with, like ".check-btn". Make sure "this" refers to the clicked element using .call(this,selector).
    forms.checkCorrespondingCheckbox = function(selector){
         $parent = $(this).parent();
@@ -520,6 +520,54 @@ $(document).ready(function() {
             $('input[type="checkbox"][value="' + correspondingValue +'"]',$parent).check();
         }
    };
+    
+    // 3.5.1.1. Given an array of unique values and another array with unique values that are a subset of the first array, return an array
+    // showing the indices of the second array's values in the first array.
+    forms.getIndicesOfArraySubset = function(array1, array2) {
+        var newArray = [];
+        for (var i=0; i < array2.length; i++) {
+            index = array1.indexOf(array2[i]);
+            if (index == -1) {
+                throw new Error("The second array's values are not a subset of the values of the first array.");
+            }
+            else if (index in newArray) {
+                throw new Error("The first or second array's values are not unique.");
+            }
+            else {
+                newArray[newArray.length] = index;
+            }
+        }
+        return newArray;
+    };
+   
+    // 3.5.1. When the page loads, if a checkbox has the [checked] attribute for initial data, or the user hit the back button
+    // after submitting the form, set up the widget with the relevant data.
+    forms.loadCheckButtonData = function() {
+        // Get the parent <div> of the custom check button widget.
+        var $parent = $(this).parent();
+        // If there are checkboxes within the parent <div> of the pressed button,
+        if ($('input[type="checkbox"]', $parent)) {
+            // Obtain the values of the checked checkboxes, if there are any.
+            var checkedCheckboxValues = $('input[type="checkbox"]:checked', $parent).map(function() {
+                return $(this).val();
+            }).toArray();
+            if (checkedCheckboxValues.length > 0) {
+                // Obtain the values of all the checkboxes in the checkgroup.
+                var allCheckboxValues = $('input[type="checkbox"]', $parent).map(function() {
+                    return $(this).val();
+                }).toArray();
+                // Obtain the indices of the checked checkboxes within the array, if there are any.
+                var indices = forms.getIndicesOfArraySubset(allCheckboxValues, checkedCheckboxValues);
+                // Obtain an array of only the .check-btns within the parent <div>.
+                var allButtons = $parent.children('.check-btn').toArray();
+                for (var i=0; i < allButtons.length; i++) {
+                	if (indices.indexOf(i) != -1) {
+                        $(allButtons[i]).toggleClass("active");
+                    }
+                }
+            }
+        }
+    };
    
    // 3.5. This function sets up .check-btn Bootstrap buttons, which once pressed will stay pressed (.active) until clicked or touched again.
    //      They also will check a corresponding hidden checkbox form control. If you aren't sending any data to the server, then Bootstrap's
@@ -527,7 +575,8 @@ $(document).ready(function() {
    //      checkbox group placed after the Bootstrap button group. With a web framework, the former configuration is more convenient because
    //      it allows iterating over each member of both groups at once.
    //      HTML: <button type="button" class="btn btn-primary check-btn active hidden-noscript">Label</button><input type="checkbox">...
-   forms.bootstrapCheckButtons = function() {
+    forms.bootstrapCheckButtons = function() {
+        $("button.check-btn:first-of-type").each(forms.loadCheckButtonData);
         $("button.check-btn").click(function() {
             $(this).toggleClass("active");
             forms.checkCorrespondingCheckbox.call(this,".check-btn");
