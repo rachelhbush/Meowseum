@@ -333,11 +333,44 @@ $(document).ready(function() {
         });
     };
     
+    // 3.6.3.2. Make the custom check button appear active.
+    // Input: buttonToPress, a DOM element. activeIcon, an image path. inactiveIcon, an image path. Output: None.
+    forms.pressImageCheckButton = function(buttonToPress, activeIcon, inactiveIcon) {
+        $(buttonToPress).toggleClass("active");
+        // If the image check button has alternate file paths, toggle them as well.
+        if ($("img[data-active], img[data-day-active]", buttonToPress)[0]) {
+            if ($(buttonToPress).hasClass("active")) {
+                $("img[data-active], img[data-day-active]", buttonToPress).attr("src", activeIcon);
+            }
+            else {
+                $("img[data-active], img[data-day-active]", buttonToPress).attr("src", inactiveIcon);
+            }
+        }
+    };
+    
+    // 3.6.3.1. If the checkboxes have initial data or the user clicked the Back button after submitting the form, set up
+    // the custom check buttons with the proper appearance.
+    // Input: $parent, the parent element of the rating widget buttons. activeIcon, an image path. inactiveIcon, an image path.
+    // Output: true or false for whether the widget has been clicked. 
+    forms.loadImageCheckButtonData = function($parent, activeIcon, inactiveIcon) {
+        var buttonsToPress = forms.getCustomButtonsCorrespondingToCheckboxes($(".check-btn:first-of-type", $parent)[0]);
+        for (var i=0; i < buttonsToPress.length; i++) {
+            forms.pressImageCheckButton(buttonsToPress[i], activeIcon, inactiveIcon);
+        }
+        if (buttonsToPress.length > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    
     // 3.6.3. Attach the event handlers for the image check button.
     // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
     //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
     // Output: None.
     forms.attachImageCheckButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
+        widgetHasBeenClicked = forms.loadImageCheckButtonData($parent, activeIcon, inactiveIcon);
         // Have a hover effect only if there are alternate file paths, and only while the image check button is inactive.
         // The hover effect toggles the inactive/active file path without toggling the active class.
         $("div.check-btn",$parent).mouseenter(function() {
@@ -350,20 +383,10 @@ $(document).ready(function() {
                 $("img[data-active], img[data-day-active]",this).attr("src",inactiveIcon);
             }
         });
-        
         $("div.check-btn",$parent).click(function() {
-            $(this).toggleClass("active");
-            // If the image check button has alternate file paths, toggle them as well.
-            if ($("img[data-active], img[data-day-active]", this)[0]) {
-                if ($(this).hasClass("active")) {
-                    $("img[data-active], img[data-day-active]", this).attr("src", activeIcon);
-                }
-                else {
-                    $("img[data-active], img[data-day-active]", this).attr("src", inactiveIcon);
-                }
-            }
+            forms.pressImageCheckButton(this, activeIcon, inactiveIcon);
             widgetHasBeenClicked = true;
-            forms.checkCorrespondingCheckbox.call(this);
+            forms.checkCheckboxesCorrespondingToCustomButtons.call(this);
         });
     };
     
@@ -526,12 +549,12 @@ $(document).ready(function() {
         });
     };
    
-   // 3.5.2. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
+   // 3.5.3. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
    // Input: Make sure "this" refers to the clicked element using .call(this). The clicked element should have a class containing "btn".
-   forms.checkCorrespondingCheckbox = function(){
+   forms.checkCheckboxesCorrespondingToCustomButtons = function(){
         $parent = $(this).parent();
         // If there are checkboxes within the parent <div> of the pressed button,
-        if ($('input[type="checkbox"]',$parent)) {
+        if ($('input[type="checkbox"]',$parent)[0]) {
             // Obtain an array of only the custom buttons within the parent <div>.
             var allButtons = $parent.children('[class*="btn"]').toArray();
             // Obtain the index of the pressed button within the array.
@@ -542,6 +565,14 @@ $(document).ready(function() {
             var correspondingValue = $(allCheckboxes[index]).val();
             $('input[type="checkbox"][value="' + correspondingValue +'"]',$parent).check();
         }
+   };
+    
+    // 3.5.2. Toggle the .active class on the .check-btn. Although this function is only one line,
+   //    the code was separated into this function because other check button widgets are
+   //    expected to have a function which serves the same purpose, but the process of
+   //    making the button appear active or inactive will be more involved.
+   forms.pressCustomCheckButton = function(buttonToPress) {
+       $(buttonToPress).toggleClass("active");
    };
     
     // 3.5.1.1. Given an array of unique values and another array with unique values that are a subset of the first array, return an array
@@ -565,11 +596,13 @@ $(document).ready(function() {
    
     // 3.5.1. When the page loads, if a checkbox has the [checked] attribute for initial data, or the user hit the back button
     // after submitting the form, set up the widget with the relevant data.
-    forms.loadCheckButtonData = function() {
+    // Input: element, the first custom button in the set.
+    // Output: buttonsToPress, an array of custom buttons to press.
+    forms.getCustomButtonsCorrespondingToCheckboxes = function(element) {
         // Get the parent <div> of the custom check button widget.
-        var $parent = $(this).parent();
+        var $parent = $(element).parent();
         // If there are checkboxes within the parent <div> of the pressed button,
-        if ($('input[type="checkbox"]', $parent)) {
+        if ($('input[type="checkbox"]', $parent)[0]) {
             // Obtain the values of the checked checkboxes, if there are any.
             var checkedCheckboxValues = $('input[type="checkbox"]:checked', $parent).map(function() {
                 return $(this).val();
@@ -583,12 +616,16 @@ $(document).ready(function() {
                 var indices = forms.getIndicesOfArraySubset(allCheckboxValues, checkedCheckboxValues);
                 // Obtain an array of only the custom buttons within the parent <div>.
                 var allButtons = $parent.children('[class*="btn"]').toArray();
+                var buttonsToPress = [];
                 for (var i=0; i < allButtons.length; i++) {
                 	if (indices.indexOf(i) != -1) {
-                        // Press the custom buttons corresponding to the checked checkboxes.
-                        $(allButtons[i]).toggleClass("active");
-                    }
+                        buttonsToPress[buttonsToPress.length] = allButtons[i];
+                  }
                 }
+                return buttonsToPress;
+            }
+            else {
+                return [];
             }
         }
     };
@@ -600,10 +637,15 @@ $(document).ready(function() {
    //      it allows iterating over each member of both groups at once.
    //      HTML: <button type="button" class="btn btn-primary check-btn active hidden-noscript">Label</button><input type="checkbox">...
     forms.bootstrapCheckButtons = function() {
-        $("button.check-btn:first-of-type").each(forms.loadCheckButtonData);
+        $("button.check-btn:first-of-type").each(function() {
+        	var buttonsToPress = getCustomButtonsCorrespondingToCheckboxes(this);
+            for (var i=0; i < buttonsToPress.length; i++) {
+                pressCustomCheckButton(buttonsToPress[i]);
+            }
+        });
         $("button.check-btn").click(function() {
-            $(this).toggleClass("active");
-            forms.checkCorrespondingCheckbox.call(this);
+            pressCustomCheckButton(this);
+            checkCheckboxesCorrespondingToCustomButtons.call(this);
         });
    };
    
@@ -613,7 +655,7 @@ $(document).ready(function() {
        // Get the parent <div> of the pressed button.
        var $parent = $(this).parent();
         // If there are radio buttons within the parent <div> of the pressed button,
-        if ($('input[type="radio"]',$parent)) {
+        if ($('input[type="radio"]',$parent)[0]) {
             // Obtain an array of only the custom buttons within the parent <div>.
             var allButtons = $parent.children('[class*="btn"]').toArray();
             // Obtain the index of the pressed button within the array.
@@ -641,7 +683,7 @@ $(document).ready(function() {
         // Get the parent <div> of the custom radio button widget.
         var $parent = $(element).parent();
         // If there are radio buttons within the parent <div> of the pressed button,
-        if ($('input[type="radio"]', $parent)) {
+        if ($('input[type="radio"]', $parent)[0]) {
             // Get the value of the checked radio button, if there is one.
             var radioValue = $('input[type="radio"]:checked', $parent).val();
             if (radioValue != undefined) {
