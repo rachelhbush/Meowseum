@@ -268,6 +268,32 @@ $(document).ready(function() {
         forms.sameAsCheckbox();
     };
     
+    // 3.6.4.2. Given a specific button in a rating widget, make this button and all preceding buttons appear active (filled),
+    // and make all buttons after appear inactive (empty).
+    // Input: buttonToPress, a DOM element. activeIcon, an image path. inactiveIcon, an image path. Output: None.
+    forms.pressRatingWidgetButton = function(buttonToPress, activeIcon, inactiveIcon) {
+        // Make this button and all its previous siblings appear active.
+        $("img[data-active], img[data-day-active]",buttonToPress).attr("src",activeIcon);
+        $(buttonToPress).prevAll(".rating-widget-btn").find("img[data-active], img[data-day-active]").attr("src", activeIcon);
+        // Make all the next siblings appear inactive.
+        $(buttonToPress).nextAll(".rating-widget-btn").find("img[data-active], img[data-day-active]").attr("src", inactiveIcon);
+    };
+    
+    // 3.6.4.1. If the rating widget has initial data or the user clicked the Back button after submitting the form, set up
+    // the rating widget with the proper appearance.
+    // Input: $parent, the parent element of the rating widget buttons. activeIcon, an image path. inactiveIcon, an image path.
+    // Output: true or false for whether the widget has been clicked. 
+    forms.loadRatingWidgetData = function($parent, activeIcon, inactiveIcon) {
+        var buttonToPress = forms.getCustomButtonCorrespondingToRadioButton($(".rating-widget-btn:first-of-type", $parent)[0]);
+        if (buttonToPress) {
+            forms.pressRatingWidgetButton(buttonToPress, activeIcon, inactiveIcon);
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    
     // 3.6.4. Provide a rating on a scale of 1 to N. Mousing over an icon makes the icons appear the same as when the icon's option has been clicked.
     //     For example, mousing over the third star in a five-star ratings widget fills the first, second, and third star while leaving the fourth and fifth empty.
     //     When the user stops mousing over any of the icons, they all appear inactive again. The file paths should be the same for each rating widget button in the group.
@@ -282,7 +308,8 @@ $(document).ready(function() {
     // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
     //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
     // Output: None. 
-    forms.attachRatingWidgetEventHandlers = function($parent,widgetHasBeenClicked,activeIcon,inactiveIcon) {
+    forms.attachRatingWidgetEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
+        widgetHasBeenClicked = forms.loadRatingWidgetData($parent, activeIcon, inactiveIcon);
         $(".rating-widget-btn",$parent).mouseover(function() {
             if (!widgetHasBeenClicked) {
                 // Make this button and all its previous siblings appear active.
@@ -300,13 +327,9 @@ $(document).ready(function() {
             }
         });
         $(".rating-widget-btn",$parent).click(function() {
-            // Make this button and all its previous siblings appear active.
-            $("img[data-active], img[data-day-active]",this).attr("src",activeIcon);
-            $(this).prevAll(".rating-widget-btn").find("img[data-active], img[data-day-active]").attr("src",activeIcon);
-            // Make all the next siblings appear inactive.
-            $(this).nextAll(".rating-widget-btn").find("img[data-active], img[data-day-active]").attr("src",inactiveIcon);
+            forms.pressRatingWidgetButton(this, activeIcon, inactiveIcon);
             widgetHasBeenClicked = true;
-            forms.checkCorrespondingRadioButton.call(this,".rating-widget-btn");
+            forms.checkRadioButtonCorrespondingToCustomButton.call(this);
         });
     };
     
@@ -340,7 +363,7 @@ $(document).ready(function() {
                 }
             }
             widgetHasBeenClicked = true;
-            forms.checkCorrespondingCheckbox.call(this,".check-btn");
+            forms.checkCorrespondingCheckbox.call(this);
         });
     };
     
@@ -374,7 +397,7 @@ $(document).ready(function() {
                 }
                 
                 widgetHasBeenClicked = true;
-                forms.checkCorrespondingRadioButton.call(this,".radio-btn");
+                forms.checkRadioButtonCorrespondingToCustomButton.call(this);
            }
         });
     };
@@ -504,13 +527,13 @@ $(document).ready(function() {
     };
    
    // 3.5.2. This function checks the Nth hidden checkbox when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
-   //        Input: selector, a string for the class used by the button the user interacts with, like ".check-btn". Make sure "this" refers to the clicked element using .call(this,selector).
-   forms.checkCorrespondingCheckbox = function(selector){
+   // Input: Make sure "this" refers to the clicked element using .call(this). The clicked element should have a class containing "btn".
+   forms.checkCorrespondingCheckbox = function(){
         $parent = $(this).parent();
         // If there are checkboxes within the parent <div> of the pressed button,
         if ($('input[type="checkbox"]',$parent)) {
-            // Obtain an array of only the .check-btns within the parent <div>.
-            var allButtons = $parent.children(".check-btn").toArray();
+            // Obtain an array of only the custom buttons within the parent <div>.
+            var allButtons = $parent.children('[class*="btn"]').toArray();
             // Obtain the index of the pressed button within the array.
             var index = allButtons.lastIndexOf(this);
             // Obtain an array of only input[type="checkbox"] form controls within the parent <div>.
@@ -558,10 +581,11 @@ $(document).ready(function() {
                 }).toArray();
                 // Obtain the indices of the checked checkboxes within the array, if there are any.
                 var indices = forms.getIndicesOfArraySubset(allCheckboxValues, checkedCheckboxValues);
-                // Obtain an array of only the .check-btns within the parent <div>.
-                var allButtons = $parent.children('.check-btn').toArray();
+                // Obtain an array of only the custom buttons within the parent <div>.
+                var allButtons = $parent.children('[class*="btn"]').toArray();
                 for (var i=0; i < allButtons.length; i++) {
                 	if (indices.indexOf(i) != -1) {
+                        // Press the custom buttons corresponding to the checked checkboxes.
                         $(allButtons[i]).toggleClass("active");
                     }
                 }
@@ -579,20 +603,19 @@ $(document).ready(function() {
         $("button.check-btn:first-of-type").each(forms.loadCheckButtonData);
         $("button.check-btn").click(function() {
             $(this).toggleClass("active");
-            forms.checkCorrespondingCheckbox.call(this,".check-btn");
+            forms.checkCorrespondingCheckbox.call(this);
         });
    };
    
    // 3.4.3. This function checks the Nth hidden radio button when the user interacts with the Nth visible button. If the widget is client-side-only, the function does nothing.
-   // Input: selector, a string for the class used by the button the user interacts with, like ".radio-btn". Make sure "this" refers to the clicked element using .call(this,selector).
-   // The reason that the selector is a parameter is that this function isn't just used by .radio-btn, but other widgets like .rating-
-   forms.checkCorrespondingRadioButton = function(selector) {
+   // Input: Make sure "this" refers to the clicked element using .call(this). The clicked element should have a class containing "btn".
+   forms.checkRadioButtonCorrespondingToCustomButton = function() {
        // Get the parent <div> of the pressed button.
        var $parent = $(this).parent();
         // If there are radio buttons within the parent <div> of the pressed button,
         if ($('input[type="radio"]',$parent)) {
-            // Obtain an array of only the .radio-btns within the parent <div>.
-            var allButtons = $parent.children(selector).toArray();
+            // Obtain an array of only the custom buttons within the parent <div>.
+            var allButtons = $parent.children('[class*="btn"]').toArray();
             // Obtain the index of the pressed button within the array.
             var index = allButtons.lastIndexOf(this);
             // Obtain an array of only input[type="radio"] form controls within the parent <div>.
@@ -605,7 +628,7 @@ $(document).ready(function() {
     
     // 3.4.2. Given a .radio-btn, apply .active to it and remove .active from all its siblings.
     // Input: buttonToPress, the .radio-btn. Output: None.
-    forms.pressRadioButton = function(buttonToPress) {
+    forms.pressCustomRadioButton = function(buttonToPress) {
         $parent = $(buttonToPress).parent();
         // Transfer the .active class to the button that was clicked.
         $('.radio-btn', $parent).removeClass("active");
@@ -614,23 +637,23 @@ $(document).ready(function() {
     
     // 3.4.1. When the page loads, if a radio button has the [checked] attribute for initial data, or the user hit the back button
     // after submitting the form, set up the widget with the relevant data.
-    forms.loadRadioButtonData = function() {
+    forms.getCustomButtonCorrespondingToRadioButton = function(element) {
         // Get the parent <div> of the custom radio button widget.
-        var $parent = $(this).parent();
+        var $parent = $(element).parent();
         // If there are radio buttons within the parent <div> of the pressed button,
         if ($('input[type="radio"]', $parent)) {
             // Get the value of the checked radio button, if there is one.
             var radioValue = $('input[type="radio"]:checked', $parent).val();
             if (radioValue != undefined) {
                 // Obtain an array of only input[type="radio"] form controls within the parent <div>.
-                var allRadio = $('input[type="radio"]',$parent).toArray();
+                var allRadio = $('input[type="radio"]', $parent).toArray();
                 // Obtain the index of the checked radio button within the array, if there is one.
                 var index = allRadio.lastIndexOf($('input[type="radio"]:checked',$parent)[0]);
-                // Obtain an array of only the .radio-btns within the parent <div>.
-                var allButtons = $parent.children('.radio-btn').toArray();
-                // Obtain the .radio-btn with the corresponding index.
+                // Obtain an array of only the custom buttons within the parent <div>.
+                var allButtons = $parent.children('[class*="btn"]').toArray();
+                // Obtain the custom button with the corresponding index.
                 var buttonToPress = allButtons[index];
-                forms.pressRadioButton(buttonToPress);
+                return buttonToPress;
             }
         }
     };
@@ -643,12 +666,15 @@ $(document).ready(function() {
     // omit the default form controls from the HTML source code.
     // HTML: <button type="button" class="btn btn-primary radio-btn active hidden-noscript">Label</button><input type="radio">...
     forms.bootstrapRadioButtons = function() {
-        $("button.radio-btn:first-of-type").each(forms.loadRadioButtonData);
+        $("button.radio-btn:first-of-type").each(function() {
+            var buttonToPress = forms.getCustomButtonCorrespondingToRadioButton(this);
+            forms.pressCustomRadioButton(buttonToPress);
+        });
         $("button.radio-btn").click(function() {
             // If a pressed button (one with the .active class) is clicked again, nothing needs to happen.
             if (!$(this).hasClass("active")) {
-                forms.pressRadioButton(this);
-                forms.checkCorrespondingRadioButton.call(this, ".radio-btn");
+                forms.pressCustomRadioButton(this);
+                forms.checkRadioButtonCorrespondingToCustomButton.call(this);
            }
         });
     };
@@ -672,6 +698,8 @@ $(document).ready(function() {
     // often when using a search form. Form controls on the reloaded page won't have attributes [checked], but their values are still in the DOM. If the first exception case were the only
     // one, this could be handled by a CSS ruleset. The second exception case means this task requires JavaScript. This page load effect happens fast enough that a flash effect has never
     // been observed.
+    // Input: None.
+    // Output: None.
     forms.hideUncheckedCheckboxesCheckmarksOnPageLoad = function() {
         $(".custom-checkbox").each(function() {
             if (!$('input[type="checkbox"]', this).prop("checked")) {
