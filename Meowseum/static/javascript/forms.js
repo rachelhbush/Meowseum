@@ -350,7 +350,7 @@ $(document).ready(function() {
     
     // 3.6.3.1. If the checkboxes have initial data or the user clicked the Back button after submitting the form, set up
     // the custom check buttons with the proper appearance.
-    // Input: $parent, the parent element of the rating widget buttons. activeIcon, an image path. inactiveIcon, an image path.
+    // Input: $parent, the parent element of the custom check buttons. activeIcon, an image path. inactiveIcon, an image path.
     // Output: true or false for whether the widget has been clicked. 
     forms.loadImageCheckButtonData = function($parent, activeIcon, inactiveIcon) {
         var buttonsToPress = forms.getCustomButtonsCorrespondingToCheckboxes($(".check-btn:first-of-type", $parent)[0]);
@@ -366,7 +366,7 @@ $(document).ready(function() {
     };
     
     // 3.6.3. Attach the event handlers for the image check button.
-    // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
+    // Input: $parent, the parent of the .check-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
     //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
     // Output: None.
     forms.attachImageCheckButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
@@ -390,11 +390,40 @@ $(document).ready(function() {
         });
     };
     
+    // 3.6.3.2. Make the custom radio button appear active.
+    // Input: buttonToPress, a DOM element. activeIcon, an image path. inactiveIcon, an image path. Output: None.
+    forms.pressImageRadioButton = function(buttonToPress, activeIcon, inactiveIcon) {
+        // Transfer the active status to the button that was clicked. Make only the clicked button have the .active class and active icon.
+        $parent = $(buttonToPress).parent();
+        $("div.radio-btn", $parent).removeClass("active");
+        $(buttonToPress).addClass("active");
+        if ($("img[data-active], img[data-day-active]",buttonToPress)[0]) {
+            $("img[data-active], img[data-day-active]",$parent).attr("src",inactiveIcon);
+            $("img[data-active], img[data-day-active]",buttonToPress).attr("src",activeIcon);
+        }
+    };
+
+    // 3.6.2.1. If the radio buttons have initial data or the user clicked the Back button after submitting the form, set up
+    // the custom radio buttons with the proper appearance.
+    // Input: $parent, the parent element of the custom radio buttons. activeIcon, an image path. inactiveIcon, an image path.
+    // Output: true or false for whether the widget has been clicked.
+    forms.loadImageRadioButtonData = function($parent, activeIcon, inactiveIcon) {
+        var buttonToPress = forms.getCustomButtonCorrespondingToRadioButton($(".radio-btn:first-of-type", $parent)[0]);
+        if (buttonToPress) {
+            forms.pressImageRadioButton(buttonToPress, activeIcon, inactiveIcon);
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    
     // 3.6.2. Attach the event handlers for the image radio button.
-    // Input: $parent, the parent of the .rating-widget-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
+    // Input: $parent, the parent of the .check-btn (jQuery set wrapping a DOM element). widgetHasBeenClicked, a Boolean value.
     //        activeIcon, the path to an image playing the same role as a filled star. inactiveIcon, the path to an image playing the same role as an empty star.
     // Output: None.
     forms.attachImageRadioButtonEventHandlers = function($parent, widgetHasBeenClicked, activeIcon, inactiveIcon) {
+        widgetHasBeenClicked = forms.loadImageRadioButtonData($parent, activeIcon, inactiveIcon);
         // If widget hasn't been clicked yet and it supports alternate file paths, then use a hover effect.
         $("div.radio-btn",$parent).mouseenter(function() {
             if (!widgetHasBeenClicked && $("img[data-active], img[data-day-active]",this)[0]) {
@@ -411,14 +440,7 @@ $(document).ready(function() {
         $("div.radio-btn",$parent).click(function() {
             // Make this button appear active. If a pressed button is clicked again, nothing needs to happen.
             if (!$(this).hasClass("active")) {
-                // Transfer the active status to the button that was clicked. Make only the clicked button have the .active class and active icon.
-                $("div.radio-btn", $parent).removeClass("active");
-                $(this).addClass("active");
-                if ($("img[data-active], img[data-day-active]",this)[0]) {
-                    $("img[data-active], img[data-day-active]",$parent).attr("src",inactiveIcon);
-                    $("img[data-active], img[data-day-active]",this).attr("src",activeIcon);
-                }
-                
+                forms.pressImageRadioButton(this, activeIcon, inactiveIcon);
                 widgetHasBeenClicked = true;
                 forms.checkRadioButtonCorrespondingToCustomButton.call(this);
            }
